@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">MinskKniga</string>
+    <string name="login_caption">Войти</string>
+    <string name="glavnaya_cap">Главная</string>
+    <string name="sprav_cap">Справочники</string>
+
+    <string-array name="price_spinner">
+        <item>Продажная</item>
+        <item>Закупочная</item>
+        <item>Оптовая</item>
+    </string-array>
+
+    <string-array name="vzaimo_spinner">
+        <item>Нет долга</item>
+        <item>Нам должны</item>
+        <item>Мы должны</item>
+    </string-array>
+
+    <string-array name="status">
+        <item>Новое</item>
+        <item>Выполнено</item>
+    </string-array>
+
+    <string-array name="contacts">
+        <item>Телефон</item>
+        <item>E-mail</item>
+        <item>Адрес</item>
+        <item>Сайт</item>
+    </string-array>
+
+    <string-array name="yesno">
+        <item>Да</item>
+        <item>Нет</item>
+    </string-array>
+</resources>

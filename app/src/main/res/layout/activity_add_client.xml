@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8F8F8"
+    android:focusableInTouchMode="true">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="?attr/colorPrimary">
+
+            <TextView
+                android:id="@+id/text_caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/roboto"
+                android:text="Новый клиент"
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="12dp"
+                app:srcCompat="@drawable/ic_back"
+                style="@style/Widget.AppCompat.Button.Borderless"/>
+
+        </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F8F8F8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/name_ed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Наименование клиента" />
+
+                <EditText
+                    android:id="@+id/sokr_name_ed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Сокращение" />
+
+                <EditText
+                    android:id="@+id/zametka_ed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Заметка" />
+
+                <EditText
+                    android:id="@+id/info_ed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Этаж, кабинет, др. инфа на печать" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/price_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ddd"
+                android:fontFamily="@font/roboto"
+                android:padding="5dp"
+                android:text="Цены"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.2dp"
+                android:background="@android:color/darker_gray"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/price_linear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:layout_weight="2"
+                        android:text="Тип цен" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:layout_weight="1"
+                        android:text="Подарки" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="13dp"
+                        android:layout_weight="1"
+                        android:text="Скидка,%" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal">
+
+
+                    <Spinner
+                        android:id="@+id/type_ceni"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:entries="@array/price_spinner" />
+
+                    <Switch
+                        android:id="@+id/podarki_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"/>
+
+                    <EditText
+                        android:id="@+id/skidka_ed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:hint="0.00"
+                        android:inputType="numberDecimal" />
+
+                    <Switch
+                        android:id="@+id/skidka_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/vzaimo_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ddd"
+                android:fontFamily="@font/roboto"
+                android:padding="5dp"
+                android:text="Взаиморасчеты"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.2dp"
+                android:background="@android:color/darker_gray"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/vzaimo_linear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/dolg_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:entries="@array/vzaimo_spinner" />
+
+                    <EditText
+                        android:id="@+id/dolg_ed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:hint="0.00"
+                        android:inputType="numberDecimal" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/region_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ddd"
+                android:fontFamily="@font/roboto"
+                android:padding="5dp"
+                android:text="Регион"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.2dp"
+                android:background="@android:color/darker_gray"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/region_linear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/naprav_ed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Направление" />
+
+                <Button
+                    android:id="@+id/city_add"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Выбрать город"
+                    android:textAlignment="textStart" />
+
+                <EditText
+                    android:id="@+id/school_ed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Школа" />
+
+                <EditText
+                    android:id="@+id/smena_ed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Смена" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/dela_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ddd"
+                android:fontFamily="@font/roboto"
+                android:padding="5dp"
+                android:text="Дела"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.2dp"
+                android:background="@android:color/darker_gray"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/dela_linear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Дата" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Статус" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Ответственный" />
+
+                </LinearLayout>
+
+
+                <ListView
+                    android:id="@+id/dela_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/dela_add"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_add"
+                    android:hint="Добавить дело" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/contacts_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ddd"
+                android:fontFamily="@font/roboto"
+                android:padding="5dp"
+                android:text="Контакты"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.2dp"
+                android:background="@android:color/darker_gray"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/contacts_linear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/contacts_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/contacts_add"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/ic_add"
+                    android:hint="Добавить контакт" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/contactface_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ddd"
+                android:fontFamily="@font/roboto"
+                android:padding="5dp"
+                android:text="Контактные лица"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.2dp"
+                android:background="@android:color/darker_gray"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/contactface_linear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/contactface_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/contactface_add"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawableLeft="@drawable/ic_add"
+                    android:hint="Добавить контактное лицо" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/add_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Отмена" />
+
+                <Button
+                    android:id="@+id/add_client"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="add_client_button"
+                    android:text="Добавить" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
