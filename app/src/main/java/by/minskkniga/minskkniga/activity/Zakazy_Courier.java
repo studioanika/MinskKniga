@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.adapter.Zakazy_Client_2;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Zakazy;
 import retrofit2.Call;
@@ -34,8 +33,7 @@ public class Zakazy_Courier extends AppCompatActivity {
     ListView lv;
     ListView lv2;
 
-    ArrayList<by.minskkniga.minskkniga.api.Zakazy> zakazy;
-    ArrayList<by.minskkniga.minskkniga.api.Zakazy> zakazy_buf;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +49,8 @@ public class Zakazy_Courier extends AppCompatActivity {
         });
 
         lv2 = findViewById(R.id.lv2);
+
+
 
         caption = findViewById(R.id.caption);
         id = getIntent().getIntExtra("id", 0);
@@ -102,11 +102,11 @@ public class Zakazy_Courier extends AppCompatActivity {
         App.getApi().getZakazy(id).enqueue(new Callback<List<Zakazy>>() {
             @Override
             public void onResponse(Call<List<Zakazy>> call, Response<List<Zakazy>> response) {
-                zakazy.clear();
-                zakazy_buf.clear();
-                zakazy.addAll(response.body());
-                zakazy_buf.addAll(response.body());
-                lv2.setAdapter(new Zakazy_Client_2(Zakazy_Courier.this, zakazy));
+//                zakazy.clear();
+//                zakazy_buf.clear();
+//                zakazy.addAll(response.body());
+//                zakazy_buf.addAll(response.body());
+//                lv2.setAdapter(new Zakazy_Courier_2(Zakazy_Courier.this, zakazy));
                 //search();
             }
 
