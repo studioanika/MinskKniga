@@ -22,7 +22,6 @@ public class Add_Dela extends BaseAdapter {
         this.strings = str;
     }
 
-
     @Override
     public int getCount() {
         return strings.size();
