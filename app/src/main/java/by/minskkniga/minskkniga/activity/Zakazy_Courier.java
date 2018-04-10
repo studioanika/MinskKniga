@@ -1,17 +1,14 @@
 package by.minskkniga.minskkniga.activity;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
@@ -33,7 +30,10 @@ public class Zakazy_Courier extends AppCompatActivity {
     ListView lv;
     ListView lv2;
 
+    ImageButton checkbox;
+    TextView checkbox0;
 
+    int check = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,22 @@ public class Zakazy_Courier extends AppCompatActivity {
 
         lv2 = findViewById(R.id.lv2);
 
+        checkbox = findViewById(R.id.checkbox);
+        checkbox0 = findViewById(R.id.checkbox0);
 
+        checkbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                check();
+            }
+        });
+
+        checkbox0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                check();
+            }
+        });
 
         caption = findViewById(R.id.caption);
         id = getIntent().getIntExtra("id", 0);
@@ -84,6 +99,26 @@ public class Zakazy_Courier extends AppCompatActivity {
 
         reload_1();
         reload_2();
+    }
+
+    public void check(){
+        switch (check){
+            case 0:
+                checkbox.setImageResource(R.drawable.ic_check_1);
+                Toast.makeText(this, "0", Toast.LENGTH_SHORT).show();
+                check=1;
+                break;
+            case 1:
+                checkbox.setImageResource(R.drawable.ic_check_2);
+                Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+                check=2;
+                break;
+            case 2:
+                checkbox.setImageResource(R.drawable.ic_check_0);
+                Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
+                check=0;
+                break;
+        }
     }
 
     @Override
