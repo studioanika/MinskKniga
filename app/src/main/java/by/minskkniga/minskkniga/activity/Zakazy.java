@@ -79,7 +79,7 @@ public class Zakazy extends AppCompatActivity {
         tabSpec.setIndicator("по клиентам");
         tabHost.addTab(tabSpec);
 
-        tabHost.setCurrentTab(0);
+        tabHost.setCurrentTab(1);
 
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             public void onTabChanged(String tabId) {

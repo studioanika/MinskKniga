@@ -3,6 +3,7 @@ package by.minskkniga.minskkniga.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Zakazy_2;
 import by.minskkniga.minskkniga.adapter.Zakazy_Client_2;
 import by.minskkniga.minskkniga.api.*;
+import by.minskkniga.minskkniga.api.Zakazy;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,11 +28,12 @@ public class Zakazy_Client extends AppCompatActivity {
     int id;
     String name;
     TextView caption;
-    ListView lv2;
 
     Zakazy_2 adapter;
     ArrayList<by.minskkniga.minskkniga.api.Zakazy> zakazy;
     ArrayList<by.minskkniga.minskkniga.api.Zakazy> zakazy_buf;
+
+    ExpandableListView expListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +46,12 @@ public class Zakazy_Client extends AppCompatActivity {
         caption.setText(name);
         Toast.makeText(this, id+" ", Toast.LENGTH_SHORT).show();
 
+        expListView = findViewById(R.id.expandeblelistview);
 
         zakazy = new ArrayList<>();
         zakazy_buf = new ArrayList<>();
-        lv2 = findViewById(R.id.lv2);
-        lv2.setAdapter(new Zakazy_Client_2(this, zakazy));
+
+        expListView.setAdapter(new Zakazy_Client_2(this, zakazy));
 
 
         TabHost tabHost = findViewById(R.id.tabHost);
@@ -64,7 +68,7 @@ public class Zakazy_Client extends AppCompatActivity {
         tabSpec.setIndicator("товары");
         tabHost.addTab(tabSpec);
 
-        tabHost.setCurrentTab(0);
+        tabHost.setCurrentTab(1);
 
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             public void onTabChanged(String tabId) {
@@ -96,7 +100,7 @@ public class Zakazy_Client extends AppCompatActivity {
                 zakazy_buf.clear();
                 zakazy.addAll(response.body());
                 zakazy_buf.addAll(response.body());
-                lv2.setAdapter(new Zakazy_Client_2(Zakazy_Client.this, zakazy));
+                expListView.setAdapter(new Zakazy_Client_2(Zakazy_Client.this, zakazy));
                 //search();
             }
 

@@ -3,6 +3,9 @@ package by.minskkniga.minskkniga.api;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Zakazy {
 
     @SerializedName("id")
@@ -23,12 +26,6 @@ public class Zakazy {
     @SerializedName("autor")
     @Expose
     private String autor;
-    @SerializedName("gorod")
-    @Expose
-    private String gorod;
-    @SerializedName("napravl")
-    @Expose
-    private String napravl;
     @SerializedName("ispolnenno")
     @Expose
     private String ispolnenno;
@@ -41,6 +38,9 @@ public class Zakazy {
     @SerializedName("komment")
     @Expose
     private String komment;
+    @SerializedName("what_zakazal")
+    @Expose
+    private List<WhatZakazal> whatZakazal;
 
     public String getId() {
         return id;
@@ -90,22 +90,6 @@ public class Zakazy {
         this.autor = autor;
     }
 
-    public String getGorod() {
-        return gorod;
-    }
-
-    public void setGorod(String gorod) {
-        this.gorod = gorod;
-    }
-
-    public String getNapravl() {
-        return napravl;
-    }
-
-    public void setNapravl(String napravl) {
-        this.napravl = napravl;
-    }
-
     public String getIspolnenno() {
         return ispolnenno;
     }
@@ -138,5 +122,12 @@ public class Zakazy {
         this.komment = komment;
     }
 
+    public List<WhatZakazal> getWhatZakazal() {
+        return whatZakazal;
+    }
+
+    public void setWhatZakazal(List<WhatZakazal> whatZakazal) {
+        this.whatZakazal = whatZakazal;
+    }
 
 }
