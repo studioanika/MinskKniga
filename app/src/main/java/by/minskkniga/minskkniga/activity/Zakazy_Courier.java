@@ -1,5 +1,6 @@
 package by.minskkniga.minskkniga.activity;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -30,8 +31,7 @@ public class Zakazy_Courier extends AppCompatActivity {
     ListView lv;
     ListView lv2;
 
-    ImageButton checkbox;
-    TextView checkbox0;
+    TextView checkbox;
 
     int check = 0;
 
@@ -51,19 +51,33 @@ public class Zakazy_Courier extends AppCompatActivity {
         lv2 = findViewById(R.id.lv2);
 
         checkbox = findViewById(R.id.checkbox);
-        checkbox0 = findViewById(R.id.checkbox0);
+        Drawable img = getResources().getDrawable(R.drawable.ic_check_0);
+        img.setBounds(0, 0, 32, 32);
+        checkbox.setCompoundDrawables(null, null, img, null);
 
         checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                check();
-            }
-        });
-
-        checkbox0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                check();
+                switch (check){
+                    case 0:
+                        Drawable img1 = getResources().getDrawable(R.drawable.ic_check_1);
+                        img1.setBounds(0, 0, 32, 32);
+                        checkbox.setCompoundDrawables(null, null, img1, null);
+                        check=1;
+                        break;
+                    case 1:
+                        Drawable img2 = getResources().getDrawable(R.drawable.ic_check_2);
+                        img2.setBounds(0, 0, 32, 32);
+                        checkbox.setCompoundDrawables(null, null, img2, null);
+                        check=2;
+                        break;
+                    case 2:
+                        Drawable img0 = getResources().getDrawable(R.drawable.ic_check_0);
+                        img0.setBounds(0, 0, 32, 32);
+                        checkbox.setCompoundDrawables(null, null, img0, null);
+                        check=0;
+                        break;
+                }
             }
         });
 
@@ -101,25 +115,6 @@ public class Zakazy_Courier extends AppCompatActivity {
         reload_2();
     }
 
-    public void check(){
-        switch (check){
-            case 0:
-                checkbox.setImageResource(R.drawable.ic_check_1);
-                Toast.makeText(this, "0", Toast.LENGTH_SHORT).show();
-                check=1;
-                break;
-            case 1:
-                checkbox.setImageResource(R.drawable.ic_check_2);
-                Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-                check=2;
-                break;
-            case 2:
-                checkbox.setImageResource(R.drawable.ic_check_0);
-                Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
-                check=0;
-                break;
-        }
-    }
 
     @Override
     protected void onResume() {
