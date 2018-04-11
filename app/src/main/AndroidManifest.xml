@@ -24,15 +24,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.Menu" />
-        <activity android:name=".activity.Spravoch_Clients" />
-        <activity android:name=".activity.Add_Client" />
-        <activity android:name=".activity.Spravoch_Providers" />
-        <activity android:name=".activity.Add_Provider" />
-        <activity android:name=".activity.Nomenklatura" />
-        <activity android:name=".activity.Add_Nomenklatura" />
-        <activity android:name=".activity.Barcode_scanner" />
-        <activity android:name=".activity.Zakazy" />
-        <activity android:name=".activity.Zakazy_Client" />
+        <activity android:name=".activity.Spravoch_Clients.Main" />
+        <activity android:name=".activity.Spravoch_Clients.Add" />
+        <activity android:name=".activity.Spravoch_Providers.Main" />
+        <activity android:name=".activity.Spravoch_Providers.Add" />
+        <activity android:name=".activity.Nomenklatura.Main" />
+        <activity android:name=".activity.Nomenklatura.Add" />
+        <activity android:name=".activity.Zakazy.Main" />
+        <activity android:name=".activity.Zakazy.Zakazy_Client" />
         <activity android:name=".activity.Spravoch_Couriers.Couriers" />
         <activity android:name=".activity.Spravoch_Couriers.Zakazy"></activity>
     </application>

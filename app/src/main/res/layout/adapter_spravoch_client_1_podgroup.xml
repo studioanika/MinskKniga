@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/expanded_podgroup_1"
+        android:id="@+id/tv1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -15,16 +15,17 @@
         android:text="TextView" />
 
     <CheckBox
-        android:id="@+id/expanded_podgroup_2"
+        android:id="@+id/ch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="202dp"
         android:focusable="false"
+        android:enabled="false"
         android:text="" />
 
     <TextView
-        android:id="@+id/expanded_podgroup_3"
+        android:id="@+id/tv2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"

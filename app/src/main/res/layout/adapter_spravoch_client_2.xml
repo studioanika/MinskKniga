@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:focusable="false"
+        android:enabled="false"
         android:layout_marginLeft="180dp" />
 
     <TextView

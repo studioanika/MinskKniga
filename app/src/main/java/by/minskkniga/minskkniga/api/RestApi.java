@@ -100,4 +100,7 @@ public interface RestApi {
 
     @GET("/api/show_couriers.php")
     Call<List<Couriers>> getCouriers();
+
+    @GET("/api/set_oplata.php")
+    Call<ResultBody> setOplata(@Query("id") String id);
 }

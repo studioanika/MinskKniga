@@ -1,4 +1,4 @@
-package by.minskkniga.minskkniga.adapter;
+package by.minskkniga.minskkniga.adapter.Spravoch_Providers;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
 import java.util.ArrayList;
+
 import by.minskkniga.minskkniga.R;
 
-public class Spravoch_Clients_1 extends BaseExpandableListAdapter {
+public class Main_1 extends BaseExpandableListAdapter {
 
     private Context _context;
 
@@ -21,7 +23,7 @@ public class Spravoch_Clients_1 extends BaseExpandableListAdapter {
     private ArrayList<ArrayList<String>> _listDataChild;
 
 
-    public Spravoch_Clients_1(Context context, ArrayList<String> listDataHeader, ArrayList<ArrayList<String>> listDataChild) {
+    public Main_1(Context context, ArrayList<String> listDataHeader, ArrayList<ArrayList<String>> listDataChild) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listDataChild;
@@ -46,27 +48,21 @@ public class Spravoch_Clients_1 extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.adapter_spravoch_client_1_podgroup, null);
+            convertView = infalInflater.inflate(R.layout.adapter_spravoch_provider_1_podgroup, null);
         }
 
-        TextView podgroup_1 = (TextView) convertView.findViewById(R.id.expanded_podgroup_1);
-        CheckBox podgroup_2 = (CheckBox) convertView.findViewById(R.id.expanded_podgroup_2);
-        TextView podgroup_3 = (TextView) convertView.findViewById(R.id.expanded_podgroup_3);
+        TextView tv1 = (TextView) convertView.findViewById(R.id.tv1);
+        TextView tv2 = (TextView) convertView.findViewById(R.id.tv2);
 
 
         String[] buffer = childText.split("@");
-        podgroup_1.setText(buffer[0]);
-        if (buffer[1].equals("1")){
-            podgroup_2.setChecked(true);
-        }else{
-            podgroup_2.setChecked(false);
+        tv1.setText(buffer[0]);
+        if (Double.parseDouble(buffer[1]) < 0) {
+            tv2.setTextColor(Color.RED);
+        } else {
+            tv2.setTextColor(Color.BLACK);
         }
-        if (Double.parseDouble(buffer[2])<0){
-            podgroup_3.setTextColor(Color.RED);
-        }else{
-            podgroup_3.setTextColor(Color.BLACK);
-        }
-        podgroup_3.setText(buffer[2]);
+        tv2.setText(buffer[1]);
 
         return convertView;
     }
@@ -98,30 +94,24 @@ public class Spravoch_Clients_1 extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.adapter_spravoch_client_1_group, null);
+            convertView = infalInflater.inflate(R.layout.adapter_spravoch_provider_1_group, null);
         }
 
-        TextView group_1 = (TextView) convertView.findViewById(R.id.expanded_group_1);
-        CheckBox group_2 = (CheckBox) convertView.findViewById(R.id.expanded_group_2);
-        TextView group_3 = (TextView) convertView.findViewById(R.id.expanded_group_3);
+        TextView tv1 = (TextView) convertView.findViewById(R.id.tv1);
+        TextView tv2 = (TextView) convertView.findViewById(R.id.tv2);
 
 
-        group_1.setTypeface(null, Typeface.BOLD);
-        group_3.setTypeface(null, Typeface.BOLD);
+        tv1.setTypeface(null, Typeface.BOLD);
+        tv2.setTypeface(null, Typeface.BOLD);
 
         String[] buffer = headerTitle.split("@");
-        group_1.setText(buffer[0]);
-        if (buffer[1].equals("1")){
-            group_2.setChecked(true);
-        }else{
-            group_2.setChecked(false);
+        tv1.setText(buffer[0]);
+        if (Double.parseDouble(buffer[1]) < 0) {
+            tv2.setTextColor(Color.RED);
+        } else {
+            tv2.setTextColor(Color.BLACK);
         }
-        if (Double.parseDouble(buffer[2])<0){
-            group_3.setTextColor(Color.RED);
-        }else{
-            group_3.setTextColor(Color.BLACK);
-        }
-        group_3.setText(buffer[2]);
+        tv2.setText(buffer[1]);
 
         return convertView;
     }

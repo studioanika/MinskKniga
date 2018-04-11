@@ -25,12 +25,12 @@
 
 
             <ImageButton
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:layout_margin="12dp"
                 app:srcCompat="@drawable/ic_notif"
-                style="@style/Widget.AppCompat.Button.Borderless"/>
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_alignParentEnd="true" />
 
         </RelativeLayout>
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Nomenklatura.Main;
 import by.minskkniga.minskkniga.activity.Spravoch_Couriers.Couriers;
 
 public class Menu extends AppCompatActivity {
@@ -52,11 +53,11 @@ public class Menu extends AppCompatActivity {
                                     long id) {
                 switch (position) {
                     case 0:
-                        Intent intent1 = new Intent(Menu.this, Zakazy.class);
+                        Intent intent1 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Zakazy.Main.class);
                         startActivity(intent1);
                         break;
                     case 3:
-                        Intent intent2 = new Intent(Menu.this, Nomenklatura.class);
+                        Intent intent2 = new Intent(Menu.this, Main.class);
                         startActivity(intent2);
                         break;
                 }
@@ -68,11 +69,11 @@ public class Menu extends AppCompatActivity {
                                     long id) {
                 switch (position) {
                     case 0:
-                        Intent intent1 = new Intent(Menu.this, Spravoch_Clients.class);
+                        Intent intent1 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Spravoch_Clients.Main.class);
                         startActivity(intent1);
                         break;
                     case 1:
-                        Intent intent2 = new Intent(Menu.this, Spravoch_Providers.class);
+                        Intent intent2 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Spravoch_Providers.Main.class);
                         startActivity(intent2);
                         break;
                     case 2:

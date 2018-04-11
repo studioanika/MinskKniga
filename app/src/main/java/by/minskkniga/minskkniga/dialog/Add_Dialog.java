@@ -28,8 +28,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.Add_Client;
-import by.minskkniga.minskkniga.activity.Add_Provider;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Sity;
 import retrofit2.Call;
@@ -147,7 +145,7 @@ public class Add_Dialog extends DialogFragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                             long id) {
-                        ((Add_Client)getActivity()).return_sity(position+1,names.get(position));
+                        ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_sity(position+1,names.get(position));
                         getDialog().dismiss();
                     }
                 });
@@ -211,7 +209,7 @@ public class Add_Dialog extends DialogFragment {
                                 date = DateUtils.formatDateTime(getActivity(),
                                         dateAndTime.getTimeInMillis(),
                                         DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_YEAR);
-                                ((Add_Client) getActivity()).return_dela(date, stat, otve);
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_dela(date, stat, otve);
 
                                 dialog.cancel();
                             }
@@ -261,7 +259,7 @@ public class Add_Dialog extends DialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // код для передачи данных
-                                ((Add_Client) getActivity()).return_contact(type, String.valueOf(edittext.getText()));
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add) getActivity()).return_contact(type, String.valueOf(edittext.getText()));
                                 dialog.cancel();
                             }
                         })
@@ -281,7 +279,7 @@ public class Add_Dialog extends DialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // код для передачи данных
-                                ((Add_Client) getActivity()).return_contact_faces(String.valueOf(edit.getText()));
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add) getActivity()).return_contact_faces(String.valueOf(edit.getText()));
                                 dialog.cancel();
                             }
                         })
@@ -330,7 +328,7 @@ public class Add_Dialog extends DialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // код для передачи данных
-                                ((Add_Provider) getActivity()).return_contact(type, String.valueOf(edittext.getText()));
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add)getActivity()).return_contact(type, String.valueOf(edittext.getText()));
                                 dialog.cancel();
                             }
                         })
@@ -350,7 +348,7 @@ public class Add_Dialog extends DialogFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // код для передачи данных
-                                ((Add_Provider) getActivity()).return_contact_faces(String.valueOf(edit.getText()));
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add)getActivity()).return_contact_faces(String.valueOf(edit.getText()));
                                 dialog.cancel();
                             }
                         })
@@ -412,7 +410,7 @@ public class Add_Dialog extends DialogFragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                             long id) {
-                        ((Add_Provider)getActivity()).return_sity(position+1,names.get(position));
+                        ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add)getActivity()).return_sity(position+1,names.get(position));
                         getDialog().dismiss();
                     }
                 });
