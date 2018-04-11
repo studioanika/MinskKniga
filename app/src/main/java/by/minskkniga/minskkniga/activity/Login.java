@@ -2,6 +2,7 @@ package by.minskkniga.minskkniga.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -42,9 +43,9 @@ public class Login extends AppCompatActivity {
         pass = findViewById(R.id.pass);
         button = findViewById(R.id.button);
 
-        sp = PreferenceManager.getDefaultSharedPreferences(this);
+        sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+        ed = sp.edit();
 
-        sp = getPreferences(MODE_PRIVATE);
         login.setText(sp.getString("login", ""));
         pass.setText(sp.getString("pass", ""));
 
@@ -83,8 +84,6 @@ public class Login extends AppCompatActivity {
                 public void onResponse(Call<by.minskkniga.minskkniga.api.Class.Login> call, Response<by.minskkniga.minskkniga.api.Class.Login> response) {
                     if (!response.body().getMessage().equals("error")) {
                         pd.cancel();
-                        sp = getPreferences(MODE_PRIVATE);
-                        ed = sp.edit();
                         ed.putString("login", login.getText().toString());
                         ed.putString("pass", pass.getText().toString());
                         ed.putString("name", response.body().getName());
