@@ -15,7 +15,7 @@
         android:background="?attr/colorPrimary">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"

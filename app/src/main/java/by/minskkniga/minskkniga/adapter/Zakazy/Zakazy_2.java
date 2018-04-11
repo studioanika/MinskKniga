@@ -2,6 +2,7 @@ package by.minskkniga.minskkniga.adapter.Zakazy;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -9,12 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Zakazy.Main;
+import by.minskkniga.minskkniga.activity.Zakazy.Zakazy_Client;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
@@ -46,7 +51,6 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -74,7 +78,6 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
             tv4.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getSokr());
             tv5.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getIdZakaza());
         }
-
         return convertView;
     }
 
@@ -111,7 +114,7 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
         TextView tv2 = convertView.findViewById(R.id.tv2);
         final CheckBox ch1 = convertView.findViewById(R.id.ch1);
         TextView tv3 = convertView.findViewById(R.id.tv3);
-
+        ImageView iv1 = convertView.findViewById(R.id.iv1);
 
         tv1.setText(_zakazy.get(groupPosition).getDate());
 
@@ -139,7 +142,6 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
                 break;
         }
 
-
         if (_zakazy.get(groupPosition).getOplacheno().equals("0")) {
             ch1.setChecked(false);
             ch1.setEnabled(true);
@@ -149,9 +151,6 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
         }
 
         tv3.setText(_zakazy.get(groupPosition).getSumma());
-
-
-
 
         ch1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,7 +189,17 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
             }
         });
 
+        iv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(_context, Zakaz_info.class);
 
+
+                intent.putExtra("name", Zakazy_Client.getName());
+                intent.putExtra("id", _zakazy.get(groupPosition).getId());
+                _context.startActivity(intent);
+            }
+        });
         return convertView;
     }
 

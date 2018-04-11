@@ -19,7 +19,7 @@
             android:background="?attr/colorPrimary">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -43,7 +43,7 @@
                 android:layout_width="56dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                app:srcCompat="@drawable/ic_filter_list"
+                app:srcCompat="@drawable/ic_filter"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_alignParentEnd="true" />
 
