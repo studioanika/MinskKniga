@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,6 +94,8 @@ public class Zakazy_Client extends AppCompatActivity {
     }
 
     public void reload_2(){
+
+
         App.getApi().getZakazy(id).enqueue(new Callback<List<by.minskkniga.minskkniga.api.Zakazy>>() {
             @Override
             public void onResponse(Call<List<by.minskkniga.minskkniga.api.Zakazy>> call, Response<List<by.minskkniga.minskkniga.api.Zakazy>> response) {
@@ -100,6 +103,12 @@ public class Zakazy_Client extends AppCompatActivity {
                 zakazy_buf.clear();
                 zakazy.addAll(response.body());
                 zakazy_buf.addAll(response.body());
+
+
+
+
+
+
                 expListView.setAdapter(new Zakazy_Client_2(Zakazy_Client.this, zakazy));
                 //search();
             }
@@ -110,4 +119,5 @@ public class Zakazy_Client extends AppCompatActivity {
             }
         });
     }
+
 }

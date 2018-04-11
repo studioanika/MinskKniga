@@ -243,8 +243,10 @@ public class Nomenklatura extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        load_nomen_filter();
-        load_nomen();
+        if (nomen_search.getText().equals("")) {
+            load_nomen_filter();
+            load_nomen();
+        }
         filter();
     }
 

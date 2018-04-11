@@ -36,10 +36,16 @@
         android:text="TextView" />
 
     <ImageView
+        android:id="@+id/info"
+        android:layout_margin="12dp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:background="@drawable/ic_info"/>
+
+    <ImageView
         android:id="@+id/icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/ic_chevron_right">
-    </ImageView>
+        android:background="@drawable/ic_chevron_right"/>
 
 </LinearLayout>
