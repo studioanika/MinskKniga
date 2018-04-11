@@ -5,20 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class ResultBody {
 
-    @SerializedName("code")
-    @Expose
-    private String code;
     @SerializedName("message")
     @Expose
     private String message;
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public String getMessage() {
         return message;

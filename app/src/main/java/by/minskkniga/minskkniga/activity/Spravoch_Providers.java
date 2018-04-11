@@ -215,7 +215,7 @@ public class Spravoch_Providers extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Providers>> call, Throwable t) {
-                Toast.makeText(Spravoch_Providers.this, "An error occurred during networking", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Spravoch_Providers.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -234,7 +234,7 @@ public class Spravoch_Providers extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Providers>> call, Throwable t) {
-                Toast.makeText(Spravoch_Providers.this, "An error occurred during networking", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Spravoch_Providers.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
     }

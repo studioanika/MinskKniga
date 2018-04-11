@@ -121,7 +121,7 @@ public class Add_Dialog extends DialogFragment {
 
                     @Override
                     public void onFailure(Call<List<Sity>> call, Throwable t) {
-                        Toast.makeText(context, "An error occurred during networking", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -386,7 +386,7 @@ public class Add_Dialog extends DialogFragment {
 
                     @Override
                     public void onFailure(Call<List<Sity>> call, Throwable t) {
-                        Toast.makeText(context, "An error occurred during networking", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
                     }
                 });
 

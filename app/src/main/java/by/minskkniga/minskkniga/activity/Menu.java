@@ -1,6 +1,7 @@
 package by.minskkniga.minskkniga.activity;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -81,4 +82,26 @@ public class Menu extends AppCompatActivity {
             }
         });
     }
+
+
+    private Boolean exit = false;
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            finishAffinity();
+        } else {
+            Toast.makeText(this, "Нажмите еще раз для выхода",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 2 * 1000);
+
+        }
+
+    }
+
 }

@@ -142,7 +142,7 @@ public class Zakazy_Courier extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<by.minskkniga.minskkniga.api.Zakazy>> call, Throwable t) {
-            //    Toast.makeText(Zakazy_Client.this, "An error occurred during networking", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Zakazy_Courier.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
     }

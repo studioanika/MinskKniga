@@ -78,7 +78,7 @@ public class Spravoch_Couriers extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Couriers>> call, Throwable t) {
-                Toast.makeText(Spravoch_Couriers.this, "An error occurred during networking", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Spravoch_Couriers.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -263,7 +263,7 @@ public class Nomenklatura extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Nomenklatura_filter> call, Throwable t) {
-                Toast.makeText(Nomenklatura.this, "An error occurred during networking", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Nomenklatura.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
     }

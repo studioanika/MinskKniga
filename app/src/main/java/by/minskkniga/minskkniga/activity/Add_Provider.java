@@ -426,7 +426,7 @@ public class Add_Provider extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResultBody> call, Throwable t) {
-                Toast.makeText(Add_Provider.this, "error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Add_Provider.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
 

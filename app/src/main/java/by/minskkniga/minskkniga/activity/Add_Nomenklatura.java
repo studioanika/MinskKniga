@@ -123,9 +123,7 @@ public class Add_Nomenklatura extends AppCompatActivity {
                 App.getApi().artikyl(nomen_artikyl.getText().toString()).enqueue(new Callback<ResultBody>() {
                     @Override
                     public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                        if(response.body().getCode().equals("1")) {
-                            Toast.makeText(Add_Nomenklatura.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(Add_Nomenklatura.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -161,7 +159,7 @@ public class Add_Nomenklatura extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResultBody> call, Throwable t) {
-                        Toast.makeText(Add_Nomenklatura.this, "error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Add_Nomenklatura.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

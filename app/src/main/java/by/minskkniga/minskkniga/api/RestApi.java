@@ -14,6 +14,12 @@ import retrofit2.http.Query;
 
 public interface RestApi {
 
+
+    @GET("/api/login.php")
+    Call<ResultBody> login(@Query("login") String login,
+                           @Query("pass") String pass);
+
+
     @GET("/api/show_clients.php")
     Call<List<Clients>> getClients();
 

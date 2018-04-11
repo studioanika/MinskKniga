@@ -118,7 +118,7 @@ public class Zakazy extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Clients>> call, Throwable t) {
-                Toast.makeText(Zakazy.this, "An error occurred during networking", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Zakazy.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -551,7 +551,7 @@ public class Add_Client extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResultBody> call, Throwable t) {
-                Toast.makeText(Add_Client.this, "Ошибка подключения", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Add_Client.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
 
