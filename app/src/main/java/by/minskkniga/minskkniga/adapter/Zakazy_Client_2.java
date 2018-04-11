@@ -12,14 +12,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.api.Class_Zakazy;
+import by.minskkniga.minskkniga.api.Class.Zakazy;
 
 public class Zakazy_Client_2 extends BaseExpandableListAdapter {
 
     private Context _context;
-    ArrayList<Class_Zakazy> _zakazy;
+    ArrayList<Zakazy> _zakazy;
 
-    public Zakazy_Client_2(Context context, ArrayList<Class_Zakazy> zakazy) {
+    public Zakazy_Client_2(Context context, ArrayList<Zakazy> zakazy) {
         this._context = context;
         this._zakazy = zakazy;
     }

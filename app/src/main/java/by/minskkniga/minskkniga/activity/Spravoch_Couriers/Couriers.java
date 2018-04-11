@@ -1,6 +1,5 @@
 package by.minskkniga.minskkniga.activity.Spravoch_Couriers;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,9 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.adapter.Spravoch_Couriers;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class_Couriers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,8 +21,8 @@ import retrofit2.Response;
 public class Couriers extends AppCompatActivity {
 
     ImageButton back;
-    ArrayList<Class_Couriers> couriers;
-    ArrayList<Class_Couriers> couriers_buf;
+    ArrayList<by.minskkniga.minskkniga.api.Class.Couriers> couriers;
+    ArrayList<by.minskkniga.minskkniga.api.Class.Couriers> couriers_buf;
     ListView lv;
 
     @Override
@@ -67,9 +64,9 @@ public class Couriers extends AppCompatActivity {
     }
 
     public void reload(){
-        App.getApi().getCouriers().enqueue(new Callback<List<Class_Couriers>>() {
+        App.getApi().getCouriers().enqueue(new Callback<List<by.minskkniga.minskkniga.api.Class.Couriers>>() {
             @Override
-            public void onResponse(Call<List<Class_Couriers>> call, Response<List<Class_Couriers>> response) {
+            public void onResponse(Call<List<by.minskkniga.minskkniga.api.Class.Couriers>> call, Response<List<by.minskkniga.minskkniga.api.Class.Couriers>> response) {
                 couriers.clear();
                 couriers_buf.clear();
                 couriers.addAll(response.body());
@@ -78,7 +75,7 @@ public class Couriers extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Class_Couriers>> call, Throwable t) {
+            public void onFailure(Call<List<by.minskkniga.minskkniga.api.Class.Couriers>> call, Throwable t) {
                 Toast.makeText(Couriers.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

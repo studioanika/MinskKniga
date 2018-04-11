@@ -31,7 +31,7 @@ import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Add_Client;
 import by.minskkniga.minskkniga.activity.Add_Provider;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class_Sity;
+import by.minskkniga.minskkniga.api.Class.Sity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -104,11 +104,11 @@ public class Add_Dialog extends DialogFragment {
                 names = new ArrayList<>();
                 names_buf = new ArrayList<>();
 
-                App.getApi().getSity().enqueue(new Callback<List<Class_Sity>>() {
+                App.getApi().getSity().enqueue(new Callback<List<Sity>>() {
                     @Override
-                    public void onResponse(Call<List<Class_Sity>> call, Response<List<Class_Sity>> response) {
+                    public void onResponse(Call<List<Sity>> call, Response<List<Sity>> response) {
 
-                        for (Class_Sity buffer : response.body()) {
+                        for (Sity buffer : response.body()) {
                             names.add(buffer.getName());
                             names_buf.add(buffer.getName());
                         }
@@ -117,7 +117,7 @@ public class Add_Dialog extends DialogFragment {
                     }
 
                     @Override
-                    public void onFailure(Call<List<Class_Sity>> call, Throwable t) {
+                    public void onFailure(Call<List<Sity>> call, Throwable t) {
                         Toast.makeText(context, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -369,11 +369,11 @@ public class Add_Dialog extends DialogFragment {
                 names = new ArrayList<>();
                 names_buf = new ArrayList<>();
 
-                App.getApi().getSity().enqueue(new Callback<List<Class_Sity>>() {
+                App.getApi().getSity().enqueue(new Callback<List<Sity>>() {
                     @Override
-                    public void onResponse(Call<List<Class_Sity>> call, Response<List<Class_Sity>> response) {
+                    public void onResponse(Call<List<Sity>> call, Response<List<Sity>> response) {
 
-                        for (Class_Sity buffer : response.body()) {
+                        for (Sity buffer : response.body()) {
                             names.add(buffer.getName());
                             names_buf.add(buffer.getName());
                         }
@@ -382,7 +382,7 @@ public class Add_Dialog extends DialogFragment {
                     }
 
                     @Override
-                    public void onFailure(Call<List<Class_Sity>> call, Throwable t) {
+                    public void onFailure(Call<List<Sity>> call, Throwable t) {
                         Toast.makeText(context, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
                     }
                 });

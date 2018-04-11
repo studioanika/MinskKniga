@@ -13,15 +13,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.api.*;
+import by.minskkniga.minskkniga.api.Class.Clients;
 
 public class Zakazy_2 extends BaseAdapter {
 
     private Context context;
     private LayoutInflater lInflater;
-    private ArrayList<Class_Clients> objects;
+    private ArrayList<Clients> objects;
 
-    public Zakazy_2(Context context, ArrayList<Class_Clients> objects) {
+    public Zakazy_2(Context context, ArrayList<Clients> objects) {
         this.context = context;
         this.objects = objects;
     }

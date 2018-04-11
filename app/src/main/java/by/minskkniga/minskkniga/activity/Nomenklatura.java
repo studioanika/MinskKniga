@@ -25,8 +25,7 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class_Nomenklatura;
-import by.minskkniga.minskkniga.api.Class_Nomenklatura_filter;
+import by.minskkniga.minskkniga.api.Class.Nomenklatura_filter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,8 +44,8 @@ public class Nomenklatura extends AppCompatActivity {
     TextView notfound;
     EditText nomen_search;
 
-    ArrayList<Class_Nomenklatura> lv;
-    ArrayList<Class_Nomenklatura> lv_buf;
+    ArrayList<by.minskkniga.minskkniga.api.Class.Nomenklatura> lv;
+    ArrayList<by.minskkniga.minskkniga.api.Class.Nomenklatura> lv_buf;
     by.minskkniga.minskkniga.adapter.Nomenklatura nomen;
 
     Spinner spinner1, spinner2, spinner3, spinner4;
@@ -190,7 +189,7 @@ public class Nomenklatura extends AppCompatActivity {
 
     public void filter() {
         lv.clear();
-        for (Class_Nomenklatura buffer : lv_buf) {
+        for (by.minskkniga.minskkniga.api.Class.Nomenklatura buffer : lv_buf) {
             if (buffer.getName().contains(nomen_search.getText().toString()) ||
                     buffer.getPredmet().contains(nomen_search.getText().toString()) ||
                     buffer.getClass_().contains(nomen_search.getText().toString()) ||
@@ -216,9 +215,9 @@ public class Nomenklatura extends AppCompatActivity {
         if (obraz == "Образец") obraz = "0";
         if (class_ == "Класс") class_ = "0";
 
-        App.getApi().getNomenclatura(avtor, izdatel, obraz, class_).enqueue(new Callback<List<Class_Nomenklatura>>() {
+        App.getApi().getNomenclatura(avtor, izdatel, obraz, class_).enqueue(new Callback<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>>() {
             @Override
-            public void onResponse(Call<List<Class_Nomenklatura>> call, Response<List<Class_Nomenklatura>> response) {
+            public void onResponse(Call<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>> call, Response<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>> response) {
                 lv.clear();
                 lv_buf.clear();
                 lv.addAll(response.body());
@@ -233,7 +232,7 @@ public class Nomenklatura extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Class_Nomenklatura>> call, Throwable t) {
+            public void onFailure(Call<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>> call, Throwable t) {
 
             }
         });
@@ -250,10 +249,10 @@ public class Nomenklatura extends AppCompatActivity {
     }
 
     public void load_nomen_filter(){
-        App.getApi().getNomenclatura_filter().enqueue(new Callback<Class_Nomenklatura_filter>() {
+        App.getApi().getNomenclatura_filter().enqueue(new Callback<Nomenklatura_filter>() {
 
             @Override
-            public void onResponse(Call<Class_Nomenklatura_filter> call, Response<Class_Nomenklatura_filter> response) {
+            public void onResponse(Call<Nomenklatura_filter> call, Response<Nomenklatura_filter> response) {
                 setAdapter(spinner1, response.body().getAutor(), 1);
                 setAdapter(spinner2, response.body().getIzdatel(), 2);
                 setAdapter(spinner4, response.body().getClass_(), 4);
@@ -261,7 +260,7 @@ public class Nomenklatura extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Class_Nomenklatura_filter> call, Throwable t) {
+            public void onFailure(Call<Nomenklatura_filter> call, Throwable t) {
                 Toast.makeText(Nomenklatura.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

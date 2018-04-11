@@ -11,15 +11,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.api.Class_Zakazy;
+import by.minskkniga.minskkniga.api.Class.Zakazy;
 
 public class Zakazy_Courier_2 extends BaseAdapter {
 
     private Context context;
     private LayoutInflater lInflater;
-    private ArrayList<Class_Zakazy> objects;
+    private ArrayList<Zakazy> objects;
 
-    public Zakazy_Courier_2(Context context, ArrayList<Class_Zakazy> objects) {
+    public Zakazy_Courier_2(Context context, ArrayList<Zakazy> objects) {
         this.context = context;
         this.objects = objects;
     }

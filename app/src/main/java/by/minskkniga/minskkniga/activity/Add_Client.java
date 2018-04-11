@@ -28,7 +28,7 @@ import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Add_Contacts;
 import by.minskkniga.minskkniga.adapter.Add_Dela;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class_ResultBody;
+import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -541,16 +541,16 @@ public class Add_Client extends AppCompatActivity {
                 Double.parseDouble(dolg),
                 dela,
                 contacts,
-                contactfaces).enqueue(new Callback<Class_ResultBody>() {
+                contactfaces).enqueue(new Callback<ResultBody>() {
 
             @Override
-            public void onResponse(Call<Class_ResultBody> call, Response<Class_ResultBody> response) {
+            public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
                 Toast.makeText(Add_Client.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
-            public void onFailure(Call<Class_ResultBody> call, Throwable t) {
+            public void onFailure(Call<ResultBody> call, Throwable t) {
                 Toast.makeText(Add_Client.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

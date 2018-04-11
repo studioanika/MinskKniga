@@ -16,7 +16,7 @@ import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Zakazy_2;
 import by.minskkniga.minskkniga.adapter.Zakazy_Client_2;
 import by.minskkniga.minskkniga.api.*;
-import by.minskkniga.minskkniga.api.Class_Zakazy;
+import by.minskkniga.minskkniga.api.Class.Zakazy;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,8 +29,8 @@ public class Zakazy_Client extends AppCompatActivity {
     TextView caption;
 
     Zakazy_2 adapter;
-    ArrayList<Class_Zakazy> zakazy;
-    ArrayList<Class_Zakazy> zakazy_buf;
+    ArrayList<Zakazy> zakazy;
+    ArrayList<Zakazy> zakazy_buf;
 
     ExpandableListView expListView;
 
@@ -94,9 +94,9 @@ public class Zakazy_Client extends AppCompatActivity {
     public void reload_2(){
 
 
-        App.getApi().getZakazy(id).enqueue(new Callback<List<Class_Zakazy>>() {
+        App.getApi().getZakazy(id).enqueue(new Callback<List<Zakazy>>() {
             @Override
-            public void onResponse(Call<List<Class_Zakazy>> call, Response<List<Class_Zakazy>> response) {
+            public void onResponse(Call<List<Zakazy>> call, Response<List<Zakazy>> response) {
                 zakazy.clear();
                 zakazy_buf.clear();
                 zakazy.addAll(response.body());
@@ -112,7 +112,7 @@ public class Zakazy_Client extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Class_Zakazy>> call, Throwable t) {
+            public void onFailure(Call<List<Zakazy>> call, Throwable t) {
                 Toast.makeText(Zakazy_Client.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

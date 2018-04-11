@@ -40,7 +40,7 @@ import java.lang.reflect.Method;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class_ResultBody;
+import by.minskkniga.minskkniga.api.Class.ResultBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -118,14 +118,14 @@ public class Add_Nomenklatura extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                App.getApi().artikyl(nomen_artikyl.getText().toString()).enqueue(new Callback<Class_ResultBody>() {
+                App.getApi().artikyl(nomen_artikyl.getText().toString()).enqueue(new Callback<ResultBody>() {
                     @Override
-                    public void onResponse(Call<Class_ResultBody> call, Response<Class_ResultBody> response) {
+                    public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
                         Toast.makeText(Add_Nomenklatura.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onFailure(Call<Class_ResultBody> call, Throwable t) {
+                    public void onFailure(Call<ResultBody> call, Throwable t) {
 
                     }
                 });
@@ -149,14 +149,14 @@ public class Add_Nomenklatura extends AppCompatActivity {
                 RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "text");
 
 
-                App.getApi().addNomenclatura(body, name).enqueue(new Callback<Class_ResultBody>() {
+                App.getApi().addNomenclatura(body, name).enqueue(new Callback<ResultBody>() {
                     @Override
-                    public void onResponse(Call<Class_ResultBody> call, Response<Class_ResultBody> response) {
+                    public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
                         Toast.makeText(Add_Nomenklatura.this, response.body().toString(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onFailure(Call<Class_ResultBody> call, Throwable t) {
+                    public void onFailure(Call<ResultBody> call, Throwable t) {
                         Toast.makeText(Add_Nomenklatura.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
                     }
                 });

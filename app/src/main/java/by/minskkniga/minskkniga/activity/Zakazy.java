@@ -16,7 +16,7 @@ import java.util.List;
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Zakazy_2;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class_Clients;
+import by.minskkniga.minskkniga.api.Class.Clients;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,8 +27,8 @@ public class Zakazy extends AppCompatActivity {
     ListView lv2;
 
 
-    ArrayList<Class_Clients> clien;
-    ArrayList<Class_Clients> clien_buf;
+    ArrayList<Clients> clien;
+    ArrayList<Clients> clien_buf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +43,8 @@ public class Zakazy extends AppCompatActivity {
             }
         });
 
-        clien = new ArrayList<Class_Clients>();
-        clien_buf = new ArrayList<Class_Clients>();
+        clien = new ArrayList<Clients>();
+        clien_buf = new ArrayList<Clients>();
         lv2 = findViewById(R.id.lv2);
         lv2.setAdapter(new Zakazy_2(this, clien));
         lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -100,9 +100,9 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void reload_2(){
-        App.getApi().getClients().enqueue(new Callback<List<Class_Clients>>() {
+        App.getApi().getClients().enqueue(new Callback<List<Clients>>() {
             @Override
-            public void onResponse(Call<List<Class_Clients>> call, Response<List<Class_Clients>> response) {
+            public void onResponse(Call<List<Clients>> call, Response<List<Clients>> response) {
                 clien.clear();
                 clien_buf.clear();
                 clien.addAll(response.body());
@@ -112,7 +112,7 @@ public class Zakazy extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Class_Clients>> call, Throwable t) {
+            public void onFailure(Call<List<Clients>> call, Throwable t) {
                 Toast.makeText(Zakazy.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

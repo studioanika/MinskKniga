@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class_Login;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -79,9 +78,9 @@ public class Login extends AppCompatActivity {
             pd.show();
 
 
-            App.getApi().login(login.getText().toString(), pass.getText().toString()).enqueue(new Callback<Class_Login>() {
+            App.getApi().login(login.getText().toString(), pass.getText().toString()).enqueue(new Callback<by.minskkniga.minskkniga.api.Class.Login>() {
                 @Override
-                public void onResponse(Call<Class_Login> call, Response<Class_Login> response) {
+                public void onResponse(Call<by.minskkniga.minskkniga.api.Class.Login> call, Response<by.minskkniga.minskkniga.api.Class.Login> response) {
                     if (!response.body().getMessage().equals("error")) {
                         pd.cancel();
                         sp = getPreferences(MODE_PRIVATE);
@@ -101,7 +100,7 @@ public class Login extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<Class_Login> call, Throwable t) {
+                public void onFailure(Call<by.minskkniga.minskkniga.api.Class.Login> call, Throwable t) {
 
                 }
             });

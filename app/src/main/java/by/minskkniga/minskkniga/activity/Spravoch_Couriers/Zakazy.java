@@ -14,7 +14,6 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class_Zakazy;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -129,9 +128,9 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void reload_2(){
-        App.getApi().getZakazy(id).enqueue(new Callback<List<Class_Zakazy>>() {
+        App.getApi().getZakazy(id).enqueue(new Callback<List<by.minskkniga.minskkniga.api.Class.Zakazy>>() {
             @Override
-            public void onResponse(Call<List<Class_Zakazy>> call, Response<List<Class_Zakazy>> response) {
+            public void onResponse(Call<List<by.minskkniga.minskkniga.api.Class.Zakazy>> call, Response<List<by.minskkniga.minskkniga.api.Class.Zakazy>> response) {
 //                zakazy.clear();
 //                zakazy_buf.clear();
 //                zakazy.addAll(response.body());
@@ -141,7 +140,7 @@ public class Zakazy extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Class_Zakazy>> call, Throwable t) {
+            public void onFailure(Call<List<by.minskkniga.minskkniga.api.Class.Zakazy>> call, Throwable t) {
                 Toast.makeText(Zakazy.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

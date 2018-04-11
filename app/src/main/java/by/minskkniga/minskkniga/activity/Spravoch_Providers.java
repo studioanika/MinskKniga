@@ -22,7 +22,7 @@ import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Spravoch_Providers_1;
 import by.minskkniga.minskkniga.adapter.Spravoch_Providers_2;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class_Providers;
+import by.minskkniga.minskkniga.api.Class.Providers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,8 +30,8 @@ import retrofit2.Response;
 public class Spravoch_Providers extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    List<Class_Providers> prov;
-    List<Class_Providers> prov_buf;
+    List<Providers> prov;
+    List<Providers> prov_buf;
 
     Spravoch_Providers_1 listAdapter;
     ExpandableListView expListView;
@@ -168,14 +168,14 @@ public class Spravoch_Providers extends AppCompatActivity {
     }
 
     public void reload_1(){
-        App.getApi().getProviders().enqueue(new Callback<List<Class_Providers>>() {
+        App.getApi().getProviders().enqueue(new Callback<List<Providers>>() {
             @Override
-            public void onResponse(Call<List<Class_Providers>> call, Response<List<Class_Providers>> response) {
+            public void onResponse(Call<List<Providers>> call, Response<List<Providers>> response) {
                 //Подготавливаем список данных:
                 listDataHeader = new ArrayList<String>();
                 listDataChild = new ArrayList<ArrayList<String>>();
 
-                List<Class_Providers> pro = response.body();
+                List<Providers> pro = response.body();
 
                 //Добавляем данные о пунктах списка:
                 int col = pro.size();
@@ -213,16 +213,16 @@ public class Spravoch_Providers extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Class_Providers>> call, Throwable t) {
+            public void onFailure(Call<List<Providers>> call, Throwable t) {
                 Toast.makeText(Spravoch_Providers.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
     public void reload_2(){
-        App.getApi().getProviders().enqueue(new Callback<List<Class_Providers>>() {
+        App.getApi().getProviders().enqueue(new Callback<List<Providers>>() {
             @Override
-            public void onResponse(Call<List<Class_Providers>> call, Response<List<Class_Providers>> response) {
+            public void onResponse(Call<List<Providers>> call, Response<List<Providers>> response) {
                 prov.clear();
                 prov_buf.clear();
                 prov.addAll(response.body());
@@ -232,7 +232,7 @@ public class Spravoch_Providers extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Class_Providers>> call, Throwable t) {
+            public void onFailure(Call<List<Providers>> call, Throwable t) {
                 Toast.makeText(Spravoch_Providers.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
