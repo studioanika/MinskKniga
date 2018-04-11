@@ -4,7 +4,7 @@ package by.minskkniga.minskkniga.api;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Sity {
+public class Class_Sity {
 
     @SerializedName("id")
     @Expose

@@ -2,36 +2,31 @@ package by.minskkniga.minskkniga.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.api.WhatZakazal;
-import by.minskkniga.minskkniga.api.Zakazy;
+import by.minskkniga.minskkniga.api.Class_Zakazy;
 
 public class Zakazy_Client_2 extends BaseExpandableListAdapter {
 
     private Context _context;
-    ArrayList<Zakazy> _zakazy;
+    ArrayList<Class_Zakazy> _zakazy;
 
-    public Zakazy_Client_2(Context context, ArrayList<Zakazy> zakazy) {
+    public Zakazy_Client_2(Context context, ArrayList<Class_Zakazy> zakazy) {
         this._context = context;
         this._zakazy = zakazy;
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._zakazy.get(groupPosition).getWhatZakazal().get(childPosititon);
+        return this._zakazy.get(groupPosition).getClassWhatZakazal().get(childPosititon);
     }
 
     @Override
@@ -64,11 +59,11 @@ public class Zakazy_Client_2 extends BaseExpandableListAdapter {
                 tv5.setText("Заказ");
             } else {
                 convertView.setBackgroundColor(Color.WHITE);
-                tv1.setText(_zakazy.get(groupPosition).getWhatZakazal().get(childPosition - 1).getName());
-                tv2.setText(_zakazy.get(groupPosition).getWhatZakazal().get(childPosition - 1).getClass_());
-                tv3.setText(_zakazy.get(groupPosition).getWhatZakazal().get(childPosition - 1).getIzdanie().substring(0, 1));
-                tv4.setText(_zakazy.get(groupPosition).getWhatZakazal().get(childPosition - 1).getSokr());
-                tv5.setText(_zakazy.get(groupPosition).getWhatZakazal().get(childPosition - 1).getIdZakaza());
+                tv1.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getName());
+                tv2.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getClass_());
+                tv3.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getIzdanie().substring(0, 1));
+                tv4.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getSokr());
+                tv5.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getIdZakaza());
             }
 
         return convertView;
@@ -76,7 +71,7 @@ public class Zakazy_Client_2 extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._zakazy.get(groupPosition).getWhatZakazal().size()+1;
+        return this._zakazy.get(groupPosition).getClassWhatZakazal().size()+1;
     }
 
     @Override

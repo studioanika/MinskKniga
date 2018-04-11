@@ -33,8 +33,8 @@
         <activity android:name=".activity.Barcode_scanner" />
         <activity android:name=".activity.Zakazy" />
         <activity android:name=".activity.Zakazy_Client" />
-        <activity android:name=".activity.Spravoch_Couriers" />
-        <activity android:name=".activity.Zakazy_Courier"></activity>
+        <activity android:name=".activity.Spravoch_Couriers.Couriers" />
+        <activity android:name=".activity.Spravoch_Couriers.Zakazy"></activity>
     </application>
 
 </manifest>

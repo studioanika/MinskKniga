@@ -11,13 +11,13 @@ import android.widget.TextView;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.api.Providers;
+import by.minskkniga.minskkniga.api.Class_Providers;
 
 public class Spravoch_Providers_2 extends RecyclerView.Adapter<Spravoch_Providers_2.ViewHolder> {
 
-        private List<Providers> prov;
+        private List<Class_Providers> prov;
 
-        public Spravoch_Providers_2(List<Providers> prov) {
+        public Spravoch_Providers_2(List<Class_Providers> prov) {
             this.prov = prov;
         }
 
@@ -29,7 +29,7 @@ public class Spravoch_Providers_2 extends RecyclerView.Adapter<Spravoch_Provider
 
         @Override
         public void onBindViewHolder(Spravoch_Providers_2.ViewHolder holder, int position) {
-            Providers cli = prov.get(position);
+            Class_Providers cli = prov.get(position);
 
             holder.tv1.setText(cli.getName());
 

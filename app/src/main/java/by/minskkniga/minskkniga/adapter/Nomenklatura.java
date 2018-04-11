@@ -10,14 +10,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.api.Class_Nomenklatura;
 
 public class Nomenklatura extends BaseAdapter {
 
     private Context context;
     private LayoutInflater lInflater;
-    private ArrayList<by.minskkniga.minskkniga.api.Nomenklatura> objects;
+    private ArrayList<Class_Nomenklatura> objects;
 
-    public Nomenklatura(Context context, ArrayList<by.minskkniga.minskkniga.api.Nomenklatura> objects) {
+    public Nomenklatura(Context context, ArrayList<Class_Nomenklatura> objects) {
         this.context = context;
         this.objects = objects;
     }

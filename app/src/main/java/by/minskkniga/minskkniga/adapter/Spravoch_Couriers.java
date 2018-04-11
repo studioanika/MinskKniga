@@ -12,15 +12,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.api.Couriers;
+import by.minskkniga.minskkniga.api.Class_Couriers;
 
 public class Spravoch_Couriers extends BaseAdapter {
 
     private Context context;
     private LayoutInflater lInflater;
-    private ArrayList<Couriers> objects;
+    private ArrayList<Class_Couriers> objects;
 
-    public Spravoch_Couriers(Context context, ArrayList<Couriers> objects) {
+    public Spravoch_Couriers(Context context, ArrayList<Class_Couriers> objects) {
         this.context = context;
         this.objects = objects;
     }

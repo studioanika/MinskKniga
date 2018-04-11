@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -41,11 +40,10 @@ import java.lang.reflect.Method;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.ResultBody;
+import by.minskkniga.minskkniga.api.Class_ResultBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -120,14 +118,14 @@ public class Add_Nomenklatura extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                App.getApi().artikyl(nomen_artikyl.getText().toString()).enqueue(new Callback<ResultBody>() {
+                App.getApi().artikyl(nomen_artikyl.getText().toString()).enqueue(new Callback<Class_ResultBody>() {
                     @Override
-                    public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
+                    public void onResponse(Call<Class_ResultBody> call, Response<Class_ResultBody> response) {
                         Toast.makeText(Add_Nomenklatura.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onFailure(Call<ResultBody> call, Throwable t) {
+                    public void onFailure(Call<Class_ResultBody> call, Throwable t) {
 
                     }
                 });
@@ -151,14 +149,14 @@ public class Add_Nomenklatura extends AppCompatActivity {
                 RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "text");
 
 
-                App.getApi().addNomenclatura(body, name).enqueue(new Callback<ResultBody>() {
+                App.getApi().addNomenclatura(body, name).enqueue(new Callback<Class_ResultBody>() {
                     @Override
-                    public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
+                    public void onResponse(Call<Class_ResultBody> call, Response<Class_ResultBody> response) {
                         Toast.makeText(Add_Nomenklatura.this, response.body().toString(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
-                    public void onFailure(Call<ResultBody> call, Throwable t) {
+                    public void onFailure(Call<Class_ResultBody> call, Throwable t) {
                         Toast.makeText(Add_Nomenklatura.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
                     }
                 });

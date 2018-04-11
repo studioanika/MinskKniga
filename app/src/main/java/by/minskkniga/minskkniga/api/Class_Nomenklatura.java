@@ -3,7 +3,7 @@ package by.minskkniga.minskkniga.api;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Nomenklatura {
+public class Class_Nomenklatura {
 
     @SerializedName("id")
     @Expose

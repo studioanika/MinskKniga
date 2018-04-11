@@ -1,4 +1,4 @@
-package by.minskkniga.minskkniga.activity;
+package by.minskkniga.minskkniga.activity.Spravoch_Couriers;
 
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,13 +14,13 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Zakazy;
+import by.minskkniga.minskkniga.api.Class_Zakazy;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class Zakazy_Courier extends AppCompatActivity {
+public class Zakazy extends AppCompatActivity {
 
     ImageButton back;
 
@@ -129,20 +129,20 @@ public class Zakazy_Courier extends AppCompatActivity {
     }
 
     public void reload_2(){
-        App.getApi().getZakazy(id).enqueue(new Callback<List<Zakazy>>() {
+        App.getApi().getZakazy(id).enqueue(new Callback<List<Class_Zakazy>>() {
             @Override
-            public void onResponse(Call<List<Zakazy>> call, Response<List<Zakazy>> response) {
+            public void onResponse(Call<List<Class_Zakazy>> call, Response<List<Class_Zakazy>> response) {
 //                zakazy.clear();
 //                zakazy_buf.clear();
 //                zakazy.addAll(response.body());
 //                zakazy_buf.addAll(response.body());
-//                lv2.setAdapter(new Zakazy_Courier_2(Zakazy_Courier.this, zakazy));
+//                lv2.setAdapter(new Zakazy_Courier_2(Zakazy.this, zakazy));
                 //search();
             }
 
             @Override
-            public void onFailure(Call<List<by.minskkniga.minskkniga.api.Zakazy>> call, Throwable t) {
-                Toast.makeText(Zakazy_Courier.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<List<Class_Zakazy>> call, Throwable t) {
+                Toast.makeText(Zakazy.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
     }

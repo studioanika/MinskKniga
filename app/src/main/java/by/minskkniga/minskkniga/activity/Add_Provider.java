@@ -11,14 +11,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,9 +25,8 @@ import java.util.ArrayList;
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Add_Contacts;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.ResultBody;
+import by.minskkniga.minskkniga.api.Class_ResultBody;
 import by.minskkniga.minskkniga.dialog.Add_Dialog;
-import by.minskkniga.minskkniga.dialog.Add_Provider_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -416,16 +413,16 @@ public class Add_Provider extends AppCompatActivity {
                 String.valueOf(city),
                 naprav_ed.getText().toString(),
                 contacts,
-                contactfaces).enqueue(new Callback<ResultBody>() {
+                contactfaces).enqueue(new Callback<Class_ResultBody>() {
 
             @Override
-            public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
+            public void onResponse(Call<Class_ResultBody> call, Response<Class_ResultBody> response) {
                 Toast.makeText(Add_Provider.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
-            public void onFailure(Call<ResultBody> call, Throwable t) {
+            public void onFailure(Call<Class_ResultBody> call, Throwable t) {
                 Toast.makeText(Add_Provider.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

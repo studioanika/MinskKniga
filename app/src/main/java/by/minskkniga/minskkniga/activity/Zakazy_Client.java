@@ -4,13 +4,11 @@ package by.minskkniga.minskkniga.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +16,7 @@ import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Zakazy_2;
 import by.minskkniga.minskkniga.adapter.Zakazy_Client_2;
 import by.minskkniga.minskkniga.api.*;
-import by.minskkniga.minskkniga.api.Zakazy;
+import by.minskkniga.minskkniga.api.Class_Zakazy;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,8 +29,8 @@ public class Zakazy_Client extends AppCompatActivity {
     TextView caption;
 
     Zakazy_2 adapter;
-    ArrayList<by.minskkniga.minskkniga.api.Zakazy> zakazy;
-    ArrayList<by.minskkniga.minskkniga.api.Zakazy> zakazy_buf;
+    ArrayList<Class_Zakazy> zakazy;
+    ArrayList<Class_Zakazy> zakazy_buf;
 
     ExpandableListView expListView;
 
@@ -96,9 +94,9 @@ public class Zakazy_Client extends AppCompatActivity {
     public void reload_2(){
 
 
-        App.getApi().getZakazy(id).enqueue(new Callback<List<by.minskkniga.minskkniga.api.Zakazy>>() {
+        App.getApi().getZakazy(id).enqueue(new Callback<List<Class_Zakazy>>() {
             @Override
-            public void onResponse(Call<List<by.minskkniga.minskkniga.api.Zakazy>> call, Response<List<by.minskkniga.minskkniga.api.Zakazy>> response) {
+            public void onResponse(Call<List<Class_Zakazy>> call, Response<List<Class_Zakazy>> response) {
                 zakazy.clear();
                 zakazy_buf.clear();
                 zakazy.addAll(response.body());
@@ -114,7 +112,7 @@ public class Zakazy_Client extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<by.minskkniga.minskkniga.api.Zakazy>> call, Throwable t) {
+            public void onFailure(Call<List<Class_Zakazy>> call, Throwable t) {
                 Toast.makeText(Zakazy_Client.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

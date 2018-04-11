@@ -10,15 +10,15 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import by.minskkniga.minskkniga.api.Clients;
+import by.minskkniga.minskkniga.api.Class_Clients;
 import by.minskkniga.minskkniga.R;
 
 
 public class Spravoch_Clients_2 extends RecyclerView.Adapter<Spravoch_Clients_2.ViewHolder>{
 
-    private List<Clients> clie;
+    private List<Class_Clients> clie;
 
-    public Spravoch_Clients_2(List<Clients> clie) {
+    public Spravoch_Clients_2(List<Class_Clients> clie) {
         this.clie = clie;
     }
 
@@ -30,7 +30,7 @@ public class Spravoch_Clients_2 extends RecyclerView.Adapter<Spravoch_Clients_2.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Clients cli = clie.get(position);
+        Class_Clients cli = clie.get(position);
 
 
         holder.tv1.setText(cli.getName());

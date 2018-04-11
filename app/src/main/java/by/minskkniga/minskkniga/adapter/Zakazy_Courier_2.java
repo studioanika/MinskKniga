@@ -1,7 +1,6 @@
 package by.minskkniga.minskkniga.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +11,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.api.Zakazy;
+import by.minskkniga.minskkniga.api.Class_Zakazy;
 
 public class Zakazy_Courier_2 extends BaseAdapter {
 
     private Context context;
     private LayoutInflater lInflater;
-    private ArrayList<Zakazy> objects;
+    private ArrayList<Class_Zakazy> objects;
 
-    public Zakazy_Courier_2(Context context, ArrayList<by.minskkniga.minskkniga.api.Zakazy> objects) {
+    public Zakazy_Courier_2(Context context, ArrayList<Class_Zakazy> objects) {
         this.context = context;
         this.objects = objects;
     }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Spravoch_Couriers.Couriers;
 
 public class Menu extends AppCompatActivity {
 
@@ -75,7 +76,7 @@ public class Menu extends AppCompatActivity {
                         startActivity(intent2);
                         break;
                     case 2:
-                        Intent intent3 = new Intent(Menu.this, Spravoch_Couriers.class);
+                        Intent intent3 = new Intent(Menu.this, Couriers.class);
                         startActivity(intent3);
                         break;
                 }

@@ -2,7 +2,6 @@ package by.minskkniga.minskkniga.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -10,7 +9,6 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +18,7 @@ import android.widget.Toast;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.ResultBody;
+import by.minskkniga.minskkniga.api.Class_Login;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,17 +79,19 @@ public class Login extends AppCompatActivity {
             pd.show();
 
 
-            App.getApi().login(login.getText().toString(), pass.getText().toString()).enqueue(new Callback<ResultBody>() {
+            App.getApi().login(login.getText().toString(), pass.getText().toString()).enqueue(new Callback<Class_Login>() {
                 @Override
-                public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
+                public void onResponse(Call<Class_Login> call, Response<Class_Login> response) {
                     if (!response.body().getMessage().equals("error")) {
                         pd.cancel();
                         sp = getPreferences(MODE_PRIVATE);
                         ed = sp.edit();
                         ed.putString("login", login.getText().toString());
                         ed.putString("pass", pass.getText().toString());
-                        ed.putString("rank", response.body().getMessage().toString());
+                        ed.putString("name", response.body().getName());
+                        ed.putString("rank", response.body().getRank());
                         ed.apply();
+                        Toast.makeText(Login.this, response.body().getName()+" "+response.body().getRank(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Login.this, Menu.class);
                         startActivity(intent);
                     } else {
@@ -101,7 +101,7 @@ public class Login extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<ResultBody> call, Throwable t) {
+                public void onFailure(Call<Class_Login> call, Throwable t) {
 
                 }
             });

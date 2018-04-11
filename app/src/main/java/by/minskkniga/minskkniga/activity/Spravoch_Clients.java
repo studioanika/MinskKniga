@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
@@ -22,7 +21,7 @@ import java.util.List;
 import by.minskkniga.minskkniga.adapter.Spravoch_Clients_1;
 import by.minskkniga.minskkniga.adapter.Spravoch_Clients_2;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Clients;
+import by.minskkniga.minskkniga.api.Class_Clients;
 import by.minskkniga.minskkniga.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,8 +30,8 @@ import retrofit2.Response;
 public class Spravoch_Clients extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    List<Clients> clien;
-    List<Clients> clien_buf;
+    List<Class_Clients> clien;
+    List<Class_Clients> clien_buf;
 
     Spravoch_Clients_1 listAdapter;
     ExpandableListView expListView;
@@ -170,14 +169,14 @@ public class Spravoch_Clients extends AppCompatActivity {
     }
 
     public void reload_1(){
-        App.getApi().getClients().enqueue(new Callback<List<Clients>>() {
+        App.getApi().getClients().enqueue(new Callback<List<Class_Clients>>() {
             @Override
-            public void onResponse(Call<List<Clients>> call, Response<List<Clients>> response) {
+            public void onResponse(Call<List<Class_Clients>> call, Response<List<Class_Clients>> response) {
                 //Подготавливаем список данных:
                 listDataHeader = new ArrayList<String>();
                 listDataChild = new ArrayList<ArrayList<String>>();
                 
-                List<Clients> cli = response.body();
+                List<Class_Clients> cli = response.body();
 
                 //Добавляем данные о пунктах списка:
                 int col = cli.size();
@@ -217,16 +216,16 @@ public class Spravoch_Clients extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Clients>> call, Throwable t) {
+            public void onFailure(Call<List<Class_Clients>> call, Throwable t) {
                 Toast.makeText(Spravoch_Clients.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void reload_2(){
-        App.getApi().getClients().enqueue(new Callback<List<Clients>>() {
+        App.getApi().getClients().enqueue(new Callback<List<Class_Clients>>() {
             @Override
-            public void onResponse(Call<List<Clients>> call, Response<List<Clients>> response) {
+            public void onResponse(Call<List<Class_Clients>> call, Response<List<Class_Clients>> response) {
                 clien.clear();
                 clien_buf.clear();
                 clien.addAll(response.body());
@@ -236,7 +235,7 @@ public class Spravoch_Clients extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Clients>> call, Throwable t) {
+            public void onFailure(Call<List<Class_Clients>> call, Throwable t) {
                 Toast.makeText(Spravoch_Clients.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class Nomenklatura_filter {
+public class Class_Nomenklatura_filter {
 
     @SerializedName("autor")
     @Expose

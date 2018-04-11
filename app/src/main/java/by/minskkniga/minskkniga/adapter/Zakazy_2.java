@@ -3,7 +3,6 @@ package by.minskkniga.minskkniga.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.*;
@@ -21,9 +19,9 @@ public class Zakazy_2 extends BaseAdapter {
 
     private Context context;
     private LayoutInflater lInflater;
-    private ArrayList<Clients> objects;
+    private ArrayList<Class_Clients> objects;
 
-    public Zakazy_2(Context context, ArrayList<Clients> objects) {
+    public Zakazy_2(Context context, ArrayList<Class_Clients> objects) {
         this.context = context;
         this.objects = objects;
     }
