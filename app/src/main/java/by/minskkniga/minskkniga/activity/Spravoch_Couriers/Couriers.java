@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Spravoch_Couriers;
+import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Main;
 import by.minskkniga.minskkniga.api.App;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -72,7 +72,7 @@ public class Couriers extends AppCompatActivity {
                 couriers_buf.clear();
                 couriers.addAll(response.body());
                 couriers_buf.addAll(response.body());
-                lv.setAdapter(new Spravoch_Couriers(Couriers.this, couriers));
+                lv.setAdapter(new Main(Couriers.this, couriers));
             }
 
             @Override

@@ -135,7 +135,7 @@ public class Zakazy extends AppCompatActivity {
 //                zakazy_buf.clear();
 //                zakazy.addAll(response.body());
 //                zakazy_buf.addAll(response.body());
-//                lv2.setAdapter(new Zakazy_Courier_2(Zakazy.this, zakazy));
+//                lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy));
                 //search();
             }
 

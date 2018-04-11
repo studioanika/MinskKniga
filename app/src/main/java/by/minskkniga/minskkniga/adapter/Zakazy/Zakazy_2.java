@@ -22,13 +22,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Zakazy_Client_2 extends BaseExpandableListAdapter {
+public class Zakazy_2 extends BaseExpandableListAdapter {
 
     private Context _context;
     ArrayList<Zakazy> _zakazy;
     AlertDialog.Builder ad;
 
-    public Zakazy_Client_2(Context context, ArrayList<Zakazy> zakazy) {
+    public Zakazy_2(Context context, ArrayList<Zakazy> zakazy) {
         this._context = context;
         this._zakazy = zakazy;
     }
