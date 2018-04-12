@@ -15,21 +15,25 @@ public class Add_Dela extends BaseAdapter {
 
     private Context context;
     private LayoutInflater lInflater;
-    private ArrayList<String> strings;
+    private ArrayList<String> date;
+    private ArrayList<String> status;
+    private ArrayList<String> otvetstv;
 
-    public Add_Dela(Context context, ArrayList<String> str) {
+    public Add_Dela(Context context, ArrayList<String> date, ArrayList<String> status, ArrayList<String> otvetstv) {
         this.context = context;
-        this.strings = str;
+        this.date = date;
+        this.status = status;
+        this.otvetstv = otvetstv;
     }
 
     @Override
     public int getCount() {
-        return strings.size();
+        return date.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return strings.get(position);
+        return date.get(position);
     }
 
     @Override
@@ -43,16 +47,15 @@ public class Add_Dela extends BaseAdapter {
         // используем созданные, но не используемые view
 
         lInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = lInflater.inflate(R.layout.adapter_add_client_dela, parent, false);
+        View view = lInflater.inflate(R.layout.adapter_add_dela, parent, false);
 
         TextView tv1 = view.findViewById(R.id.tv1);
         TextView tv2 = view.findViewById(R.id.tv2);
         TextView tv3 = view.findViewById(R.id.tv3);
 
-        String[] buffer = strings.get(position).split("/~/");
-        tv1.setText(buffer[0]);
-        tv2.setText(buffer[1]);
-        tv3.setText(buffer[2]);
+        tv1.setText(date.get(position));
+        tv2.setText(status.get(position));
+        tv3.setText(otvetstv.get(position));
         return view;
     }
 

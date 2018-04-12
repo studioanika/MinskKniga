@@ -39,6 +39,7 @@ public class Add_Dialog extends DialogFragment {
 
     private EditText search_ed;
     private ListView search_lv;
+    private ArrayList<Sity> sity;
     private ArrayList<String> names;
     private ArrayList<String> names_buf;
     private TextView search_tv;
@@ -101,6 +102,7 @@ public class Add_Dialog extends DialogFragment {
                 search_tv = view.findViewById(R.id.search_tv);
                 names = new ArrayList<>();
                 names_buf = new ArrayList<>();
+                sity = new ArrayList<>();
 
                 App.getApi().getSity().enqueue(new Callback<List<Sity>>() {
                     @Override
@@ -110,6 +112,7 @@ public class Add_Dialog extends DialogFragment {
                             names.add(buffer.getName());
                             names_buf.add(buffer.getName());
                         }
+                        sity.addAll(response.body());
                         //dialog.cancel();
                         search_lv.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, names));
                     }
@@ -145,8 +148,11 @@ public class Add_Dialog extends DialogFragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                             long id) {
-                        ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_sity(position+1,names.get(position));
-                        getDialog().dismiss();
+                        for(Sity buf : sity){
+                            if (buf.getName().equals(names.get(position)))
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_sity(Integer.parseInt(buf.getId()),names.get(position));
+                            getDialog().dismiss();
+                        }
                     }
                 });
 
@@ -366,6 +372,7 @@ public class Add_Dialog extends DialogFragment {
                 search_tv = view.findViewById(R.id.search_tv);
                 names = new ArrayList<>();
                 names_buf = new ArrayList<>();
+                sity = new ArrayList<>();
 
                 App.getApi().getSity().enqueue(new Callback<List<Sity>>() {
                     @Override
@@ -375,7 +382,8 @@ public class Add_Dialog extends DialogFragment {
                             names.add(buffer.getName());
                             names_buf.add(buffer.getName());
                         }
-                        //dialog.cancel();
+                        sity.addAll(response.body());
+
                         search_lv.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, names));
                     }
 
@@ -410,8 +418,12 @@ public class Add_Dialog extends DialogFragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                             long id) {
-                        ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add)getActivity()).return_sity(position+1,names.get(position));
-                        getDialog().dismiss();
+                        for(Sity buf : sity){
+                            if (buf.getName().equals(names.get(position)))
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add)getActivity()).return_sity(Integer.parseInt(buf.getId()),names.get(position));
+                            getDialog().dismiss();
+                        }
+
                     }
                 });
 

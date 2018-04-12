@@ -70,7 +70,9 @@ public class Add extends AppCompatActivity {
     ListView list_contact;
     ListView list_contactfaces;
 
-    ArrayList<String> array_contact;
+    ArrayList<String> contact_type;
+    ArrayList<String> contact_text;
+
     ArrayList<String> array_contactface;
 
     Add_Contacts adapter_contact;
@@ -96,16 +98,19 @@ public class Add extends AppCompatActivity {
 
         dlg1 = new Add_Dialog(this, 7);
         dlg2 = new Add_Dialog(this, 5);
-        array_contact = new ArrayList<String>();
+
+        contact_type = new ArrayList<String>();
+        contact_text = new ArrayList<String>();
+
         list_contact = findViewById(R.id.contacts_listview);
-        adapter_contact = new Add_Contacts(this, array_contact);
+        adapter_contact = new Add_Contacts(this, contact_type, contact_text);
         list_contact.setAdapter(adapter_contact);
 
         dlg3 = new Add_Dialog(this, 6);
         array_contactface = new ArrayList<String>();
         list_contactfaces = findViewById(R.id.contactface_listview);
         adapter_contactfaces = new ArrayAdapter<String>(this,
-                R.layout.adapter_add_client_contactfaces, array_contactface);
+                R.layout.adapter_add_contactfaces, array_contactface);
 
         sv = findViewById(R.id.scrollview);
         list_contactfaces.setAdapter(adapter_contactfaces);
@@ -270,11 +275,12 @@ public class Add extends AppCompatActivity {
     public void return_contact(String type, String text) {
         if (!text.isEmpty()) {
             params_contact = list_contact.getLayoutParams();
-            params_contact.height = (int) (list_contact.getResources().getDisplayMetrics().density * ((adapter_contact.getCount() + 1) * 31));
+            params_contact.height = (int) (list_contact.getResources().getDisplayMetrics().density * ((adapter_contact.getCount() + 1) * 41));
             list_contact.setLayoutParams(params_contact);
 
+            contact_type.add(type);
+            contact_text.add(text);
 
-            array_contact.add(type + "/~/" + text);
             adapter_contact.notifyDataSetChanged();
             Toast.makeText(this, type + " " + text, Toast.LENGTH_SHORT).show();
         }
@@ -295,6 +301,10 @@ public class Add extends AppCompatActivity {
     String contacts = "";
     String contactfaces = "";
     int i = 0;
+
+    public void add_back(View view){
+        onBackPressed();
+    }
 
     public void add_client_button(View view) {
 
@@ -378,16 +388,14 @@ public class Add extends AppCompatActivity {
             naprav_ed.requestFocus();
             return;
         }
-        if (array_contact.size() != 0) {
-            contacts = array_contact.get(0);
-            i = 0;
-            for (String buf : array_contact) {
-                if (i != 0) {
-                    contacts += "/~~/" + buf;
-                }
-                i++;
+
+        if (contact_type.size() != 0) {
+            contacts = contact_type.get(0) + "/~/" + contact_text.get(0);
+            for (int i = 1; i < contact_type.size(); i++) {
+                contacts += "/~~/" + contact_type.get(i) + "/~/" + contact_text.get(i);
             }
         }
+
 
         if (array_contactface.size() != 0) {
             contactfaces = array_contactface.get(0);

@@ -81,8 +81,13 @@ public class Add extends AppCompatActivity {
     ListView list_contact;
     ListView list_contactfaces;
 
-    ArrayList<String> array_dela;
-    ArrayList<String> array_contact;
+    ArrayList<String> dela_date;
+    ArrayList<String> dela_status;
+    ArrayList<String> dela_otvetstv;
+
+    ArrayList<String> contact_type;
+    ArrayList<String> contact_text;
+
     ArrayList<String> array_contactface;
 
     Add_Dela adapter_dela;
@@ -112,22 +117,29 @@ public class Add extends AppCompatActivity {
         dlg1 = new Add_Dialog(this, 1);
 
         dlg2 = new Add_Dialog(this, 2);
-        array_dela = new ArrayList<String>();
+
+        dela_date = new ArrayList<String>();
+        dela_status = new ArrayList<String>();
+        dela_otvetstv = new ArrayList<String>();
+
         list_dela = findViewById(R.id.dela_listview);
-        adapter_dela = new Add_Dela(this, array_dela);
+        adapter_dela = new Add_Dela(this, dela_date, dela_status, dela_otvetstv);
         list_dela.setAdapter(adapter_dela);
 
         dlg3 = new Add_Dialog(this, 3);
-        array_contact = new ArrayList<String>();
+
+        contact_type = new ArrayList<String>();
+        contact_text = new ArrayList<String>();
+
         list_contact = findViewById(R.id.contacts_listview);
-        adapter_contact = new Add_Contacts(this, array_contact);
+        adapter_contact = new Add_Contacts(this, contact_type, contact_text);
         list_contact.setAdapter(adapter_contact);
 
         dlg4 = new Add_Dialog(this, 4);
         array_contactface = new ArrayList<String>();
         list_contactfaces = findViewById(R.id.contactface_listview);
         adapter_contactfaces = new ArrayAdapter<String>(this,
-                R.layout.adapter_add_client_contactfaces, array_contactface);
+                R.layout.adapter_add_contactfaces, array_contactface);
 
         list_contactfaces.setAdapter(adapter_contactfaces);
 
@@ -350,7 +362,10 @@ public class Add extends AppCompatActivity {
         list_dela.setLayoutParams(params_dela);
 
 
-        array_dela.add(date + "/~/" + status + "/~/" + otvetstv);
+        dela_date.add(date);
+        dela_status.add(status);
+        dela_otvetstv.add(otvetstv);
+
         adapter_dela.notifyDataSetChanged();
         Toast.makeText(this, date, Toast.LENGTH_SHORT).show();
     }
@@ -358,11 +373,12 @@ public class Add extends AppCompatActivity {
     public void return_contact(String type, String text) {
         if (!text.isEmpty()) {
             params_contact = list_contact.getLayoutParams();
-            params_contact.height = (int) (list_contact.getResources().getDisplayMetrics().density * ((adapter_contact.getCount() + 1) * 31));
+            params_contact.height = (int) (list_contact.getResources().getDisplayMetrics().density * ((adapter_contact.getCount() + 1) * 41));
             list_contact.setLayoutParams(params_contact);
 
+            contact_type.add(type);
+            contact_text.add(text);
 
-            array_contact.add(type + "/~/" + text);
             adapter_contact.notifyDataSetChanged();
             Toast.makeText(this, type + " " + text, Toast.LENGTH_SHORT).show();
         }
@@ -386,6 +402,10 @@ public class Add extends AppCompatActivity {
     String dolg = "0";
 
     int i = 0;
+
+    public void add_back(View view){
+        onBackPressed();
+    }
 
     public void add_client_button(View view) {
         if (name_ed.getText().toString().isEmpty()) {
@@ -476,27 +496,21 @@ public class Add extends AppCompatActivity {
         dolg = skidka_ed.getText().toString();
         if (dolg.isEmpty()) dolg = "0";
 
+        
+        if (dela_date.size() != 0) {
+            dela = dela_date.get(0) + "/~/" + dela_status.get(0) + "/~/" + dela_otvetstv.get(0);
+            for (int i = 1; i < dela_date.size(); i++) {
+                dela += "/~~/" + dela_date.get(0) + "/~/" + dela_status.get(0) + "/~/" + dela_otvetstv.get(0);
+            }
+        }
 
-        if (array_dela.size() != 0) {
-            dela = array_dela.get(0);
-            i = 0;
-            for (String buf : array_dela) {
-                if (i != 0) {
-                    dela += "/~~/" + buf;
-                }
-                i++;
+        if (contact_type.size() != 0) {
+            contacts = contact_type.get(0) + "/~/" + contact_text.get(0);
+            for (int i = 1; i < contact_type.size(); i++) {
+                contacts += "/~~/" + contact_type.get(i) + "/~/" + contact_text.get(i);
             }
         }
-        if (array_contact.size() != 0) {
-            contacts = array_contact.get(0);
-            i = 0;
-            for (String buf : array_contact) {
-                if (i != 0) {
-                    contacts += "/~~/" + buf;
-                }
-                i++;
-            }
-        }
+
         if (array_contactface.size() != 0) {
             contactfaces = array_contactface.get(0);
             i = 0;

@@ -14,10 +14,10 @@ public class App extends Application {
         super.onCreate();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://query.pe.hu/") //Базовая часть адреса
-                .addConverterFactory(GsonConverterFactory.create()) //Конвертер, необходимый для преобразования JSON'а в объекты
+                .baseUrl("http://query.pe.hu/")
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        Api = retrofit.create(RestApi.class); //Создаем объект, при помощи которого будем выполнять запросы
+        Api = retrofit.create(RestApi.class);
     }
 
     public static RestApi getApi() {
