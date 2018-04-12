@@ -34,7 +34,7 @@
         <activity android:name=".activity.Zakazy.Zakazy_Client" />
         <activity android:name=".activity.Spravoch_Couriers.Couriers" />
         <activity android:name=".activity.Spravoch_Couriers.Zakazy" />
-        <activity android:name=".adapter.Zakazy.Zakaz_info"></activity>
+        <activity android:name=".activity.Zakazy.Zakaz_info"></activity>
     </application>
 
 </manifest>

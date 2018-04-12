@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +17,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.Zakazy.Main;
+import by.minskkniga.minskkniga.activity.Zakazy.Zakaz_info;
 import by.minskkniga.minskkniga.activity.Zakazy.Zakazy_Client;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
@@ -192,9 +191,8 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
         iv1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(_context, Zakaz_info.class);
-
-
                 intent.putExtra("name", Zakazy_Client.getName());
                 intent.putExtra("id", _zakazy.get(groupPosition).getId());
                 _context.startActivity(intent);

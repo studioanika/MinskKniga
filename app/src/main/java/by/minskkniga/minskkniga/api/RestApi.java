@@ -2,6 +2,7 @@ package by.minskkniga.minskkniga.api;
 
 import java.util.List;
 
+import by.minskkniga.minskkniga.activity.Zakazy.Zakaz_info;
 import by.minskkniga.minskkniga.api.Class.Clients;
 import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.Login;
@@ -103,4 +104,7 @@ public interface RestApi {
 
     @GET("/api/set_oplata.php")
     Call<ResultBody> setOplata(@Query("id") String id);
+
+    @GET("/api/show_zakaz_info.php")
+    Call<by.minskkniga.minskkniga.api.Class.Zakaz_info> getZakaz_info(@Query("id") String id);
 }
