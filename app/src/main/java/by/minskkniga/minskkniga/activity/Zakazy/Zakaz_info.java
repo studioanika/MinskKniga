@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import java.util.List;
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Couriers;
+import by.minskkniga.minskkniga.api.Class.WhatZakazal;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,9 +38,13 @@ public class Zakaz_info extends AppCompatActivity {
     TextView status;
     CheckBox chernovik;
     CheckBox oplacheno;
+    TextView tv1;
+    TextView tv2;
 
     Spinner courier;
     ArrayAdapter<String> adapter;
+
+    ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,10 @@ public class Zakaz_info extends AppCompatActivity {
         date2 = findViewById(R.id.date2);
         autor = findViewById(R.id.autor);
         status = findViewById(R.id.status);
+        tv1 = findViewById(R.id.tv1);
+        tv2 = findViewById(R.id.tv2);
+
+        lv = findViewById(R.id.lv);
 
         courier = findViewById(R.id.courier);
 
@@ -75,7 +85,7 @@ public class Zakaz_info extends AppCompatActivity {
         reload();
     }
 
-    public void reload(){
+    public void reload() {
         App.getApi().getZakaz_info(id).enqueue(new Callback<by.minskkniga.minskkniga.api.Class.Zakaz_info>() {
             @Override
             public void onResponse(Call<by.minskkniga.minskkniga.api.Class.Zakaz_info> call, Response<by.minskkniga.minskkniga.api.Class.Zakaz_info> response) {
@@ -85,10 +95,19 @@ public class Zakaz_info extends AppCompatActivity {
                 date2.setText(zakaz.getDate());
                 autor.setText(zakaz.getAutor());
 
+                double summa = 0;
+                double ves = 0;
+                for(int i = 0;i<zakaz.getWhatZakazal().size();i++){
+                    summa += Double.parseDouble(zakaz.getWhatZakazal().get(i).getStoim());
+                    ves+=Double.parseDouble(zakaz.getWhatZakazal().get(i).getVes());
+                }
+
+                tv1.setText("Итого "+zakaz.getWhatZakazal().size()+" позиция на "+summa+" BYN");
+                tv2.setText("Вес: "+ves+" кг");
 
                 oplacheno.setChecked(zakaz.getOplacheno().equals("1"));
 
-                switch(zakaz.getStatus()){
+                switch (zakaz.getStatus()) {
                     case "0"://chernovik новый  green
                         status.setText("Новый");
                         status.setBackgroundColor(Color.GREEN);
@@ -116,6 +135,8 @@ public class Zakaz_info extends AppCompatActivity {
                         break;
 
                 }
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_info(Zakaz_info.this, (ArrayList<WhatZakazal>) zakaz.getWhatZakazal()));
+                load_couriers();
             }
 
             @Override
@@ -123,21 +144,30 @@ public class Zakaz_info extends AppCompatActivity {
 
             }
         });
+    }
 
-
-
+    public void load_couriers(){
         App.getApi().getCouriers().enqueue(new Callback<List<Couriers>>() {
             @Override
             public void onResponse(Call<List<Couriers>> call, Response<List<Couriers>> response) {
                 ArrayList<String> mass = new ArrayList();
-                for(int i = 0;i<response.body().size();i++) {
+                ArrayList<String> id = new ArrayList();
+                for (int i = 0; i < response.body().size(); i++) {
                     mass.add(response.body().get(i).getName());
+                    id.add(response.body().get(i).getId());
                 }
 
                 adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, mass);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
                 courier.setAdapter(adapter);
+
+                for (int i = 0; i < adapter.getCount(); i++) {
+                    if (zakaz.getCourier().equals(id.get(i))) {
+                        courier.setSelection(i);
+                    }
+                }
+
             }
 
             @Override

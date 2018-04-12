@@ -50,6 +50,7 @@ public class Main extends AppCompatActivity {
         clien_buf = new ArrayList<Clients>();
         lv2 = findViewById(R.id.lv2);
         lv2.setAdapter(new Main_2(this, clien));
+
         lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

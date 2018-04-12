@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.Class.WhatZakazal;
@@ -49,9 +51,16 @@ public class Zakaz_info extends BaseAdapter{
         TextView tv1 = view.findViewById(R.id.tv1);
         TextView tv2 = view.findViewById(R.id.tv2);
         TextView tv3 = view.findViewById(R.id.tv3);
-        CheckBox ch1 = view.findViewById(R.id.ch1);
+        TextView tv4 = view.findViewById(R.id.tv4);
+        TextView tv5 = view.findViewById(R.id.tv5);
+        EditText ed1 = view.findViewById(R.id.ed1);
 
-
+        tv1.setText(objects.get(position).getName());
+        tv2.setText(objects.get(position).getClass_());
+        tv3.setText(objects.get(position).getIzdanie().substring(0,1));
+        tv4.setText(objects.get(position).getArtikyl());
+        tv5.setText(objects.get(position).getSokr());
+        ed1.setText(objects.get(position).getZak());
 
         return view;
     }
