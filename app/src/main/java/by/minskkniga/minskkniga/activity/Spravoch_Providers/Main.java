@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.Toast;
 
@@ -29,15 +30,14 @@ import retrofit2.Response;
 
 public class Main extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    List<Providers> prov;
-    List<Providers> prov_buf;
+    ListView lv2;
+    ArrayList<Providers> prov;
+    ArrayList<Providers> prov_buf;
 
     Main_1 listAdapter;
     ExpandableListView expListView;
     ArrayList<String> listDataHeader;
     ArrayList<ArrayList<String>> listDataChild;
-    Main_2 adapter;
     EditText searchedit;
     ImageButton back;
 
@@ -117,12 +117,9 @@ public class Main extends AppCompatActivity {
         prov = new ArrayList<>();
         prov_buf = new ArrayList<>();
 
-        recyclerView = findViewById(R.id.rw2);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        lv2 = findViewById(R.id.lv2);
 
-        adapter = new Main_2(prov);
-        recyclerView.setAdapter(adapter);
+        lv2.setAdapter(new Main_2(this, prov));
 //tab 2 end
 
 //search start
@@ -156,7 +153,7 @@ public class Main extends AppCompatActivity {
         }else{
             prov.addAll(prov_buf);
         }
-        recyclerView.getAdapter().notifyDataSetChanged();
+        lv2.setAdapter(new Main_2(this, prov));
     }
 
     @Override
@@ -227,7 +224,7 @@ public class Main extends AppCompatActivity {
                 prov_buf.clear();
                 prov.addAll(response.body());
                 prov_buf.addAll(response.body());
-                recyclerView.getAdapter().notifyDataSetChanged();
+                lv2.setAdapter(new Main_2(Main.this, prov));
                 search();
             }
 

@@ -1,38 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:layout_centerVertical="true">
+    android:layout_height="30dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/tv1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="22dp"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
         android:text="TextView" />
 
     <CheckBox
         android:id="@+id/ch1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:focusable="false"
-        android:enabled="false"
-        android:layout_marginLeft="180dp" />
+        android:layout_weight="1"
+        android:enabled="false"/>
 
     <TextView
         android:id="@+id/tv2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="277dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="1"
         android:text="TextView" />
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="0.2dp"
-        android:background="@android:color/darker_gray"
-        android:visibility="visible" />
-
-</RelativeLayout>
+</LinearLayout>
