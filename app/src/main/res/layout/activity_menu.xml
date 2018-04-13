@@ -35,18 +35,7 @@
         </RelativeLayout>
 
             <ListView
-                android:id="@+id/listView1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#F8F8F8"
-                android:text="Справочники" />
-
-            <ListView
-                android:id="@+id/listView2"
+                android:id="@+id/lv1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

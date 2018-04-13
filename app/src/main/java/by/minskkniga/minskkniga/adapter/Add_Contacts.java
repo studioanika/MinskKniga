@@ -50,15 +50,14 @@ public class Add_Contacts extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         // используем созданные, но не используемые view
 
-        lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        lInflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = lInflater.inflate(R.layout.adapter_add_contacts, parent, false);
 
         TextView tv1 = view.findViewById(R.id.tv1);
         ImageButton b1 = view.findViewById(R.id.b1);
 
 
-
-        switch (type.get(position)){
+        switch (type.get(position)) {
             case "tel":
                 b1.setImageResource(R.drawable.ic_tel);
                 break;
@@ -76,38 +75,52 @@ public class Add_Contacts extends BaseAdapter {
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (type.get(position)){
+                switch (type.get(position)) {
                     case "tel":
-                        Intent tel = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", text.get(position), null));
-                        _context.startActivity(tel);
+                        try {
+                            Intent tel = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", text.get(position), null));
+                            _context.startActivity(tel);
+                        } catch (Exception e) {
+                            Toast.makeText(_context, "Ошибка", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     case "mail":
-                        Intent mail = new Intent(Intent.ACTION_SEND);
-                        String[] TO = {text.get(position)};
-                        mail.setData(Uri.parse("mailto:"));
-                        mail.setType("text/plain");
-                        mail.putExtra(Intent.EXTRA_EMAIL, TO);
-                        mail.putExtra(Intent.EXTRA_SUBJECT, _context.getString(R.string.app_name));
-                        _context.startActivity(Intent.createChooser(mail, "Send Email"));
+                        try {
+                            Intent mail = new Intent(Intent.ACTION_SEND);
+                            String[] TO = {text.get(position)};
+                            mail.setData(Uri.parse("mailto:"));
+                            mail.setType("text/plain");
+                            mail.putExtra(Intent.EXTRA_EMAIL, TO);
+                            mail.putExtra(Intent.EXTRA_SUBJECT, _context.getString(R.string.app_name));
+                            _context.startActivity(Intent.createChooser(mail, "Send Email"));
+                        } catch (Exception e) {
+                            Toast.makeText(_context, "Ошибка", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     case "site":
-                        Intent site = new Intent(Intent.ACTION_VIEW);
-                        site.setData(Uri.parse(text.get(position)));
-                        _context.startActivity(site);
+                        try {
+                            Intent site = new Intent(Intent.ACTION_VIEW);
+                            site.setData(Uri.parse(text.get(position)));
+                            _context.startActivity(site);
+                        } catch (Exception e) {
+                            Toast.makeText(_context, "Ошибка", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                 }
             }
         });
 
-        if(type.get(position).equals("site")) {
+        if (type.get(position).equals("site")) {
             if (text.get(position).length() > 6) {
                 if (!text.get(position).substring(0, 7).equals("http://")) {
-                    tv1.setText("http://" + text.get(position));
+                    text.add(position, "http://" + text.get(position));
+                    tv1.setText(text.get(position));
                 }
             } else {
-                tv1.setText("http://" + text.get(position));
+                text.add(position, "http://" + text.get(position));
+                tv1.setText(text.get(position));
             }
-        }else{
+        } else {
             tv1.setText(text.get(position));
         }
 

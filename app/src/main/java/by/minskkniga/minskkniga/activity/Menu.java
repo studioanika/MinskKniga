@@ -17,26 +17,19 @@ import by.minskkniga.minskkniga.activity.Spravoch_Couriers.Couriers;
 
 public class Menu extends AppCompatActivity {
 
-    String[] list1 = {"Заказы", "Поставщики", "Касса", "Номенклатура", "Органайзер", "Инвентаризация"};
-    String[] list2 = {"Клиенты", "Поставщики", "Курьеры"};
+    String[] list1 = {"Заказы", "Поставщики", "Касса", "Номенклатура", "Органайзер", "Инвентаризация", "Справочники", "Клиенты", "Поставщики", "Курьеры"};
 
-    ListView lv1, lv2;
+    ListView lv1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        lv1 = findViewById(R.id.listView1);
-        lv2 = findViewById(R.id.listView2);
+        lv1 = findViewById(R.id.lv1);
 
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, list1);
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, list2);
-        // присваиваем адаптер списку
-        lv1.setAdapter(adapter1);
-        lv2.setAdapter(adapter2);
+        lv1.setAdapter(new by.minskkniga.minskkniga.adapter.Main(this));
+
 
 
         lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -60,25 +53,17 @@ public class Menu extends AppCompatActivity {
                         Intent intent2 = new Intent(Menu.this, Main.class);
                         startActivity(intent2);
                         break;
-                }
-            }
-        });
-        lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
-                                    long id) {
-                switch (position) {
-                    case 0:
-                        Intent intent1 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Spravoch_Clients.Main.class);
-                        startActivity(intent1);
+                    case 7:
+                        Intent intent7 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Spravoch_Clients.Main.class);
+                        startActivity(intent7);
                         break;
-                    case 1:
-                        Intent intent2 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Spravoch_Providers.Main.class);
-                        startActivity(intent2);
+                    case 8:
+                        Intent intent8 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Spravoch_Providers.Main.class);
+                        startActivity(intent8);
                         break;
-                    case 2:
-                        Intent intent3 = new Intent(Menu.this, Couriers.class);
-                        startActivity(intent3);
+                    case 9:
+                        Intent intent9 = new Intent(Menu.this, Couriers.class);
+                        startActivity(intent9);
                         break;
                 }
             }

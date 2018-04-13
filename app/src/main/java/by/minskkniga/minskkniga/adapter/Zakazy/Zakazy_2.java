@@ -63,7 +63,7 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
         TextView tv5 = convertView.findViewById(R.id.tv5);
 
         if (childPosition == 0) {
-            convertView.setBackgroundColor(Color.YELLOW);
+            convertView.setBackgroundColor(Color.DKGRAY);
             tv1.setText("Наим.");
             tv2.setText("Кл.");
             tv3.setText("Изд.");
