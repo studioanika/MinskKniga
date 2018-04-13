@@ -14,6 +14,7 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
+import by.minskkniga.minskkniga.api.Class.Zakaz_info;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,8 +28,8 @@ public class Zakazy extends AppCompatActivity {
     String name;
     TextView caption;
 
-    ListView lv;
     ListView lv2;
+
 
     TextView checkbox;
 

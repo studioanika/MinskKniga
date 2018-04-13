@@ -54,13 +54,7 @@ public class Zakazy_2 extends BaseAdapter {
 
 
 
-        /*новый
-        частично собран
-        собран
-        в доставку
-        отгружен
-        ожидание
-        оплачен*/
+
 
         if (objects.get(position).getOplacheno().equals("0")) {
             ch1.setChecked(false);
@@ -68,7 +62,7 @@ public class Zakazy_2 extends BaseAdapter {
             ch1.setChecked(true);
         }
 
-        tv3.setText(objects.get(position).getSumma().toString());
+        tv2.setText(objects.get(position).getSumma().toString());
 
 
         return view;

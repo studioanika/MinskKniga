@@ -85,6 +85,12 @@ public class Zakaz_info extends AppCompatActivity {
         reload();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        reload();
+    }
+
     public void reload() {
         App.getApi().getZakaz_info(id).enqueue(new Callback<by.minskkniga.minskkniga.api.Class.Zakaz_info>() {
             @Override
