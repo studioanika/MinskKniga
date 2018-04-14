@@ -39,9 +39,6 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Intent intent = new Intent(Login.this, Menu.class);
-        startActivity(intent);
-
         login = findViewById(R.id.login);
         pass = findViewById(R.id.pass);
         button = findViewById(R.id.button);

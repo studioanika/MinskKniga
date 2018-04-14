@@ -62,110 +62,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout1"
+                    <include
+                        layout="@layout/include_zakazy_1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-                        <Spinner
-                            android:id="@+id/status"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"/>
-
-                        <Spinner
-                            android:id="@+id/sity"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"/>
-
-                        <Spinner
-                            android:id="@+id/school"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"/>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingLeft="10dp"
-                                android:text="Дата"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Статус"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:paddingRight="10dp"
-                                android:text="Клиент"/>
-
-                        </LinearLayout>
-
-                        <ListView
-                            android:id="@+id/lv1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout2"
+                    <include
+                        layout="@layout/include_zakazy_2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-
-                        <EditText
-                            android:id="@+id/search"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="Поиск клиентов"
-                            android:inputType="textPersonName" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_marginLeft="10dp"
-                                android:text="Заказы клиентов" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Долг" />
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="10dp"
-                                android:layout_weight="1"
-                                android:text="Образец" />
-
-                        </LinearLayout>
-
-                        <ListView
-                            android:id="@+id/lv2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    </LinearLayout>
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
                 </FrameLayout>

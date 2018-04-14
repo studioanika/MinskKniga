@@ -59,86 +59,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
-                <LinearLayout
-                    android:id="@+id/linearLayout1"
+                <include
+                    layout="@layout/include_spravoch_courier_1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
-                        android:text="Поставщики"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:text="Долг"/>
-                    </LinearLayout>
-
-                    <ExpandableListView
-                        android:id="@+id/expandablelistview"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scrollbars="vertical"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayout2"
+                <include
+                    layout="@layout/include_spravoch_courier_2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <EditText
-                        android:id="@+id/editsearchclients"
-                        android:layout_width="match_parent"
-                        android:layout_height="58dp"
-                        android:ems="10"
-                        android:hint="Поиск Клиентов"
-                        android:inputType="textPersonName" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:text="Поставщики" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginRight="10dp"
-                        android:text="Долг" />
-
-                    </LinearLayout>
-
-
-                    <ListView
-                        android:id="@+id/lv2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
-
-
-                </LinearLayout>
-
-
-
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
             </FrameLayout>
 
