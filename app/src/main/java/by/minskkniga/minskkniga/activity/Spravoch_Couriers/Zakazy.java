@@ -4,8 +4,10 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,10 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Zakazy_1;
 import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Zakazy_2;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.Zakaz_info;
-import by.minskkniga.minskkniga.api.Class.Zakazy_courier;
+import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
+import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,25 +28,33 @@ import retrofit2.Response;
 
 public class Zakazy extends AppCompatActivity {
 
-    ImageButton back;
-
     int id;
     String name;
     TextView caption;
+    ImageButton back;
+    ImageButton filter;
+    TabHost tabHost;
+    RelativeLayout filter_layout_1;
+    RelativeLayout filter_layout_2;
+    TextView notfound_1;
+    TextView notfound_2;
 
+    ExpandableListView lv1;
     ListView lv2;
-
     TextView checkbox;
-
     int check = 0;
 
-    ArrayList<Zakazy_courier> zakazy;
-    ArrayList<Zakazy_courier> zakazy_buf;
+    ArrayList<Zakazy_courier_knigi> zakazy_1;
+    ArrayList<Zakazy_courier_knigi> zakazy_1_buf;
+
+    ArrayList<Zakazy_courier_clients> zakazy_2;
+    ArrayList<Zakazy_courier_clients> zakazy_2_buf;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_zakazy_courier);
+        setContentView(R.layout.activity_courier_zakazy);
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -53,10 +64,46 @@ public class Zakazy extends AppCompatActivity {
             }
         });
 
+        filter_layout_1 = findViewById(R.id.filter_layout_1);
+        filter_layout_1.setVisibility(View.GONE);
+        filter_layout_2 = findViewById(R.id.filter_layout_2);
+        filter_layout_2.setVisibility(View.GONE);
+        filter = findViewById(R.id.filter_button);
+
+        notfound_1 = findViewById(R.id.notfound_1);
+        notfound_2 = findViewById(R.id.notfound_2);
+
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (tabHost.getCurrentTab()){
+                    case 0:
+                        if (filter_layout_1.getVisibility()==View.GONE){
+                            filter_layout_1.setVisibility(View.VISIBLE);
+                        }else{
+                            filter_layout_1.setVisibility(View.GONE);
+                        }
+                        break;
+                    case 1:
+                        if (filter_layout_2.getVisibility()==View.GONE){
+                            filter_layout_2.setVisibility(View.VISIBLE);
+                        }else{
+                            filter_layout_2.setVisibility(View.GONE);
+                        }
+                        break;
+                }
+            }
+        });
+
+
+        lv1 = findViewById(R.id.lv1);
         lv2 = findViewById(R.id.lv2);
 
-        zakazy = new ArrayList<>();
-        zakazy_buf = new ArrayList<>();
+        zakazy_1 = new ArrayList<>();
+        zakazy_1_buf = new ArrayList<>();
+
+        zakazy_2 = new ArrayList<>();
+        zakazy_2_buf = new ArrayList<>();
 
         checkbox = findViewById(R.id.checkbox);
         Drawable img = getResources().getDrawable(R.drawable.ic_check_0);
@@ -96,7 +143,7 @@ public class Zakazy extends AppCompatActivity {
         Toast.makeText(this, id+" ", Toast.LENGTH_SHORT).show();
 
 
-        TabHost tabHost = findViewById(R.id.tabHost);
+        tabHost = findViewById(R.id.tabHost);
         tabHost.setup();
 
         TabHost.TabSpec tabSpec = tabHost.newTabSpec("tag1");
@@ -110,7 +157,7 @@ public class Zakazy extends AppCompatActivity {
         tabSpec.setIndicator("по клиентам");
         tabHost.addTab(tabSpec);
 
-        tabHost.setCurrentTab(0);
+        tabHost.setCurrentTab(1);
 
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             public void onTabChanged(String tabId) {
@@ -133,23 +180,41 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void reload_1(){
-        //reload
+        App.getApi().getCourier_knigi(String.valueOf(id)).enqueue(new Callback<List<Zakazy_courier_knigi>>() {
+            @Override
+            public void onResponse(Call<List<Zakazy_courier_knigi>> call, Response<List<Zakazy_courier_knigi>> response) {
+                zakazy_1.clear();
+                zakazy_1_buf.clear();
+                zakazy_1.addAll(response.body());
+                zakazy_1_buf.addAll(response.body());
+                lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
+                notfound_1.setVisibility(View.GONE);
+                notfound_1.setText("Ничего не найдено");
+            }
+
+            @Override
+            public void onFailure(Call<List<Zakazy_courier_knigi>> call, Throwable t) {
+
+            }
+        });
     }
 
     public void reload_2(){
-        App.getApi().getZakazy_courier(String.valueOf(id)).enqueue(new Callback<List<Zakazy_courier>>() {
+        App.getApi().getCourier_zakazy(String.valueOf(id)).enqueue(new Callback<List<Zakazy_courier_clients>>() {
             @Override
-            public void onResponse(Call<List<Zakazy_courier>> call, Response<List<Zakazy_courier>> response) {
-                zakazy.clear();
-                zakazy_buf.clear();
-                zakazy.addAll(response.body());
-                zakazy_buf.addAll(response.body());
-                lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy));
+            public void onResponse(Call<List<Zakazy_courier_clients>> call, Response<List<Zakazy_courier_clients>> response) {
+                zakazy_2.clear();
+                zakazy_2_buf.clear();
+                zakazy_2.addAll(response.body());
+                zakazy_2_buf.addAll(response.body());
+                lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
+                notfound_2.setVisibility(View.GONE);
+                notfound_2.setText("Ничего не найдено");
                 //search();
             }
 
             @Override
-            public void onFailure(Call<List<Zakazy_courier>> call, Throwable t) {
+            public void onFailure(Call<List<Zakazy_courier_clients>> call, Throwable t) {
                 Toast.makeText(Zakazy.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

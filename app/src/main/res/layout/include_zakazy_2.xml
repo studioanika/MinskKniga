@@ -40,6 +40,15 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/notfound_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="Загрузка, пожалуйста подождите"
+        android:visibility="visible" />
+
     <ListView
         android:id="@+id/lv2"
         android:layout_width="match_parent"

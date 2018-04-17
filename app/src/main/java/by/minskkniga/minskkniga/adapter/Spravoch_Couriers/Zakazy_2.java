@@ -11,16 +11,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.api.Class.Zakazy;
-import by.minskkniga.minskkniga.api.Class.Zakazy_courier;
+import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 
 public class Zakazy_2 extends BaseAdapter {
 
     private Context context;
     private LayoutInflater lInflater;
-    private ArrayList<Zakazy_courier> objects;
+    private ArrayList<Zakazy_courier_clients> objects;
 
-    public Zakazy_2(Context context, ArrayList<Zakazy_courier> objects) {
+    public Zakazy_2(Context context, ArrayList<Zakazy_courier_clients> objects) {
         this.context = context;
         this.objects = objects;
     }
@@ -44,7 +43,7 @@ public class Zakazy_2 extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         lInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = lInflater.inflate(R.layout.adapter_zakazy_courier_2, parent, false);
+        View view = lInflater.inflate(R.layout.adapter_spravoch_courier_2, parent, false);
 
         TextView tv1 = view.findViewById(R.id.tv1);
         TextView tv2 = view.findViewById(R.id.tv2);

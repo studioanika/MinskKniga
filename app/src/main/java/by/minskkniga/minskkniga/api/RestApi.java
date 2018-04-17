@@ -2,7 +2,6 @@ package by.minskkniga.minskkniga.api;
 
 import java.util.List;
 
-import by.minskkniga.minskkniga.activity.Zakazy.Zakaz_info;
 import by.minskkniga.minskkniga.api.Class.Clients;
 import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.Login;
@@ -12,7 +11,8 @@ import by.minskkniga.minskkniga.api.Class.Providers;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.Sity;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
-import by.minskkniga.minskkniga.api.Class.Zakazy_courier;
+import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
+import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -109,7 +109,10 @@ public interface RestApi {
     @GET("/api/show_zakaz_info.php")
     Call<by.minskkniga.minskkniga.api.Class.Zakaz_info> getZakaz_info(@Query("id") String id);
 
-    @GET("/api/show_zakazy_courier.php")
-    Call<List<Zakazy_courier>> getZakazy_courier(@Query("id") String id);
+    @GET("/api/show_courier_zakazy.php")
+    Call<List<Zakazy_courier_clients>> getCourier_zakazy(@Query("id") String id);
+
+    @GET("/api/show_courier_knigi.php")
+    Call<List<Zakazy_courier_knigi>> getCourier_knigi(@Query("id") String id);
 
 }

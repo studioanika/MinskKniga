@@ -35,8 +35,16 @@
                 android:layout_alignParentStart="true"
                 app:srcCompat="@drawable/ic_back" />
 
-        </RelativeLayout>
+            <ImageButton
+                android:id="@+id/filter_button"
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                app:srcCompat="@drawable/ic_filter"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_alignParentEnd="true" />
 
+        </RelativeLayout>
 
         <TabHost
             android:id="@+id/tabHost"
@@ -61,80 +69,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout1"
+                    <include
+                        layout="@layout/include_courier_zakazy_1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout2"
+                    <include
+                        layout="@layout/include_courier_zakazy_2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <EditText
-                            android:id="@+id/search2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Поиск клиентов" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_weight="1"
-                                android:text="Клиенты"/>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Заказ"/>
-
-                            <TextView
-                                android:id="@+id/checkbox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Вып."/>
-
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="10dp"
-                                android:layout_weight="1"
-                                android:text="Книги"/>
-
-
-                        </LinearLayout>
-
-
-                        <ListView
-                            android:id="@+id/lv2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                    </LinearLayout>
-
-
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
                 </FrameLayout>
 
             </LinearLayout>
-
-
-
 
         </TabHost>
 
