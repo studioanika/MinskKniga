@@ -10,11 +10,14 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Zakazy_2;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Zakaz_info;
+import by.minskkniga.minskkniga.api.Class.Zakazy_courier;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,10 +33,12 @@ public class Zakazy extends AppCompatActivity {
 
     ListView lv2;
 
-
     TextView checkbox;
 
     int check = 0;
+
+    ArrayList<Zakazy_courier> zakazy;
+    ArrayList<Zakazy_courier> zakazy_buf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,9 @@ public class Zakazy extends AppCompatActivity {
         });
 
         lv2 = findViewById(R.id.lv2);
+
+        zakazy = new ArrayList<>();
+        zakazy_buf = new ArrayList<>();
 
         checkbox = findViewById(R.id.checkbox);
         Drawable img = getResources().getDrawable(R.drawable.ic_check_0);
@@ -129,19 +137,19 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void reload_2(){
-        App.getApi().getZakazy(id).enqueue(new Callback<List<by.minskkniga.minskkniga.api.Class.Zakazy>>() {
+        App.getApi().getZakazy_courier(String.valueOf(id)).enqueue(new Callback<List<Zakazy_courier>>() {
             @Override
-            public void onResponse(Call<List<by.minskkniga.minskkniga.api.Class.Zakazy>> call, Response<List<by.minskkniga.minskkniga.api.Class.Zakazy>> response) {
-//                zakazy.clear();
-//                zakazy_buf.clear();
-//                zakazy.addAll(response.body());
-//                zakazy_buf.addAll(response.body());
-//                lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy));
+            public void onResponse(Call<List<Zakazy_courier>> call, Response<List<Zakazy_courier>> response) {
+                zakazy.clear();
+                zakazy_buf.clear();
+                zakazy.addAll(response.body());
+                zakazy_buf.addAll(response.body());
+                lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy));
                 //search();
             }
 
             @Override
-            public void onFailure(Call<List<by.minskkniga.minskkniga.api.Class.Zakazy>> call, Throwable t) {
+            public void onFailure(Call<List<Zakazy_courier>> call, Throwable t) {
                 Toast.makeText(Zakazy.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

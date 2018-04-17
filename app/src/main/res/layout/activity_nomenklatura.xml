@@ -199,8 +199,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="20dp"
-            android:text="Ничего не найдено"
-            android:visibility="gone" />
+            android:text="Загрузка, пожалуйста подождите"
+            android:visibility="visible" />
 
 
         <ListView

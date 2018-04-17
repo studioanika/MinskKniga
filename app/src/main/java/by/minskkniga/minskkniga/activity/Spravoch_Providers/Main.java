@@ -14,6 +14,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -41,6 +42,9 @@ public class Main extends AppCompatActivity {
     EditText searchedit;
     ImageButton back;
 
+    TextView notfound_1;
+    TextView notfound_2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,9 @@ public class Main extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        notfound_1 = findViewById(R.id.notfound_1);
+        notfound_2 = findViewById(R.id.notfound_2);
 
         TabHost tabHost = findViewById(R.id.tabHost);
         tabHost.setup();
@@ -207,6 +214,7 @@ public class Main extends AppCompatActivity {
 
                 //Настраиваем listAdapter:
                 expListView.setAdapter(listAdapter);
+                notfound_1.setVisibility(View.GONE);
             }
 
             @Override
@@ -226,6 +234,7 @@ public class Main extends AppCompatActivity {
                 prov_buf.addAll(response.body());
                 lv2.setAdapter(new Main_2(Main.this, prov));
                 search();
+                notfound_2.setVisibility(View.GONE);
             }
 
             @Override

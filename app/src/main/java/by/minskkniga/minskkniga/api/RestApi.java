@@ -12,6 +12,7 @@ import by.minskkniga.minskkniga.api.Class.Providers;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.Sity;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
+import by.minskkniga.minskkniga.api.Class.Zakazy_courier;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -107,4 +108,8 @@ public interface RestApi {
 
     @GET("/api/show_zakaz_info.php")
     Call<by.minskkniga.minskkniga.api.Class.Zakaz_info> getZakaz_info(@Query("id") String id);
+
+    @GET("/api/show_zakazy_courier.php")
+    Call<List<Zakazy_courier>> getZakazy_courier(@Query("id") String id);
+
 }

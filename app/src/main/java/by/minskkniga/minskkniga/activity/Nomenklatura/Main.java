@@ -110,7 +110,6 @@ public class Main extends AppCompatActivity {
         });
 
         notfound = findViewById(R.id.notfound);
-
         yesno = new ArrayList<>();
         yesno.add("Да");
         yesno.add("Нет");
@@ -229,6 +228,7 @@ public class Main extends AppCompatActivity {
                 } else {
                     notfound.setVisibility(View.VISIBLE);
                 }
+                notfound.setText("Ничего не найдено");
             }
 
             @Override

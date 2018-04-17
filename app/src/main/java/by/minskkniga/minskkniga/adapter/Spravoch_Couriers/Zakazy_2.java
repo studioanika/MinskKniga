@@ -12,14 +12,15 @@ import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
+import by.minskkniga.minskkniga.api.Class.Zakazy_courier;
 
 public class Zakazy_2 extends BaseAdapter {
 
     private Context context;
     private LayoutInflater lInflater;
-    private ArrayList<Zakazy> objects;
+    private ArrayList<Zakazy_courier> objects;
 
-    public Zakazy_2(Context context, ArrayList<Zakazy> objects) {
+    public Zakazy_2(Context context, ArrayList<Zakazy_courier> objects) {
         this.context = context;
         this.objects = objects;
     }
@@ -53,16 +54,22 @@ public class Zakazy_2 extends BaseAdapter {
         CheckBox ch2 = view.findViewById(R.id.ch2);
 
 
+        tv1.setText(objects.get(position).getClient());
+        tv2.setText(objects.get(position).getSumma());
+        tv3.setText(objects.get(position).getKomment());
+        tv4.setText(objects.get(position).getInfo());
 
-
-
-        if (objects.get(position).getOplacheno().equals("0")) {
-            ch1.setChecked(false);
-        } else {
+        if (objects.get(position).getStatus().equals("3")) {
             ch1.setChecked(true);
+        } else {
+            ch1.setChecked(false);
         }
 
-        tv2.setText(objects.get(position).getSumma().toString());
+        if (objects.get(position).getStatus().equals("2")) {
+            ch2.setChecked(true);
+        } else {
+            ch2.setChecked(false);
+        }
 
 
         return view;
