@@ -8,13 +8,13 @@
     <RelativeLayout
         android:id="@+id/filter_layout_1"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <Spinner
-            android:id="@+id/spinner1_1"
+            android:id="@+id/spinner1"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
-            android:id="@+id/spinner2_1"
+            android:id="@+id/spinner2"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -59,11 +59,30 @@
 
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/search1"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Поиск" />
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/search1"
+            android:layout_width="wrap_content"
+            android:layout_height="58dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Поиск"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/barcode"
+            android:layout_width="24dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/ic_barcode_scan"/>
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

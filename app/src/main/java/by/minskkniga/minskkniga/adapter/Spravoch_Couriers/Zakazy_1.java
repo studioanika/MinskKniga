@@ -25,7 +25,7 @@ public class Zakazy_1 extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._object.get(groupPosition).getKnigi().size();
+        return this._object.get(groupPosition).getMas().size();
     }
 
     @Override
@@ -46,15 +46,15 @@ public class Zakazy_1 extends BaseExpandableListAdapter {
         TextView tv1 = (TextView) convertView.findViewById(R.id.tv1);
         TextView tv2 = (TextView) convertView.findViewById(R.id.tv2);
 
-        tv1.setText(_object.get(groupPosition).getKnigi().get(childPosition).getName());
-        tv2.setText(_object.get(groupPosition).getKnigi().get(childPosition).getOtgruz());
+        tv1.setText(_object.get(groupPosition).getMas().get(childPosition).getName());
+        tv2.setText(_object.get(groupPosition).getMas().get(childPosition).getOtgruz());
 
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._object.get(groupPosition).getKnigi().size();
+        return this._object.get(groupPosition).getMas().size();
     }
 
     @Override

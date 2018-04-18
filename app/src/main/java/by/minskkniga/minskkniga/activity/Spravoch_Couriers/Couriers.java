@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class Couriers extends AppCompatActivity {
     ArrayList<by.minskkniga.minskkniga.api.Class.Couriers> couriers;
     ArrayList<by.minskkniga.minskkniga.api.Class.Couriers> couriers_buf;
     ListView lv;
+    TextView notfound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class Couriers extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        notfound = findViewById(R.id.notfound);
 
         couriers = new ArrayList<>();
         couriers_buf = new ArrayList<>();
@@ -73,6 +76,8 @@ public class Couriers extends AppCompatActivity {
                 couriers.addAll(response.body());
                 couriers_buf.addAll(response.body());
                 lv.setAdapter(new Main(Couriers.this, couriers));
+                notfound.setVisibility(View.GONE);
+                notfound.setText("Ничего не найдено");
             }
 
             @Override

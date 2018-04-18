@@ -10,15 +10,18 @@ public class Zakazy_courier_knigi {
     @SerializedName("id")
     @Expose
     private String id;
+    @SerializedName("artikyl")
+    @Expose
+    private String artikyl;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("otgruz")
     @Expose
     private String otgruz;
-    @SerializedName("knigi")
+    @SerializedName("mas")
     @Expose
-    private List<Zakazy_courier_knigi_mas> knigi;
+    private List<Zakazy_courier_knigi_mas> mas;
 
     public String getId() {
         return id;
@@ -26,6 +29,14 @@ public class Zakazy_courier_knigi {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getArtikyl() {
+        return artikyl;
+    }
+
+    public void setArtikyl(String artikyl) {
+        this.artikyl = artikyl;
     }
 
     public String getName() {
@@ -44,12 +55,12 @@ public class Zakazy_courier_knigi {
         this.otgruz = otgruz;
     }
 
-    public List<Zakazy_courier_knigi_mas> getKnigi() {
-        return knigi;
+    public List<Zakazy_courier_knigi_mas> getMas() {
+        return mas;
     }
 
-    public void setKnigi(List<Zakazy_courier_knigi_mas> knigi) {
-        this.knigi = knigi;
+    public void setMas(List<Zakazy_courier_knigi_mas> mas) {
+        this.mas = mas;
     }
 
 }

@@ -173,8 +173,7 @@ public class Main extends AppCompatActivity {
         });
 //end onclick filter
 
-        load_nomen_filter();
-        load_nomen();
+        load_filter();
     }
 
     @Override
@@ -209,10 +208,10 @@ public class Main extends AppCompatActivity {
     }
 
     public void load_nomen() {
-        if (avtor == "Автор") avtor = "0";
-        if (izdatel == "Издатель") izdatel = "0";
-        if (obraz == "Образец") obraz = "0";
-        if (class_ == "Класс") class_ = "0";
+        if (spinner1.getSelectedItemPosition() == 0) avtor = "null";
+        if (spinner2.getSelectedItemPosition() == 0) izdatel = "null";
+        if (spinner3.getSelectedItemPosition() == 0) obraz = "null";
+        if (spinner4.getSelectedItemPosition() == 0) class_ = "null";
 
         App.getApi().getNomenclatura(avtor, izdatel, obraz, class_).enqueue(new Callback<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>>() {
             @Override
@@ -242,13 +241,12 @@ public class Main extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (nomen_search.getText().equals("")) {
-            load_nomen_filter();
-            load_nomen();
+            load_filter();
         }
         filter();
     }
 
-    public void load_nomen_filter(){
+    public void load_filter(){
         App.getApi().getNomenclatura_filter().enqueue(new Callback<Nomenklatura_filter>() {
 
             @Override
@@ -257,6 +255,7 @@ public class Main extends AppCompatActivity {
                 setAdapter(spinner2, response.body().getIzdatel(), 2);
                 setAdapter(spinner4, response.body().getClass_(), 4);
                 setAdapter(spinner3, yesno, 3);
+                load_nomen();
             }
 
             @Override
@@ -275,7 +274,7 @@ public class Main extends AppCompatActivity {
                 arr.add(0, "Издатель");
                 break;
             case 3:
-                if (!arr.get(0).toString().equals("Образец"))
+                if (!arr.get(0).equals("Образец"))
                     arr.add(0, "Образец");
                 break;
             case 4:

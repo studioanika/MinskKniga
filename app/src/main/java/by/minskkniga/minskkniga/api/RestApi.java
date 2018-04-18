@@ -3,6 +3,8 @@ package by.minskkniga.minskkniga.api;
 import java.util.List;
 
 import by.minskkniga.minskkniga.api.Class.Clients;
+import by.minskkniga.minskkniga.api.Class.Courier_filter_1;
+import by.minskkniga.minskkniga.api.Class.Courier_filter_2;
 import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.Login;
 import by.minskkniga.minskkniga.api.Class.Nomenklatura;
@@ -69,7 +71,7 @@ public interface RestApi {
     @GET("/api/show_sity.php")
     Call<List<Sity>> getSity();
 
-    @GET("/api/show_header_nomenklatura.php")
+    @GET("/api/show_nomenklatura_filter.php")
     Call<Nomenklatura_filter> getNomenclatura_filter();
 
     @GET("/api/show_nomenklatura.php")
@@ -113,6 +115,13 @@ public interface RestApi {
     Call<List<Zakazy_courier_clients>> getCourier_zakazy(@Query("id") String id);
 
     @GET("/api/show_courier_knigi.php")
-    Call<List<Zakazy_courier_knigi>> getCourier_knigi(@Query("id") String id);
+    Call<List<Zakazy_courier_knigi>> getCourier_knigi(@Query("id") String id,
+                                                      @Query("izdanie") String izdanie,
+                                                      @Query("class") String _class);
 
+    @GET("/api/show_couriers_filter_1.php")
+    Call<Courier_filter_1> getCourier_filter_1();
+
+    @GET("/api/show_couriers_filter_2.php")
+    Call<Courier_filter_2> getCourier_filter_2();
 }

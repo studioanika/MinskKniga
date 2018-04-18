@@ -17,6 +17,18 @@ public class Zakazy_courier_clients {
     @SerializedName("komment")
     @Expose
     private String komment;
+    @SerializedName("napravl")
+    @Expose
+    private String napravl;
+    @SerializedName("sity")
+    @Expose
+    private String sity;
+    @SerializedName("school")
+    @Expose
+    private String school;
+    @SerializedName("smena")
+    @Expose
+    private String smena;
     @SerializedName("summa")
     @Expose
     private String summa;
@@ -54,6 +66,38 @@ public class Zakazy_courier_clients {
 
     public void setKomment(String komment) {
         this.komment = komment;
+    }
+
+    public String getNapravl() {
+        return napravl;
+    }
+
+    public void setNapravl(String napravl) {
+        this.napravl = napravl;
+    }
+
+    public String getSity() {
+        return sity;
+    }
+
+    public void setSity(String sity) {
+        this.sity = sity;
+    }
+
+    public Object getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getSmena() {
+        return smena;
+    }
+
+    public void setSmena(String smena) {
+        this.smena = smena;
     }
 
     public String getSumma() {

@@ -8,13 +8,14 @@
     <RelativeLayout
         android:id="@+id/filter_layout_2"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:background="?attr/colorPrimary"
+        android:layout_height="140dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <Spinner
-            android:id="@+id/spinner1_2"
+            android:id="@+id/spinner3"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -23,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
-            android:id="@+id/spinner2_2"
+            android:id="@+id/spinner4"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -33,7 +34,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
-            android:id="@+id/spinner3_2"
+            android:id="@+id/spinner5"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -42,7 +43,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <Spinner
-            android:id="@+id/spinner4_2"
+            android:id="@+id/spinner6"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -58,7 +59,6 @@
             android:layout_alignParentRight="false"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="90dp"
-            android:background="?attr/colorPrimary"
             android:text="Очистить"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -70,7 +70,6 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="32dp"
             android:layout_marginTop="90dp"
-            android:background="?attr/colorPrimary"
             android:text="Готово"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -80,7 +79,7 @@
     <EditText
         android:id="@+id/search2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="58dp"
         android:hint="Поиск клиентов" />
 
     <LinearLayout
