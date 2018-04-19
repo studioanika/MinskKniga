@@ -17,11 +17,8 @@ import by.minskkniga.minskkniga.R;
 public class Main_1 extends BaseExpandableListAdapter {
 
     private Context _context;
-
     private ArrayList<String> _listDataHeader;
-
     private ArrayList<ArrayList<String>> _listDataChild;
-
 
     public Main_1(Context context, ArrayList<String> listDataHeader, ArrayList<ArrayList<String>> listDataChild) {
         this._context = context;

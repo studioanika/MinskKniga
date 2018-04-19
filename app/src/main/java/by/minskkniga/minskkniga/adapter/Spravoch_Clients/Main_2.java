@@ -19,23 +19,23 @@ public class Main_2 extends BaseAdapter{
 
     private Context _context;
     private LayoutInflater lInflater;
-    private ArrayList<Clients> objects;
+    private ArrayList<Clients> _objects;
 
     public Main_2(Context context, ArrayList<Clients> objects) {
         this._context = context;
-        this.objects = objects;
+        this._objects = objects;
 
     }
 
 
     @Override
     public int getCount() {
-        return objects.size();
+        return _objects.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return objects.get(position);
+        return _objects.get(position);
     }
 
     @Override
@@ -55,19 +55,19 @@ public class Main_2 extends BaseAdapter{
         CheckBox ch1 = view.findViewById(R.id.ch1);
         TextView tv2 = view.findViewById(R.id.tv2);
 
-        tv1.setText(objects.get(position).getName());
-        if (objects.get(position).getObraz().equals("0")) {
+        tv1.setText(_objects.get(position).getName());
+        if (_objects.get(position).getObraz().equals("0")) {
             ch1.setChecked(false);
         } else {
             ch1.setChecked(true);
         }
 
-        if (objects.get(position).getDolg()>=0) {
+        if (_objects.get(position).getDolg()>=0) {
             tv2.setTextColor(Color.BLACK);
         } else {
             tv2.setTextColor(Color.RED);
         }
-        tv2.setText(objects.get(position).getDolg().toString());
+        tv2.setText(_objects.get(position).getDolg().toString());
 
 
         return view;

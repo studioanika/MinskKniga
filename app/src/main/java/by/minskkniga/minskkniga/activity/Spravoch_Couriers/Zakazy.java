@@ -286,7 +286,8 @@ public class Zakazy extends AppCompatActivity {
                 filter_layout_2.setVisibility(View.GONE);
             }
         });
-            load_filter_2();
+
+        load_filter_2();
     }
 
     @Override

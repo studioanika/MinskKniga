@@ -17,23 +17,23 @@ import by.minskkniga.minskkniga.api.Class.Clients;
 
 public class Main_2 extends BaseAdapter {
 
-    private Context context;
+    private Context _context;
     private LayoutInflater lInflater;
-    private ArrayList<Clients> objects;
+    private ArrayList<Clients> _objects;
 
     public Main_2(Context context, ArrayList<Clients> objects) {
-        this.context = context;
-        this.objects = objects;
+        this._context = context;
+        this._objects = objects;
     }
 
     @Override
     public int getCount() {
-        return objects.size();
+        return _objects.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return objects.get(position);
+        return _objects.get(position);
     }
 
     @Override
@@ -44,23 +44,23 @@ public class Main_2 extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        lInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = lInflater.inflate(R.layout.adapter_zakazy_2, parent, false);
 
         TextView tv1 = view.findViewById(R.id.tv1);
         TextView tv2 = view.findViewById(R.id.tv2);
         CheckBox ch1 = view.findViewById(R.id.ch1);
 
-        tv1.setText(objects.get(position).getName());
+        tv1.setText(_objects.get(position).getName());
 
-        if (objects.get(position).getObraz().equals("0")) {
+        if (_objects.get(position).getObraz().equals("0")) {
             ch1.setChecked(false);
         } else {
             ch1.setChecked(true);
         }
 
-        tv2.setText(objects.get(position).getDolg().toString());
-        if (objects.get(position).getDolg()>=0) {
+        tv2.setText(_objects.get(position).getDolg().toString());
+        if (_objects.get(position).getDolg()>=0) {
             tv2.setTextColor(Color.BLACK);
         } else {
             tv2.setTextColor(Color.RED);

@@ -18,23 +18,23 @@ import by.minskkniga.minskkniga.api.Class.WhatZakazal;
 
 public class Zakaz_info extends BaseAdapter{
 
-    private Context context;
+    private Context _context;
     private LayoutInflater lInflater;
-    private ArrayList<WhatZakazal> objects;
+    private ArrayList<WhatZakazal> _objects;
 
     public Zakaz_info(Context context, ArrayList<WhatZakazal> objects) {
-        this.context = context;
-        this.objects = objects;
+        this._context = context;
+        this._objects = objects;
     }
 
     @Override
     public int getCount() {
-        return objects.size();
+        return _objects.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return objects.get(position);
+        return _objects.get(position);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Zakaz_info extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        lInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = lInflater.inflate(R.layout.adapter_zakaz_info, parent, false);
 
         TextView tv1 = view.findViewById(R.id.tv1);
@@ -55,12 +55,12 @@ public class Zakaz_info extends BaseAdapter{
         TextView tv5 = view.findViewById(R.id.tv5);
         EditText ed1 = view.findViewById(R.id.ed1);
 
-        tv1.setText(objects.get(position).getName());
-        tv2.setText(objects.get(position).getClass_());
-        tv3.setText(objects.get(position).getIzdanie().substring(0,1));
-        tv4.setText(objects.get(position).getArtikyl());
-        tv5.setText(objects.get(position).getSokr());
-        ed1.setText(objects.get(position).getZak());
+        tv1.setText(_objects.get(position).getName());
+        tv2.setText(_objects.get(position).getClass_());
+        tv3.setText(_objects.get(position).getIzdanie().substring(0,1));
+        tv4.setText(_objects.get(position).getArtikyl());
+        tv5.setText(_objects.get(position).getSokr());
+        ed1.setText(_objects.get(position).getZak());
 
         return view;
     }
