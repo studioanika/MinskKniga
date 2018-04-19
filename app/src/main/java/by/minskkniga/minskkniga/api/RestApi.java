@@ -112,7 +112,11 @@ public interface RestApi {
     Call<by.minskkniga.minskkniga.api.Class.Zakaz_info> getZakaz_info(@Query("id") String id);
 
     @GET("/api/show_courier_zakazy.php")
-    Call<List<Zakazy_courier_clients>> getCourier_zakazy(@Query("id") String id);
+    Call<List<Zakazy_courier_clients>> getCourier_zakazy(@Query("id") String id,
+                                                         @Query("napravl") String napravl,
+                                                         @Query("sity") String sity,
+                                                         @Query("school") String school,
+                                                         @Query("smena") String smena);
 
     @GET("/api/show_courier_knigi.php")
     Call<List<Zakazy_courier_knigi>> getCourier_knigi(@Query("id") String id,
@@ -120,8 +124,8 @@ public interface RestApi {
                                                       @Query("class") String _class);
 
     @GET("/api/show_couriers_filter_1.php")
-    Call<Courier_filter_1> getCourier_filter_1();
+    Call<Courier_filter_1> getCourier_filter_1(@Query("id") String id);
 
     @GET("/api/show_couriers_filter_2.php")
-    Call<Courier_filter_2> getCourier_filter_2();
+    Call<Courier_filter_2> getCourier_filter_2(@Query("id") String id);
 }

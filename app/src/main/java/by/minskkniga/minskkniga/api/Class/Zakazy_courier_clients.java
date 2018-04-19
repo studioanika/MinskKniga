@@ -8,9 +8,9 @@ public class Zakazy_courier_clients {
     @SerializedName("id")
     @Expose
     private String id;
-    @SerializedName("client")
+    @SerializedName("name")
     @Expose
-    private String client;
+    private String name;
     @SerializedName("info")
     @Expose
     private String info;
@@ -44,12 +44,12 @@ public class Zakazy_courier_clients {
         this.id = id;
     }
 
-    public String getClient() {
-        return client;
+    public String getName() {
+        return name;
     }
 
-    public void setClient(String client) {
-        this.client = client;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getInfo() {

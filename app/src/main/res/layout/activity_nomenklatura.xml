@@ -97,7 +97,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/nomen_clear"
+            android:id="@+id/clear"
             android:layout_width="122dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="false"
@@ -108,7 +108,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/nomen_ok"
+            android:id="@+id/ok"
             android:layout_width="122dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
@@ -132,7 +132,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/nomen_search"
+                android:id="@+id/search"
                 android:layout_width="wrap_content"
                 android:layout_height="58dp"
                 android:layout_weight="1"
@@ -141,7 +141,7 @@
                 android:inputType="textPersonName" />
 
             <Button
-                android:id="@+id/nomen_barcode"
+                android:id="@+id/barcode"
                 android:layout_width="24dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="15dp"
@@ -204,7 +204,7 @@
 
 
         <ListView
-            android:id="@+id/nomen_lv"
+            android:id="@+id/lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

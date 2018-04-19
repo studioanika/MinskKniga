@@ -37,16 +37,16 @@ public class Main extends AppCompatActivity {
     ImageButton filter;
     RelativeLayout filter_layout;
     ImageButton back;
-    Button nomen_barcode;
-    Button nomen_clear;
-    Button nomen_ok;
-    ListView nomen_lv;
+    Button barcode;
+    Button clear;
+    Button ok;
+    ListView lv;
     TextView notfound;
-    EditText nomen_search;
+    EditText search;
 
-    ArrayList<by.minskkniga.minskkniga.api.Class.Nomenklatura> lv;
-    ArrayList<by.minskkniga.minskkniga.api.Class.Nomenklatura> lv_buf;
-    by.minskkniga.minskkniga.adapter.Nomenklatura.Main nomen;
+    ArrayList<by.minskkniga.minskkniga.api.Class.Nomenklatura> nomen;
+    ArrayList<by.minskkniga.minskkniga.api.Class.Nomenklatura> nomen_buf;
+    by.minskkniga.minskkniga.adapter.Nomenklatura.Main adapter;
 
     Spinner spinner1, spinner2, spinner3, spinner4;
 
@@ -76,15 +76,14 @@ public class Main extends AppCompatActivity {
         spinner3 = findViewById(R.id.spinner3);
         spinner4 = findViewById(R.id.spinner4);
 
-        nomen_clear = findViewById(R.id.nomen_clear);
-        nomen_ok = findViewById(R.id.nomen_ok);
-        nomen_search = findViewById(R.id.nomen_search);
+        clear = findViewById(R.id.clear);
+        ok = findViewById(R.id.ok);
+        search = findViewById(R.id.search);
 
-        nomen_lv = findViewById(R.id.nomen_lv);
+        lv = findViewById(R.id.lv);
 
-        lv = new ArrayList<>();
-        lv_buf = new ArrayList<>();
-        nomen = new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(this, lv);
+        nomen = new ArrayList<>();
+        nomen_buf = new ArrayList<>();
 
 
         filter_layout = findViewById(R.id.filter_layout);
@@ -115,9 +114,9 @@ public class Main extends AppCompatActivity {
         yesno.add("Нет");
 
         qrScan = new IntentIntegrator(this);
-        nomen_barcode = findViewById(R.id.nomen_barcode);
-        nomen_search = findViewById(R.id.nomen_search);
-        nomen_barcode.setOnClickListener(new View.OnClickListener() {
+        barcode = findViewById(R.id.barcode);
+        search = findViewById(R.id.search);
+        barcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 qrScan.initiateScan();
@@ -125,7 +124,7 @@ public class Main extends AppCompatActivity {
         });
 
 //start onclick filter
-        nomen_clear.setOnClickListener(new View.OnClickListener() {
+        clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 spinner1.setSelection(0);
@@ -136,26 +135,26 @@ public class Main extends AppCompatActivity {
                 izdatel = "Издатель";
                 obraz = "Образец";
                 class_ = "Класс";
-                load_nomen();
-                nomen_lv.setAdapter(nomen);
+                reload();
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, nomen));
                 filter_layout.setVisibility(View.GONE);
             }
         });
 
-        nomen_ok.setOnClickListener(new View.OnClickListener() {
+        ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 avtor = spinner1.getSelectedItem().toString();
                 izdatel = spinner2.getSelectedItem().toString();
                 obraz = spinner3.getSelectedItem().toString();
                 class_ = spinner4.getSelectedItem().toString();
-                load_nomen();
-                nomen_lv.setAdapter(nomen);
+                reload();
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, nomen));
                 filter_layout.setVisibility(View.GONE);
             }
         });
 
-        nomen_search.addTextChangedListener(new TextWatcher() {
+        search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -180,34 +179,34 @@ public class Main extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
-            nomen_search.setText(result.getContents());
+            search.setText(result.getContents());
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void filter() {
-        lv.clear();
-        for (by.minskkniga.minskkniga.api.Class.Nomenklatura buffer : lv_buf) {
-            if (buffer.getName().contains(nomen_search.getText().toString()) ||
-                    buffer.getPredmet().contains(nomen_search.getText().toString()) ||
-                    buffer.getClass_().contains(nomen_search.getText().toString()) ||
-                    buffer.getIzdatel().contains(nomen_search.getText().toString()) ||
-                    buffer.getArtikul().contains(nomen_search.getText().toString()) ||
-                    buffer.getSokrName().contains(nomen_search.getText().toString()) ||
-                    buffer.getProdCena().contains(nomen_search.getText().toString()) ||
-                    buffer.getBarcode().contains(nomen_search.getText().toString())) {
-                lv.add(buffer);
+        nomen.clear();
+        for (by.minskkniga.minskkniga.api.Class.Nomenklatura buffer : nomen_buf) {
+            if (buffer.getName().contains(search.getText().toString()) ||
+                    buffer.getPredmet().contains(search.getText().toString()) ||
+                    buffer.getClass_().contains(search.getText().toString()) ||
+                    buffer.getIzdatel().contains(search.getText().toString()) ||
+                    buffer.getArtikul().contains(search.getText().toString()) ||
+                    buffer.getSokrName().contains(search.getText().toString()) ||
+                    buffer.getProdCena().contains(search.getText().toString()) ||
+                    buffer.getBarcode().contains(search.getText().toString())) {
+                nomen.add(buffer);
             }
         }
-        if (!lv.isEmpty()) {
+        if (!nomen.isEmpty()) {
             notfound.setVisibility(View.GONE);
         } else {
             notfound.setVisibility(View.VISIBLE);
         }
-        nomen_lv.setAdapter(nomen);
+        lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, nomen));
     }
 
-    public void load_nomen() {
+    public void reload() {
         if (spinner1.getSelectedItemPosition() == 0) avtor = "null";
         if (spinner2.getSelectedItemPosition() == 0) izdatel = "null";
         if (spinner3.getSelectedItemPosition() == 0) obraz = "null";
@@ -216,13 +215,13 @@ public class Main extends AppCompatActivity {
         App.getApi().getNomenclatura(avtor, izdatel, obraz, class_).enqueue(new Callback<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>>() {
             @Override
             public void onResponse(Call<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>> call, Response<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>> response) {
-                lv.clear();
-                lv_buf.clear();
-                lv.addAll(response.body());
-                lv_buf.addAll(response.body());
-                nomen_lv.setAdapter(nomen);
+                nomen.clear();
+                nomen_buf.clear();
+                nomen.addAll(response.body());
+                nomen_buf.addAll(response.body());
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, nomen));
 
-                if (!lv.isEmpty()) {
+                if (!nomen.isEmpty()) {
                     notfound.setVisibility(View.GONE);
                 } else {
                     notfound.setVisibility(View.VISIBLE);
@@ -240,7 +239,7 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (nomen_search.getText().equals("")) {
+        if (search.getText().equals("")) {
             load_filter();
         }
         filter();
@@ -255,7 +254,7 @@ public class Main extends AppCompatActivity {
                 setAdapter(spinner2, response.body().getIzdatel(), 2);
                 setAdapter(spinner4, response.body().getClass_(), 4);
                 setAdapter(spinner3, yesno, 3);
-                load_nomen();
+                reload();
             }
 
             @Override

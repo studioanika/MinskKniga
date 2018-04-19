@@ -23,18 +23,15 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.Nomenklatura.Main;
 import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Zakazy_1;
 import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Zakazy_2;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Courier_filter_1;
 import by.minskkniga.minskkniga.api.Class.Courier_filter_2;
-import by.minskkniga.minskkniga.api.Class.Nomenklatura_filter;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import retrofit2.Call;
@@ -61,6 +58,13 @@ public class Zakazy extends AppCompatActivity {
     Spinner spinner4;
     Spinner spinner5;
     Spinner spinner6;
+
+    Button clear_1;
+    Button ok_1;
+
+    Button clear_2;
+    Button ok_2;
+
     Button barcode;
     IntentIntegrator qrScan;
 
@@ -78,11 +82,18 @@ public class Zakazy extends AppCompatActivity {
     ArrayList<Zakazy_courier_clients> zakazy_2;
     ArrayList<Zakazy_courier_clients> zakazy_2_buf;
 
+    String izdatel = "Издательство";
+    String class_ = "Класс";
+
+    String napravl = "Направление";
+    String sity = "Город";
+    String school = "Школа";
+    String smena = "Смена";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_courier_zakazy);
+        setContentView(R.layout.activity_spravoch_courier_zakazy);
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +226,66 @@ public class Zakazy extends AppCompatActivity {
             }
         });
 
+        clear_1 = findViewById(R.id.clear_1);
+        ok_1 = findViewById(R.id.ok_1);
 
+        clear_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinner1.setSelection(0);
+                spinner2.setSelection(0);
+                izdatel = "Издательство";
+                class_ = "Класс";
+                reload_1();
+                lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
+                filter_layout_1.setVisibility(View.GONE);
+            }
+        });
+
+        ok_1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                izdatel = spinner1.getSelectedItem().toString();
+                class_ = spinner2.getSelectedItem().toString();
+                reload_1();
+                lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
+                filter_layout_1.setVisibility(View.GONE);
+            }
+        });
+
+        clear_2 = findViewById(R.id.clear_2);
+        ok_2 = findViewById(R.id.ok_2);
+
+
+        clear_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spinner3.setSelection(0);
+                spinner4.setSelection(0);
+                spinner5.setSelection(0);
+                spinner6.setSelection(0);
+                napravl = "Направление";
+                sity = "Город";
+                school = "Школа";
+                smena = "Смена";
+                reload_2();
+                lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
+                filter_layout_2.setVisibility(View.GONE);
+            }
+        });
+
+        ok_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                napravl = spinner3.getSelectedItem().toString();
+                sity = spinner4.getSelectedItem().toString();
+                school = spinner5.getSelectedItem().toString();
+                smena = spinner6.getSelectedItem().toString();
+                reload_2();
+                lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
+                filter_layout_2.setVisibility(View.GONE);
+            }
+        });
             load_filter_2();
     }
 
@@ -239,27 +309,36 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void reload_1(){
-//        App.getApi().getCourier_knigi(String.valueOf(id)).enqueue(new Callback<List<Zakazy_courier_knigi>>() {
-//            @Override
-//            public void onResponse(Call<List<Zakazy_courier_knigi>> call, Response<List<Zakazy_courier_knigi>> response) {
-//                zakazy_1.clear();
-//                zakazy_1_buf.clear();
-//                zakazy_1.addAll(response.body());
-//                zakazy_1_buf.addAll(response.body());
-//                lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
-//                notfound_1.setVisibility(View.GONE);
-//                notfound_1.setText("Ничего не найдено");
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Zakazy_courier_knigi>> call, Throwable t) {
-//
-//            }
-//        });
+        if (spinner1.getSelectedItemPosition() == 0) izdatel = "null";
+        if (spinner2.getSelectedItemPosition() == 0) class_ = "null";
+
+        Toast.makeText(this, izdatel+" "+class_, Toast.LENGTH_SHORT).show();
+        App.getApi().getCourier_knigi(String.valueOf(id),izdatel,class_).enqueue(new Callback<List<Zakazy_courier_knigi>>() {
+            @Override
+            public void onResponse(Call<List<Zakazy_courier_knigi>> call, Response<List<Zakazy_courier_knigi>> response) {
+                zakazy_1.clear();
+                zakazy_1_buf.clear();
+                zakazy_1.addAll(response.body());
+                zakazy_1_buf.addAll(response.body());
+                lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
+                notfound_1.setVisibility(View.GONE);
+                notfound_1.setText("Ничего не найдено");
+            }
+
+            @Override
+            public void onFailure(Call<List<Zakazy_courier_knigi>> call, Throwable t) {
+
+            }
+        });
     }
 
     public void reload_2(){
-        App.getApi().getCourier_zakazy(String.valueOf(id)).enqueue(new Callback<List<Zakazy_courier_clients>>() {
+        if (spinner3.getSelectedItemPosition() == 0) napravl = "null";
+        if (spinner4.getSelectedItemPosition() == 0) sity = "null";
+        if (spinner5.getSelectedItemPosition() == 0) school = "null";
+        if (spinner6.getSelectedItemPosition() == 0) smena = "null";
+
+        App.getApi().getCourier_zakazy(String.valueOf(id), napravl, sity, school, smena).enqueue(new Callback<List<Zakazy_courier_clients>>() {
             @Override
             public void onResponse(Call<List<Zakazy_courier_clients>> call, Response<List<Zakazy_courier_clients>> response) {
                 zakazy_2.clear();
@@ -269,7 +348,6 @@ public class Zakazy extends AppCompatActivity {
                 lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
                 notfound_2.setVisibility(View.GONE);
                 notfound_2.setText("Ничего не найдено");
-                //search();
             }
 
             @Override
@@ -336,7 +414,7 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void load_filter_1(){
-        App.getApi().getCourier_filter_1().enqueue(new Callback<Courier_filter_1>() {
+        App.getApi().getCourier_filter_1(String.valueOf(id)).enqueue(new Callback<Courier_filter_1>() {
 
             @Override
             public void onResponse(Call<Courier_filter_1> call, Response<Courier_filter_1> response) {
@@ -353,7 +431,7 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void load_filter_2(){
-        App.getApi().getCourier_filter_2().enqueue(new Callback<Courier_filter_2>() {
+        App.getApi().getCourier_filter_2(String.valueOf(id)).enqueue(new Callback<Courier_filter_2>() {
 
             @Override
             public void onResponse(Call<Courier_filter_2> call, Response<Courier_filter_2> response) {

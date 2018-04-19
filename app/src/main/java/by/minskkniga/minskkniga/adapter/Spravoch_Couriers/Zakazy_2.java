@@ -53,7 +53,7 @@ public class Zakazy_2 extends BaseAdapter {
         CheckBox ch2 = view.findViewById(R.id.ch2);
 
 
-        tv1.setText(objects.get(position).getClient());
+        tv1.setText(objects.get(position).getName());
         tv2.setText(objects.get(position).getSumma());
         tv3.setText(objects.get(position).getKomment());
         tv4.setText(objects.get(position).getInfo());

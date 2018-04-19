@@ -34,7 +34,7 @@
 
 
         <Button
-            android:id="@+id/nomen_clear_1"
+            android:id="@+id/clear_1"
             android:layout_width="122dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="false"
@@ -46,7 +46,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/nomen_ok_1"
+            android:id="@+id/ok_1"
             android:layout_width="122dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
