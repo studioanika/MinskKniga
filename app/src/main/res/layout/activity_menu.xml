@@ -25,12 +25,27 @@
 
 
             <ImageButton
+                android:id="@+id/notif"
                 android:layout_width="56dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 app:srcCompat="@drawable/ic_notif"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_alignParentEnd="true" />
+
+            <TextView
+                android:id="@+id/notif_count"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/circle"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:textColor="#fff"
+                android:textSize="9sp"
+                android:paddingLeft="4dp"
+                android:text="0"/>
 
         </RelativeLayout>
 

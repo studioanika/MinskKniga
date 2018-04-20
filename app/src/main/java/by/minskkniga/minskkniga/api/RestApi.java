@@ -9,8 +9,10 @@ import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.Login;
 import by.minskkniga.minskkniga.api.Class.Nomenklatura;
 import by.minskkniga.minskkniga.api.Class.Nomenklatura_filter;
+import by.minskkniga.minskkniga.api.Class.Notif_count;
 import by.minskkniga.minskkniga.api.Class.Organizer;
 import by.minskkniga.minskkniga.api.Class.Organizer_filter;
+import by.minskkniga.minskkniga.api.Class.Organizer_info;
 import by.minskkniga.minskkniga.api.Class.Providers;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.Sity;
@@ -145,4 +147,20 @@ public interface RestApi {
 
     @GET("/api/set_organizer_ok.php")
     Call<ResultBody> setOrganizer_ok(@Query("id") String id);
+
+    @GET("/api/show_organizer_info.php")
+    Call<Organizer_info> getOrganizer_info();
+
+    @GET("/api/add_organizer.php")
+    Call<ResultBody> addOrganizer(@Query("id") String id,
+                                  @Query("countragent_id") String countragent_id,
+                                  @Query("autor_id") String autor_id,
+                                  @Query("ispolnitel_id") String ispolnitel_id,
+                                  @Query("date") String date,
+                                  @Query("status") String status,
+                                  @Query("text") String text);
+
+    @GET("/api/show_notif.php")
+    Call<Notif_count> getNotif(@Query("id") String id);
+
 }

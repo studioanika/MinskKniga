@@ -2,17 +2,20 @@ package by.minskkniga.minskkniga.adapter.Organizer;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Organizer.Add;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Organizer;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
@@ -59,7 +62,7 @@ public class Main extends BaseAdapter {
         TextView tv2 = view.findViewById(R.id.tv2);
         TextView tv3 = view.findViewById(R.id.tv3);
         final CheckBox ch1 = view.findViewById(R.id.ch1);
-
+        ImageView iv1 = view.findViewById(R.id.iv1);
 
         tv1.setText(_objects.get(position).getDate());
         tv2.setText(_objects.get(position).getAutorName());
@@ -102,9 +105,25 @@ public class Main extends BaseAdapter {
                             ch1.setChecked(false);
                         }
                     });
-                    ad.setCancelable(true);
+                    ad.setCancelable(false);
                     ad.show();
                 }
+            }
+        });
+
+        iv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(_context, Add.class);
+                intent.putExtra("id", _objects.get(position).getId());
+                intent.putExtra("contragent_id", _objects.get(position).getCountragentId());
+                intent.putExtra("autor_id", _objects.get(position).getAutorId());
+                intent.putExtra("autor_name", _objects.get(position).getAutorName());
+                intent.putExtra("ispolnitel", _objects.get(position).getIspolnitelId());
+                intent.putExtra("date", _objects.get(position).getDate());
+                intent.putExtra("status", _objects.get(position).getStatus());
+                intent.putExtra("text", _objects.get(position).getText());
+                _context.startActivity(intent);
             }
         });
 

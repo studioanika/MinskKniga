@@ -1,8 +1,10 @@
 package by.minskkniga.minskkniga.activity.Organizer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -62,6 +64,7 @@ public class Main extends AppCompatActivity {
     SharedPreferences sp;
     SharedPreferences.Editor ed;
     String id;
+    String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,7 @@ public class Main extends AppCompatActivity {
         ed = sp.edit();
 
         id = sp.getString("id", "");
+        name = sp.getString("name","");
 
         Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
         spinner1 = findViewById(R.id.spinner1);
@@ -124,7 +128,7 @@ public class Main extends AppCompatActivity {
         tabSpec.setIndicator("я поручил");
         tabHost.addTab(tabSpec);
 
-        tabHost.setCurrentTab(1);
+        tabHost.setCurrentTab(0);
 
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             public void onTabChanged(String tabId) {
@@ -165,6 +169,23 @@ public class Main extends AppCompatActivity {
                 else
                     lv2.setAdapter(new by.minskkniga.minskkniga.adapter.Organizer.Main(Main.this, organ,2));
                 filter_layout.setVisibility(View.GONE);
+            }
+        });
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Main.this, Add.class);
+                intent.putExtra("id", "null");
+                intent.putExtra("contragent_id", "null");
+                intent.putExtra("autor_id", id);
+                intent.putExtra("autor_name", name);
+                intent.putExtra("ispolnitel", "null");
+                intent.putExtra("date", "null");
+                intent.putExtra("status", "new");
+                intent.putExtra("text", "");
+                startActivity(intent);
             }
         });
     }
@@ -228,8 +249,8 @@ public class Main extends AppCompatActivity {
             public void onResponse(Call<Organizer_filter> call, Response<Organizer_filter> response) {
                 setAdapter(spinner1, response.body().getAutor(), 1);
                 setAdapter(spinner2, response.body().getKomy(), 2);
-                setAdapter(spinner4, response.body().getKontragent(), 3);
-                setAdapter(spinner3, response.body().getStatus(), 4);
+                setAdapter(spinner3, response.body().getKontragent(), 3);
+                setAdapter(spinner4, response.body().getStatus(), 4);
                 reload();
             }
 
@@ -287,9 +308,7 @@ public class Main extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItemText = (String) parent.getItemAtPosition(position);
                 if (position > 0) {
-                    Toast.makeText
-                            (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                            .show();
+
                 }
             }
 
