@@ -13,6 +13,9 @@ public class Zakazy_courier_knigi {
     @SerializedName("artikyl")
     @Expose
     private String artikyl;
+    @SerializedName("barcode")
+    @Expose
+    private String barcode;
     @SerializedName("name")
     @Expose
     private String name;
@@ -37,6 +40,14 @@ public class Zakazy_courier_knigi {
 
     public void setArtikyl(String artikyl) {
         this.artikyl = artikyl;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     public String getName() {

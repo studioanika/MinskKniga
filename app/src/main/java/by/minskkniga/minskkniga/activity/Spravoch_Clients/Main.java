@@ -35,12 +35,10 @@ public class Main extends AppCompatActivity {
     ArrayList<Clients> clien;
     ArrayList<Clients> clien_buf;
 
-    Main_1 listAdapter;
-
     ExpandableListView expListView;
     ArrayList<String> listDataHeader;
     ArrayList<ArrayList<String>> listDataChild;
-    EditText searchedit;
+    EditText search;
     ImageButton back;
 
     TextView notfound_1;
@@ -132,8 +130,8 @@ public class Main extends AppCompatActivity {
 //tab 2 end
 
 //search start
-        searchedit = findViewById(R.id.editsearchclients);
-        searchedit.addTextChangedListener(new TextWatcher() {
+        search = findViewById(R.id.search);
+        search.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -153,9 +151,9 @@ public class Main extends AppCompatActivity {
 
     public void search(){
         clien.clear();
-        if (!searchedit.getText().toString().isEmpty()) {
+        if (!search.getText().toString().isEmpty()) {
             for (int i = 0; i < clien_buf.size(); i++) {
-                if (clien_buf.get(i).getName().toLowerCase().contains(searchedit.getText().toString().toLowerCase())) {
+                if (clien_buf.get(i).getName().toLowerCase().contains(search.getText().toString().toLowerCase())) {
                     clien.add(clien_buf.get(i));
                 }
             }
@@ -214,10 +212,7 @@ public class Main extends AppCompatActivity {
                 }
 
 
-                listAdapter = new Main_1(getApplicationContext(), listDataHeader, listDataChild);
-
-                //Настраиваем listAdapter:
-                expListView.setAdapter(listAdapter);
+                expListView.setAdapter(new Main_1(getApplicationContext(), listDataHeader, listDataChild));
                 notfound_1.setVisibility(View.GONE);
             }
 

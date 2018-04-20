@@ -14,13 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Main;
 import by.minskkniga.minskkniga.api.App;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Couriers extends AppCompatActivity {
+public class Main extends AppCompatActivity {
 
     ImageButton back;
     ArrayList<by.minskkniga.minskkniga.api.Class.Couriers> couriers;
@@ -50,7 +49,7 @@ public class Couriers extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(Couriers.this, Zakazy.class);
+                Intent intent = new Intent(Main.this, Zakazy.class);
                 intent.putExtra("id", Integer.parseInt(couriers.get(position).getId()));
                 intent.putExtra("name", couriers.get(position).getName());
                 startActivity(intent);
@@ -75,14 +74,14 @@ public class Couriers extends AppCompatActivity {
                 couriers_buf.clear();
                 couriers.addAll(response.body());
                 couriers_buf.addAll(response.body());
-                lv.setAdapter(new Main(Couriers.this, couriers));
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Main(Main.this, couriers));
                 notfound.setVisibility(View.GONE);
                 notfound.setText("Ничего не найдено");
             }
 
             @Override
             public void onFailure(Call<List<by.minskkniga.minskkniga.api.Class.Couriers>> call, Throwable t) {
-                Toast.makeText(Couriers.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Main.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
     }

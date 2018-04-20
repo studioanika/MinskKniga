@@ -3,8 +3,13 @@ package by.minskkniga.minskkniga.activity.Spravoch_Couriers;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Nomenklatura.Main;
 import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Zakazy_1;
 import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Zakazy_2;
 import by.minskkniga.minskkniga.api.App;
@@ -46,11 +52,13 @@ public class Zakazy extends AppCompatActivity {
     TextView caption;
     ImageButton back;
     ImageButton filter;
+    ImageButton menu;
     TabHost tabHost;
     RelativeLayout filter_layout_1;
     RelativeLayout filter_layout_2;
     TextView notfound_1;
     TextView notfound_2;
+    DrawerLayout drawer;
 
     Spinner spinner1;
     Spinner spinner2;
@@ -191,6 +199,7 @@ public class Zakazy extends AppCompatActivity {
                         check=0;
                         break;
                 }
+                filter_2();
             }
         });
 
@@ -287,7 +296,94 @@ public class Zakazy extends AppCompatActivity {
             }
         });
 
+        menu = findViewById(R.id.menu);
+        drawer = findViewById(R.id.drawer_couriers);
+
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(GravityCompat.END);
+            }
+        });
+
+        search_1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filter_1();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        search_2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filter_2();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         load_filter_2();
+    }
+
+    public void filter_1() {
+        zakazy_1.clear();
+        for (Zakazy_courier_knigi buffer : zakazy_1_buf) {
+            if (buffer.getName().toLowerCase().contains(search_1.getText().toString())||
+                    buffer.getBarcode().toLowerCase().contains(search_1.getText().toString())) {
+                zakazy_1.add(buffer);
+            }
+        }
+        if (!zakazy_1.isEmpty()) {
+            notfound_1.setVisibility(View.GONE);
+        } else {
+            notfound_1.setVisibility(View.VISIBLE);
+        }
+        lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
+    }
+
+    public void filter_2() {
+        zakazy_2.clear();
+        for (Zakazy_courier_clients buffer : zakazy_2_buf) {
+            if (buffer.getName().toLowerCase().contains(search_2.getText().toString())) {
+                switch (check) {
+                    case 0:
+                        zakazy_2.add(buffer);
+                        break;
+                    case 1:
+                        if (!buffer.getStatus().equals("3"))
+                            zakazy_2.add(buffer);
+                        break;
+                    case 2:
+                        if (buffer.getStatus().equals("3"))
+                            zakazy_2.add(buffer);
+                        break;
+                }
+            }
+        }
+        if (!zakazy_2.isEmpty()) {
+            notfound_2.setVisibility(View.GONE);
+        } else {
+            notfound_2.setVisibility(View.VISIBLE);
+        }
+        lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
     }
 
     @Override
@@ -303,10 +399,11 @@ public class Zakazy extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (tabHost.getCurrentTab()==0)
+            if (search_1.getText().equals(""))
             load_filter_1();
         if (tabHost.getCurrentTab()==1)
+            if (search_2.getText().equals(""))
             load_filter_2();
-
     }
 
     public void reload_1(){
@@ -322,7 +419,12 @@ public class Zakazy extends AppCompatActivity {
                 zakazy_1.addAll(response.body());
                 zakazy_1_buf.addAll(response.body());
                 lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
-                notfound_1.setVisibility(View.GONE);
+
+                if (!zakazy_1.isEmpty()) {
+                    notfound_1.setVisibility(View.GONE);
+                } else {
+                    notfound_1.setVisibility(View.VISIBLE);
+                }
                 notfound_1.setText("Ничего не найдено");
             }
 
@@ -331,6 +433,8 @@ public class Zakazy extends AppCompatActivity {
 
             }
         });
+
+
     }
 
     public void reload_2(){
@@ -347,7 +451,12 @@ public class Zakazy extends AppCompatActivity {
                 zakazy_2.addAll(response.body());
                 zakazy_2_buf.addAll(response.body());
                 lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
-                notfound_2.setVisibility(View.GONE);
+
+                if (!zakazy_2.isEmpty()) {
+                    notfound_2.setVisibility(View.GONE);
+                } else {
+                    notfound_2.setVisibility(View.VISIBLE);
+                }
                 notfound_2.setText("Ничего не найдено");
             }
 

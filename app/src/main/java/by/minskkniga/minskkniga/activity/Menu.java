@@ -6,14 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.Nomenklatura.Main;
-import by.minskkniga.minskkniga.activity.Spravoch_Couriers.Couriers;
+import by.minskkniga.minskkniga.activity.Spravoch_Couriers.Main;
 
 public class Menu extends AppCompatActivity {
 
@@ -50,7 +48,7 @@ public class Menu extends AppCompatActivity {
                         startActivity(intent1);
                         break;
                     case 3:
-                        Intent intent2 = new Intent(Menu.this, Main.class);
+                        Intent intent2 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Nomenklatura.Main.class);
                         startActivity(intent2);
                         break;
                     case 7:
@@ -62,7 +60,7 @@ public class Menu extends AppCompatActivity {
                         startActivity(intent8);
                         break;
                     case 9:
-                        Intent intent9 = new Intent(Menu.this, Couriers.class);
+                        Intent intent9 = new Intent(Menu.this, Main.class);
                         startActivity(intent9);
                         break;
                 }

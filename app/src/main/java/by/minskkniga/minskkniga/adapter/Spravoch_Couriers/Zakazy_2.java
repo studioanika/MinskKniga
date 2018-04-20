@@ -1,6 +1,7 @@
 package by.minskkniga.minskkniga.adapter.Spravoch_Couriers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Spravoch_Couriers.Zakaz_info;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 
 public class Zakazy_2 extends BaseAdapter {
@@ -55,13 +57,6 @@ public class Zakazy_2 extends BaseAdapter {
 
 
         tv1.setText(_objects.get(position).getName());
-        tv1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(_context, position, Toast.LENGTH_SHORT).show();
-            }
-        });
-
         tv2.setText(_objects.get(position).getSumma());
         tv3.setText(_objects.get(position).getKomment());
         tv4.setText(_objects.get(position).getInfo());
@@ -78,6 +73,15 @@ public class Zakazy_2 extends BaseAdapter {
             ch2.setChecked(false);
         }
 
+        tv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(_context, Zakaz_info.class);
+                intent.putExtra("id", _objects.get(position).getId());
+                intent.putExtra("name",  _objects.get(position).getName());
+                _context.startActivity(intent);
+            }
+        });
 
         return view;
     }

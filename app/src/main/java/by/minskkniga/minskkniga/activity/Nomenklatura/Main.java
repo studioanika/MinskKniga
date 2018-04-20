@@ -187,14 +187,14 @@ public class Main extends AppCompatActivity {
     public void filter() {
         nomen.clear();
         for (by.minskkniga.minskkniga.api.Class.Nomenklatura buffer : nomen_buf) {
-            if (buffer.getName().contains(search.getText().toString()) ||
-                    buffer.getPredmet().contains(search.getText().toString()) ||
-                    buffer.getClass_().contains(search.getText().toString()) ||
-                    buffer.getIzdatel().contains(search.getText().toString()) ||
-                    buffer.getArtikul().contains(search.getText().toString()) ||
-                    buffer.getSokrName().contains(search.getText().toString()) ||
-                    buffer.getProdCena().contains(search.getText().toString()) ||
-                    buffer.getBarcode().contains(search.getText().toString())) {
+            if (buffer.getName().toLowerCase().contains(search.getText().toString()) ||
+                    buffer.getPredmet().toLowerCase().contains(search.getText().toString()) ||
+                    buffer.getClass_().toLowerCase().contains(search.getText().toString()) ||
+                    buffer.getIzdatel().toLowerCase().contains(search.getText().toString()) ||
+                    buffer.getArtikul().toLowerCase().contains(search.getText().toString()) ||
+                    buffer.getSokrName().toLowerCase().contains(search.getText().toString()) ||
+                    buffer.getProdCena().toLowerCase().contains(search.getText().toString()) ||
+                    buffer.getBarcode().toLowerCase().contains(search.getText().toString())) {
                 nomen.add(buffer);
             }
         }

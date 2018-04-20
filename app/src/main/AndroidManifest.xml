@@ -32,9 +32,10 @@
         <activity android:name=".activity.Nomenklatura.Add" />
         <activity android:name=".activity.Zakazy.Main" />
         <activity android:name=".activity.Zakazy.Zakazy_Client" />
-        <activity android:name=".activity.Spravoch_Couriers.Couriers" />
+        <activity android:name=".activity.Spravoch_Couriers.Main" />
         <activity android:name=".activity.Spravoch_Couriers.Zakazy" />
-        <activity android:name=".activity.Zakazy.Zakaz_info"></activity>
+        <activity android:name=".activity.Zakazy.Zakaz_info" />
+        <activity android:name=".activity.Spravoch_Couriers.Zakaz_info"></activity>
     </application>
 
 </manifest>

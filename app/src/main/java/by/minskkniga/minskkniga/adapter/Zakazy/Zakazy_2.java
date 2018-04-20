@@ -182,7 +182,7 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
                             ch1.setChecked(false);
                         }
                     });
-                    ad.setCancelable(false);
+                    ad.setCancelable(true);
                     ad.show();
                 }
             }

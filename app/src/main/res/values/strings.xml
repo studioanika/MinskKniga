@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">MinskKniga</string>
-    <string name="login_caption">Войти</string>
-    <string name="glavnaya_cap">Главная</string>
-    <string name="sprav_cap">Справочники</string>
 
     <string-array name="price_spinner">
         <item>Продажная</item>
@@ -32,4 +29,5 @@
         <item>Да</item>
         <item>Нет</item>
     </string-array>
+
 </resources>

@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F8F8"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
 
         <RelativeLayout
@@ -89,7 +91,7 @@
         android:layout_marginRight="40dp"
         android:layout_marginTop="28dp"
         android:background="@color/colorAccent"
-        android:text="@string/login_caption"
+        android:text="Войти"
         android:textColor="@android:color/background_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

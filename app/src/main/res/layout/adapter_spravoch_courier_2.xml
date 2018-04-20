@@ -15,21 +15,23 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp">
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/tv1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textStyle="bold" />
 
             <CheckBox
                 android:id="@+id/ch1"
@@ -51,7 +53,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/tv3"
@@ -64,11 +66,12 @@
                 android:id="@+id/tv4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="#E0822F"
                 android:layout_weight="1"
                 android:text="TextView" />
 
-
         </LinearLayout>
+
     </LinearLayout>
 
 
