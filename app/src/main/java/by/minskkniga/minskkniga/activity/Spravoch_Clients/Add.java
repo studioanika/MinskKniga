@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -90,9 +91,9 @@ public class Add extends AppCompatActivity {
 
     ArrayList<String> array_contactface;
 
-    Add_Dela adapter_dela;
-    Add_Contacts adapter_contact;
-    ArrayAdapter<String> adapter_contactfaces;
+//    Add_Dela adapter_dela;
+//    Add_Contacts adapter_contact;
+//    ArrayAdapter<String> adapter_contactfaces;
 
     String podarki = "0";
     String ceni_type;
@@ -123,8 +124,8 @@ public class Add extends AppCompatActivity {
         dela_otvetstv = new ArrayList<String>();
 
         list_dela = findViewById(R.id.dela_listview);
-        adapter_dela = new Add_Dela(this, dela_date, dela_status, dela_otvetstv);
-        list_dela.setAdapter(adapter_dela);
+
+        list_dela.setAdapter(new Add_Dela(this, dela_date, dela_status, dela_otvetstv));
 
         dlg3 = new Add_Dialog(this, 3);
 
@@ -132,16 +133,11 @@ public class Add extends AppCompatActivity {
         contact_text = new ArrayList<String>();
 
         list_contact = findViewById(R.id.contacts_listview);
-        adapter_contact = new Add_Contacts(this, contact_type, contact_text);
-        list_contact.setAdapter(adapter_contact);
+
 
         dlg4 = new Add_Dialog(this, 4);
         array_contactface = new ArrayList<String>();
         list_contactfaces = findViewById(R.id.contactface_listview);
-        adapter_contactfaces = new ArrayAdapter<String>(this,
-                R.layout.adapter_add_contactfaces, array_contactface);
-
-        list_contactfaces.setAdapter(adapter_contactfaces);
 
         name_ed = findViewById(R.id.name_ed);
         sokr_name_ed = findViewById(R.id.sokr_name_ed);
@@ -346,52 +342,34 @@ public class Add extends AppCompatActivity {
         });
     }
 
-    ViewGroup.LayoutParams params_dela;
-    ViewGroup.LayoutParams params_contact;
-    ViewGroup.LayoutParams params_contactfaces;
-
     public void return_sity(int id, String name){
         city = id;
         add_city.setText(name);
-        Toast.makeText(this, id+" "+name, Toast.LENGTH_SHORT).show();
     }
 
     public void return_dela(String date, String status, String otvetstv) {
-        params_dela = list_dela.getLayoutParams();
-        params_dela.height = (int) (list_dela.getResources().getDisplayMetrics().density * ((adapter_dela.getCount() + 1) * 31));
-        list_dela.setLayoutParams(params_dela);
-
-
         dela_date.add(date);
         dela_status.add(status);
         dela_otvetstv.add(otvetstv);
-
-        adapter_dela.notifyDataSetChanged();
-        Toast.makeText(this, date, Toast.LENGTH_SHORT).show();
+        list_dela.setAdapter(new Add_Dela(this, dela_date, dela_status, dela_otvetstv));
+        setListViewHeightBasedOnChildren(list_dela);
     }
 
     public void return_contact(String type, String text) {
         if (!text.isEmpty()) {
-            params_contact = list_contact.getLayoutParams();
-            params_contact.height = (int) (list_contact.getResources().getDisplayMetrics().density * ((adapter_contact.getCount() + 1) * 41));
-            list_contact.setLayoutParams(params_contact);
-
             contact_type.add(type);
             contact_text.add(text);
-
-            adapter_contact.notifyDataSetChanged();
-            Toast.makeText(this, type + " " + text, Toast.LENGTH_SHORT).show();
+            list_contact.setAdapter(new Add_Contacts(this, contact_type, contact_text));
+            setListViewHeightBasedOnChildren(list_contact);
         }
     }
 
     public void return_contact_faces(String text) {
         if (!text.isEmpty()) {
-            params_contactfaces = list_contact.getLayoutParams();
-            params_contactfaces.height = (int) (list_contactfaces.getResources().getDisplayMetrics().density * ((adapter_contactfaces.getCount() + 1) * 31));
-            list_contactfaces.setLayoutParams(params_contactfaces);
-
             array_contactface.add(text);
-            adapter_contactfaces.notifyDataSetChanged();
+            list_contactfaces.setAdapter(new ArrayAdapter<String>(this,
+                    R.layout.adapter_add_contactfaces, array_contactface));
+            setListViewHeightBasedOnChildren(list_contactfaces);
         }
     }
 
@@ -559,7 +537,6 @@ public class Add extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                Toast.makeText(Add.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
 
@@ -568,11 +545,27 @@ public class Add extends AppCompatActivity {
                 Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
+    }
 
-        //name&short_name&zametka&info&price_type&price_sale&credit_size&city&school&napravl&smena&dela&contacts=&contact_faces
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
 
-        //Toast.makeText(this, dela, Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this, contacts, Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this, contactfaces, Toast.LENGTH_SHORT).show();
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 }

@@ -13,6 +13,9 @@ public class Zakaz_info {
     @SerializedName("date")
     @Expose
     private String date;
+    @SerializedName("zametka")
+    @Expose
+    private String zametka;
     @SerializedName("autor")
     @Expose
     private String autor;
@@ -43,6 +46,14 @@ public class Zakaz_info {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getZametka() {
+        return zametka;
+    }
+
+    public void setZametka(String zametka) {
+        this.zametka = zametka;
     }
 
     public String getAutor() {

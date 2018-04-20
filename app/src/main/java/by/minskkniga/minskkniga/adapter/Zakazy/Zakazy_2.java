@@ -163,7 +163,6 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
                             App.getApi().setOplata(_zakazy.get(groupPosition).getId()).enqueue(new Callback<ResultBody>() {
                                 @Override
                                 public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                                    Toast.makeText(_context, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                                     _zakazy.get(groupPosition).setOplacheno("1");
                                     ch1.setEnabled(false);
                                 }

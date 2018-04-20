@@ -53,7 +53,6 @@ public class Zakazy_Client extends AppCompatActivity {
         id = getIntent().getIntExtra("id", 0);
         name = getIntent().getStringExtra("name");
         caption.setText(name);
-        Toast.makeText(this, id+" ", Toast.LENGTH_SHORT).show();
 
         expListView = findViewById(R.id.expandeblelistview);
 
@@ -91,11 +90,11 @@ public class Zakazy_Client extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        super.onResume();
         if (tabHost.getCurrentTab()==0)
             reload_1();
         if (tabHost.getCurrentTab()==1)
             reload_2();
-        super.onResume();
     }
 
     public static String getName(){

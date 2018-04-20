@@ -90,7 +90,6 @@ public class Login extends AppCompatActivity {
                         ed.putString("name", response.body().getName());
                         ed.putString("rank", response.body().getRank());
                         ed.apply();
-                        Toast.makeText(Login.this, response.body().getName()+" "+response.body().getRank(), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Login.this, Menu.class);
                         startActivity(intent);
                     } else {

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -75,9 +76,6 @@ public class Add extends AppCompatActivity {
 
     ArrayList<String> array_contactface;
 
-    Add_Contacts adapter_contact;
-    ArrayAdapter<String> adapter_contactfaces;
-
     String price_type;
     int type_dolg;
     ImageButton back;
@@ -103,17 +101,13 @@ public class Add extends AppCompatActivity {
         contact_text = new ArrayList<String>();
 
         list_contact = findViewById(R.id.contacts_listview);
-        adapter_contact = new Add_Contacts(this, contact_type, contact_text);
-        list_contact.setAdapter(adapter_contact);
 
         dlg3 = new Add_Dialog(this, 6);
         array_contactface = new ArrayList<String>();
         list_contactfaces = findViewById(R.id.contactface_listview);
-        adapter_contactfaces = new ArrayAdapter<String>(this,
-                R.layout.adapter_add_contactfaces, array_contactface);
 
         sv = findViewById(R.id.scrollview);
-        list_contactfaces.setAdapter(adapter_contactfaces);
+
 
         name_ed = findViewById(R.id.name_ed);
         short_name_ed = findViewById(R.id.short_name_ed);
@@ -267,33 +261,22 @@ public class Add extends AppCompatActivity {
         });
     }
 
-    ViewGroup.LayoutParams params_dela;
-    ViewGroup.LayoutParams params_contact;
-    ViewGroup.LayoutParams params_contactfaces;
-
 
     public void return_contact(String type, String text) {
         if (!text.isEmpty()) {
-            params_contact = list_contact.getLayoutParams();
-            params_contact.height = (int) (list_contact.getResources().getDisplayMetrics().density * ((adapter_contact.getCount() + 1) * 41));
-            list_contact.setLayoutParams(params_contact);
-
             contact_type.add(type);
             contact_text.add(text);
-
-            adapter_contact.notifyDataSetChanged();
-            Toast.makeText(this, type + " " + text, Toast.LENGTH_SHORT).show();
+            list_contact.setAdapter(new Add_Contacts(this, contact_type, contact_text));
+            setListViewHeightBasedOnChildren(list_contact);
         }
     }
 
     public void return_contact_faces(String text) {
         if (!text.isEmpty()) {
-            params_contactfaces = list_contact.getLayoutParams();
-            params_contactfaces.height = (int) (list_contactfaces.getResources().getDisplayMetrics().density * ((adapter_contactfaces.getCount() + 1) * 31));
-            list_contactfaces.setLayoutParams(params_contactfaces);
-
             array_contactface.add(text);
-            adapter_contactfaces.notifyDataSetChanged();
+            list_contactfaces.setAdapter(new ArrayAdapter<String>(this,
+                    R.layout.adapter_add_contactfaces, array_contactface));
+            setListViewHeightBasedOnChildren(list_contactfaces);
         }
     }
 
@@ -425,7 +408,6 @@ public class Add extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                Toast.makeText(Add.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
 
@@ -446,20 +428,34 @@ public class Add extends AppCompatActivity {
                 city + " " +
                 contacts + " " +
                 contactfaces);
-
-        //name&short_name&zametka&info&price_type&price_sale&credit_size&city&school&napravl&smena&dela&contacts=&contact_faces
-
-        //Toast.makeText(this, dela, Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this, contacts, Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this, contactfaces, Toast.LENGTH_SHORT).show();
-
     }
 
 
     public void return_sity(int id, String name) {
         city = id;
         add_city.setText(name);
-        Toast.makeText(this, id + " " + name, Toast.LENGTH_SHORT).show();
     }
 
+
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
 }

@@ -121,7 +121,6 @@ public class Add extends AppCompatActivity {
                 App.getApi().artikyl(nomen_artikyl.getText().toString()).enqueue(new Callback<ResultBody>() {
                     @Override
                     public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                        Toast.makeText(Add.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -152,7 +151,6 @@ public class Add extends AppCompatActivity {
                 App.getApi().addNomenclatura(body, name).enqueue(new Callback<ResultBody>() {
                     @Override
                     public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                        Toast.makeText(Add.this, response.body().toString(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

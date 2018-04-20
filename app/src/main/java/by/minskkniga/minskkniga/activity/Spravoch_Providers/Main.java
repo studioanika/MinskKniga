@@ -39,7 +39,7 @@ public class Main extends AppCompatActivity {
     ExpandableListView expListView;
     ArrayList<String> listDataHeader;
     ArrayList<ArrayList<String>> listDataChild;
-    EditText searchedit;
+    EditText search;
     ImageButton back;
 
     TextView notfound_1;
@@ -124,8 +124,8 @@ public class Main extends AppCompatActivity {
         lv2 = findViewById(R.id.lv2);
 
 
-        searchedit = findViewById(R.id.editsearchclients);
-        searchedit.addTextChangedListener(new TextWatcher() {
+        search = findViewById(R.id.search);
+        search.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -145,15 +145,21 @@ public class Main extends AppCompatActivity {
 
     public void search(){
         prov.clear();
-        if (!searchedit.getText().toString().isEmpty()) {
+        if (!search.getText().toString().isEmpty()) {
             for (int i = 0; i < prov_buf.size(); i++) {
-                if (prov_buf.get(i).getName().toLowerCase().contains(searchedit.getText().toString().toLowerCase())) {
+                if (prov_buf.get(i).getName().toLowerCase().contains(search.getText().toString().toLowerCase())) {
                     prov.add(prov_buf.get(i));
                 }
             }
         }else{
             prov.addAll(prov_buf);
         }
+        if (!prov.isEmpty()) {
+            notfound_2.setVisibility(View.GONE);
+        } else {
+            notfound_2.setVisibility(View.VISIBLE);
+        }
+        notfound_2.setText("Ничего не найдено");
         lv2.setAdapter(new Main_2(this, prov));
     }
 
@@ -161,7 +167,7 @@ public class Main extends AppCompatActivity {
     protected void onResume() {
         if (tabHost.getCurrentTab()==0)
             reload_1();
-        if (tabHost.getCurrentTab()==1)
+        if (tabHost.getCurrentTab()==1 && search.getText().toString().isEmpty())
             reload_2();
         super.onResume();
     }
@@ -228,8 +234,13 @@ public class Main extends AppCompatActivity {
                 prov.addAll(response.body());
                 prov_buf.addAll(response.body());
                 lv2.setAdapter(new Main_2(Main.this, prov));
-                search();
-                notfound_2.setVisibility(View.GONE);
+
+                if (!prov.isEmpty()) {
+                    notfound_2.setVisibility(View.GONE);
+                } else {
+                    notfound_2.setVisibility(View.VISIBLE);
+                }
+                notfound_2.setText("Ничего не найдено");
             }
 
             @Override

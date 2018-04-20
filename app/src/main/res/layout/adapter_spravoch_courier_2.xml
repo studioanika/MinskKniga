@@ -75,12 +75,19 @@
 
     </LinearLayout>
 
-
-    <ImageView
+    <LinearLayout
         android:id="@+id/icon"
         android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/ic_chevron_right">
-    </ImageView>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_chevron_right">
+        </ImageView>
+
+    </LinearLayout>
 
 </LinearLayout>

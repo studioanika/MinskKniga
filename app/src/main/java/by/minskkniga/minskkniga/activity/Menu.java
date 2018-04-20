@@ -34,8 +34,6 @@ public class Menu extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                     long id) {
-                Toast.makeText(getApplicationContext(), ((TextView) itemClicked).getText(),
-                        Toast.LENGTH_SHORT).show();
             }
         });
         lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {

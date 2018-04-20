@@ -151,6 +151,11 @@ public class Main extends AppCompatActivity {
         }else{
             clien.addAll(clien_buf);
         }
+        if (!clien.isEmpty()) {
+            notfound_2.setVisibility(View.GONE);
+        } else {
+            notfound_2.setVisibility(View.VISIBLE);
+        }
         lv2.setAdapter(new Main_2(this, clien));
     }
 
@@ -158,7 +163,7 @@ public class Main extends AppCompatActivity {
     protected void onResume() {
         if (tabHost.getCurrentTab()==0)
             reload_1();
-        if (tabHost.getCurrentTab()==1)
+        if (tabHost.getCurrentTab()==1 && search.getText().toString().isEmpty())
             reload_2();
         super.onResume();
     }
@@ -205,7 +210,13 @@ public class Main extends AppCompatActivity {
 
 
                 expListView.setAdapter(new Main_1(getApplicationContext(), listDataHeader, listDataChild));
-                notfound_1.setVisibility(View.GONE);
+
+                if (!listDataHeader.isEmpty()) {
+                    notfound_1.setVisibility(View.GONE);
+                } else {
+                    notfound_1.setVisibility(View.VISIBLE);
+                }
+                notfound_1.setText("Ничего не найдено");
             }
 
             @Override
@@ -224,8 +235,13 @@ public class Main extends AppCompatActivity {
                 clien.addAll(response.body());
                 clien_buf.addAll(response.body());
                 lv2.setAdapter(new Main_2(Main.this, clien));
-                search();
-                notfound_2.setVisibility(View.GONE);
+
+                if (!clien.isEmpty()) {
+                    notfound_2.setVisibility(View.GONE);
+                } else {
+                    notfound_2.setVisibility(View.VISIBLE);
+                }
+                notfound_2.setText("Ничего не найдено");
             }
 
             @Override

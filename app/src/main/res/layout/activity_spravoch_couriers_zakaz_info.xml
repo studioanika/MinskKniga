@@ -45,6 +45,16 @@
 
     </RelativeLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -53,7 +63,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:padding="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -67,7 +77,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -80,13 +91,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:padding="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -100,7 +112,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -119,7 +132,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="5dp"
+            android:padding="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -146,30 +159,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/linear_courier"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="Заметки"/>
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:orientation="vertical">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text=""/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Заметки"/>
 
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:background="#000000"
-            android:textColor="#ffffff"
-            android:text="ГОТОВО"/>
+            <EditText
+                android:id="@+id/zametka"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""/>
+
+            <Button
+                android:id="@+id/ok"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#000000"
+                android:textColor="#ffffff"
+                android:text="ГОТОВО"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -180,40 +202,39 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="10dp"
-            android:paddingBottom="20dp"
-            android:background="#eee"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="#eee">
 
             <TextView
                 android:id="@+id/tv1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
-                android:text="Итого 1 позиция на 0,00 BYN" />
+                android:text="Итого 1 позиция на 0,00 BYN"
+                android:textStyle="bold"  />
 
             <TextView
                 android:id="@+id/tv2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="Вес: 0,000 кг" />
+                android:text="Вес: 0,000 кг"
+                android:textStyle="bold"  />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
             android:background="#eee"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:text="Класс" />
 
@@ -239,7 +260,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginRight="10dp"
                 android:text="Кол-во" />
 
         </LinearLayout>
@@ -247,7 +267,12 @@
         <ListView
             android:id="@+id/lv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"/>
+
     </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

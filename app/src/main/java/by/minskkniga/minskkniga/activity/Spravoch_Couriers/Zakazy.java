@@ -397,13 +397,15 @@ public class Zakazy extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if (tabHost.getCurrentTab()==0)
-            if (search_1.getText().equals(""))
-            load_filter_1();
-        if (tabHost.getCurrentTab()==1)
-            if (search_2.getText().equals(""))
-            load_filter_2();
         super.onResume();
+        if (tabHost.getCurrentTab() == 0 && search_1.getText().toString().isEmpty()) {
+            load_filter_1();
+            Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+        }
+        if (tabHost.getCurrentTab() == 1 && search_2.getText().toString().isEmpty()) {
+            load_filter_2();
+            Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void reload_1(){

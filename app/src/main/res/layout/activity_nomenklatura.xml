@@ -12,9 +12,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -155,15 +152,15 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:background="#f8f8f8"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="#eee"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:text="Класс" />
 
@@ -188,7 +185,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:text="Цена" />
 

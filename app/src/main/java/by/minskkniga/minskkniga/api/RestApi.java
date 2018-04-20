@@ -128,4 +128,7 @@ public interface RestApi {
 
     @GET("/api/show_couriers_filter_2.php")
     Call<Courier_filter_2> getCourier_filter_2(@Query("id") String id);
+
+    @GET("/api/set_complete_zakaz.php")
+    Call<ResultBody> setComplete_zakaz(@Query("id") String id);
 }

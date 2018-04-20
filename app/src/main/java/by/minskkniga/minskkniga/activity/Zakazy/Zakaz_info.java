@@ -1,12 +1,15 @@
 package by.minskkniga.minskkniga.activity.Zakazy;
 
 import android.graphics.Color;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -80,9 +83,6 @@ public class Zakaz_info extends AppCompatActivity {
         oplacheno = findViewById(R.id.oplacheno);
 
         zakaz = new by.minskkniga.minskkniga.api.Class.Zakaz_info();
-
-        Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
-        reload();
     }
 
     @Override
@@ -142,6 +142,7 @@ public class Zakaz_info extends AppCompatActivity {
 
                 }
                 lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_info(Zakaz_info.this, (ArrayList<WhatZakazal>) zakaz.getWhatZakazal()));
+                setListViewHeightBasedOnChildren(lv);
                 load_couriers();
             }
 
@@ -181,5 +182,27 @@ public class Zakaz_info extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 }

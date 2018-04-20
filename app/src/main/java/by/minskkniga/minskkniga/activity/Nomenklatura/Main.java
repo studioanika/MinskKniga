@@ -236,11 +236,11 @@ public class Main extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        super.onResume();
         if (search.getText().toString().isEmpty()) {
             load_filter();
             filter();
         }
-        super.onResume();
     }
 
     public void load_filter(){
