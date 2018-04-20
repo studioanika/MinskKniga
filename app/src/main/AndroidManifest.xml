@@ -35,7 +35,8 @@
         <activity android:name=".activity.Spravoch_Couriers.Main" />
         <activity android:name=".activity.Spravoch_Couriers.Zakazy" />
         <activity android:name=".activity.Zakazy.Zakaz_info" />
-        <activity android:name=".activity.Spravoch_Couriers.Zakaz_info"></activity>
+        <activity android:name=".activity.Spravoch_Couriers.Zakaz_info" />
+        <activity android:name=".activity.Organizer.Main"></activity>
     </application>
 
 </manifest>

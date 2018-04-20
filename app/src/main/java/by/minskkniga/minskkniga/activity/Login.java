@@ -85,6 +85,7 @@ public class Login extends AppCompatActivity {
                 public void onResponse(Call<by.minskkniga.minskkniga.api.Class.Login> call, Response<by.minskkniga.minskkniga.api.Class.Login> response) {
                     if (!response.body().getMessage().equals("error")) {
                         pd.cancel();
+                        ed.putString("id", response.body().getId());
                         ed.putString("login", login.getText().toString());
                         ed.putString("pass", pass.getText().toString());
                         ed.putString("name", response.body().getName());

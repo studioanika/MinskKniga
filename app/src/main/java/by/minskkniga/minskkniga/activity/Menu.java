@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import by.minskkniga.minskkniga.R;
@@ -42,12 +41,16 @@ public class Menu extends AppCompatActivity {
                                     long id) {
                 switch (position) {
                     case 0:
-                        Intent intent1 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Zakazy.Main.class);
-                        startActivity(intent1);
+                        Intent intent0 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Zakazy.Main.class);
+                        startActivity(intent0);
                         break;
                     case 3:
-                        Intent intent2 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Nomenklatura.Main.class);
-                        startActivity(intent2);
+                        Intent intent3 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Nomenklatura.Main.class);
+                        startActivity(intent3);
+                        break;
+                    case 4:
+                        Intent intent4 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Organizer.Main.class);
+                        startActivity(intent4);
                         break;
                     case 7:
                         Intent intent7 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Spravoch_Clients.Main.class);

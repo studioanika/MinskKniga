@@ -199,7 +199,7 @@ public class Zakazy extends AppCompatActivity {
                         check=0;
                         break;
                 }
-                filter_2();
+                search_2();
             }
         });
 
@@ -314,7 +314,7 @@ public class Zakazy extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filter_1();
+                search_1();
             }
 
             @Override
@@ -331,7 +331,7 @@ public class Zakazy extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filter_2();
+                search_2();
             }
 
             @Override
@@ -343,7 +343,7 @@ public class Zakazy extends AppCompatActivity {
         load_filter_2();
     }
 
-    public void filter_1() {
+    public void search_1() {
         zakazy_1.clear();
         for (Zakazy_courier_knigi buffer : zakazy_1_buf) {
             if (buffer.getName().toLowerCase().contains(search_1.getText().toString())||
@@ -359,7 +359,7 @@ public class Zakazy extends AppCompatActivity {
         lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
     }
 
-    public void filter_2() {
+    public void search_2() {
         zakazy_2.clear();
         for (Zakazy_courier_clients buffer : zakazy_2_buf) {
             if (buffer.getName().toLowerCase().contains(search_2.getText().toString())) {

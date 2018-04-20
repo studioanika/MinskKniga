@@ -9,6 +9,8 @@ import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.Login;
 import by.minskkniga.minskkniga.api.Class.Nomenklatura;
 import by.minskkniga.minskkniga.api.Class.Nomenklatura_filter;
+import by.minskkniga.minskkniga.api.Class.Organizer;
+import by.minskkniga.minskkniga.api.Class.Organizer_filter;
 import by.minskkniga.minskkniga.api.Class.Providers;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.Sity;
@@ -131,4 +133,16 @@ public interface RestApi {
 
     @GET("/api/set_complete_zakaz.php")
     Call<ResultBody> setComplete_zakaz(@Query("id") String id);
+
+    @GET("/api/show_organizer.php")
+    Call<List<Organizer>> getOrganizer(@Query("autor") String autor,
+                                  @Query("komy") String komy,
+                                  @Query("kontragent") String kontragent,
+                                  @Query("status") String status);
+
+    @GET("/api/show_organizer_filter.php")
+    Call<Organizer_filter> getOrganizer_filter();
+
+    @GET("/api/set_organizer_ok.php")
+    Call<ResultBody> setOrganizer_ok(@Query("id") String id);
 }
