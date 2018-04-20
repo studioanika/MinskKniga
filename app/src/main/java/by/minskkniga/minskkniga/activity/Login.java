@@ -101,7 +101,8 @@ public class Login extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<by.minskkniga.minskkniga.api.Class.Login> call, Throwable t) {
-
+                    pd.cancel();
+                    Toast.makeText(Login.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {

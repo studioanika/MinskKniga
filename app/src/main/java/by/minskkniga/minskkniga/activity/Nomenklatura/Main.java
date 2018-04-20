@@ -170,8 +170,6 @@ public class Main extends AppCompatActivity {
 
             }
         });
-//end onclick filter
-
         load_filter();
     }
 
@@ -187,14 +185,14 @@ public class Main extends AppCompatActivity {
     public void filter() {
         nomen.clear();
         for (by.minskkniga.minskkniga.api.Class.Nomenklatura buffer : nomen_buf) {
-            if (buffer.getName().toLowerCase().contains(search.getText().toString()) ||
-                    buffer.getPredmet().toLowerCase().contains(search.getText().toString()) ||
-                    buffer.getClass_().toLowerCase().contains(search.getText().toString()) ||
-                    buffer.getIzdatel().toLowerCase().contains(search.getText().toString()) ||
-                    buffer.getArtikul().toLowerCase().contains(search.getText().toString()) ||
-                    buffer.getSokrName().toLowerCase().contains(search.getText().toString()) ||
-                    buffer.getProdCena().toLowerCase().contains(search.getText().toString()) ||
-                    buffer.getBarcode().toLowerCase().contains(search.getText().toString())) {
+            if (buffer.getName().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    buffer.getPredmet().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    buffer.getClass_().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    buffer.getIzdatel().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    buffer.getArtikul().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    buffer.getSokrName().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    buffer.getProdCena().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    buffer.getBarcode().toLowerCase().contains(search.getText().toString().toLowerCase())) {
                 nomen.add(buffer);
             }
         }
@@ -238,11 +236,11 @@ public class Main extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
-        if (search.getText().equals("")) {
+        if (search.getText().toString().isEmpty()) {
             load_filter();
+            filter();
         }
-        filter();
+        super.onResume();
     }
 
     public void load_filter(){

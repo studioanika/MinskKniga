@@ -33,6 +33,8 @@ public class Main extends AppCompatActivity {
     ArrayList<Clients> clien;
     ArrayList<Clients> clien_buf;
 
+    TabHost tabHost;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +66,7 @@ public class Main extends AppCompatActivity {
         });
 
 
-        TabHost tabHost = findViewById(R.id.tabHost);
+        tabHost = findViewById(R.id.tabHost);
         tabHost.setup();
 
         TabHost.TabSpec tabSpec = tabHost.newTabSpec("tag1");
@@ -82,21 +84,21 @@ public class Main extends AppCompatActivity {
 
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             public void onTabChanged(String tabId) {
-                reload_1();
-                reload_2();
+                if (tabHost.getCurrentTab()==0)
+                    reload_1();
+                if (tabHost.getCurrentTab()==1)
+                    reload_2();
             }
         });
-
-        reload_1();
-        reload_2();
     }
 
     @Override
     protected void onResume() {
+        if (tabHost.getCurrentTab()==0)
+            reload_1();
+        if (tabHost.getCurrentTab()==1)
+            reload_2();
         super.onResume();
-        reload_1();
-        reload_2();
-
     }
 
     public void reload_1(){

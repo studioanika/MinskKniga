@@ -34,6 +34,7 @@ public class Zakazy_Client extends AppCompatActivity {
     ArrayList<Zakazy> zakazy_buf;
 
     ExpandableListView expListView;
+    TabHost tabHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,7 @@ public class Zakazy_Client extends AppCompatActivity {
         expListView.setAdapter(new Zakazy_2(this, zakazy));
 
 
-        TabHost tabHost = findViewById(R.id.tabHost);
+        tabHost = findViewById(R.id.tabHost);
         tabHost.setup();
 
         TabHost.TabSpec tabSpec = tabHost.newTabSpec("tag1");
@@ -80,19 +81,21 @@ public class Zakazy_Client extends AppCompatActivity {
 
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             public void onTabChanged(String tabId) {
-
+                if (tabHost.getCurrentTab()==0)
+                    reload_1();
+                if (tabHost.getCurrentTab()==1)
+                    reload_2();
             }
         });
-        reload_1();
-        reload_2();
     }
 
     @Override
     protected void onResume() {
+        if (tabHost.getCurrentTab()==0)
+            reload_1();
+        if (tabHost.getCurrentTab()==1)
+            reload_2();
         super.onResume();
-        reload_1();
-        reload_2();
-
     }
 
     public static String getName(){

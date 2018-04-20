@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +56,7 @@ public class Zakazy_2 extends BaseAdapter {
         TextView tv4 = view.findViewById(R.id.tv4);
         CheckBox ch1 = view.findViewById(R.id.ch1);
         CheckBox ch2 = view.findViewById(R.id.ch2);
-
+        ImageView iv1 =view.findViewById(R.id.icon);
 
         tv1.setText(_objects.get(position).getName());
         tv2.setText(_objects.get(position).getSumma());
@@ -74,6 +76,13 @@ public class Zakazy_2 extends BaseAdapter {
         }
 
         tv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        iv1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(_context, Zakaz_info.class);

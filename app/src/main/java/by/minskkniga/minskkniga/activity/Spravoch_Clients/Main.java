@@ -44,6 +44,8 @@ public class Main extends AppCompatActivity {
     TextView notfound_1;
     TextView notfound_2;
 
+    TabHost tabHost;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +62,7 @@ public class Main extends AppCompatActivity {
         notfound_1 = findViewById(R.id.notfound_1);
         notfound_2 = findViewById(R.id.notfound_2);
 
-        TabHost tabHost = findViewById(R.id.tabHost);
+        tabHost = findViewById(R.id.tabHost);
         tabHost.setup();
 
         TabHost.TabSpec tabSpec = tabHost.newTabSpec("tag1");
@@ -78,8 +80,10 @@ public class Main extends AppCompatActivity {
 
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             public void onTabChanged(String tabId) {
-                reload_1();
-                reload_2();
+                if (tabHost.getCurrentTab()==0)
+                    reload_1();
+                if (tabHost.getCurrentTab()==1)
+                    reload_2();
             }
         });
 
@@ -93,15 +97,7 @@ public class Main extends AppCompatActivity {
         });
 
 
-//tab 1 start
-        expListView = (ExpandableListView) findViewById(R.id.expandablelistview);
-
-        /*if (android.os.Build.VERSION.SDK_INT <
-                android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            expListView.setIndicatorBounds(0, 200);
-        } else {
-            expListView.setIndicatorBoundsRelative(0, 200);
-        }*/
+        expListView = findViewById(R.id.expandablelistview);
 
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
 
@@ -118,18 +114,14 @@ public class Main extends AppCompatActivity {
                 return false;
             }
         });
-//tab 1 end
 
-//tab 2 start
         clien = new ArrayList<>();
         clien_buf = new ArrayList<>();
 
         lv2 = findViewById(R.id.lv2);
 
         lv2.setAdapter(new Main_2(this, clien));
-//tab 2 end
 
-//search start
         search = findViewById(R.id.search);
         search.addTextChangedListener(new TextWatcher() {
 
@@ -146,7 +138,6 @@ public class Main extends AppCompatActivity {
                 search();
             }
         });
-//search end
     }
 
     public void search(){
@@ -165,10 +156,11 @@ public class Main extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        if (tabHost.getCurrentTab()==0)
+            reload_1();
+        if (tabHost.getCurrentTab()==1)
+            reload_2();
         super.onResume();
-        reload_1();
-        reload_2();
-
     }
 
     public void reload_1(){
