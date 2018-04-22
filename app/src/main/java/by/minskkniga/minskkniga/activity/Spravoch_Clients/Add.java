@@ -2,6 +2,7 @@ package by.minskkniga.minskkniga.activity.Spravoch_Clients;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -85,15 +86,17 @@ public class Add extends AppCompatActivity {
     ArrayList<String> dela_date;
     ArrayList<String> dela_status;
     ArrayList<String> dela_otvetstv;
+    ArrayList<String> dela_otvet_id;
+    ArrayList<String> dela_text;
 
     ArrayList<String> contact_type;
     ArrayList<String> contact_text;
 
     ArrayList<String> array_contactface;
 
-//    Add_Dela adapter_dela;
-//    Add_Contacts adapter_contact;
-//    ArrayAdapter<String> adapter_contactfaces;
+    SharedPreferences sp;
+
+    String id;
 
     String podarki = "0";
     String ceni_type;
@@ -119,9 +122,14 @@ public class Add extends AppCompatActivity {
 
         dlg2 = new Add_Dialog(this, 2);
 
-        dela_date = new ArrayList<String>();
-        dela_status = new ArrayList<String>();
-        dela_otvetstv = new ArrayList<String>();
+        dela_date = new ArrayList<>();
+        dela_status = new ArrayList<>();
+        dela_otvetstv = new ArrayList<>();
+        dela_otvet_id = new ArrayList<>();
+        dela_text = new ArrayList<>();
+
+        sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+        id = sp.getString("id", "");
 
         list_dela = findViewById(R.id.dela_listview);
 
@@ -347,12 +355,17 @@ public class Add extends AppCompatActivity {
         add_city.setText(name);
     }
 
-    public void return_dela(String date, String status, String otvetstv) {
+    public void return_dela(String date, String status, String otve_name, String otve, String text) {
         dela_date.add(date);
         dela_status.add(status);
-        dela_otvetstv.add(otvetstv);
+        dela_otvetstv.add(otve_name);
+        dela_otvet_id.add(otve);
+        dela_text.add(text);
         list_dela.setAdapter(new Add_Dela(this, dela_date, dela_status, dela_otvetstv));
         setListViewHeightBasedOnChildren(list_dela);
+
+
+        Toast.makeText(this, date+" "+status+" "+otve_name+" "+otve+" "+text, Toast.LENGTH_SHORT).show();
     }
 
     public void return_contact(String type, String text) {
@@ -419,7 +432,7 @@ public class Add extends AppCompatActivity {
         }
         switch (type_dolg) {
             case 0:
-                creditsize = 0.00;
+                creditsize = 0.0;
                 break;
             case 1:
                 if (dolg_ed.getText().toString().isEmpty()){
@@ -472,13 +485,13 @@ public class Add extends AppCompatActivity {
             return;
         }
         dolg = skidka_ed.getText().toString();
-        if (dolg.isEmpty()) dolg = "0";
+        if (dolg.isEmpty()) dolg = "0.0";
 
         
         if (dela_date.size() != 0) {
-            dela = dela_date.get(0) + "/~/" + dela_status.get(0) + "/~/" + dela_otvetstv.get(0);
+            dela = dela_date.get(0) + "/~/" + (dela_status.get(0).equals("Новое")?"new":"ok") + "/~/" + dela_otvet_id.get(0) + "/~/" + dela_text.get(0);
             for (int i = 1; i < dela_date.size(); i++) {
-                dela += "/~~/" + dela_date.get(0) + "/~/" + dela_status.get(0) + "/~/" + dela_otvetstv.get(0);
+                dela += "/~~/" + dela_date.get(i) + "/~/" + (dela_status.get(i).equals("Новое")?"new":"ok") + "/~/" + dela_otvet_id.get(i) + "/~/" + dela_text.get(i);
             }
         }
 
@@ -503,23 +516,8 @@ public class Add extends AppCompatActivity {
         if (contacts.isEmpty()) contacts = "null";
         if (contactfaces.isEmpty()) contactfaces = "null";
 
-        Log.d("add_client", "name:" + name_ed.getText().toString() + " short_name:" +
-                sokr_name_ed.getText().toString() + " info:" +
-                info_ed.getText().toString() + " zametka:" +
-                zametka_ed.getText().toString() + " naprav:" +
-                naprav_ed.getText().toString() + " city:" +
-                city + " school:" +
-                school_ed.getText().toString() + " smena:" +
-                smena_ed.getText().toString() + " price_type:" +
-                ceni_type + " creditsize:" +
-                creditsize + " podarki:" +
-                podarki + " dolg:" +
-                Double.parseDouble(dolg) + " dela:" +
-                dela + " contacts:" +
-                contacts + " contactfaces:" +
-                contactfaces);
-
-        App.getApi().addClient(name_ed.getText().toString(),
+        App.getApi().addClient(id,
+                name_ed.getText().toString(),
                 sokr_name_ed.getText().toString(),
                 info_ed.getText().toString(),
                 zametka_ed.getText().toString(),

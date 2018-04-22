@@ -5,25 +5,26 @@ import com.google.gson.annotations.SerializedName;
 
 public class Login {
 
-    @SerializedName("id")
+    @SerializedName("user_id")
     @Expose
-    private String id;
+    private String user_id;
     @SerializedName("message")
     @Expose
     private String message;
-    @SerializedName("name")
-    @Expose
-    private String name;
     @SerializedName("rank")
     @Expose
     private String rank;
 
-    public String getId() {
-        return id;
+    @SerializedName("name")
+    @Expose
+    private String name;
+
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUser_id(String id) {
+        this.user_id = user_id;
     }
 
     public String getMessage() {
@@ -34,19 +35,19 @@ public class Login {
         this.message = message;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getRank() {
         return rank;
     }
 
     public void setRank(String rank) {
         this.rank = rank;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -81,6 +81,7 @@ public class Zakaz_info extends AppCompatActivity {
         courier = findViewById(R.id.courier);
         zametka = findViewById(R.id.zametka);
         ok = findViewById(R.id.ok);
+        ok.setVisibility(View.GONE);
 
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,27 +135,28 @@ public class Zakaz_info extends AppCompatActivity {
                 switch (zakaz.getStatus()) {
                     case "0"://chernovik новый  green
                         status.setText("Новый");
-                        status.setBackgroundColor(Color.GREEN);
+                        status.setTextColor(Color.rgb(97, 184, 126));
                         break;
                     case "1"://новый  green
                         status.setText("Новый");
-                        status.setBackgroundColor(Color.GREEN);
+                        status.setTextColor(Color.rgb(97, 184, 126));
                         break;
                     case "2"://в сборке  yellow
                         status.setText("В сборке");
-                        status.setBackgroundColor(Color.YELLOW);
+                        status.setTextColor(Color.rgb(242, 201, 76));
                         break;
                     case "3"://собран  blue
                         status.setText("Собран");
-                        status.setBackgroundColor(Color.BLUE);
+                        status.setTextColor(Color.BLUE);
                         break;
                     case "4"://в доставке   lightred
                         status.setText("В доставке");
-                        status.setBackgroundColor(Color.rgb(242, 0, 86));
+                        status.setTextColor(Color.rgb(242, 0, 86));
+                        ok.setVisibility(View.VISIBLE);
                         break;
                     case "5"://отгружен   darkred
                         status.setText("Отгружен");
-                        status.setBackgroundColor(Color.rgb(255, 204, 203));
+                        status.setTextColor(Color.rgb(139, 0, 0));
                         break;
 
                 }

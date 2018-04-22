@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -85,11 +84,12 @@ public class Login extends AppCompatActivity {
                 public void onResponse(Call<by.minskkniga.minskkniga.api.Class.Login> call, Response<by.minskkniga.minskkniga.api.Class.Login> response) {
                     if (!response.body().getMessage().equals("error")) {
                         pd.cancel();
-                        ed.putString("id", response.body().getId());
+                        Toast.makeText(Login.this, response.body().getRank()+" "+response.body().getUser_id(), Toast.LENGTH_SHORT).show();
                         ed.putString("login", login.getText().toString());
                         ed.putString("pass", pass.getText().toString());
-                        ed.putString("name", response.body().getName());
                         ed.putString("rank", response.body().getRank());
+                        ed.putString("user_id", response.body().getUser_id());
+                        ed.putString("name", response.body().getName());
                         ed.apply();
                         Intent intent = new Intent(Login.this, Menu.class);
                         startActivity(intent);

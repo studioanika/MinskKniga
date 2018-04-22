@@ -21,6 +21,7 @@ import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -40,7 +41,8 @@ public interface RestApi {
     Call<List<Clients>> getClients();
 
     @GET("/api/add_client.php")
-    Call<ResultBody> addClient(@Query("name") String name,
+    Call<ResultBody> addClient(@Query("id") String id,
+                               @Query("name") String name,
                                @Query("sokr_name") String sokr_name,
                                @Query("info_for_print") String info_for_print,
                                @Query("zametka") String zametka,
@@ -82,12 +84,12 @@ public interface RestApi {
     Call<List<Nomenklatura>> getNomenclatura(@Query("autor") String avtor,
                                              @Query("izdatel") String izdatel,
                                              @Query("obrazec") String obraz,
-                                             @Query("class") String _class);
+                                             @Query("clas") String clas);
 
     @Multipart
     @POST("/api/add_nomenklatura.php")
     Call<ResultBody> addNomenclatura(@Part MultipartBody.Part image,
-                                     @Part("name") RequestBody name);
+                                     @Part("image") RequestBody name);
     /*,
                                      @Part("_class") RequestBody _class,
                                      @Part("predmet") RequestBody predmet,
@@ -163,4 +165,13 @@ public interface RestApi {
     @GET("/api/show_notif.php")
     Call<Notif_count> getNotif(@Query("id") String id);
 
+    @GET("/api/set_courier_add_knigi.php")
+    Call<ResultBody> addKnigi(@Query("id") String id);
+
+    @GET("/api/add_courier.php")
+    Call<ResultBody> addCourier(@Query("name") String name,
+                                @Query("login") String login,
+                                @Query("pass") String pass,
+                                @Query("desc") String desc,
+                                @Query("contacts") String contacts);
 }

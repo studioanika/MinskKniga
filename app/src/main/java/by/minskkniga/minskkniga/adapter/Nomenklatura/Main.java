@@ -51,8 +51,11 @@ public class Main extends BaseAdapter {
         TextView tv6 = view.findViewById(R.id.tv6);
 
         tv1.setText(_objects.get(position).getName());
-        tv2.setText(_objects.get(position).getClass_());
-        tv3.setText(_objects.get(position).getIzdatel().substring(0,1));
+        tv2.setText(_objects.get(position).getClas());
+        if (!_objects.get(position).getIzdatel().equals(""))
+            tv3.setText(_objects.get(position).getIzdatel().substring(0,1));
+        else
+            tv3.setText("");
         tv4.setText(_objects.get(position).getArtikul());
         tv5.setText(_objects.get(position).getSokrName());
         tv6.setText(_objects.get(position).getProdCena());

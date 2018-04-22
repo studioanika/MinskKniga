@@ -26,9 +26,6 @@ public class Providers {
     @SerializedName("price_sale")
     @Expose
     private String priceSale;
-    @SerializedName("credit_type")
-    @Expose
-    private String creditType;
     @SerializedName("credit_size")
     @Expose
     private Double creditSize;
@@ -93,14 +90,6 @@ public class Providers {
 
     public void setPriceSale(String priceSale) {
         this.priceSale = priceSale;
-    }
-
-    public String getCreditType() {
-        return creditType;
-    }
-
-    public void setCreditType(String creditType) {
-        this.creditType = creditType;
     }
 
     public Double getCreditSize() {

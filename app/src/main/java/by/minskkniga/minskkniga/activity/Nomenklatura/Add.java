@@ -8,9 +8,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapRegionDecoder;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -34,8 +37,14 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 
 import by.minskkniga.minskkniga.R;
@@ -44,6 +53,7 @@ import by.minskkniga.minskkniga.api.Class.ResultBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,13 +66,13 @@ public class Add extends AppCompatActivity {
     EditText nomen_artikyl;
     IntentIntegrator qrScan;
     ImageView imageView;
-    //start upload
-    private static final int PICK_IMAGE_REQUEST = 234;
-    private Uri filePath;
-    private static final int TAKE_PICTURE = 1;
-    private Uri imageUri;
-    byte[] photo = null;
-//end upload
+    Bitmap bitmap;
+
+    private final int TAKE_PICTURE = 1;
+    private final int FILE_CHOOSER_RESULT = 2;
+    private Uri outputFileUri;
+
+    int image = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,49 +118,19 @@ public class Add extends AppCompatActivity {
         nomen_artikyl = findViewById(R.id.nomen_artikyl);
 
 
-        nomen_artikyl.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                App.getApi().artikyl(nomen_artikyl.getText().toString()).enqueue(new Callback<ResultBody>() {
-                    @Override
-                    public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResultBody> call, Throwable t) {
-
-                    }
-                });
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                File file = new File(getRealPathFromURI(Add.this, filePath));
-
-                final RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-                MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+                
+                final RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file());
+                MultipartBody.Part body = MultipartBody.Part.createFormData("image", file().getName(), reqFile);
                 RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "text");
-
 
                 App.getApi().addNomenclatura(body, name).enqueue(new Callback<ResultBody>() {
                     @Override
                     public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
+                        Toast.makeText(Add.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -158,6 +138,7 @@ public class Add extends AppCompatActivity {
                         Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
                     }
                 });
+
             }
         });
 
@@ -169,68 +150,117 @@ public class Add extends AppCompatActivity {
         }
     }
 
+    public File file() {
+        String path = "";
+        if (image == 1) {
+            path = outputFileUri.getPath();
+        } else if (image == 2) {
+            path = getPath(outputFileUri);
+        }
+
+        File f = new File(getCacheDir(), "buffer.jpg");
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bos);
+        byte[] bitmapdata = bos.toByteArray();
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(f);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return f;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        super.onActivityResult(requestCode, resultCode, data);
+//        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+//        if (result != null) {
+//            nomen_barcode.setText(result.getContents());
+//        }
+//
 
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            nomen_barcode.setText(result.getContents());
-        }
+        if (resultCode == RESULT_OK)
+            switch (requestCode) {
+                case TAKE_PICTURE:
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), outputFileUri);
+                        bitmap = decodeSampledBitmapFromUri(outputFileUri.getPath(), 480, 320);
+                        imageView.setImageBitmap(bitmap);
+                        image=1;
+                    } catch (IOException e) {
+                        Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case FILE_CHOOSER_RESULT:
+                    try {
+                        outputFileUri = data.getData();
 
+                        bitmap = decodeSampledBitmapFromUri(getPath(outputFileUri), 480, 320);
+                        imageView.setImageBitmap(bitmap);
+                        image=2;
+                        Toast.makeText(this, getPath(outputFileUri), Toast.LENGTH_SHORT).show();
+//                        outputFileUri = data.getData();
+//                        InputStream imageStream = getContentResolver().openInputStream(outputFileUri);
+//
+//                        bitmap = BitmapFactory.decodeStream(imageStream);
+//                        bitmap = decodeSampledBitmapFromUri(outputFileUri, 480, 320);
+//                        imageView.setImageBitmap(bitmap);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            filePath = data.getData();
-            Uri image = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                bitmap = decodeSampledBitmapFromResource(getPath(image), 400, 300);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
-                photo = baos.toByteArray();
-                imageView.setImageBitmap(bitmap);
-//photo = bitmap;
-
-            } catch (Exception e) {
-                //e.printStackTrace();
-                Toast.makeText(this, "Ошибка получения пути к файлу, возможно данный файл находиться в облаке", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == TAKE_PICTURE) {
-            if (resultCode == Activity.RESULT_OK) {
-                Uri selectedImage = imageUri;
-                this.getContentResolver().notifyChange(filePath, null);
-//ImageView imageView = (ImageView) v.findViewById(R.id.ImageView);
-                ContentResolver cr = this.getContentResolver();
-                Bitmap bitmap;
-                try {
-                    bitmap = android.provider.MediaStore.Images.Media
-                            .getBitmap(cr, selectedImage);
-                    bitmap = decodeSampledBitmapFromResource(selectedImage.getPath().toString(), 300, 225);
-
-                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//compress the image to jpg format
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                    photo = byteArrayOutputStream.toByteArray();
-                    imageView.setImageBitmap(bitmap);
-
-
-                } catch (Exception e) {
-                    Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT)
-                            .show();
-                    Log.e("Camera", e.toString());
-                }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "Ошибка получения пути к файлу, возможно данный файл находиться в облаке", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
             }
 
 
+    }
+
+    public static Bitmap decodeSampledBitmapFromUri(String path, int reqWidth, int reqHeight) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+        options.inSampleSize = calculateInSampleSize(options, reqWidth,
+                reqHeight);
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(path, options);
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
         }
+        return inSampleSize;
     }
 
     private void showFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, FILE_CHOOSER_RESULT);
     }
 
     public void takePhoto() {
@@ -243,32 +273,16 @@ public class Add extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                    Uri.fromFile(photo));
-            imageUri = Uri.fromFile(photo);
-            filePath = imageUri;
+            File file = new File(Environment.getExternalStorageDirectory(),
+                    "minskkniga.jpg");
+            outputFileUri = Uri.fromFile(file);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
             startActivityForResult(intent, TAKE_PICTURE);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static Bitmap decodeSampledBitmapFromResource(String path, int reqWidth, int reqHeight) {
-
-// First decode with inJustDecodeBounds=true to check dimensions
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, options);
-
-// Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-// Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(path, options);
     }
 
     public String getPath(Uri uri) {
@@ -280,42 +294,6 @@ public class Add extends AppCompatActivity {
         String s = cursor.getString(column_index);
         cursor.close();
         return s;
-    }
-
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-// Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-
-// Calculate ratios of height and width to requested height and width
-            final int heightRatio = Math.round((float) height / (float) reqHeight);
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-
-// Choose the smallest ratio as inSampleSize value, this will guarantee
-// a final image with both dimensions larger than or equal to the
-// requested height and width.
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-        }
-
-        return inSampleSize;
-    }
-
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = {MediaStore.Images.Media.DATA};
-            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
     }
 
     @Override

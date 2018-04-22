@@ -186,8 +186,7 @@ public class Main extends AppCompatActivity {
         nomen.clear();
         for (by.minskkniga.minskkniga.api.Class.Nomenklatura buffer : nomen_buf) {
             if (buffer.getName().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
-                    buffer.getPredmet().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
-                    buffer.getClass_().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    buffer.getClas().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
                     buffer.getIzdatel().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
                     buffer.getArtikul().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
                     buffer.getSokrName().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
@@ -250,7 +249,7 @@ public class Main extends AppCompatActivity {
             public void onResponse(Call<Nomenklatura_filter> call, Response<Nomenklatura_filter> response) {
                 setAdapter(spinner1, response.body().getAutor(), 1);
                 setAdapter(spinner2, response.body().getIzdatel(), 2);
-                setAdapter(spinner4, response.body().getClass_(), 4);
+                setAdapter(spinner4, response.body().getClas(), 4);
                 setAdapter(spinner3, yesno, 3);
                 reload();
             }

@@ -1,6 +1,7 @@
 package by.minskkniga.minskkniga.activity.Spravoch_Couriers;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -52,6 +53,15 @@ public class Main extends AppCompatActivity {
 
         search = findViewById(R.id.search);
 
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Main.this, Add.class);
+                startActivity(intent);
+            }
+        });
+
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -72,12 +82,10 @@ public class Main extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 Intent intent = new Intent(Main.this, Zakazy.class);
-                intent.putExtra("id", Integer.parseInt(couriers.get(position).getId()));
+                intent.putExtra("user_id", Integer.parseInt(couriers.get(position).getId()));
                 intent.putExtra("name", couriers.get(position).getName());
                 startActivity(intent);
-
             }
         });
     }

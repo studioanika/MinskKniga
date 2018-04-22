@@ -29,6 +29,9 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
+import by.minskkniga.minskkniga.api.Class.Organizer_filter;
+import by.minskkniga.minskkniga.api.Class.Organizer_info;
+import by.minskkniga.minskkniga.api.Class.Organizer_info_mas;
 import by.minskkniga.minskkniga.api.Class.Sity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,17 +48,18 @@ public class Add_Dialog extends DialogFragment {
     private TextView search_tv;
 
 
-    private Button datepicker;
+    private TextView datepicker;
     private Calendar dateAndTime;
     private Spinner otvetstv;
     private Spinner status;
-    private String[] mas_otvetstv = {"Дима", "Вася", "Федя"};
+    private EditText text;
+    private ArrayList<Organizer_info_mas> arr_otvetstv;
+    private ArrayList<String> mas_otvetstv;
     private String date;
     private String stat;
     private String otve;
+    private String otve_name;
     private ArrayAdapter<String> otvetstv_adapter;
-
-
 
 
     private View view;
@@ -161,8 +165,12 @@ public class Add_Dialog extends DialogFragment {
                 break;
             case 2:
                 view = inflater.inflate(R.layout.dialog_add_dela, null);
-                datepicker = view.findViewById(R.id.dialog_dela_datepicker);
-                status = view.findViewById(R.id.dialog_dela_spinner1);
+                datepicker = view.findViewById(R.id.datepicker);
+                status = view.findViewById(R.id.spinner1);
+                arr_otvetstv = new ArrayList<>();
+                mas_otvetstv = new ArrayList<>();
+
+                text = view.findViewById(R.id.text);
                 status.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -175,15 +183,41 @@ public class Add_Dialog extends DialogFragment {
 
                     }
                 });
-                otvetstv = (Spinner) view.findViewById(R.id.dialog_dela_spinner2);
+                otvetstv = view.findViewById(R.id.spinner2);
                 otvetstv_adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, mas_otvetstv);
                 otvetstv_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 otvetstv.setAdapter(otvetstv_adapter);
+
+
+                //text.
+
+                App.getApi().getOrganizer_info().enqueue(new Callback<Organizer_info>() {
+                    @Override
+                    public void onResponse(Call<Organizer_info> call, Response<Organizer_info> response) {
+                        arr_otvetstv.clear();
+                        arr_otvetstv.addAll(response.body().getCouriers());
+
+                        for (int i = 0; i < response.body().getCouriers().size(); i++) {
+                            mas_otvetstv.add(response.body().getCouriers().get(i).getName().toString());
+                        }
+                        otvetstv_adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, mas_otvetstv);
+                        otvetstv_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        otvetstv.setAdapter(otvetstv_adapter);
+                        otve_name = arr_otvetstv.get(0).getName().toString();
+                        otve = arr_otvetstv.get(0).getId().toString();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Organizer_info> call, Throwable t) {
+
+                    }
+                });
+
                 otvetstv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        String item = (String) parent.getItemAtPosition(position);
-                        otve = item;
+                        otve_name = arr_otvetstv.get(position).getName().toString();
+                        otve = arr_otvetstv.get(position).getId().toString();
                     }
 
                     @Override
@@ -215,7 +249,7 @@ public class Add_Dialog extends DialogFragment {
                                 date = DateUtils.formatDateTime(getActivity(),
                                         dateAndTime.getTimeInMillis(),
                                         DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_YEAR);
-                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_dela(date, stat, otve);
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_dela(date, stat, otve_name, otve, text.getText().toString());
 
                                 dialog.cancel();
                             }
@@ -429,6 +463,55 @@ public class Add_Dialog extends DialogFragment {
 
                 builder.setTitle("Выбор города")
                         .setView(view);
+                break;
+            case 8:
+                view = inflater.inflate(R.layout.dialog_add_contacts, null);
+                spinner = view.findViewById(R.id.dialog_contact_spinner);
+                edittext = view.findViewById(R.id.dialog_contact_edittext);
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        switch (position) {
+                            case 0:
+                                edittext.setHint("Номер телефона");
+                                type = "tel";
+                                break;
+                            case 1:
+                                edittext.setHint("Электронная почта");
+                                type = "mail";
+                                break;
+                            case 2:
+                                edittext.setHint("Место жительства");
+                                type = "adress";
+                                break;
+                            case 3:
+                                edittext.setHint("Web сайт");
+                                type = "site";
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+                builder.setTitle("Добавить контакт")
+                        .setView(view)
+                        .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // код для передачи данных
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Couriers.Add) getActivity()).return_contact(type, String.valueOf(edittext.getText()));
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
                 break;
         }
         return builder.create();

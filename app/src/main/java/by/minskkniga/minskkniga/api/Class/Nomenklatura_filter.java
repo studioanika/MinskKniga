@@ -10,16 +10,16 @@ public class Nomenklatura_filter {
 
     @SerializedName("autor")
     @Expose
-    private ArrayList<String> autor = null;
+    private ArrayList<String> autor;
     @SerializedName("izdatel")
     @Expose
-    private ArrayList<String> izdatel = null;
+    private ArrayList<String> izdatel;
     @SerializedName("obrazec")
     @Expose
-    private ArrayList<String> obrazec = null;
-    @SerializedName("class")
+    private ArrayList<String> obrazec;
+    @SerializedName("clas")
     @Expose
-    private ArrayList<String> _class = null;
+    private ArrayList<String> clas;
 
     public ArrayList<String> getAutor() {
         return autor;
@@ -45,12 +45,12 @@ public class Nomenklatura_filter {
         this.obrazec = obrazec;
     }
 
-    public ArrayList<String> getClass_() {
-        return _class;
+    public ArrayList<String> getClas() {
+        return clas;
     }
 
-    public void setClass_(ArrayList<String> _class) {
-        this._class = _class;
+    public void setClas(ArrayList<String> clas) {
+        this.clas = clas;
     }
 
 }

@@ -120,23 +120,23 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
         switch (_zakazy.get(groupPosition).getStatus()) {
             case "1":
                 //tv1.setTextColor(Color.GREEN);
-                tv2.setBackgroundColor(Color.GREEN);
+                tv2.setTextColor(Color.rgb(97, 184, 126));
                 tv2.setText("Новый");
                 break;
             case "2":
-                tv2.setBackgroundColor(Color.YELLOW);
+                tv2.setTextColor(Color.rgb(242, 201, 76));
                 tv2.setText("В сборке");
                 break;
             case "3":
-                tv2.setBackgroundColor(Color.BLUE);
+                tv2.setTextColor(Color.BLUE);
                 tv2.setText("Собран");
                 break;
             case "4":
-                tv2.setBackgroundColor(Color.rgb(242, 0, 86));
+                tv2.setTextColor(Color.rgb(242, 0, 86));
                 tv2.setText("В доставке");
                 break;
             case "5":
-                tv2.setBackgroundColor(Color.rgb(255, 204, 203));
+                tv2.setTextColor(Color.rgb(139, 0, 0));
                 tv2.setText("Отгружен");
                 break;
         }

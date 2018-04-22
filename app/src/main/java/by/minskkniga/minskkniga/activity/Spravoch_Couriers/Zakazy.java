@@ -47,7 +47,7 @@ import retrofit2.Response;
 
 public class Zakazy extends AppCompatActivity {
 
-    int id;
+    String user_id;
     String name;
     TextView caption;
     ImageButton back;
@@ -204,10 +204,9 @@ public class Zakazy extends AppCompatActivity {
         });
 
         caption = findViewById(R.id.caption);
-        id = getIntent().getIntExtra("id", 0);
+        user_id = getIntent().getStringExtra("user_id");
         name = getIntent().getStringExtra("name");
         caption.setText(name);
-        Toast.makeText(this, id+" ", Toast.LENGTH_SHORT).show();
 
 
         tabHost = findViewById(R.id.tabHost);
@@ -413,7 +412,7 @@ public class Zakazy extends AppCompatActivity {
         if (spinner2.getSelectedItemPosition() == 0) class_ = "null";
 
         Toast.makeText(this, izdatel+" "+class_, Toast.LENGTH_SHORT).show();
-        App.getApi().getCourier_knigi(String.valueOf(id),izdatel,class_).enqueue(new Callback<List<Zakazy_courier_knigi>>() {
+        App.getApi().getCourier_knigi(String.valueOf(user_id),izdatel,class_).enqueue(new Callback<List<Zakazy_courier_knigi>>() {
             @Override
             public void onResponse(Call<List<Zakazy_courier_knigi>> call, Response<List<Zakazy_courier_knigi>> response) {
                 zakazy_1.clear();
@@ -445,7 +444,7 @@ public class Zakazy extends AppCompatActivity {
         if (spinner5.getSelectedItemPosition() == 0) school = "null";
         if (spinner6.getSelectedItemPosition() == 0) smena = "null";
 
-        App.getApi().getCourier_zakazy(String.valueOf(id), napravl, sity, school, smena).enqueue(new Callback<List<Zakazy_courier_clients>>() {
+        App.getApi().getCourier_zakazy(String.valueOf(user_id), napravl, sity, school, smena).enqueue(new Callback<List<Zakazy_courier_clients>>() {
             @Override
             public void onResponse(Call<List<Zakazy_courier_clients>> call, Response<List<Zakazy_courier_clients>> response) {
                 zakazy_2.clear();
@@ -526,7 +525,7 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void load_filter_1(){
-        App.getApi().getCourier_filter_1(String.valueOf(id)).enqueue(new Callback<Courier_filter_1>() {
+        App.getApi().getCourier_filter_1(String.valueOf(user_id)).enqueue(new Callback<Courier_filter_1>() {
 
             @Override
             public void onResponse(Call<Courier_filter_1> call, Response<Courier_filter_1> response) {
@@ -543,7 +542,7 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void load_filter_2(){
-        App.getApi().getCourier_filter_2(String.valueOf(id)).enqueue(new Callback<Courier_filter_2>() {
+        App.getApi().getCourier_filter_2(String.valueOf(user_id)).enqueue(new Callback<Courier_filter_2>() {
 
             @Override
             public void onResponse(Call<Courier_filter_2> call, Response<Courier_filter_2> response) {

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class Main extends BaseAdapter {
         TextView tv2 = view.findViewById(R.id.tv2);
         TextView tv3 = view.findViewById(R.id.tv3);
         final CheckBox ch1 = view.findViewById(R.id.ch1);
-        ImageView iv1 = view.findViewById(R.id.iv1);
+        LinearLayout ll1 = view.findViewById(R.id.ll1);
 
         tv1.setText(_objects.get(position).getDate());
         tv2.setText(_objects.get(position).getAutorName());
@@ -111,10 +112,11 @@ public class Main extends BaseAdapter {
             }
         });
 
-        iv1.setOnClickListener(new View.OnClickListener() {
+        ll1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(_context, Add.class);
+                intent.putExtra("tab", id+"");
                 intent.putExtra("id", _objects.get(position).getId());
                 intent.putExtra("contragent_id", _objects.get(position).getCountragentId());
                 intent.putExtra("autor_id", _objects.get(position).getAutorId());

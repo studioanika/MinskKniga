@@ -177,6 +177,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Main.this, Add.class);
+                intent.putExtra("tab", "null");
                 intent.putExtra("id", "null");
                 intent.putExtra("contragent_id", "null");
                 intent.putExtra("autor_id", id);

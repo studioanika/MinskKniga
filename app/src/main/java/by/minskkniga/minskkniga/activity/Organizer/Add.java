@@ -34,6 +34,7 @@ public class Add extends AppCompatActivity {
 
     ImageButton back;
     String id;
+    String tab;
     String contragent_id;
     String autor_name;
     String autor_id;
@@ -72,7 +73,7 @@ public class Add extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            onBackPressed();
+                onBackPressed();
             }
         });
 
@@ -96,7 +97,6 @@ public class Add extends AppCompatActivity {
         spinner3 = findViewById(R.id.spinner3);
 
 
-
         dateAndTime = Calendar.getInstance();
         ed_date.setText(DateUtils.formatDateTime(this,
                 dateAndTime.getTimeInMillis(),
@@ -115,6 +115,7 @@ public class Add extends AppCompatActivity {
         });
 
 
+        tab = getIntent().getStringExtra("tab");
         id = getIntent().getStringExtra("id");
         contragent_id = getIntent().getStringExtra("contragent_id");
         autor_name = getIntent().getStringExtra("autor_name");
@@ -131,15 +132,28 @@ public class Add extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner3.setAdapter(adapter);
 
+        if (!tab.equals("null")) {
+            if (tab.equals("1")) {
+                spinner1.setEnabled(false);
+                spinner2.setEnabled(false);
+                spinner3.setEnabled(false);
+                ed_date.setEnabled(false);
+                ed_autor.setEnabled(false);
+                ed_text.setEnabled(false);
+            } else {
+                spinner3.setEnabled(false);
+            }
+        }
+
         if (status.equals("new"))
             spinner3.setSelection(0);
         else
             spinner3.setSelection(1);
 
-        if (id.equals("null")){
+
+        if (id.equals("null")) {
             ed_autor.setVisibility(View.GONE);
             autor_lab.setVisibility(View.GONE);
-
         }
         clients = new ArrayList<>();
         couriers = new ArrayList<>();
@@ -154,11 +168,12 @@ public class Add extends AppCompatActivity {
                 date = DateUtils.formatDateTime(Add.this,
                         dateAndTime.getTimeInMillis(),
                         DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_YEAR);
-                if (spinner3.getSelectedItemPosition()==0)
+                if (spinner3.getSelectedItemPosition() == 0)
                     status = "new";
                 else
                     status = "ok";
                 text = ed_text.getText().toString();
+
 
                 App.getApi().addOrganizer(id, contragent_id, autor_id, ispolnitel, date, status, text).enqueue(new Callback<ResultBody>() {
                     @Override
@@ -172,8 +187,8 @@ public class Add extends AppCompatActivity {
                     }
                 });
             }
-        });
 
+        });
     }
 
     private void setInitialDateTime() {

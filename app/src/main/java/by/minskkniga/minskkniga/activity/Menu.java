@@ -13,10 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.nio.file.Files;
-
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.Spravoch_Couriers.Main;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Notif_count;
 import retrofit2.Call;
@@ -29,7 +26,9 @@ public class Menu extends AppCompatActivity {
     ImageButton notif;
     TextView notif_count;
     SharedPreferences sp;
-    String id;
+    String user_id;
+    String rank;
+    String name;
     String col;
 
     @Override
@@ -47,7 +46,9 @@ public class Menu extends AppCompatActivity {
         });
 
         sp = getSharedPreferences("login", Context.MODE_PRIVATE);
-        id = sp.getString("id", "");
+        rank = sp.getString("rank", "");
+        name = sp.getString("name", "");
+        user_id = sp.getString("user_id", "");
 
         notif = findViewById(R.id.notif);
         notif.setOnClickListener(new View.OnClickListener() {
@@ -88,8 +89,16 @@ public class Menu extends AppCompatActivity {
                         startActivity(intent8);
                         break;
                     case 9:
-                        Intent intent9 = new Intent(Menu.this, Main.class);
-                        startActivity(intent9);
+                        if (rank.equals("courier")) {
+                            Intent intent9 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Spravoch_Couriers.Zakazy.class);
+                            intent9.putExtra("name", name);
+                            intent9.putExtra("user_id", user_id);
+                            startActivity(intent9);
+                        }
+                        if (rank.equals("admin")) {
+                            Intent intent9 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Spravoch_Couriers.Main.class);
+                            startActivity(intent9);
+                        }
                         break;
                 }
             }
@@ -124,7 +133,7 @@ public class Menu extends AppCompatActivity {
     }
 
     public void reload(){
-        App.getApi().getNotif(id).enqueue(new Callback<Notif_count>() {
+        App.getApi().getNotif(user_id).enqueue(new Callback<Notif_count>() {
             @Override
             public void onResponse(Call<Notif_count> call, Response<Notif_count> response) {
                 col = response.body().getCol();
