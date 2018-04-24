@@ -104,6 +104,20 @@ public class Main extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Main.this, Add.class);
+                intent.putExtra("id", "");
+                intent.putExtra("name", "");
+                intent.putExtra("clas", "");
+                intent.putExtra("obrazec", "");
+                intent.putExtra("artikul", "");
+                intent.putExtra("sokr_name", "");
+                intent.putExtra("izdatel", "");
+                intent.putExtra("autor", "");
+                intent.putExtra("barcode", "");
+                intent.putExtra("zakup_cena", "");
+                intent.putExtra("prod_cena", "");
+                intent.putExtra("standart", "");
+                intent.putExtra("ves", "");
+                intent.putExtra("image", "");
                 startActivity(intent);
             }
         });
@@ -162,7 +176,7 @@ public class Main extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filter();
+                search();
             }
 
             @Override
@@ -182,7 +196,7 @@ public class Main extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void filter() {
+    public void search() {
         nomen.clear();
         for (by.minskkniga.minskkniga.api.Class.Nomenklatura buffer : nomen_buf) {
             if (buffer.getName().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
@@ -236,9 +250,13 @@ public class Main extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (search.getText().toString().isEmpty()) {
-            load_filter();
-            filter();
+        if (spinner1.getSelectedItemPosition() == 0 &&
+            spinner2.getSelectedItemPosition() == 0 &&
+            spinner3.getSelectedItemPosition() == 0 &&
+            spinner4.getSelectedItemPosition() == 0 &&
+            search.getText().toString().isEmpty() &&
+            lv.getFirstVisiblePosition()==0) {
+                load_filter();
         }
     }
 

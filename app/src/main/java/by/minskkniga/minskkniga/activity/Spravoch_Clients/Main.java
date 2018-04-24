@@ -189,25 +189,24 @@ public class Main extends AppCompatActivity {
                     isset = true;
                     obraz = 0;
                     for (int k = 0; k < i; k++) {
-                        if (cli.get(i).getSity().equals(cli.get(k).getSity())) {
+                        if (cli.get(i).getGorod().equals(cli.get(k).getGorod())) {
                             isset = false;
                         }
                     }
 
                     if (isset) {
-                        ArrayList<String> temp = new ArrayList<String>();
+                        ArrayList<String> temp = new ArrayList<>();
                         for (int j = 0; j < col; j++) {
-                            if (cli.get(j).getSity().equals(cli.get(i).getSity())) {
-                                temp.add(cli.get(j).getName() + "@" + cli.get(j).getObraz() + "@" + cli.get(j).getDolg());
-                                dolg += cli.get(j).getDolg();
-                                if (cli.get(j).getObraz().equals("1")) obraz = 1;
+                            if (cli.get(j).getGorod().equals(cli.get(i).getGorod())) {
+                                temp.add(cli.get(j).getName() + "@" + cli.get(j).getObrazec() + "@" + cli.get(j).getDolg());
+                                dolg += Double.parseDouble(cli.get(j).getDolg());
+                                if (cli.get(j).getObrazec().equals("1")) obraz = 1;
                             }
                         }
-                        listDataHeader.add(cli.get(i).getSity() + "@" + obraz + "@" + dolg);
+                        listDataHeader.add(cli.get(i).getGorod() + "@" + obraz + "@" + dolg);
                         listDataChild.add(temp);
                     }
                 }
-
 
                 expListView.setAdapter(new Main_1(getApplicationContext(), listDataHeader, listDataChild));
 

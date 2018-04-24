@@ -136,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:entries="@array/price_spinner" />
+                        android:entries="@array/price_spinner_provider" />
 
                     <EditText
                         android:id="@+id/nakrytka_ed"
@@ -182,7 +182,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:entries="@array/vzaimo_spinner" />
+                        android:entries="@array/dolg_spinner" />
 
                     <EditText
                         android:id="@+id/dolg_size"

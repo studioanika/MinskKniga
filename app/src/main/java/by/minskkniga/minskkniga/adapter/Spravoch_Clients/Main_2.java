@@ -56,13 +56,13 @@ public class Main_2 extends BaseAdapter{
         TextView tv2 = view.findViewById(R.id.tv2);
 
         tv1.setText(_objects.get(position).getName());
-        if (_objects.get(position).getObraz().equals("0")) {
+        if (_objects.get(position).getObrazec().equals("0")) {
             ch1.setChecked(false);
         } else {
             ch1.setChecked(true);
         }
 
-        if (_objects.get(position).getDolg()>=0) {
+        if (Double.parseDouble(_objects.get(position).getDolg())>=0) {
             tv2.setTextColor(Color.BLACK);
         } else {
             tv2.setTextColor(Color.RED);

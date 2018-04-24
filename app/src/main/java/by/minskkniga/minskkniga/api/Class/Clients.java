@@ -14,39 +14,45 @@ public class Clients {
     @SerializedName("sokr_name")
     @Expose
     private String sokrName;
-    @SerializedName("info_for_print")
-    @Expose
-    private String infoForPrint;
     @SerializedName("zametka")
     @Expose
     private String zametka;
-    @SerializedName("napravl")
+    @SerializedName("print")
     @Expose
-    private String napravl;
-    @SerializedName("sity")
+    private String print;
+    @SerializedName("type_c")
     @Expose
-    private String sity;
-    @SerializedName("school")
+    private String typeC;
+    @SerializedName("nacenka")
     @Expose
-    private String school;
-    @SerializedName("smena")
-    @Expose
-    private String smena;
-    @SerializedName("type_ceni")
-    @Expose
-    private String typeCeni;
-    @SerializedName("dolg")
-    @Expose
-    private Double dolg;
+    private String nacenka;
     @SerializedName("podarki")
     @Expose
     private String podarki;
     @SerializedName("skidka")
     @Expose
     private String skidka;
-    @SerializedName("obraz")
+    @SerializedName("dolg")
     @Expose
-    private String obraz;
+    private String dolg;
+    @SerializedName("napravl")
+    @Expose
+    private String napravl;
+    @SerializedName("gorod_id")
+    @Expose
+    private String gorodId;
+    @SerializedName("school")
+    @Expose
+    private String school;
+    @SerializedName("smena")
+    @Expose
+    private String smena;
+    @SerializedName("obrazec")
+    @Expose
+    private String obrazec;
+    @SerializedName("gorod")
+    @Expose
+    private String gorod;
 
     public String getId() {
         return id;
@@ -72,14 +78,6 @@ public class Clients {
         this.sokrName = sokrName;
     }
 
-    public String getInfoForPrint() {
-        return infoForPrint;
-    }
-
-    public void setInfoForPrint(String infoForPrint) {
-        this.infoForPrint = infoForPrint;
-    }
-
     public String getZametka() {
         return zametka;
     }
@@ -88,52 +86,28 @@ public class Clients {
         this.zametka = zametka;
     }
 
-    public String getNapravl() {
-        return napravl;
+    public String getPrint() {
+        return print;
     }
 
-    public void setNapravl(String napravl) {
-        this.napravl = napravl;
+    public void setPrint(String print) {
+        this.print = print;
     }
 
-    public String getSity() {
-        return sity;
+    public String getTypeC() {
+        return typeC;
     }
 
-    public void setSity(String sity) {
-        this.sity = sity;
+    public void setTypeC(String typeC) {
+        this.typeC = typeC;
     }
 
-    public String getSchool() {
-        return school;
+    public String getNacenka() {
+        return nacenka;
     }
 
-    public void setSchool(String school) {
-        this.school = school;
-    }
-
-    public String getSmena() {
-        return smena;
-    }
-
-    public void setSmena(String smena) {
-        this.smena = smena;
-    }
-
-    public String getTypeCeni() {
-        return typeCeni;
-    }
-
-    public void setTypeCeni(String typeCeni) {
-        this.typeCeni = typeCeni;
-    }
-
-    public Double getDolg() {
-        return dolg;
-    }
-
-    public void setDolg(Double dolg) {
-        this.dolg = dolg;
+    public void setNacenka(String nacenka) {
+        this.nacenka = nacenka;
     }
 
     public String getPodarki() {
@@ -152,11 +126,59 @@ public class Clients {
         this.skidka = skidka;
     }
 
-    public String getObraz() {
-        return obraz;
+    public String getDolg() {
+        return dolg;
     }
 
-    public void setObraz(String obraz) {
-        this.obraz = obraz;
+    public void setDolg(String dolg) {
+        this.dolg = dolg;
+    }
+
+    public String getNapravl() {
+        return napravl;
+    }
+
+    public void setNapravl(String napravl) {
+        this.napravl = napravl;
+    }
+
+    public String getGorodId() {
+        return gorodId;
+    }
+
+    public void setGorodId(String gorodId) {
+        this.gorodId = gorodId;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getSmena() {
+        return smena;
+    }
+
+    public void setSmena(String smena) {
+        this.smena = smena;
+    }
+
+    public String getObrazec() {
+        return obrazec;
+    }
+
+    public void setObrazec(String obrazec) {
+        this.obrazec = obrazec;
+    }
+
+    public String getGorod() {
+        return gorod;
+    }
+
+    public void setGorod(String gorod) {
+        this.gorod = gorod;
     }
 }

@@ -37,10 +37,8 @@ public class Add extends AppCompatActivity {
     ScrollView sv;
     DialogFragment dlg1;
     DialogFragment dlg2;
-    DialogFragment dlg3;
 
     Button add_contact;
-    Button add_contactfaces;
 
     Spinner type_ceni;
     Spinner dolg_type;
@@ -50,13 +48,11 @@ public class Add extends AppCompatActivity {
     TextView vzaimo_caption;
     TextView region_caption;
     TextView contacts_caption;
-    TextView contactface_caption;
 
     LinearLayout price_linear;
     LinearLayout vzaimo_linear;
     LinearLayout region_linear;
     LinearLayout contacts_linear;
-    LinearLayout contactface_linear;
 
 
     EditText name_ed;
@@ -69,12 +65,9 @@ public class Add extends AppCompatActivity {
     Button add_city;
 
     ListView list_contact;
-    ListView list_contactfaces;
 
     ArrayList<String> contact_type;
     ArrayList<String> contact_text;
-
-    ArrayList<String> array_contactface;
 
     String price_type;
     int type_dolg;
@@ -94,17 +87,14 @@ public class Add extends AppCompatActivity {
             }
         });
 
-        dlg1 = new Add_Dialog(this, 7);
-        dlg2 = new Add_Dialog(this, 5);
+        dlg1 = new Add_Dialog(this, "gorod_proveder");
+        dlg2 = new Add_Dialog(this, "countact_provider");
 
         contact_type = new ArrayList<String>();
         contact_text = new ArrayList<String>();
 
         list_contact = findViewById(R.id.contacts_listview);
 
-        dlg3 = new Add_Dialog(this, 6);
-        array_contactface = new ArrayList<String>();
-        list_contactfaces = findViewById(R.id.contactface_listview);
 
         sv = findViewById(R.id.scrollview);
 
@@ -180,18 +170,6 @@ public class Add extends AppCompatActivity {
             }
         });
 
-        contactface_caption = findViewById(R.id.contactface_caption);
-        contactface_linear = findViewById(R.id.contactface_linear);
-        contactface_caption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (contactface_linear.getVisibility() == View.VISIBLE) {
-                    contactface_linear.setVisibility(View.GONE);
-                } else {
-                    contactface_linear.setVisibility(View.VISIBLE);
-                }
-            }
-        });
 
 //end открытие закрытие подпунктов
 
@@ -252,15 +230,13 @@ public class Add extends AppCompatActivity {
             }
         });
 
-        add_contactfaces = findViewById(R.id.contactface_add);
-        add_contactfaces.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dlg3.show(getFragmentManager(), "");
-            }
-        });
+
     }
 
+    public void return_gorod(int id, String name) {
+        city = id;
+        add_city.setText(name);
+    }
 
     public void return_contact(String type, String text) {
         if (!text.isEmpty()) {
@@ -271,18 +247,8 @@ public class Add extends AppCompatActivity {
         }
     }
 
-    public void return_contact_faces(String text) {
-        if (!text.isEmpty()) {
-            array_contactface.add(text);
-            list_contactfaces.setAdapter(new ArrayAdapter<String>(this,
-                    R.layout.adapter_add_contactfaces, array_contactface));
-            setListViewHeightBasedOnChildren(list_contactfaces);
-        }
-    }
-
     Double creditsize;
     String contacts = "";
-    String contactfaces = "";
     int i = 0;
 
     public void add_back(View view){
@@ -380,19 +346,7 @@ public class Add extends AppCompatActivity {
         }
 
 
-        if (array_contactface.size() != 0) {
-            contactfaces = array_contactface.get(0);
-            i = 0;
-            for (String buf : array_contactface) {
-                if (i != 0) {
-                    contactfaces += "/~~/" + buf;
-                }
-                i++;
-            }
-        }
-
         if (contacts.isEmpty()) contacts = "null";
-        if (contactfaces.isEmpty()) contactfaces = "null";
 
         App.getApi().addProvider(name_ed.getText().toString(),
                 short_name_ed.getText().toString(),
@@ -403,8 +357,7 @@ public class Add extends AppCompatActivity {
                 creditsize,
                 String.valueOf(city),
                 naprav_ed.getText().toString(),
-                contacts,
-                contactfaces).enqueue(new Callback<ResultBody>() {
+                contacts).enqueue(new Callback<ResultBody>() {
 
             @Override
             public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
@@ -417,24 +370,10 @@ public class Add extends AppCompatActivity {
             }
         });
 
-        Log.d("addprovider", name_ed.getText().toString() + " " +
-                short_name_ed.getText().toString() + " " +
-                zametka_ed.getText().toString() + " " +
-                info_ed.getText().toString() + " " +
-                price_type + " " +
-                nakrytka_ed.getText().toString() + " " +
-                creditsize + " " +
-                naprav_ed.getText().toString() + " " +
-                city + " " +
-                contacts + " " +
-                contactfaces);
     }
 
 
-    public void return_sity(int id, String name) {
-        city = id;
-        add_city.setText(name);
-    }
+
 
 
     public void setListViewHeightBasedOnChildren(ListView listView) {

@@ -53,14 +53,14 @@ public class Main_2 extends BaseAdapter {
 
         tv1.setText(_objects.get(position).getName());
 
-        if (_objects.get(position).getObraz().equals("0")) {
+        if (_objects.get(position).getObrazec().equals("0")) {
             ch1.setChecked(false);
         } else {
             ch1.setChecked(true);
         }
 
-        tv2.setText(_objects.get(position).getDolg().toString());
-        if (_objects.get(position).getDolg()>=0) {
+        tv2.setText(_objects.get(position).getDolg());
+        if (Double.parseDouble(_objects.get(position).getDolg())>=0) {
             tv2.setTextColor(Color.BLACK);
         } else {
             tv2.setTextColor(Color.RED);

@@ -15,13 +15,12 @@ import by.minskkniga.minskkniga.api.Class.Organizer_filter;
 import by.minskkniga.minskkniga.api.Class.Organizer_info;
 import by.minskkniga.minskkniga.api.Class.Providers;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
-import by.minskkniga.minskkniga.api.Class.Sity;
+import by.minskkniga.minskkniga.api.Class.Gorod;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -41,22 +40,20 @@ public interface RestApi {
     Call<List<Clients>> getClients();
 
     @GET("/api/add_client.php")
-    Call<ResultBody> addClient(@Query("id") String id,
-                               @Query("name") String name,
+    Call<ResultBody> addClient(@Query("name") String name,
                                @Query("sokr_name") String sokr_name,
-                               @Query("info_for_print") String info_for_print,
                                @Query("zametka") String zametka,
+                               @Query("print") String print,
+                               @Query("type_c") String type_c,
+                               @Query("nacenka") String nacenka,
+                               @Query("podarki") String podarki,
+                               @Query("skidka") String skidka,
+                               @Query("dolg") String dolg,
                                @Query("napravl") String napravl,
-                               @Query("sity") int sity,
+                               @Query("gorod_id") int gorod_id,
                                @Query("school") String school,
                                @Query("smena") String smena,
-                               @Query("type_ceni") String type_ceni,
-                               @Query("dolg") Double dolg,
-                               @Query("podarki") String podarki,
-                               @Query("skidka") Double skidka,
-                               @Query("dela") String dela,
-                               @Query("contacts") String contacts,
-                               @Query("contact_faces") String contact_faces);
+                               @Query("contacts") String contacts);
 
     @GET("/api/show_providers.php")
     Call<List<Providers>> getProviders();
@@ -71,11 +68,10 @@ public interface RestApi {
                                  @Query("credit_size") double credit_size,
                                  @Query("city") String city,
                                  @Query("napravl") String napravl,
-                                 @Query("contacts") String contacts,
-                                 @Query("contact_faces") String contact_faces);
+                                 @Query("contacts") String contacts);
 
-    @GET("/api/show_sity.php")
-    Call<List<Sity>> getSity();
+    @GET("/api/show_goroda.php")
+    Call<List<Gorod>> getGorod();
 
     @GET("/api/show_nomenklatura_filter.php")
     Call<Nomenklatura_filter> getNomenclatura_filter();
@@ -89,19 +85,34 @@ public interface RestApi {
     @Multipart
     @POST("/api/add_nomenklatura.php")
     Call<ResultBody> addNomenclatura(@Part MultipartBody.Part image,
-                                     @Part("image") RequestBody name);
-    /*,
-                                     @Part("_class") RequestBody _class,
-                                     @Part("predmet") RequestBody predmet,
-                                     @Part("name") RequestBody obrazec,
-                                     @Part("name") RequestBody artikul,
-                                     @Part("name") RequestBody sokr_name,
-                                     @Part("name") RequestBody izdatel,
-                                     @Part("name") RequestBody autor,
-                                     @Part("name") RequestBody barcode,
-                                     @Query("name") RequestBody zakup_cena,
-                                     @Query("name") RequestBody prod_cena);
-*/
+                                     @Query("name") String name,
+                                     @Query("clas") String clas,
+                                     @Query("obrazec") String obrazec,
+                                     @Query("artikul") String artikul,
+                                     @Query("sokr_name") String sokr_name,
+                                     @Query("izdatel") String izdatel,
+                                     @Query("autor") String autor,
+                                     @Query("barcode") String barcode,
+                                     @Query("zakup_cena") String zakup_cena,
+                                     @Query("prod_cena") String prod_cena,
+                                     @Query("standart") String standart,
+                                     @Query("ves") String ves);
+
+    @GET("/api/add_nomenklatura.php")
+    Call<ResultBody> addNomenclatura(@Query("name") String name,
+                                     @Query("clas") String clas,
+                                     @Query("obrazec") String obrazec,
+                                     @Query("artikul") String artikul,
+                                     @Query("sokr_name") String sokr_name,
+                                     @Query("izdatel") String izdatel,
+                                     @Query("autor") String autor,
+                                     @Query("barcode") String barcode,
+                                     @Query("zakup_cena") String zakup_cena,
+                                     @Query("prod_cena") String prod_cena,
+                                     @Query("standart") String standart,
+                                     @Query("ves") String ves);
+
+
     @GET("/api/artikyl.php")
     Call<ResultBody> artikyl(@Query("name") String name);
 
