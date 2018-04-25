@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -21,14 +20,11 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.Nomenklatura;
-import by.minskkniga.minskkniga.api.Class.Nomenklatura_filter;
 import by.minskkniga.minskkniga.api.Class.Organizer;
 import by.minskkniga.minskkniga.api.Class.Organizer_filter;
 import retrofit2.Call;

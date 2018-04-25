@@ -7,8 +7,8 @@ import by.minskkniga.minskkniga.api.Class.Courier_filter_1;
 import by.minskkniga.minskkniga.api.Class.Courier_filter_2;
 import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.Login;
-import by.minskkniga.minskkniga.api.Class.Nomenklatura;
-import by.minskkniga.minskkniga.api.Class.Nomenklatura_filter;
+import by.minskkniga.minskkniga.api.Class.Products;
+import by.minskkniga.minskkniga.api.Class.Products_filter;
 import by.minskkniga.minskkniga.api.Class.Notif_count;
 import by.minskkniga.minskkniga.api.Class.Organizer;
 import by.minskkniga.minskkniga.api.Class.Organizer_filter;
@@ -20,7 +20,6 @@ import by.minskkniga.minskkniga.api.Class.Zakazy;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -36,7 +35,7 @@ public interface RestApi {
                       @Query("pass") String pass);
 
 
-    @GET("/api/show_clients.php")
+    @GET("/api/get_clients.php")
     Call<List<Clients>> getClients();
 
     @GET("/api/add_client.php")
@@ -55,7 +54,7 @@ public interface RestApi {
                                @Query("smena") String smena,
                                @Query("contacts") String contacts);
 
-    @GET("/api/show_providers.php")
+    @GET("/api/get_providers.php")
     Call<List<Providers>> getProviders();
 
     @GET("/api/add_provider.php")
@@ -70,21 +69,25 @@ public interface RestApi {
                                  @Query("napravl") String napravl,
                                  @Query("contacts") String contacts);
 
-    @GET("/api/show_goroda.php")
+    @GET("/api/get_goroda.php")
     Call<List<Gorod>> getGorod();
 
-    @GET("/api/show_nomenklatura_filter.php")
-    Call<Nomenklatura_filter> getNomenclatura_filter();
+    @GET("/api/get_products_filter.php")
+    Call<Products_filter> getProducts_filter();
 
-    @GET("/api/show_nomenklatura.php")
-    Call<List<Nomenklatura>> getNomenclatura(@Query("autor") String avtor,
-                                             @Query("izdatel") String izdatel,
-                                             @Query("obrazec") String obraz,
-                                             @Query("clas") String clas);
+    @GET("/api/get_products.php")
+    Call<List<Products>> getProducts(@Query("autor") String avtor,
+                                         @Query("izdatel") String izdatel,
+                                         @Query("obrazec") String obraz,
+                                         @Query("clas") String clas);
+
+    @GET("/api/get_product.php")
+    Call<Products> getProduct(@Query("id") String id);
 
     @Multipart
-    @POST("/api/add_nomenklatura.php")
-    Call<ResultBody> addNomenclatura(@Part MultipartBody.Part image,
+    @POST("/api/add_product.php")
+    Call<ResultBody> addProduct(@Part MultipartBody.Part image,
+                                     @Query("id") String id,
                                      @Query("name") String name,
                                      @Query("clas") String clas,
                                      @Query("obrazec") String obrazec,
@@ -98,8 +101,9 @@ public interface RestApi {
                                      @Query("standart") String standart,
                                      @Query("ves") String ves);
 
-    @GET("/api/add_nomenklatura.php")
-    Call<ResultBody> addNomenclatura(@Query("name") String name,
+    @GET("/api/add_product.php")
+    Call<ResultBody> addProduct(@Query("id") String id,
+                                     @Query("name") String name,
                                      @Query("clas") String clas,
                                      @Query("obrazec") String obrazec,
                                      @Query("artikul") String artikul,
@@ -116,52 +120,52 @@ public interface RestApi {
     @GET("/api/artikyl.php")
     Call<ResultBody> artikyl(@Query("name") String name);
 
-    @GET("/api/show_zakazy.php")
+    @GET("/api/get_zakazy.php")
     Call<List<Zakazy>> getZakazy(@Query("id") int id);
 
-    @GET("/api/show_couriers.php")
+    @GET("/api/get_couriers.php")
     Call<List<Couriers>> getCouriers();
 
     @GET("/api/set_oplata.php")
     Call<ResultBody> setOplata(@Query("id") String id);
 
-    @GET("/api/show_zakaz_info.php")
+    @GET("/api/get_zakaz_info.php")
     Call<by.minskkniga.minskkniga.api.Class.Zakaz_info> getZakaz_info(@Query("id") String id);
 
-    @GET("/api/show_courier_zakazy.php")
+    @GET("/api/get_courier_zakazy.php")
     Call<List<Zakazy_courier_clients>> getCourier_zakazy(@Query("id") String id,
                                                          @Query("napravl") String napravl,
                                                          @Query("sity") String sity,
                                                          @Query("school") String school,
                                                          @Query("smena") String smena);
 
-    @GET("/api/show_courier_knigi.php")
+    @GET("/api/get_courier_knigi.php")
     Call<List<Zakazy_courier_knigi>> getCourier_knigi(@Query("id") String id,
                                                       @Query("izdanie") String izdanie,
                                                       @Query("class") String _class);
 
-    @GET("/api/show_couriers_filter_1.php")
+    @GET("/api/get_couriers_filter_1.php")
     Call<Courier_filter_1> getCourier_filter_1(@Query("id") String id);
 
-    @GET("/api/show_couriers_filter_2.php")
+    @GET("/api/get_couriers_filter_2.php")
     Call<Courier_filter_2> getCourier_filter_2(@Query("id") String id);
 
     @GET("/api/set_complete_zakaz.php")
     Call<ResultBody> setComplete_zakaz(@Query("id") String id);
 
-    @GET("/api/show_organizer.php")
+    @GET("/api/get_organizer.php")
     Call<List<Organizer>> getOrganizer(@Query("autor") String autor,
                                   @Query("komy") String komy,
                                   @Query("kontragent") String kontragent,
                                   @Query("status") String status);
 
-    @GET("/api/show_organizer_filter.php")
+    @GET("/api/get_organizer_filter.php")
     Call<Organizer_filter> getOrganizer_filter();
 
     @GET("/api/set_organizer_ok.php")
     Call<ResultBody> setOrganizer_ok(@Query("id") String id);
 
-    @GET("/api/show_organizer_info.php")
+    @GET("/api/get_organizer_info.php")
     Call<Organizer_info> getOrganizer_info();
 
     @GET("/api/add_organizer.php")
@@ -173,7 +177,7 @@ public interface RestApi {
                                   @Query("status") String status,
                                   @Query("text") String text);
 
-    @GET("/api/show_notif.php")
+    @GET("/api/get_notif.php")
     Call<Notif_count> getNotif(@Query("id") String id);
 
     @GET("/api/set_courier_add_knigi.php")

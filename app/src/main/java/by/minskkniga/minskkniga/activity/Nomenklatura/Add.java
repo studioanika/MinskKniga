@@ -60,9 +60,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
+import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -106,6 +108,8 @@ public class Add extends AppCompatActivity {
     int isimage = 0;
 
     String id = "";
+
+    String image_name;
 
     @SuppressLint("CheckResult")
     @Override
@@ -174,24 +178,34 @@ public class Add extends AppCompatActivity {
 
         id = getIntent().getStringExtra("id");
 
-        if (!id.equals("")) {
+        if (!id.equals("null")) {
+            App.getApi().getProduct(id).enqueue(new Callback<Products>() {
+                @Override
+                public void onResponse(Call<Products> call, Response<Products> response) {
 
-            name.setText(getIntent().getStringExtra("name"));
-            clas.setText(getIntent().getStringExtra("clas"));
-            obrazec_spinner.setSelection(getIntent().getStringExtra("obrazec").equals("Есть") ? 0 : 1);
-            artikul.setText(getIntent().getStringExtra("artikul"));
-            sokr_name.setText(getIntent().getStringExtra("sokr_name"));
-            izdatel.setText(getIntent().getStringExtra("izdatel"));
-            autor.setText(getIntent().getStringExtra("autor"));
-            barcode.setText(getIntent().getStringExtra("barcode"));
-            zakup_cena.setText(getIntent().getStringExtra("zakup_cena"));
-            prod_cena.setText(getIntent().getStringExtra("prod_cena"));
-            standart.setText(getIntent().getStringExtra("standart"));
-            ves.setText(getIntent().getStringExtra("ves"));
+                    name.setText(response.body().getName());
+                    clas.setText(response.body().getClas());
+                    obrazec_spinner.setSelection(response.body().getArtikul().equals("Есть")?1:0);
+                    artikul.setText(response.body().getArtikul());
+                    sokr_name.setText(response.body().getSokrName());
+                    izdatel.setText(response.body().getIzdatel());
+                    autor.setText(response.body().getAutor());
+                    barcode.setText(response.body().getBarcode());
+                    zakup_cena.setText(response.body().getZakupCena());
+                    prod_cena.setText(response.body().getProdCena());
+                    standart.setText(response.body().getStandart());
+                    ves.setText(response.body().getVes());
+                    Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+                }
+
+                @Override
+                public void onFailure(Call<Products> call, Throwable t) {
+
+                }
+            });
 
 //if (getIntent().getStringExtra("image").equals("1")){
-    Glide.with(this).load("http://query.pe.hu/admin/img/nomen/" + id + ".jpg").apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
-            Toast.makeText(this, "reload", Toast.LENGTH_SHORT).show();
+
 //}
 
 
@@ -218,7 +232,8 @@ public class Add extends AppCompatActivity {
             final RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file());
             MultipartBody.Part body = MultipartBody.Part.createFormData("image", file().getName(), reqFile);
 
-            App.getApi().addNomenclatura(body,
+            App.getApi().addProduct(body,
+                    id,
                     name.getText().toString(),
                     clas.getText().toString().isEmpty() ? "" : clas.getText().toString(),
                     obrazec_spinner.getSelectedItemPosition() == 0 ? "" : "Есть",
@@ -244,7 +259,8 @@ public class Add extends AppCompatActivity {
                 }
             });
         } else {
-            App.getApi().addNomenclatura(name.getText().toString(),
+            App.getApi().addProduct(id,
+                    name.getText().toString(),
                     clas.getText().toString().isEmpty() ? "" : clas.getText().toString(),
                     obrazec_spinner.getSelectedItemPosition() == 0 ? "" : "Есть",
                     artikul.getText().toString().isEmpty() ? "" : artikul.getText().toString(),

@@ -3,7 +3,7 @@ package by.minskkniga.minskkniga.api.Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Nomenklatura {
+public class Products {
 
     @SerializedName("id")
     @Expose
@@ -44,6 +44,9 @@ public class Nomenklatura {
     @SerializedName("ves")
     @Expose
     private String ves;
+    @SerializedName("image")
+    @Expose
+    private String image;
 
     public String getId() {
         return id;
@@ -147,5 +150,13 @@ public class Nomenklatura {
 
     public void setVes(String ves) {
         this.ves = ves;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

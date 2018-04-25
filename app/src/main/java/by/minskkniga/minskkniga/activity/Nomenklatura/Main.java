@@ -25,7 +25,8 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.Nomenklatura_filter;
+import by.minskkniga.minskkniga.api.Class.Products;
+import by.minskkniga.minskkniga.api.Class.Products_filter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,8 +45,8 @@ public class Main extends AppCompatActivity {
     TextView notfound;
     EditText search;
 
-    ArrayList<by.minskkniga.minskkniga.api.Class.Nomenklatura> nomen;
-    ArrayList<by.minskkniga.minskkniga.api.Class.Nomenklatura> nomen_buf;
+    ArrayList<Products> products;
+    ArrayList<Products> products_buf;
     by.minskkniga.minskkniga.adapter.Nomenklatura.Main adapter;
 
     Spinner spinner1, spinner2, spinner3, spinner4;
@@ -82,8 +83,16 @@ public class Main extends AppCompatActivity {
 
         lv = findViewById(R.id.lv);
 
-        nomen = new ArrayList<>();
-        nomen_buf = new ArrayList<>();
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(Main.this, Add.class);
+                intent.putExtra("id", products.get(position).getId());
+                startActivity(intent);
+            }
+        });
+        products = new ArrayList<>();
+        products_buf = new ArrayList<>();
 
 
         filter_layout = findViewById(R.id.filter_layout);
@@ -104,20 +113,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Main.this, Add.class);
-                intent.putExtra("id", "");
-                intent.putExtra("name", "");
-                intent.putExtra("clas", "");
-                intent.putExtra("obrazec", "");
-                intent.putExtra("artikul", "");
-                intent.putExtra("sokr_name", "");
-                intent.putExtra("izdatel", "");
-                intent.putExtra("autor", "");
-                intent.putExtra("barcode", "");
-                intent.putExtra("zakup_cena", "");
-                intent.putExtra("prod_cena", "");
-                intent.putExtra("standart", "");
-                intent.putExtra("ves", "");
-                intent.putExtra("image", "");
+                intent.putExtra("id", "null");
                 startActivity(intent);
             }
         });
@@ -150,7 +146,7 @@ public class Main extends AppCompatActivity {
                 obraz = "Образец";
                 class_ = "Класс";
                 reload();
-                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, nomen));
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, products));
                 filter_layout.setVisibility(View.GONE);
             }
         });
@@ -163,7 +159,7 @@ public class Main extends AppCompatActivity {
                 obraz = spinner3.getSelectedItem().toString();
                 class_ = spinner4.getSelectedItem().toString();
                 reload();
-                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, nomen));
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, products));
                 filter_layout.setVisibility(View.GONE);
             }
         });
@@ -197,8 +193,8 @@ public class Main extends AppCompatActivity {
     }
 
     public void search() {
-        nomen.clear();
-        for (by.minskkniga.minskkniga.api.Class.Nomenklatura buffer : nomen_buf) {
+        products.clear();
+        for (Products buffer : products_buf) {
             if (buffer.getName().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
                     buffer.getClas().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
                     buffer.getIzdatel().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
@@ -206,15 +202,15 @@ public class Main extends AppCompatActivity {
                     buffer.getSokrName().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
                     buffer.getProdCena().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
                     buffer.getBarcode().toLowerCase().contains(search.getText().toString().toLowerCase())) {
-                nomen.add(buffer);
+                products.add(buffer);
             }
         }
-        if (!nomen.isEmpty()) {
+        if (!products.isEmpty()) {
             notfound.setVisibility(View.GONE);
         } else {
             notfound.setVisibility(View.VISIBLE);
         }
-        lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, nomen));
+        lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, products));
     }
 
     public void reload() {
@@ -223,16 +219,16 @@ public class Main extends AppCompatActivity {
         if (spinner3.getSelectedItemPosition() == 0) obraz = "null";
         if (spinner4.getSelectedItemPosition() == 0) class_ = "null";
 
-        App.getApi().getNomenclatura(avtor, izdatel, obraz, class_).enqueue(new Callback<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>>() {
+        App.getApi().getProducts(avtor, izdatel, obraz, class_).enqueue(new Callback<List<Products>>() {
             @Override
-            public void onResponse(Call<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>> call, Response<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>> response) {
-                nomen.clear();
-                nomen_buf.clear();
-                nomen.addAll(response.body());
-                nomen_buf.addAll(response.body());
-                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, nomen));
+            public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
+                products.clear();
+                products_buf.clear();
+                products.addAll(response.body());
+                products_buf.addAll(response.body());
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, products));
 
-                if (!nomen.isEmpty()) {
+                if (!products.isEmpty()) {
                     notfound.setVisibility(View.GONE);
                 } else {
                     notfound.setVisibility(View.VISIBLE);
@@ -241,7 +237,7 @@ public class Main extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<by.minskkniga.minskkniga.api.Class.Nomenklatura>> call, Throwable t) {
+            public void onFailure(Call<List<Products>> call, Throwable t) {
 
             }
         });
@@ -261,10 +257,10 @@ public class Main extends AppCompatActivity {
     }
 
     public void load_filter(){
-        App.getApi().getNomenclatura_filter().enqueue(new Callback<Nomenklatura_filter>() {
+        App.getApi().getProducts_filter().enqueue(new Callback<Products_filter>() {
 
             @Override
-            public void onResponse(Call<Nomenklatura_filter> call, Response<Nomenklatura_filter> response) {
+            public void onResponse(Call<Products_filter> call, Response<Products_filter> response) {
                 setAdapter(spinner1, response.body().getAutor(), 1);
                 setAdapter(spinner2, response.body().getIzdatel(), 2);
                 setAdapter(spinner4, response.body().getClas(), 4);
@@ -273,7 +269,7 @@ public class Main extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Nomenklatura_filter> call, Throwable t) {
+            public void onFailure(Call<Products_filter> call, Throwable t) {
                 Toast.makeText(Main.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
