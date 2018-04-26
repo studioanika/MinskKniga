@@ -188,7 +188,7 @@
                 android:layout_gravity="center"
                 android:background="#000000"
                 android:textColor="#ffffff"
-                android:text="ГОТОВО"/>
+                android:text="Готово"/>
 
         </LinearLayout>
 

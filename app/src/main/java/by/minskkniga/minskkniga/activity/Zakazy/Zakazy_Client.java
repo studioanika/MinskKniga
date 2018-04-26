@@ -1,6 +1,7 @@
 package by.minskkniga.minskkniga.activity.Zakazy;
 
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -61,6 +62,18 @@ public class Zakazy_Client extends AppCompatActivity {
 
         expListView = findViewById(R.id.expandeblelistview);
 
+
+        expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v,int groupPosition, long id) {
+                Intent intent = new Intent(Zakazy_Client.this, Zakaz_info.class);
+                intent.putExtra("name", name);
+                intent.putExtra("id", zakazy.get(groupPosition).getId());
+                startActivity(intent);
+                return true;
+            }
+        });
+
         zakazy = new ArrayList<>();
         zakazy_buf = new ArrayList<>();
 
@@ -92,6 +105,14 @@ public class Zakazy_Client extends AppCompatActivity {
         });
     }
 
+    public void expanded(int id){
+        if (expListView.isGroupExpanded(id)){
+            expListView.collapseGroup(id);
+        }else{
+            expListView.expandGroup(id);
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -99,10 +120,6 @@ public class Zakazy_Client extends AppCompatActivity {
             reload_1();
         if (tabHost.getCurrentTab()==1)
             reload_2();
-    }
-
-    public static String getName(){
-            return name;
     }
 
     public void reload_1(){

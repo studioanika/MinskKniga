@@ -70,24 +70,32 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
             tv4.setText("Сокр.");
             tv5.setText("Заказ");
         } else {
-            convertView.setBackgroundColor(Color.WHITE);
-            tv1.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getName());
-            tv2.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getClas());
             try {
+                convertView.setBackgroundColor(Color.WHITE);
+                tv1.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getName());
+                tv2.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getClas());
                 tv3.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getIzdatel().substring(0, 1));
+                tv4.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getSokrName());
+                tv5.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getZakazano());
             }catch (Exception e){
                 tv1.setText("Пустой заказ");
+                tv2.setText("");
                 tv3.setText("");
+                tv4.setText("");
+                tv5.setText("");
             }
-            tv4.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getSokrName());
-            tv5.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getZakazano());
+
         }
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._zakazy.get(groupPosition).getClassWhatZakazal().size() + 1;
+        if (_zakazy.get(groupPosition).getClassWhatZakazal().size()==0){
+            return this._zakazy.get(groupPosition).getClassWhatZakazal().size() + 2;
+        }else{
+            return this._zakazy.get(groupPosition).getClassWhatZakazal().size() + 1;
+        }
     }
 
     @Override
@@ -118,9 +126,14 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
         TextView tv2 = convertView.findViewById(R.id.tv2);
         final CheckBox ch1 = convertView.findViewById(R.id.ch1);
         TextView tv3 = convertView.findViewById(R.id.tv3);
-        ImageView iv1 = convertView.findViewById(R.id.iv1);
+        ImageView info = convertView.findViewById(R.id.info);
 
-
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((Zakazy_Client)_context).expanded(groupPosition);
+            }
+        });
 
         tv1.setText(_zakazy.get(groupPosition).getDate());
 
@@ -194,16 +207,6 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
             }
         });
 
-        iv1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(_context, Zakaz_info.class);
-                intent.putExtra("name", Zakazy_Client.getName());
-                intent.putExtra("id", _zakazy.get(groupPosition).getId());
-                _context.startActivity(intent);
-            }
-        });
         return convertView;
     }
 

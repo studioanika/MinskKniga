@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Zakaz_info {
+public class Zakaz {
 
     @SerializedName("id")
     @Expose
@@ -13,6 +13,9 @@ public class Zakaz_info {
     @SerializedName("date")
     @Expose
     private String date;
+    @SerializedName("date_izm")
+    @Expose
+    private String dateIzm;
     @SerializedName("zametka")
     @Expose
     private String zametka;
@@ -46,6 +49,14 @@ public class Zakaz_info {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getDateIzm() {
+        return dateIzm;
+    }
+
+    public void setDateIzm(String dateIzm) {
+        this.dateIzm = dateIzm;
     }
 
     public String getZametka() {
@@ -95,5 +106,6 @@ public class Zakaz_info {
     public void setWhatZakazal(List<WhatZakazal> whatZakazal) {
         this.whatZakazal = whatZakazal;
     }
+
 
 }

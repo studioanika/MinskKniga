@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -23,6 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Spravoch_Clients.Add;
+import by.minskkniga.minskkniga.activity.Zakazy.Main;
+import by.minskkniga.minskkniga.activity.Zakazy.Zakaz_new;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Gorod;
 import retrofit2.Call;
@@ -40,6 +46,7 @@ public class Add_Dialog extends DialogFragment {
     private String type_client;
     private String type_provider;
     private String type_courier;
+    private int type_zakaz;
 
     public Add_Dialog(Context context, String id) {
         this.context = context;
@@ -99,14 +106,14 @@ public class Add_Dialog extends DialogFragment {
                                     names_client.add(names_client_buf.get(i));
                                 }
                             }
-                        }else{
+                        } else {
                             names_client.addAll(names_client_buf);
                         }
                         lv_client.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, names_client));
 
-                        if (names_client.size()==0){
+                        if (names_client.size() == 0) {
                             notfound_client.setVisibility(View.VISIBLE);
-                        }else{
+                        } else {
                             notfound_client.setVisibility(View.GONE);
                         }
                     }
@@ -116,16 +123,16 @@ public class Add_Dialog extends DialogFragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                             long id) {
-                        for(Gorod buf : gorod_client){
+                        for (Gorod buf : gorod_client) {
                             if (buf.getName().equals(names_client.get(position)))
-                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_gorod(Integer.parseInt(buf.getId()),names_client.get(position));
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add) getActivity()).return_gorod(Integer.parseInt(buf.getId()), names_client.get(position));
                             getDialog().dismiss();
                         }
                     }
                 });
 
                 builder.setTitle("Выбор города")
-                       .setView(view);
+                        .setView(view);
                 break;
             case "contact_client":
                 view = inflater.inflate(R.layout.dialog_add_contacts, null);
@@ -162,8 +169,7 @@ public class Add_Dialog extends DialogFragment {
                         .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // код для передачи данных
-                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_contact(type_client, String.valueOf(edittext_client.getText()));
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add) getActivity()).return_contact(type_client, String.valueOf(edittext_client.getText()));
                                 dialog.cancel();
                             }
                         })
@@ -205,12 +211,12 @@ public class Add_Dialog extends DialogFragment {
                 });
 
                 builder.setPositiveButton("Ок", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add)getActivity()).return_contact(type_provider, String.valueOf(edittext_provider.getText()));
-                                dialog.cancel();
-                            }
-                        })
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add) getActivity()).return_contact(type_provider, String.valueOf(edittext_provider.getText()));
+                        dialog.cancel();
+                    }
+                })
                         .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -266,14 +272,14 @@ public class Add_Dialog extends DialogFragment {
                                     names_provider.add(names_provider_buf.get(i));
                                 }
                             }
-                        }else{
+                        } else {
                             names_provider.addAll(names_provider_buf);
                         }
                         lv_provider.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, names_provider));
 
-                        if (names_provider.size()==0){
+                        if (names_provider.size() == 0) {
                             notfound_provider.setVisibility(View.VISIBLE);
-                        }else{
+                        } else {
                             notfound_provider.setVisibility(View.GONE);
                         }
                     }
@@ -283,9 +289,9 @@ public class Add_Dialog extends DialogFragment {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                             long id) {
-                        for(Gorod buf : gorod_provider){
+                        for (Gorod buf : gorod_provider) {
                             if (buf.getName().equals(names_provider.get(position)))
-                                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add)getActivity()).return_gorod(Integer.parseInt(buf.getId()),names_provider.get(position));
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add) getActivity()).return_gorod(Integer.parseInt(buf.getId()), names_provider.get(position));
                             getDialog().dismiss();
                         }
 
@@ -339,17 +345,117 @@ public class Add_Dialog extends DialogFragment {
                             }
                         });
                 break;
-
-
-
-
-
-
-
-
             case "zakaz_type":
                 view = inflater.inflate(R.layout.dialog_zakaz_type, null);
 
+                final TextView tv1 = view.findViewById(R.id.tv1);
+                final TextView tv2 = view.findViewById(R.id.tv2);
+                final TextView tv3 = view.findViewById(R.id.tv3);
+                final TextView tv4 = view.findViewById(R.id.tv4);
+                final TextView tv5 = view.findViewById(R.id.tv5);
+
+                tv1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        type_zakaz = 1;
+                        tv1.setBackgroundColor(Color.rgb(221, 221, 221));
+                        tv2.setBackgroundColor(Color.WHITE);
+                        tv3.setBackgroundColor(Color.WHITE);
+                        tv4.setBackgroundColor(Color.WHITE);
+                        tv5.setBackgroundColor(Color.WHITE);
+                    }
+                });
+
+                tv2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        type_zakaz = 2;
+                        tv1.setBackgroundColor(Color.WHITE);
+                        tv2.setBackgroundColor(Color.rgb(221, 221, 221));
+                        tv3.setBackgroundColor(Color.WHITE);
+                        tv4.setBackgroundColor(Color.WHITE);
+                        tv5.setBackgroundColor(Color.WHITE);
+                    }
+                });
+
+                tv3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        type_zakaz = 3;
+                        tv1.setBackgroundColor(Color.WHITE);
+                        tv2.setBackgroundColor(Color.WHITE);
+                        tv3.setBackgroundColor(Color.rgb(221, 221, 221));
+                        tv4.setBackgroundColor(Color.WHITE);
+                        tv5.setBackgroundColor(Color.WHITE);
+                    }
+                });
+
+                tv4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        type_zakaz = 4;
+                        tv1.setBackgroundColor(Color.WHITE);
+                        tv2.setBackgroundColor(Color.WHITE);
+                        tv3.setBackgroundColor(Color.WHITE);
+                        tv4.setBackgroundColor(Color.rgb(221, 221, 221));
+                        tv5.setBackgroundColor(Color.WHITE);
+                    }
+                });
+
+                tv5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        type_zakaz = 5;
+                        tv1.setBackgroundColor(Color.WHITE);
+                        tv2.setBackgroundColor(Color.WHITE);
+                        tv3.setBackgroundColor(Color.WHITE);
+                        tv4.setBackgroundColor(Color.WHITE);
+                        tv5.setBackgroundColor(Color.rgb(221, 221, 221));
+                    }
+                });
+
+                builder.setTitle("Выбор заявки")
+                        .setView(view)
+                        .setPositiveButton("Создать", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ((Zakaz_new)getActivity()).return_zakaz_type(type_zakaz);
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                getActivity().finish();
+                            }
+                        });
+
+                break;
+
+
+
+
+            case "zakaz_client":
+                view = inflater.inflate(R.layout.dialog_zakaz_client, null);
+
+
+                builder.setTitle("Выбор клиента")
+                        .setView(view)
+                        .setPositiveButton("Создать клиента", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface dialog, int which) {
+                                Intent intent = new Intent(context, Add.class);
+                                context.startActivity(intent);
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
 
                 break;
         }

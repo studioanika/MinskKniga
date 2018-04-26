@@ -41,10 +41,11 @@
     <EditText
         android:id="@+id/search"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="58dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:hint="Поиск курьеров"
+        android:drawableLeft="@drawable/ic_search"
         android:inputType="textPersonName" />
 
         <LinearLayout

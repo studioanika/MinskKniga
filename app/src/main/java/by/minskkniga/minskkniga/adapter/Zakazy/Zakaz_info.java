@@ -55,13 +55,16 @@ public class Zakaz_info extends BaseAdapter{
         TextView tv5 = view.findViewById(R.id.tv5);
         EditText ed1 = view.findViewById(R.id.ed1);
 
-        tv1.setText(_objects.get(position).getName());
-        tv2.setText(_objects.get(position).getClas());
-        tv3.setText(_objects.get(position).getIzdatel().substring(0,1));
-        tv4.setText(_objects.get(position).getArtikul());
-        tv5.setText(_objects.get(position).getSokrName());
-        ed1.setText(_objects.get(position).getZakazano());
+        try {
+            tv1.setText(_objects.get(position).getName());
+            tv2.setText(_objects.get(position).getClas());
+            tv3.setText(_objects.get(position).getIzdatel().substring(0, 1));
+            tv4.setText(_objects.get(position).getArtikul());
+            tv5.setText(_objects.get(position).getSokrName());
+            ed1.setText(_objects.get(position).getZakazano());
+        }catch (Exception e){
 
+        }
         return view;
     }
 }

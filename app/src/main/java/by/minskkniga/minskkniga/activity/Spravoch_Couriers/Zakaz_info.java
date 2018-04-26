@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -24,6 +23,7 @@ import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.WhatZakazal;
+import by.minskkniga.minskkniga.api.Class.Zakaz;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,7 +34,7 @@ public class Zakaz_info extends AppCompatActivity {
     String id;
     TextView caption;
     ImageButton back;
-    by.minskkniga.minskkniga.api.Class.Zakaz_info zakaz;
+    Zakaz zakaz;
 
     TextView blank;
     TextView date1;
@@ -101,7 +101,7 @@ public class Zakaz_info extends AppCompatActivity {
             }
         });
 
-        zakaz = new by.minskkniga.minskkniga.api.Class.Zakaz_info();
+        zakaz = new Zakaz();
     }
 
     @Override
@@ -111,9 +111,9 @@ public class Zakaz_info extends AppCompatActivity {
     }
 
     public void reload() {
-        App.getApi().getZakaz_info(id).enqueue(new Callback<by.minskkniga.minskkniga.api.Class.Zakaz_info>() {
+        App.getApi().getZakaz_info(id).enqueue(new Callback<Zakaz>() {
             @Override
-            public void onResponse(Call<by.minskkniga.minskkniga.api.Class.Zakaz_info> call, Response<by.minskkniga.minskkniga.api.Class.Zakaz_info> response) {
+            public void onResponse(Call<Zakaz> call, Response<Zakaz> response) {
                 zakaz = response.body();
                 blank.setText(zakaz.getId());
                 date1.setText(zakaz.getDate());
@@ -166,7 +166,7 @@ public class Zakaz_info extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<by.minskkniga.minskkniga.api.Class.Zakaz_info> call, Throwable t) {
+            public void onFailure(Call<Zakaz> call, Throwable t) {
 
             }
         });

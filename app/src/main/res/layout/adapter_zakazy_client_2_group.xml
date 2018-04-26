@@ -38,10 +38,9 @@
 
     <ImageView
         android:id="@+id/info"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         app:srcCompat="@drawable/ic_info"/>
-
 
     <ImageView
         android:id="@+id/iv1"

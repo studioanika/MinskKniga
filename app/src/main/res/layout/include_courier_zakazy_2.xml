@@ -60,7 +60,7 @@
             android:layout_alignParentRight="false"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="90dp"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimary"
             android:text="Очистить"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -72,7 +72,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="32dp"
             android:layout_marginTop="90dp"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimary"
             android:text="Готово"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -83,6 +83,7 @@
         android:id="@+id/search2"
         android:layout_width="match_parent"
         android:layout_height="58dp"
+        android:drawableLeft="@drawable/ic_search"
         android:hint="Поиск клиентов" />
 
     <LinearLayout

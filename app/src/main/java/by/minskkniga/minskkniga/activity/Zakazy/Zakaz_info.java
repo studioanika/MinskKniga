@@ -1,7 +1,6 @@
 package by.minskkniga.minskkniga.activity.Zakazy;
 
 import android.graphics.Color;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +21,7 @@ import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.WhatZakazal;
+import by.minskkniga.minskkniga.api.Class.Zakaz;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,7 +32,7 @@ public class Zakaz_info extends AppCompatActivity {
     String id;
     TextView caption;
     ImageButton back;
-    by.minskkniga.minskkniga.api.Class.Zakaz_info zakaz;
+    Zakaz zakaz;
 
     TextView blank;
     TextView date1;
@@ -67,6 +67,8 @@ public class Zakaz_info extends AppCompatActivity {
         name = getIntent().getStringExtra("name");
         caption.setText(name);
 
+        Toast.makeText(this, id+" "+name, Toast.LENGTH_SHORT).show();
+
         blank = findViewById(R.id.blank);
         date1 = findViewById(R.id.date1);
         date2 = findViewById(R.id.date2);
@@ -82,7 +84,7 @@ public class Zakaz_info extends AppCompatActivity {
         chernovik = findViewById(R.id.chernovik);
         oplacheno = findViewById(R.id.oplacheno);
 
-        zakaz = new by.minskkniga.minskkniga.api.Class.Zakaz_info();
+        zakaz = new Zakaz();
     }
 
     @Override
@@ -92,21 +94,21 @@ public class Zakaz_info extends AppCompatActivity {
     }
 
     public void reload() {
-        App.getApi().getZakaz_info(id).enqueue(new Callback<by.minskkniga.minskkniga.api.Class.Zakaz_info>() {
+        App.getApi().getZakaz_info(id).enqueue(new Callback<Zakaz>() {
             @Override
-            public void onResponse(Call<by.minskkniga.minskkniga.api.Class.Zakaz_info> call, Response<by.minskkniga.minskkniga.api.Class.Zakaz_info> response) {
+            public void onResponse(Call<Zakaz> call, Response<Zakaz> response) {
                 zakaz = response.body();
                 blank.setText(zakaz.getId());
                 date1.setText(zakaz.getDate());
-                date2.setText(zakaz.getDate());
+                date2.setText(zakaz.getDateIzm()    );
                 autor.setText(zakaz.getAutor());
 
                 double summa = 0;
                 double ves = 0;
-//                for(int i = 0;i<zakaz.getWhatZakazal().size();i++){
-//                    summa += Double.parseDouble(zakaz.getWhatZakazal().get(i).getStoim());
-//                    ves+=Double.parseDouble(zakaz.getWhatZakazal().get(i).getVes())* Double.parseDouble(zakaz.getWhatZakazal().get(i).getZak());
-//                }
+                for(int i = 0;i<zakaz.getWhatZakazal().size();i++){
+                    summa += Double.parseDouble(zakaz.getWhatZakazal().get(i).getCena());
+                    ves+=Double.parseDouble(zakaz.getWhatZakazal().get(i).getVes())* Double.parseDouble(zakaz.getWhatZakazal().get(i).getZakazano());
+                }
 
                 tv1.setText("Итого " + zakaz.getWhatZakazal().size() + " позиция на " + summa + " BYN");
                 tv2.setText("Вес: " + ves + " кг");
@@ -147,7 +149,7 @@ public class Zakaz_info extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<by.minskkniga.minskkniga.api.Class.Zakaz_info> call, Throwable t) {
+            public void onFailure(Call<Zakaz> call, Throwable t) {
 
             }
         });
@@ -179,7 +181,7 @@ public class Zakaz_info extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Couriers>> call, Throwable t) {
-
+                Toast.makeText(Zakaz_info.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
     }
