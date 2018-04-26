@@ -70,17 +70,17 @@ public class Zakazy_2 extends BaseAdapter {
 
         tv1.setText(_objects.get(position).getName());
         tv2.setText(_objects.get(position).getSumma());
-        tv3.setText(_objects.get(position).getKomment());
+        tv3.setText(_objects.get(position).getKoment());
         tv4.setText(_objects.get(position).getInfo());
 
-        if (_objects.get(position).getStatus().equals("3")) {//выполнено книг на руках нет
+        if (_objects.get(position).getStatus().equals("5")) {//выполнено книг на руках нет
             ch1.setChecked(true);
             ch2.setEnabled(false);
         } else {
             ch1.setChecked(false);
         }
 
-        if (_objects.get(position).getStatus().equals("2")) {//собран книги на руках
+        if (_objects.get(position).getStatus().equals("4")) {//собран книги на руках
             ch2.setChecked(true);
             ch2.setEnabled(false);
         } else {

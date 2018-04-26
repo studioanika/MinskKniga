@@ -47,8 +47,9 @@ import retrofit2.Response;
 
 public class Zakazy extends AppCompatActivity {
 
-    String user_id;
+    String id;
     String name;
+
     TextView caption;
     ImageButton back;
     ImageButton filter;
@@ -91,7 +92,7 @@ public class Zakazy extends AppCompatActivity {
     ArrayList<Zakazy_courier_clients> zakazy_2_buf;
 
     String izdatel = "Издательство";
-    String class_ = "Класс";
+    String clas = "Класс";
 
     String napravl = "Направление";
     String sity = "Город";
@@ -204,10 +205,9 @@ public class Zakazy extends AppCompatActivity {
         });
 
         caption = findViewById(R.id.caption);
-        user_id = getIntent().getStringExtra("user_id");
+        id = getIntent().getStringExtra("id");
         name = getIntent().getStringExtra("name");
         caption.setText(name);
-
 
         tabHost = findViewById(R.id.tabHost);
         tabHost.setup();
@@ -243,7 +243,7 @@ public class Zakazy extends AppCompatActivity {
                 spinner1.setSelection(0);
                 spinner2.setSelection(0);
                 izdatel = "Издательство";
-                class_ = "Класс";
+                clas = "Класс";
                 reload_1();
                 lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
                 filter_layout_1.setVisibility(View.GONE);
@@ -254,7 +254,7 @@ public class Zakazy extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 izdatel = spinner1.getSelectedItem().toString();
-                class_ = spinner2.getSelectedItem().toString();
+                clas = spinner2.getSelectedItem().toString();
                 reload_1();
                 lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
                 filter_layout_1.setVisibility(View.GONE);
@@ -409,10 +409,10 @@ public class Zakazy extends AppCompatActivity {
 
     public void reload_1(){
         if (spinner1.getSelectedItemPosition() == 0) izdatel = "null";
-        if (spinner2.getSelectedItemPosition() == 0) class_ = "null";
+        if (spinner2.getSelectedItemPosition() == 0) clas = "null";
 
-        Toast.makeText(this, izdatel+" "+class_, Toast.LENGTH_SHORT).show();
-        App.getApi().getCourier_knigi(String.valueOf(user_id),izdatel,class_).enqueue(new Callback<List<Zakazy_courier_knigi>>() {
+        Toast.makeText(this, izdatel+" "+clas, Toast.LENGTH_SHORT).show();
+        App.getApi().getCourier_knigi(String.valueOf(id),izdatel,clas).enqueue(new Callback<List<Zakazy_courier_knigi>>() {
             @Override
             public void onResponse(Call<List<Zakazy_courier_knigi>> call, Response<List<Zakazy_courier_knigi>> response) {
                 zakazy_1.clear();
@@ -444,7 +444,7 @@ public class Zakazy extends AppCompatActivity {
         if (spinner5.getSelectedItemPosition() == 0) school = "null";
         if (spinner6.getSelectedItemPosition() == 0) smena = "null";
 
-        App.getApi().getCourier_zakazy(String.valueOf(user_id), napravl, sity, school, smena).enqueue(new Callback<List<Zakazy_courier_clients>>() {
+        App.getApi().getCourier_zakazy(String.valueOf(id), napravl, sity, school, smena).enqueue(new Callback<List<Zakazy_courier_clients>>() {
             @Override
             public void onResponse(Call<List<Zakazy_courier_clients>> call, Response<List<Zakazy_courier_clients>> response) {
                 zakazy_2.clear();
@@ -525,12 +525,12 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void load_filter_1(){
-        App.getApi().getCourier_filter_1(String.valueOf(user_id)).enqueue(new Callback<Courier_filter_1>() {
+        App.getApi().getCourier_filter_1(String.valueOf(id)).enqueue(new Callback<Courier_filter_1>() {
 
             @Override
             public void onResponse(Call<Courier_filter_1> call, Response<Courier_filter_1> response) {
                 setAdapter_1(spinner1, response.body().getIzdatel(), 1);
-                setAdapter_1(spinner2, response.body().getClass_(), 2);
+                setAdapter_1(spinner2, response.body().getClas(), 2);
                 reload_1();
             }
 
@@ -542,12 +542,12 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void load_filter_2(){
-        App.getApi().getCourier_filter_2(String.valueOf(user_id)).enqueue(new Callback<Courier_filter_2>() {
+        App.getApi().getCourier_filter_2(String.valueOf(id)).enqueue(new Callback<Courier_filter_2>() {
 
             @Override
             public void onResponse(Call<Courier_filter_2> call, Response<Courier_filter_2> response) {
                 setAdapter_2(spinner3, response.body().getNapravl(), 1);
-                setAdapter_2(spinner4, response.body().getSity(), 2);
+                setAdapter_2(spinner4, response.body().getGorod(), 2);
                 setAdapter_2(spinner5, response.body().getSchool(), 3);
                 setAdapter_2(spinner6, response.body().getSmena(), 4);
                 reload_2();

@@ -28,6 +28,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -87,7 +88,7 @@ public class Add extends AppCompatActivity {
     EditText izdatel;
     EditText autor;
     EditText barcode;
-    Button barcode_button;
+    ImageButton barcode_button;
     EditText zakup_cena;
     EditText prod_cena;
     EditText standart;
@@ -109,13 +110,12 @@ public class Add extends AppCompatActivity {
 
     String id = "";
 
-    String image_name;
-
-    @SuppressLint("CheckResult")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_nomenklatura);
+
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -176,6 +176,8 @@ public class Add extends AppCompatActivity {
             }
         });
 
+        Glide.with(this).load(R.drawable.ic_launcher_foreground).into(image);
+
         id = getIntent().getStringExtra("id");
 
         if (!id.equals("null")) {
@@ -195,7 +197,13 @@ public class Add extends AppCompatActivity {
                     prod_cena.setText(response.body().getProdCena());
                     standart.setText(response.body().getStandart());
                     ves.setText(response.body().getVes());
-                    Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                        Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+                    }else{
+                        Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).into(image);
+                    }
+
                 }
 
                 @Override
@@ -203,10 +211,6 @@ public class Add extends AppCompatActivity {
 
                 }
             });
-
-//if (getIntent().getStringExtra("image").equals("1")){
-
-//}
 
 
         }
@@ -339,8 +343,6 @@ public class Add extends AppCompatActivity {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), outputFileUri);
                         bitmap = decodeSampledBitmapFromUri(outputFileUri.getPath(), 480, 320);
 
-                        //image.setImageBitmap(bitmap);
-
                         Glide.with(this).load(bitmap).into(image);
                         isimage = 1;
                     } catch (IOException e) {
@@ -353,13 +355,8 @@ public class Add extends AppCompatActivity {
 
                         bitmap = decodeSampledBitmapFromUri(getPath(outputFileUri), 480, 320);
 
-                        //image.setImageBitmap(bitmap);
-
                         Glide.with(this).load(bitmap).into(image);
-
                         isimage = 2;
-                        Toast.makeText(this, getPath(outputFileUri), Toast.LENGTH_SHORT).show();
-
                     } catch (Exception e) {
                         Toast.makeText(this, "error", Toast.LENGTH_SHORT).show();
                     }

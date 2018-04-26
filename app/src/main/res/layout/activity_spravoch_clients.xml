@@ -15,7 +15,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="?attr/colorPrimary">
+            android:background="@color/colorPrimary">
 
             <TextView
                 android:id="@+id/caption"
@@ -56,7 +56,7 @@
                 android:id="@android:id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#FFEA00" />
+                android:background="@color/colorPrimary" />
 
             <FrameLayout
                 android:id="@android:id/tabcontent"

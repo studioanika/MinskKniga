@@ -38,7 +38,7 @@ public class Main extends AppCompatActivity {
     ImageButton filter;
     RelativeLayout filter_layout;
     ImageButton back;
-    Button barcode;
+    ImageButton barcode;
     Button clear;
     Button ok;
     ListView lv;

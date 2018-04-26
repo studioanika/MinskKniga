@@ -123,10 +123,10 @@ public class Zakaz_info extends AppCompatActivity {
 
                 double summa = 0;
                 double ves = 0;
-                for(int i = 0;i<zakaz.getWhatZakazal().size();i++){
-                    summa += Double.parseDouble(zakaz.getWhatZakazal().get(i).getStoim());
-                    ves+=Double.parseDouble(zakaz.getWhatZakazal().get(i).getVes())* Double.parseDouble(zakaz.getWhatZakazal().get(i).getZak());
-                }
+//                for(int i = 0;i<zakaz.getWhatZakazal().size();i++){
+//                    summa += Double.parseDouble(zakaz.getWhatZakazal().get(i).getStoim());
+//                    ves+=Double.parseDouble(zakaz.getWhatZakazal().get(i).getVes())* Double.parseDouble(zakaz.getWhatZakazal().get(i).getZak());
+//                }
 
                 tv1.setText("Итого " + zakaz.getWhatZakazal().size() + " позиция на " + summa + " BYN");
                 tv2.setText("Вес: " + ves + " кг");

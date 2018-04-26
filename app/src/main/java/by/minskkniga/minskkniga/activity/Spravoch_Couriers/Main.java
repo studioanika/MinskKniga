@@ -83,7 +83,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(Main.this, Zakazy.class);
-                intent.putExtra("user_id", Integer.parseInt(couriers.get(position).getId()));
+                intent.putExtra("id", couriers.get(position).getId());
                 intent.putExtra("name", couriers.get(position).getName());
                 startActivity(intent);
             }

@@ -48,7 +48,7 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -72,10 +72,15 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
         } else {
             convertView.setBackgroundColor(Color.WHITE);
             tv1.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getName());
-            tv2.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getClass_());
-            tv3.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getIzdanie().substring(0, 1));
-            tv4.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getSokr());
-            tv5.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getIdZakaza());
+            tv2.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getClas());
+            try {
+                tv3.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getIzdatel().substring(0, 1));
+            }catch (Exception e){
+                tv1.setText("Пустой заказ");
+                tv3.setText("");
+            }
+            tv4.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getSokrName());
+            tv5.setText(_zakazy.get(groupPosition).getClassWhatZakazal().get(childPosition - 1).getZakazano());
         }
         return convertView;
     }
@@ -114,6 +119,8 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
         final CheckBox ch1 = convertView.findViewById(R.id.ch1);
         TextView tv3 = convertView.findViewById(R.id.tv3);
         ImageView iv1 = convertView.findViewById(R.id.iv1);
+
+
 
         tv1.setText(_zakazy.get(groupPosition).getDate());
 

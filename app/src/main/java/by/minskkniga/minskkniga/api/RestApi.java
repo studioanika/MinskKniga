@@ -135,7 +135,7 @@ public interface RestApi {
     @GET("/api/get_courier_zakazy.php")
     Call<List<Zakazy_courier_clients>> getCourier_zakazy(@Query("id") String id,
                                                          @Query("napravl") String napravl,
-                                                         @Query("sity") String sity,
+                                                         @Query("gorod") String gorod,
                                                          @Query("school") String school,
                                                          @Query("smena") String smena);
 

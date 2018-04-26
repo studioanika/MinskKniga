@@ -5,61 +5,24 @@ import com.google.gson.annotations.SerializedName;
 
 public class WhatZakazal {
 
-    @SerializedName("id")
-    @Expose
-    private String id;
-    @SerializedName("id_zakaza")
-    @Expose
-    private String idZakaza;
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("artikyl")
+    @SerializedName("artikul")
     @Expose
-    private String artikyl;
-    @SerializedName("class")
+    private String artikul;
+    @SerializedName("clas")
     @Expose
-    private String _class;
-    @SerializedName("izdanie")
+    private String clas;
+    @SerializedName("izdatel")
     @Expose
-    private String izdanie;
-    @SerializedName("sokr")
+    private String izdatel;
+    @SerializedName("sokr_name")
     @Expose
-    private String sokr;
-    @SerializedName("cena")
+    private String sokrName;
+    @SerializedName("zakazano")
     @Expose
-    private String cena;
-    @SerializedName("zak")
-    @Expose
-    private String zak;
-    @SerializedName("stoim")
-    @Expose
-    private String stoim;
-    @SerializedName("ves")
-    @Expose
-    private String ves;
-    @SerializedName("otgruz")
-    @Expose
-    private String otgruz;
-    @SerializedName("upak")
-    @Expose
-    private String upak;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getIdZakaza() {
-        return idZakaza;
-    }
-
-    public void setIdZakaza(String idZakaza) {
-        this.idZakaza = idZakaza;
-    }
+    private String zakazano;
 
     public String getName() {
         return name;
@@ -69,84 +32,44 @@ public class WhatZakazal {
         this.name = name;
     }
 
-    public String getArtikyl() {
-        return artikyl;
+    public String getArtikul() {
+        return artikul;
     }
 
-    public void setArtikyl(String artikyl) {
-        this.artikyl = artikyl;
+    public void setArtikul(String artikul) {
+        this.artikul = artikul;
     }
 
-    public String getClass_() {
-        return _class;
+    public String getClas() {
+        return clas;
     }
 
-    public void setClass_(String _class) {
-        this._class = _class;
+    public void setClas(String clas) {
+        this.clas = clas;
     }
 
-    public String getIzdanie() {
-        return izdanie;
+    public String getIzdatel() {
+        return izdatel;
     }
 
-    public void setIzdanie(String izdanie) {
-        this.izdanie = izdanie;
+    public void setIzdatel(String izdatel) {
+        this.izdatel = izdatel;
     }
 
-    public String getSokr() {
-        return sokr;
+    public String getSokrName() {
+        return sokrName;
     }
 
-    public void setSokr(String sokr) {
-        this.sokr = sokr;
+    public void setSokrName(String sokrName) {
+        this.sokrName = sokrName;
     }
 
-    public String getCena() {
-        return cena;
+    public String getZakazano() {
+        return zakazano;
     }
 
-    public void setCena(String cena) {
-        this.cena = cena;
-    }
-
-    public String getZak() {
-        return zak;
-    }
-
-    public void setZak(String zak) {
-        this.zak = zak;
-    }
-
-    public String getStoim() {
-        return stoim;
-    }
-
-    public void setStoim(String stoim) {
-        this.stoim = stoim;
-    }
-
-    public String getVes() {
-        return ves;
-    }
-
-    public void setVes(String ves) {
-        this.ves = ves;
-    }
-
-    public String getOtgruz() {
-        return otgruz;
-    }
-
-    public void setOtgruz(String otgruz) {
-        this.otgruz = otgruz;
-    }
-
-    public String getUpak() {
-        return upak;
-    }
-
-    public void setUpak(String upak) {
-        this.upak = upak;
+    public void setZakazano(String zakazano) {
+        this.zakazano = zakazano;
     }
 
 }

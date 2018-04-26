@@ -10,9 +10,9 @@ public class Courier_filter_1 {
     @SerializedName("izdatel")
     @Expose
     private ArrayList<String> izdatel = null;
-    @SerializedName("class")
+    @SerializedName("clas")
     @Expose
-    private ArrayList<String> _class = null;
+    private ArrayList<String> clas = null;
 
     public ArrayList<String> getIzdatel() {
         return izdatel;
@@ -22,12 +22,12 @@ public class Courier_filter_1 {
         this.izdatel = izdatel;
     }
 
-    public ArrayList<String> getClass_() {
-        return _class;
+    public ArrayList<String> getClas() {
+        return clas;
     }
 
-    public void setClass_(ArrayList<String> _class) {
-        this._class = _class;
+    public void setClas(ArrayList<String> clas) {
+        this.clas = clas;
     }
 
 }

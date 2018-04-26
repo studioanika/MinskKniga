@@ -35,6 +35,8 @@ public class Zakazy_Client extends AppCompatActivity {
 
     ExpandableListView expListView;
     TabHost tabHost;
+    TextView notfound_1;
+    TextView notfound_2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,9 @@ public class Zakazy_Client extends AppCompatActivity {
             }
         });
 
+        notfound_1 = findViewById(R.id.notfound_1);
+        notfound_2 = findViewById(R.id.notfound_2);
+
         caption = findViewById(R.id.caption);
         id = getIntent().getIntExtra("id", 0);
         name = getIntent().getStringExtra("name");
@@ -60,7 +65,6 @@ public class Zakazy_Client extends AppCompatActivity {
         zakazy_buf = new ArrayList<>();
 
         expListView.setAdapter(new Zakazy_2(this, zakazy));
-
 
         tabHost = findViewById(R.id.tabHost);
         tabHost.setup();
@@ -117,12 +121,14 @@ public class Zakazy_Client extends AppCompatActivity {
                 zakazy_buf.addAll(response.body());
 
 
-
-
-
-
                 expListView.setAdapter(new Zakazy_2(Zakazy_Client.this, zakazy));
-                //search();
+
+                if (!zakazy.isEmpty()) {
+                    notfound_2.setVisibility(View.GONE);
+                } else {
+                    notfound_2.setVisibility(View.VISIBLE);
+                }
+                notfound_2.setText("Ничего не найдено");
             }
 
             @Override

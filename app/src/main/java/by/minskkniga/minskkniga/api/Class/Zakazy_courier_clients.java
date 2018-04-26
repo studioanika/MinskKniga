@@ -14,9 +14,9 @@ public class Zakazy_courier_clients {
     @SerializedName("info")
     @Expose
     private String info;
-    @SerializedName("komment")
+    @SerializedName("koment")
     @Expose
-    private String komment;
+    private String koment;
     @SerializedName("napravl")
     @Expose
     private String napravl;
@@ -60,12 +60,12 @@ public class Zakazy_courier_clients {
         this.info = info;
     }
 
-    public String getKomment() {
-        return komment;
+    public String getKoment() {
+        return koment;
     }
 
-    public void setKomment(String komment) {
-        this.komment = komment;
+    public void setKoment(String koment) {
+        this.koment = koment;
     }
 
     public String getNapravl() {

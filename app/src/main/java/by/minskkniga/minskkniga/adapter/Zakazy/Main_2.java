@@ -1,6 +1,7 @@
 package by.minskkniga.minskkniga.adapter.Zakazy;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ public class Main_2 extends BaseAdapter {
     public Main_2(Context context, ArrayList<Clients> objects) {
         this._context = context;
         this._objects = objects;
+        lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -44,8 +46,13 @@ public class Main_2 extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = lInflater.inflate(R.layout.adapter_zakazy_2, parent, false);
+//        lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        View view = lInflater.inflate(R.layout.adapter_zakazy_2, parent, false);
+
+        View view = convertView;
+        if (view == null) {
+            view = lInflater.inflate(R.layout.adapter_zakazy_2, parent, false);
+        }
 
         TextView tv1 = view.findViewById(R.id.tv1);
         TextView tv2 = view.findViewById(R.id.tv2);

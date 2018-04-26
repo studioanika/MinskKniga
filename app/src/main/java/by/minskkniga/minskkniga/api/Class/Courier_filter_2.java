@@ -10,16 +10,16 @@ public class Courier_filter_2 {
 
     @SerializedName("napravl")
     @Expose
-    private ArrayList<String> napravl = null;
-    @SerializedName("sity")
+    private ArrayList<String> napravl;
+    @SerializedName("gorod")
     @Expose
-    private ArrayList<String> sity = null;
+    private ArrayList<String> gorod;
     @SerializedName("school")
     @Expose
-    private ArrayList<String> school = null;
+    private ArrayList<String> school;
     @SerializedName("smena")
     @Expose
-    private ArrayList<String> smena = null;
+    private ArrayList<String> smena;
 
     public ArrayList<String> getNapravl() {
         return napravl;
@@ -29,12 +29,12 @@ public class Courier_filter_2 {
         this.napravl = napravl;
     }
 
-    public ArrayList<String> getSity() {
-        return sity;
+    public ArrayList<String> getGorod() {
+        return gorod;
     }
 
-    public void setSity(ArrayList<String> sity) {
-        this.sity = sity;
+    public void setGorod(ArrayList<String> gorod) {
+        this.gorod = gorod;
     }
 
     public ArrayList<String> getSchool() {

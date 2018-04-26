@@ -15,7 +15,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="?attr/colorPrimary">
+            android:background="@color/colorPrimary">
 
             <TextView
                 android:id="@+id/caption"
@@ -52,7 +52,7 @@
         android:id="@+id/filter_layout"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="?attr/colorPrimary"
+        android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -139,14 +139,12 @@
                 android:hint="Поиск"
                 android:inputType="textPersonName" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/barcode"
                 android:layout_width="24dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/ic_barcode_scan"/>
-
+                android:layout_margin="15dp"
+                app:srcCompat="@drawable/ic_barcode_scan"/>
 
         </LinearLayout>
 
