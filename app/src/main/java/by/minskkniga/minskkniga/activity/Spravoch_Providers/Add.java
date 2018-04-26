@@ -35,9 +35,8 @@ import retrofit2.Response;
 public class Add extends AppCompatActivity {
 
     ScrollView sv;
-    DialogFragment dlg1;
-    DialogFragment dlg2;
-
+    DialogFragment dlg_gorod;
+    DialogFragment dlg_contact;
     Button add_contact;
 
     Spinner type_ceni;
@@ -87,8 +86,8 @@ public class Add extends AppCompatActivity {
             }
         });
 
-        dlg1 = new Add_Dialog(this, "gorod_proveder");
-        dlg2 = new Add_Dialog(this, "countact_provider");
+        dlg_gorod = new Add_Dialog(this, "gorod_provider");
+        dlg_contact = new Add_Dialog(this, "contact_provider");
 
         contact_type = new ArrayList<String>();
         contact_text = new ArrayList<String>();
@@ -111,7 +110,7 @@ public class Add extends AppCompatActivity {
         add_city.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dlg1.show(getFragmentManager(), "");
+                dlg_gorod.show(getFragmentManager(), "");
             }
         });
 
@@ -226,10 +225,9 @@ public class Add extends AppCompatActivity {
         add_contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dlg2.show(getFragmentManager(), "");
+                dlg_contact.show(getFragmentManager(), "");
             }
         });
-
 
     }
 

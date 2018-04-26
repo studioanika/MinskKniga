@@ -5,13 +5,13 @@
     android:orientation="vertical">
 
     <Spinner
-        android:id="@+id/dialog_contact_spinner"
+        android:id="@+id/spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/contacts"/>
 
     <EditText
-        android:id="@+id/dialog_contact_edittext"
+        android:id="@+id/edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName" />

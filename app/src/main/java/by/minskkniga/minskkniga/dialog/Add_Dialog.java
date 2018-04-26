@@ -32,70 +32,46 @@ import retrofit2.Response;
 @SuppressLint("ValidFragment")
 public class Add_Dialog extends DialogFragment {
 
-    private EditText search_ed;
-    private ListView search_lv;
-    private ArrayList<Gorod> gorod;
-    private ArrayList<String> names;
-    private ArrayList<String> names_buf;
-    private TextView search_tv;
-
     private View view;
     private LayoutInflater inflater;
     private Context context;
     private String id;
 
-    private Spinner spinner;
-    private EditText edittext;
-    private String type;
-
-    private EditText edit;
-
+    private String type_client;
+    private String type_provider;
+    private String type_courier;
 
     public Add_Dialog(Context context, String id) {
         this.context = context;
         this.id = id;
     }
 
-
-    public void search(){
-        names.clear();
-        if (!search_ed.getText().toString().isEmpty()) {
-            for (int i = 0; i < names_buf.size(); i++) {
-                if (names_buf.get(i).toLowerCase().contains(search_ed.getText().toString().toLowerCase())) {
-                    names.add(names_buf.get(i));
-                }
-            }
-        }else{
-            names.addAll(names_buf);
-        }
-        search_lv.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, names));
-    }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         inflater = getActivity().getLayoutInflater();
+
         switch (id) {
             case "gorod_client":
-                view = inflater.inflate(R.layout.dialog_add_sity, null);
-                search_ed = view.findViewById(R.id.search_ed);
-                search_lv = view.findViewById(R.id.search_lv);
-                search_tv = view.findViewById(R.id.search_tv);
-                names = new ArrayList<>();
-                names_buf = new ArrayList<>();
-                gorod = new ArrayList<>();
+                view = inflater.inflate(R.layout.dialog_add_gorod, null);
+                final EditText search_client = view.findViewById(R.id.search_gorod);
+                final ListView lv_client = view.findViewById(R.id.lv_gorod);
+                final TextView notfound_client = view.findViewById(R.id.notfound);
+                final ArrayList<String> names_client = new ArrayList<>();
+                final ArrayList<String> names_client_buf = new ArrayList<>();
+                final ArrayList<Gorod> gorod_client = new ArrayList<>();
 
                 App.getApi().getGorod().enqueue(new Callback<List<Gorod>>() {
                     @Override
                     public void onResponse(Call<List<Gorod>> call, Response<List<Gorod>> response) {
 
                         for (Gorod buffer : response.body()) {
-                            names.add(buffer.getName());
-                            names_buf.add(buffer.getName());
+                            names_client.add(buffer.getName());
+                            names_client_buf.add(buffer.getName());
                         }
-                        gorod.addAll(response.body());
+                        gorod_client.addAll(response.body());
                         //dialog.cancel();
-                        search_lv.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, names));
+                        lv_client.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, names_client));
                     }
 
                     @Override
@@ -104,7 +80,7 @@ public class Add_Dialog extends DialogFragment {
                     }
                 });
 
-                search_ed.addTextChangedListener(new TextWatcher() {
+                search_client.addTextChangedListener(new TextWatcher() {
 
                     @Override
                     public void afterTextChanged(Editable s) {
@@ -116,22 +92,33 @@ public class Add_Dialog extends DialogFragment {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        search();
-                        if (names.size()==0){
-                            search_tv.setVisibility(View.VISIBLE);
+                        names_client.clear();
+                        if (!search_client.getText().toString().isEmpty()) {
+                            for (int i = 0; i < names_client_buf.size(); i++) {
+                                if (names_client_buf.get(i).toLowerCase().contains(search_client.getText().toString().toLowerCase())) {
+                                    names_client.add(names_client_buf.get(i));
+                                }
+                            }
                         }else{
-                            search_tv.setVisibility(View.GONE);
+                            names_client.addAll(names_client_buf);
+                        }
+                        lv_client.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, names_client));
+
+                        if (names_client.size()==0){
+                            notfound_client.setVisibility(View.VISIBLE);
+                        }else{
+                            notfound_client.setVisibility(View.GONE);
                         }
                     }
                 });
 
-                search_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                lv_client.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                             long id) {
-                        for(Gorod buf : gorod){
-                            if (buf.getName().equals(names.get(position)))
-                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_gorod(Integer.parseInt(buf.getId()),names.get(position));
+                        for(Gorod buf : gorod_client){
+                            if (buf.getName().equals(names_client.get(position)))
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_gorod(Integer.parseInt(buf.getId()),names_client.get(position));
                             getDialog().dismiss();
                         }
                     }
@@ -142,27 +129,24 @@ public class Add_Dialog extends DialogFragment {
                 break;
             case "contact_client":
                 view = inflater.inflate(R.layout.dialog_add_contacts, null);
-                spinner = view.findViewById(R.id.dialog_contact_spinner);
-                edittext = view.findViewById(R.id.dialog_contact_edittext);
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                final Spinner spinner_client = view.findViewById(R.id.spinner);
+                final EditText edittext_client = view.findViewById(R.id.edittext);
+
+                spinner_client.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         switch (position) {
                             case 0:
-                                edittext.setHint("Номер телефона");
-                                type = "tel";
+                                edittext_client.setHint("Номер телефона");
+                                type_client = "tel";
                                 break;
                             case 1:
-                                edittext.setHint("Электронная почта");
-                                type = "mail";
+                                edittext_client.setHint("Электронная почта");
+                                type_client = "mail";
                                 break;
                             case 2:
-                                edittext.setHint("Место жительства");
-                                type = "adress";
-                                break;
-                            case 3:
-                                edittext.setHint("Web сайт");
-                                type = "site";
+                                edittext_client.setHint("Контактное лицо");
+                                type_client = "contact";
                                 break;
                         }
                     }
@@ -172,13 +156,14 @@ public class Add_Dialog extends DialogFragment {
 
                     }
                 });
+
                 builder.setTitle("Добавить контакт")
                         .setView(view)
                         .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // код для передачи данных
-                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_contact(type, String.valueOf(edittext.getText()));
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Clients.Add)getActivity()).return_contact(type_client, String.valueOf(edittext_client.getText()));
                                 dialog.cancel();
                             }
                         })
@@ -191,23 +176,24 @@ public class Add_Dialog extends DialogFragment {
                 break;
             case "contact_provider":
                 view = inflater.inflate(R.layout.dialog_add_contacts, null);
-                spinner = view.findViewById(R.id.dialog_contact_spinner);
-                edittext = view.findViewById(R.id.dialog_contact_edittext);
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                final Spinner spinner_provider = view.findViewById(R.id.spinner);
+                final EditText edittext_provider = view.findViewById(R.id.edittext);
+
+                spinner_provider.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         switch (position) {
                             case 0:
-                                edittext.setHint("Номер телефона");
-                                type = "tel";
+                                edittext_provider.setHint("Номер телефона");
+                                type_provider = "tel";
                                 break;
                             case 1:
-                                edittext.setHint("Электронная почта");
-                                type = "mail";
+                                edittext_provider.setHint("Электронная почта");
+                                type_provider = "mail";
                                 break;
                             case 2:
-                                edittext.setHint("Контактное лицо");
-                                type = "contact";
+                                edittext_provider.setHint("Контактное лицо");
+                                type_provider = "contact";
                                 break;
                         }
                     }
@@ -217,13 +203,11 @@ public class Add_Dialog extends DialogFragment {
 
                     }
                 });
-                builder.setTitle("Добавить контакт")
-                        .setView(view)
-                        .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
+
+                builder.setPositiveButton("Ок", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // код для передачи данных
-                                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add)getActivity()).return_contact(type, String.valueOf(edittext.getText()));
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add)getActivity()).return_contact(type_provider, String.valueOf(edittext_provider.getText()));
                                 dialog.cancel();
                             }
                         })
@@ -232,28 +216,29 @@ public class Add_Dialog extends DialogFragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
                             }
-                        });
+                        })
+                        .setTitle("Добавить контакт").setView(view);
                 break;
             case "gorod_provider":
-                view = inflater.inflate(R.layout.dialog_add_sity, null);
-                search_ed = view.findViewById(R.id.search_ed);
-                search_lv = view.findViewById(R.id.search_lv);
-                search_tv = view.findViewById(R.id.search_tv);
-                names = new ArrayList<>();
-                names_buf = new ArrayList<>();
-                gorod = new ArrayList<>();
+                view = inflater.inflate(R.layout.dialog_add_gorod, null);
+                final EditText search_provider = view.findViewById(R.id.search_gorod);
+                final ListView lv_provider = view.findViewById(R.id.lv_gorod);
+                final TextView notfound_provider = view.findViewById(R.id.notfound);
+                final ArrayList<String> names_provider = new ArrayList<>();
+                final ArrayList<String> names_provider_buf = new ArrayList<>();
+                final ArrayList<Gorod> gorod_provider = new ArrayList<>();
 
                 App.getApi().getGorod().enqueue(new Callback<List<Gorod>>() {
                     @Override
                     public void onResponse(Call<List<Gorod>> call, Response<List<Gorod>> response) {
 
                         for (Gorod buffer : response.body()) {
-                            names.add(buffer.getName());
-                            names_buf.add(buffer.getName());
+                            names_provider.add(buffer.getName());
+                            names_provider_buf.add(buffer.getName());
                         }
-                        gorod.addAll(response.body());
+                        gorod_provider.addAll(response.body());
 
-                        search_lv.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, names));
+                        lv_provider.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, names_provider));
                     }
 
                     @Override
@@ -262,7 +247,7 @@ public class Add_Dialog extends DialogFragment {
                     }
                 });
 
-                search_ed.addTextChangedListener(new TextWatcher() {
+                search_provider.addTextChangedListener(new TextWatcher() {
 
                     @Override
                     public void afterTextChanged(Editable s) {
@@ -274,50 +259,60 @@ public class Add_Dialog extends DialogFragment {
 
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        search();
-                        if (names.size()==0){
-                            search_tv.setVisibility(View.VISIBLE);
+                        names_provider.clear();
+                        if (!search_provider.getText().toString().isEmpty()) {
+                            for (int i = 0; i < names_provider_buf.size(); i++) {
+                                if (names_provider_buf.get(i).toLowerCase().contains(search_provider.getText().toString().toLowerCase())) {
+                                    names_provider.add(names_provider_buf.get(i));
+                                }
+                            }
                         }else{
-                            search_tv.setVisibility(View.GONE);
+                            names_provider.addAll(names_provider_buf);
+                        }
+                        lv_provider.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, names_provider));
+
+                        if (names_provider.size()==0){
+                            notfound_provider.setVisibility(View.VISIBLE);
+                        }else{
+                            notfound_provider.setVisibility(View.GONE);
                         }
                     }
                 });
 
-                search_lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                lv_provider.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                             long id) {
-                        for(Gorod buf : gorod){
-                            if (buf.getName().equals(names.get(position)))
-                                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add)getActivity()).return_gorod(Integer.parseInt(buf.getId()),names.get(position));
+                        for(Gorod buf : gorod_provider){
+                            if (buf.getName().equals(names_provider.get(position)))
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add)getActivity()).return_gorod(Integer.parseInt(buf.getId()),names_provider.get(position));
                             getDialog().dismiss();
                         }
 
                     }
                 });
-
-                builder.setTitle("Выбор города")
-                        .setView(view);
+                builder.setTitle("Выбор города").setView(view);
                 break;
             case "contact_courier":
                 view = inflater.inflate(R.layout.dialog_add_contacts, null);
-                spinner = view.findViewById(R.id.dialog_contact_spinner);
-                edittext = view.findViewById(R.id.dialog_contact_edittext);
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                final Spinner spinner_courier = view.findViewById(R.id.spinner);
+                final EditText edittext_courier = view.findViewById(R.id.edittext);
+
+                spinner_courier.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         switch (position) {
                             case 0:
-                                edittext.setHint("Номер телефона");
-                                type = "tel";
+                                edittext_courier.setHint("Номер телефона");
+                                type_courier = "tel";
                                 break;
                             case 1:
-                                edittext.setHint("Электронная почта");
-                                type = "mail";
+                                edittext_courier.setHint("Электронная почта");
+                                type_courier = "mail";
                                 break;
                             case 2:
-                                edittext.setHint("Контактное лицо");
-                                type = "contact";
+                                edittext_courier.setHint("Контактное лицо");
+                                type_courier = "contact";
                                 break;
                         }
                     }
@@ -327,13 +322,13 @@ public class Add_Dialog extends DialogFragment {
 
                     }
                 });
+
                 builder.setTitle("Добавить контакт")
                         .setView(view)
                         .setPositiveButton("Ок", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // код для передачи данных
-                                ((by.minskkniga.minskkniga.activity.Spravoch_Couriers.Add) getActivity()).return_contact(type, String.valueOf(edittext.getText()));
+                                ((by.minskkniga.minskkniga.activity.Spravoch_Couriers.Add) getActivity()).return_contact(type_courier, String.valueOf(edittext_courier.getText()));
                                 dialog.cancel();
                             }
                         })
@@ -343,6 +338,19 @@ public class Add_Dialog extends DialogFragment {
                                 dialog.cancel();
                             }
                         });
+                break;
+
+
+
+
+
+
+
+
+            case "zakaz_type":
+                view = inflater.inflate(R.layout.dialog_zakaz_type, null);
+
+
                 break;
         }
         return builder.create();
