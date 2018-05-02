@@ -71,7 +71,7 @@ public interface RestApi {
                                  @Query("contacts") String contacts);
 
     @GET("/api/get_goroda.php")
-    Call<List<Gorod>> getGorod();
+    Call<List<Gorod>> getGoroda();
 
     @GET("/api/get_products_filter.php")
     Call<Products_filter> getProducts_filter();

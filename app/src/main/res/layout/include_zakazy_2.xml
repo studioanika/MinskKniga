@@ -14,7 +14,7 @@
         android:layout_height="58dp"
         android:ems="10"
         android:hint="Поиск клиентов"
-        android:drawableLeft="@drawable/ic_search"
+        android:drawableStart="@android:drawable/ic_menu_search"
         android:inputType="textPersonName" />
 
     <LinearLayout

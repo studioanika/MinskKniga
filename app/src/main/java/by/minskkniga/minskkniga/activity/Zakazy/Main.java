@@ -36,6 +36,9 @@ public class Main extends AppCompatActivity {
 
     TabHost tabHost;
 
+    TextView notfound_1;
+    TextView notfound_2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,9 @@ public class Main extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        notfound_1 = findViewById(R.id.notfound_1);
+        notfound_2 = findViewById(R.id.notfound_2);
 
         clien = new ArrayList<Clients>();
         clien_buf = new ArrayList<Clients>();
@@ -127,6 +133,14 @@ public class Main extends AppCompatActivity {
                 clien_buf.clear();
                 clien.addAll(response.body());
                 clien_buf.addAll(response.body());
+
+                if (!clien.isEmpty()) {
+                    notfound_2.setVisibility(View.GONE);
+                } else {
+                    notfound_2.setVisibility(View.VISIBLE);
+                }
+                notfound_2.setText("Ничего не найдено");
+
                 lv2.setAdapter(new Main_2(Main.this, clien));
                 //search();
             }

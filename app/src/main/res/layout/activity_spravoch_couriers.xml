@@ -45,7 +45,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:hint="Поиск курьеров"
-        android:drawableLeft="@drawable/ic_search"
+        android:drawableStart="@android:drawable/ic_menu_search"
         android:inputType="textPersonName" />
 
         <LinearLayout

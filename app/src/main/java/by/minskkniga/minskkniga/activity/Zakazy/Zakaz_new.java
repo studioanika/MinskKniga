@@ -3,8 +3,10 @@ package by.minskkniga.minskkniga.activity.Zakazy;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ public class Zakaz_new extends AppCompatActivity {
 
     ImageButton back;
     ImageButton menu;
+    TextView caption;
 
     DialogFragment dlg_zakaz;
     DialogFragment dlg_client;
@@ -32,8 +35,13 @@ public class Zakaz_new extends AppCompatActivity {
 
     Button select_client;
     Button ok;
+    SharedPreferences sp;
+
+    TextView autor;
 
     boolean is_select_client = false;
+
+    String id_client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +56,11 @@ public class Zakaz_new extends AppCompatActivity {
             }
         });
         menu = findViewById(R.id.menu);
+        caption = findViewById(R.id.caption);
+        sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+        autor = findViewById(R.id.autor);
+
+        autor.setText(sp.getString("login", ""));
 
         linear_select_client = findViewById(R.id.linear_select_client);
         linear_zametki = findViewById(R.id.linear_zametki);
@@ -85,13 +98,18 @@ public class Zakaz_new extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (is_select_client && !dlg_client.isVisible()){
-            dlg_client.dismiss();
-            dlg_client.show(getFragmentManager(), "");
-        }
+
     }
 
     public void return_zakaz_type(int type){
 
+    }
+
+    public void return_client(String id, String name){
+        id_client = id;
+        linear_select_client.setVisibility(View.GONE);
+        linear_zametki.setVisibility(View.VISIBLE);
+        linear_ok.setVisibility(View.VISIBLE);
+        caption.setText(name);
     }
 }
