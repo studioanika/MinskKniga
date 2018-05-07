@@ -39,6 +39,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -65,6 +66,7 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
+import by.minskkniga.minskkniga.api.Class.Product;
 import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
 import okhttp3.MediaType;
@@ -93,6 +95,13 @@ public class Add extends AppCompatActivity {
     EditText prod_cena;
     EditText standart;
     EditText ves;
+
+    TextView zakazano;
+    TextView dostupno;
+    TextView vozvrat;
+    TextView ogidanie;
+    TextView upakovok;
+    TextView ostatok;
 
     Button cancel;
     Button ok;
@@ -160,6 +169,13 @@ public class Add extends AppCompatActivity {
         standart = findViewById(R.id.standart);
         ves = findViewById(R.id.ves);
 
+        zakazano = findViewById(R.id.zakazano);
+        dostupno = findViewById(R.id.dostupno);
+        vozvrat = findViewById(R.id.vozvrat);
+        ogidanie = findViewById(R.id.ogidanie);
+        upakovok = findViewById(R.id.upakovok);
+        ostatok = findViewById(R.id.ostatok);
+
         qrScan = new IntentIntegrator(this);
         barcode_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,9 +197,9 @@ public class Add extends AppCompatActivity {
         id = getIntent().getStringExtra("id");
 
         if (!id.equals("null")) {
-            App.getApi().getProduct(id).enqueue(new Callback<Products>() {
+            App.getApi().getProduct(id).enqueue(new Callback<Product>() {
                 @Override
-                public void onResponse(Call<Products> call, Response<Products> response) {
+                public void onResponse(Call<Product> call, Response<Product> response) {
 
                     name.setText(response.body().getName());
                     clas.setText(response.body().getClas());
@@ -198,6 +214,14 @@ public class Add extends AppCompatActivity {
                     standart.setText(response.body().getStandart());
                     ves.setText(response.body().getVes());
 
+                    zakazano.setText(response.body().getZakazano());
+                    dostupno.setText(response.body().getDostupno());
+                    vozvrat.setText(response.body().getVozvrat());
+                    ogidanie.setText(response.body().getOgidanie());
+                    upakovok.setText(response.body().getUpakovok());
+                    ostatok.setText(response.body().getOstatok());
+
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
                         Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
                     }else{
@@ -207,7 +231,7 @@ public class Add extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<Products> call, Throwable t) {
+                public void onFailure(Call<Product> call, Throwable t) {
 
                 }
             });

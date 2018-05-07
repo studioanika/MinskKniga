@@ -1,16 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    android:id="@+id/drawer"
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +32,6 @@
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="56dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 app:srcCompat="@drawable/ic_back" />
 
@@ -46,83 +39,67 @@
                 android:id="@+id/filter_button"
                 android:layout_width="56dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 app:srcCompat="@drawable/ic_filter"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_alignParentEnd="true" />
+                style="@style/Widget.AppCompat.Button.Borderless" />
 
         </RelativeLayout>
 
         <RelativeLayout
-        android:id="@+id/filter_layout"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            android:id="@+id/filter_layout"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@color/colorPrimary">
 
-        <Spinner
-            android:id="@+id/spinner1"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"/>
 
-        <Spinner
-            android:id="@+id/spinner2"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/spinner2"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="10dp"/>
 
-        <Spinner
-            android:id="@+id/spinner3"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="50dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            <Spinner
+                android:id="@+id/spinner3"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="50dp"/>
 
-        <Spinner
-            android:id="@+id/spinner4"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="50dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/spinner4"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="50dp"/>
 
-        <Button
-            android:id="@+id/clear"
-            android:layout_width="122dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="false"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="90dp"
-            android:text="Очистить"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/clear"
+                android:layout_width="122dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="false"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="90dp"
+                android:text="Очистить"/>
 
-        <Button
-            android:id="@+id/ok"
-            android:layout_width="122dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="90dp"
-            android:text="Готово"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/ok"
+                android:layout_width="122dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="32dp"
+                android:layout_marginTop="90dp"
+                android:text="Готово"/>
 
-    </RelativeLayout>
+        </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -213,7 +190,6 @@
 
     </LinearLayout>
 
-
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -221,23 +197,10 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="false"
+        android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
         app:backgroundTint="@color/colorPrimary"
         app:srcCompat="@drawable/ic_add" />
 
-    </RelativeLayout>
+</RelativeLayout>
 
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:background="@color/drawer_background"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_drawer_nomenklatura" />
-
-
-</android.support.v4.widget.DrawerLayout>

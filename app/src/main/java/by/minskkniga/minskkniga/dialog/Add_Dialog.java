@@ -37,6 +37,7 @@ import by.minskkniga.minskkniga.activity.Zakazy.Zakaz_new;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Clients;
 import by.minskkniga.minskkniga.api.Class.Gorod;
+import by.minskkniga.minskkniga.api.Class.Product;
 import by.minskkniga.minskkniga.api.Class.Products;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,7 +61,7 @@ public class Add_Dialog extends DialogFragment {
 
     private String image;
     private String name_product;
-    private Products product;
+    private Product product;
 
     public Add_Dialog(Context context, String id, String tag) {
         this.context = context;
@@ -714,11 +715,11 @@ public class Add_Dialog extends DialogFragment {
         final TextView ostatok = view.findViewById(R.id.ostatok);
         final TextView dostupno = view.findViewById(R.id.dostupno);
         final TextView obrazec = view.findViewById(R.id.obrazec);
-        product = new Products();
+        product = new Product();
 
-        App.getApi().getProduct(tag).enqueue(new Callback<Products>() {
+        App.getApi().getProduct(tag).enqueue(new Callback<Product>() {
             @Override
-            public void onResponse(Call<Products> call, Response<Products> response) {
+            public void onResponse(Call<Product> call, Response<Product> response) {
                 product = response.body();
                 name_product = response.body().getName();
                 name.setText(name_product);
@@ -729,12 +730,15 @@ public class Add_Dialog extends DialogFragment {
                 izdatel.setText(response.body().getIzdatel());
                 autor.setText(response.body().getAutor());
                 sokr_name.setText(response.body().getSokrName());
+                ostatok.setText(response.body().getOstatok());
+                dostupno.setText(response.body().getDostupno());
+                obrazec.setText(response.body().getObrazec());
 
                 image = response.body().getImage();
             }
 
             @Override
-            public void onFailure(Call<Products> call, Throwable t) {
+            public void onFailure(Call<Product> call, Throwable t) {
 
             }
         });

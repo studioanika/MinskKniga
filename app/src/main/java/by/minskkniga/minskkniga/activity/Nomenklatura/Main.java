@@ -31,12 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.adapter.MenuAdapter;
-import by.minskkniga.minskkniga.adapter.Nomenklatura.New_zakaz;
 import by.minskkniga.minskkniga.api.App;
+import by.minskkniga.minskkniga.api.Class.Product;
 import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.Products_filter;
-import by.minskkniga.minskkniga.api.Class.XXX;
 import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,13 +53,9 @@ public class Main extends AppCompatActivity {
     ListView lv;
     TextView notfound;
     EditText search;
-    DrawerLayout drawer;
 
     ArrayList<Products> products;
     ArrayList<Products> products_buf;
-    by.minskkniga.minskkniga.adapter.Nomenklatura.Main adapter;
-
-    RecyclerView recyclerMenu;
 
     Spinner spinner1, spinner2, spinner3, spinner4;
 
@@ -74,19 +68,8 @@ public class Main extends AppCompatActivity {
     String class_ = "Класс";
 
     boolean zakaz = false;
-    NavigationView nav_view;
-    TextView nav_notfound;
-    Button nav_ok;
-    ListView nav_lv;
+
     DialogFragment dlg_nomenclatura;
-
-    List<XXX> zak_name;
-    New_zakaz adapt;
-    View header;
-
-    Context context;
-
-    MenuAdapter adapters;
 
     public void initialize(){
         back = findViewById(R.id.back);
@@ -96,8 +79,6 @@ public class Main extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
-
 
         spinner1 = findViewById(R.id.spinner1);
         spinner2 = findViewById(R.id.spinner2);
@@ -109,13 +90,12 @@ public class Main extends AppCompatActivity {
         ok = findViewById(R.id.ok);
         search = findViewById(R.id.search);
 
-        drawer = findViewById(R.id.drawer);
 
         zakaz = getIntent().getBooleanExtra("zakaz", false);
         if (zakaz){
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
         }else{
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
         }
 
         lv = findViewById(R.id.lv);
@@ -147,30 +127,12 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        nav_view = findViewById(R.id.nav_view);
-        //View headerLayout = nav_view.inflateHeaderView(R.layout.nav_drawer_nomenklatura);
-        header = (View) nav_view.getHeaderView(0);
-        zak_name = new ArrayList<>();
-//        nav_notfound = header.findViewById(R.id.nav_notfound);
-        nav_ok = header.findViewById(R.id.nav_ok);
-
-        nav_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(adapters!=null) {
-                    List<XXX> dsd = adapters.getNewsList();
-                    String sd = "";
-                }
-            }
-        });
-//        nav_lv = header.findViewById(R.id.nav_lv);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nomenklatura);
-        context = this;
         initialize();
 
 
@@ -255,22 +217,8 @@ public class Main extends AppCompatActivity {
         load_filter();
     }
 
-    public void return_product(Products product){
-
-        XXX a = new XXX();
-        a.setName(product.getName());
-        a.setColvo("0");
-        zak_name.add(a);
-        //nav_lv.setAdapter(new New_zakaz(Main.this, zak_name));
-
-        recyclerMenu = (RecyclerView) header.findViewById(R.id.header_recycler);
-
-        adapters = new MenuAdapter(zak_name, context);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerMenu.setLayoutManager(layoutManager);
-        recyclerMenu.setAdapter(adapters);
-        adapters.notifyDataSetChanged();
-
+    public void return_product(Product product){
+        Toast.makeText(this, product.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -353,8 +301,8 @@ public class Main extends AppCompatActivity {
             public void onResponse(Call<Products_filter> call, Response<Products_filter> response) {
                 setAdapter(spinner1, response.body().getAutor(), 1);
                 setAdapter(spinner2, response.body().getIzdatel(), 2);
-                setAdapter(spinner4, response.body().getClas(), 4);
                 setAdapter(spinner3, yesno, 3);
+                setAdapter(spinner4, response.body().getClas(), 4);
                 reload();
             }
 
