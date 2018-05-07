@@ -55,7 +55,7 @@ public class Add extends AppCompatActivity {
         });
 
         sv = findViewById(R.id.scrollview);
-        dlg = new Add_Dialog(this, "contact_courier");
+        dlg = new Add_Dialog(this, "contact_courier","");
         add_contact = findViewById(R.id.contacts_add);
         add_contact.setOnClickListener(new View.OnClickListener() {
             @Override

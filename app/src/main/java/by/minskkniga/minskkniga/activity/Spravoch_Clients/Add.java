@@ -99,8 +99,8 @@ public class Add extends AppCompatActivity {
         });
         sv = findViewById(R.id.scrollview);
 
-        dlg_gorod = new Add_Dialog(this, "gorod_client");
-        dlg_contact = new Add_Dialog(this, "contact_client");
+        dlg_gorod = new Add_Dialog(this, "gorod_client","");
+        dlg_contact = new Add_Dialog(this, "contact_client","");
 
         contact_type = new ArrayList<>();
         contact_text = new ArrayList<>();

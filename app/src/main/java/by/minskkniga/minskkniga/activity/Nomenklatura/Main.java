@@ -1,14 +1,21 @@
 package by.minskkniga.minskkniga.activity.Nomenklatura;
 
+import android.app.DialogFragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,9 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.adapter.MenuAdapter;
+import by.minskkniga.minskkniga.adapter.Nomenklatura.New_zakaz;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.Products_filter;
+import by.minskkniga.minskkniga.api.Class.XXX;
+import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,10 +55,13 @@ public class Main extends AppCompatActivity {
     ListView lv;
     TextView notfound;
     EditText search;
+    DrawerLayout drawer;
 
     ArrayList<Products> products;
     ArrayList<Products> products_buf;
     by.minskkniga.minskkniga.adapter.Nomenklatura.Main adapter;
+
+    RecyclerView recyclerMenu;
 
     Spinner spinner1, spinner2, spinner3, spinner4;
 
@@ -59,11 +73,22 @@ public class Main extends AppCompatActivity {
     String obraz = "Образец";
     String class_ = "Класс";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nomenklatura);
+    boolean zakaz = false;
+    NavigationView nav_view;
+    TextView nav_notfound;
+    Button nav_ok;
+    ListView nav_lv;
+    DialogFragment dlg_nomenclatura;
 
+    List<XXX> zak_name;
+    New_zakaz adapt;
+    View header;
+
+    Context context;
+
+    MenuAdapter adapters;
+
+    public void initialize(){
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,25 +97,29 @@ public class Main extends AppCompatActivity {
             }
         });
 
+
+
         spinner1 = findViewById(R.id.spinner1);
         spinner2 = findViewById(R.id.spinner2);
         spinner3 = findViewById(R.id.spinner3);
         spinner4 = findViewById(R.id.spinner4);
 
+
         clear = findViewById(R.id.clear);
         ok = findViewById(R.id.ok);
         search = findViewById(R.id.search);
 
+        drawer = findViewById(R.id.drawer);
+
+        zakaz = getIntent().getBooleanExtra("zakaz", false);
+        if (zakaz){
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        }else{
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
+
         lv = findViewById(R.id.lv);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(Main.this, Add.class);
-                intent.putExtra("id", products.get(position).getId());
-                startActivity(intent);
-            }
-        });
         products = new ArrayList<>();
         products_buf = new ArrayList<>();
 
@@ -98,15 +127,15 @@ public class Main extends AppCompatActivity {
         filter_layout = findViewById(R.id.filter_layout);
         filter_layout.setVisibility(View.GONE);
         filter = findViewById(R.id.filter_button);
-        filter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (filter_layout.getVisibility() == View.VISIBLE)
-                    filter_layout.setVisibility(View.GONE);
-                else
-                    filter_layout.setVisibility(View.VISIBLE);
-            }
-        });
+
+        notfound = findViewById(R.id.notfound);
+        yesno = new ArrayList<>();
+        yesno.add("Да");
+        yesno.add("Нет");
+
+        qrScan = new IntentIntegrator(this);
+        barcode = findViewById(R.id.barcode);
+        search = findViewById(R.id.search);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -118,14 +147,57 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        notfound = findViewById(R.id.notfound);
-        yesno = new ArrayList<>();
-        yesno.add("Да");
-        yesno.add("Нет");
+        nav_view = findViewById(R.id.nav_view);
+        //View headerLayout = nav_view.inflateHeaderView(R.layout.nav_drawer_nomenklatura);
+        header = (View) nav_view.getHeaderView(0);
+        zak_name = new ArrayList<>();
+//        nav_notfound = header.findViewById(R.id.nav_notfound);
+        nav_ok = header.findViewById(R.id.nav_ok);
 
-        qrScan = new IntentIntegrator(this);
-        barcode = findViewById(R.id.barcode);
-        search = findViewById(R.id.search);
+        nav_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(adapters!=null) {
+                    List<XXX> dsd = adapters.getNewsList();
+                    String sd = "";
+                }
+            }
+        });
+//        nav_lv = header.findViewById(R.id.nav_lv);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_nomenklatura);
+        context = this;
+        initialize();
+
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (zakaz){
+                    dlg_nomenclatura = new Add_Dialog(Main.this, "nomenclatura_info", String.valueOf(products.get(position).getId()));
+                    dlg_nomenclatura.show(getFragmentManager(), "");
+                }else{
+                    Intent intent = new Intent(Main.this, Add.class);
+                    intent.putExtra("id", products.get(position).getId());
+                    startActivity(intent);
+                }
+            }
+        });
+
+        filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (filter_layout.getVisibility() == View.VISIBLE)
+                    filter_layout.setVisibility(View.GONE);
+                else
+                    filter_layout.setVisibility(View.VISIBLE);
+            }
+        });
+
         barcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,6 +253,24 @@ public class Main extends AppCompatActivity {
             }
         });
         load_filter();
+    }
+
+    public void return_product(Products product){
+
+        XXX a = new XXX();
+        a.setName(product.getName());
+        a.setColvo("0");
+        zak_name.add(a);
+        //nav_lv.setAdapter(new New_zakaz(Main.this, zak_name));
+
+        recyclerMenu = (RecyclerView) header.findViewById(R.id.header_recycler);
+
+        adapters = new MenuAdapter(zak_name, context);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerMenu.setLayoutManager(layoutManager);
+        recyclerMenu.setAdapter(adapters);
+        adapters.notifyDataSetChanged();
+
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -17,22 +18,26 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Spravoch_Clients.Add;
-import by.minskkniga.minskkniga.activity.Zakazy.Main;
 import by.minskkniga.minskkniga.activity.Zakazy.Zakaz_new;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Clients;
 import by.minskkniga.minskkniga.api.Class.Gorod;
+import by.minskkniga.minskkniga.api.Class.Products;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,20 +45,27 @@ import retrofit2.Response;
 @SuppressLint("ValidFragment")
 public class Add_Dialog extends DialogFragment {
 
+    DialogFragment dlg_image;
     private View view;
     private LayoutInflater inflater;
     private AlertDialog.Builder builder;
     private Context context;
     private String id;
+    private String tag;
 
     private String type_client;
     private String type_provider;
     private String type_courier;
     private int type_zakaz = 1;
 
-    public Add_Dialog(Context context, String id) {
+    private String image;
+    private String name_product;
+    private Products product;
+
+    public Add_Dialog(Context context, String id, String tag) {
         this.context = context;
         this.id = id;
+        this.tag = tag;
     }
 
     @Override
@@ -83,11 +95,17 @@ public class Add_Dialog extends DialogFragment {
             case "zakaz_client":
                 zakaz_client();
                 break;
+            case "nomenclatura_info":
+                nomenclatura_info();
+                break;
+            case "image":
+                image();
+                break;
         }
         return builder.create();
     }
 
-    public void gorod_client(){
+    public void gorod_client() {
         view = inflater.inflate(R.layout.dialog_add_gorod, null);
         final EditText search_client = view.findViewById(R.id.search_gorod);
         final ListView lv_client = view.findViewById(R.id.lv_gorod);
@@ -163,7 +181,7 @@ public class Add_Dialog extends DialogFragment {
                 .setView(view);
     }
 
-    public void contact_client(){
+    public void contact_client() {
         view = inflater.inflate(R.layout.dialog_add_contacts, null);
         final Spinner spinner_client = view.findViewById(R.id.spinner);
         final EditText edittext_client = view.findViewById(R.id.edittext);
@@ -210,7 +228,7 @@ public class Add_Dialog extends DialogFragment {
                 });
     }
 
-    public void contact_provider(){
+    public void contact_provider() {
         view = inflater.inflate(R.layout.dialog_add_contacts, null);
         final Spinner spinner_provider = view.findViewById(R.id.spinner);
         final EditText edittext_provider = view.findViewById(R.id.edittext);
@@ -256,7 +274,7 @@ public class Add_Dialog extends DialogFragment {
                 .setTitle("Добавить контакт").setView(view);
     }
 
-    public void gorod_provider(){
+    public void gorod_provider() {
         view = inflater.inflate(R.layout.dialog_add_gorod, null);
         final EditText search_provider = view.findViewById(R.id.search_gorod);
         final ListView lv_provider = view.findViewById(R.id.lv_gorod);
@@ -331,7 +349,7 @@ public class Add_Dialog extends DialogFragment {
         builder.setTitle("Выбор города").setView(view);
     }
 
-    public void contact_courier(){
+    public void contact_courier() {
         view = inflater.inflate(R.layout.dialog_add_contacts, null);
         final Spinner spinner_courier = view.findViewById(R.id.spinner);
         final EditText edittext_courier = view.findViewById(R.id.edittext);
@@ -378,7 +396,7 @@ public class Add_Dialog extends DialogFragment {
                 });
     }
 
-    public void zakaz_type(){
+    public void zakaz_type() {
         view = inflater.inflate(R.layout.dialog_zakaz_type, null);
 
         final TextView tv1 = view.findViewById(R.id.tv1);
@@ -452,7 +470,7 @@ public class Add_Dialog extends DialogFragment {
                 .setPositiveButton("Создать", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((Zakaz_new)getActivity()).return_zakaz_type(type_zakaz);
+                        ((Zakaz_new) getActivity()).return_zakaz_type(type_zakaz);
                         dialog.cancel();
                     }
                 })
@@ -465,7 +483,7 @@ public class Add_Dialog extends DialogFragment {
                 });
     }
 
-    public void zakaz_client(){
+    public void zakaz_client() {
         view = inflater.inflate(R.layout.dialog_zakaz_client, null);
 
         final EditText search = view.findViewById(R.id.search);
@@ -503,7 +521,7 @@ public class Add_Dialog extends DialogFragment {
                 }
                 notfound_gorod.setText("Ничего не найдено");
 
-                spinner.setAdapter(new  ArrayAdapter<>(context, android.R.layout.simple_list_item_1, goroda));
+                spinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, goroda));
             }
 
             @Override
@@ -534,7 +552,7 @@ public class Add_Dialog extends DialogFragment {
                 } else {
                     goroda.addAll(goroda_buf);
                 }
-                spinner.setAdapter(new  ArrayAdapter<>(context, android.R.layout.simple_list_item_1, goroda));
+                spinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, goroda));
 
                 if (goroda.size() == 0) {
                     notfound_gorod.setVisibility(View.VISIBLE);
@@ -587,7 +605,7 @@ public class Add_Dialog extends DialogFragment {
 
                 goroda.addAll(goroda_buf);
 
-                spinner.setAdapter(new  ArrayAdapter<>(context, android.R.layout.simple_list_item_1, goroda));
+                spinner.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, goroda));
             }
         });
 
@@ -658,7 +676,7 @@ public class Add_Dialog extends DialogFragment {
                 for (Clients buf : clients_zak) {
                     if (buf.getName().equals(clients.get(position)))
                         ((Zakaz_new) getActivity()).return_client(buf.getId(), clients.get(position));
-                        getDialog().dismiss();
+                    getDialog().dismiss();
                 }
 
             }
@@ -680,6 +698,90 @@ public class Add_Dialog extends DialogFragment {
                         dialog.cancel();
                     }
                 });
+    }
 
+    public void nomenclatura_info(){
+        view = inflater.inflate(R.layout.dialog_nomenklatura, null);
+
+        final Button button_image = view.findViewById(R.id.button_image);
+        final TextView name = view.findViewById(R.id.name);
+        final TextView artikul = view.findViewById(R.id.artikul);
+        final TextView clas = view.findViewById(R.id.clas);
+        final TextView predmet = view.findViewById(R.id.predmet);
+        final TextView izdatel = view.findViewById(R.id.izdatel);
+        final TextView autor = view.findViewById(R.id.autor);
+        final TextView sokr_name = view.findViewById(R.id.sokr_name);
+        final TextView ostatok = view.findViewById(R.id.ostatok);
+        final TextView dostupno = view.findViewById(R.id.dostupno);
+        final TextView obrazec = view.findViewById(R.id.obrazec);
+        product = new Products();
+
+        App.getApi().getProduct(tag).enqueue(new Callback<Products>() {
+            @Override
+            public void onResponse(Call<Products> call, Response<Products> response) {
+                product = response.body();
+                name_product = response.body().getName();
+                name.setText(name_product);
+                artikul.setText(response.body().getArtikul());
+                clas.setText(response.body().getClas());
+                //predmet.setText(response.body().get)
+                predmet.setText("пусто");
+                izdatel.setText(response.body().getIzdatel());
+                autor.setText(response.body().getAutor());
+                sokr_name.setText(response.body().getSokrName());
+
+                image = response.body().getImage();
+            }
+
+            @Override
+            public void onFailure(Call<Products> call, Throwable t) {
+
+            }
+        });
+
+        button_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg_image = new Add_Dialog(context, "image", image);
+                dlg_image.show(getFragmentManager(), "");
+            }
+        });
+
+        builder.setView(view)
+                .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+                        ((by.minskkniga.minskkniga.activity.Nomenklatura.Main)getActivity()).return_product(product);
+                        dialog.cancel();
+                    }
+                })
+                .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+    }
+
+    public void image(){
+        view = inflater.inflate(R.layout.dialog_image, null);
+        final ImageView image = view.findViewById(R.id.image);
+
+        Glide.with(context).load(R.drawable.ic_launcher_foreground).into(image);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            Glide.with(context).load("http://query.pe.hu/admin/img/nomen/" + tag).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+        }else{
+            Glide.with(context).load("http://query.pe.hu/admin/img/nomen/" + tag).into(image);
+        }
+
+        builder.setView(view)
+                .setPositiveButton("Закрыть", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+
+                        dialog.cancel();
+                    }
+                });
     }
 }

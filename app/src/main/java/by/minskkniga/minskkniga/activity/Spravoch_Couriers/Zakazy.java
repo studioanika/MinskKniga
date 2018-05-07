@@ -3,7 +3,6 @@ package by.minskkniga.minskkniga.activity.Spravoch_Couriers;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -32,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.Nomenklatura.Main;
 import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Zakazy_1;
 import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Zakazy_2;
 import by.minskkniga.minskkniga.api.App;
@@ -74,7 +72,7 @@ public class Zakazy extends AppCompatActivity {
     Button clear_2;
     Button ok_2;
 
-    Button barcode;
+    ImageButton barcode;
     IntentIntegrator qrScan;
 
     ExpandableListView lv1;
@@ -296,7 +294,7 @@ public class Zakazy extends AppCompatActivity {
         });
 
         menu = findViewById(R.id.menu);
-        drawer = findViewById(R.id.drawer_couriers);
+        drawer = findViewById(R.id.drawer);
 
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
