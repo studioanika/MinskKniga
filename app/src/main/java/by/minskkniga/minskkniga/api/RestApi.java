@@ -8,6 +8,7 @@ import by.minskkniga.minskkniga.api.Class.Courier_filter_2;
 import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.Login;
 import by.minskkniga.minskkniga.api.Class.Product;
+import by.minskkniga.minskkniga.api.Class.Product_client;
 import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.Products_filter;
 import by.minskkniga.minskkniga.api.Class.Notif_count;
@@ -85,6 +86,10 @@ public interface RestApi {
 
     @GET("/api/get_product.php")
     Call<Product> getProduct(@Query("id") String id);
+
+    @GET("/api/get_product_client.php")
+    Call<Product_client> getProduct_client(@Query("id") String id,
+                                           @Query("id_client") String id_client);
 
     @Multipart
     @POST("/api/add_product.php")

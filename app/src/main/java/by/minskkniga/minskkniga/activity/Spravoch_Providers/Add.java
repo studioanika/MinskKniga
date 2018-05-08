@@ -86,8 +86,8 @@ public class Add extends AppCompatActivity {
             }
         });
 
-        dlg_gorod = new Add_Dialog(this, "gorod_provider","");
-        dlg_contact = new Add_Dialog(this, "contact_provider","");
+        dlg_gorod = new Add_Dialog(this, "gorod_provider");
+        dlg_contact = new Add_Dialog(this, "contact_provider");
 
         contact_type = new ArrayList<String>();
         contact_text = new ArrayList<String>();

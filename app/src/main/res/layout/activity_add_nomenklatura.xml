@@ -47,7 +47,6 @@
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"
-                android:visibility="gone"
                 android:layout_height="200dp"
                 android:layout_weight="1"/>
 
@@ -214,9 +213,9 @@
             </LinearLayout>
 
 <LinearLayout
+    android:id="@+id/linear_add"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:visibility="gone"
     android:orientation="vertical">
 
             <LinearLayout
@@ -313,12 +312,14 @@
 
                 <EditText
                     android:id="@+id/zakup_cena"
+                    android:inputType="numberDecimal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
 
                 <EditText
                     android:id="@+id/prod_cena"
+                    android:inputType="numberDecimal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
@@ -393,10 +394,11 @@
 
 
 
-
-
-
-
+<LinearLayout
+    android:id="@+id/linear_add_zakaz"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -430,9 +432,11 @@
 
                 <EditText
                     android:id="@+id/cena_zakaz"
+                    android:inputType="numberDecimal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:text="0"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -443,9 +447,11 @@
 
                 <EditText
                     android:id="@+id/col_zakaz"
+                    android:inputType="numberDecimal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:text="0" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -497,9 +503,11 @@
 
                 <EditText
                     android:id="@+id/cena_podar"
+                    android:inputType="numberDecimal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:text="0"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -510,9 +518,11 @@
 
                 <EditText
                     android:id="@+id/col_podar"
+                    android:inputType="numberDecimal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:text="0" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -525,32 +535,35 @@
                     android:id="@+id/summa_podar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="#f00"
                     android:layout_weight="1"
                     android:text="0"/>
 
             </LinearLayout>
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textStyle="bold"
-        android:text="Итого: "/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:text="Итого: "/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:textStyle="bold"
-        android:text="0"/>
+                <TextView
+                    android:id="@+id/summa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:textStyle="bold"
+                    android:text="0"/>
+
+            </LinearLayout>
 
 </LinearLayout>
-
 
 
 

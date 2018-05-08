@@ -27,14 +27,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.adapter.Nomenklatura.Nav_zakaz;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Product;
 import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.Products_filter;
+import by.minskkniga.minskkniga.api.Class.Zakaz_product;
 import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,6 +74,13 @@ public class Main extends AppCompatActivity {
 
     DialogFragment dlg_nomenclatura;
 
+    DrawerLayout drawer;
+    Button nav_ok;
+    TextView nav_notfound;
+    ListView nav_lv;
+    String id_client;
+    ArrayList<Zakaz_product> nav_product;
+
     public void initialize(){
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -90,12 +100,30 @@ public class Main extends AppCompatActivity {
         ok = findViewById(R.id.ok);
         search = findViewById(R.id.search);
 
+        drawer = findViewById(R.id.drawer);
+        nav_ok = findViewById(R.id.nav_ok);
+
+        nav_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra(Zakaz_product.class.getCanonicalName(), nav_product);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+
+        nav_notfound = findViewById(R.id.nav_notfound);
+        nav_lv = findViewById(R.id.nav_lv);
+
+        nav_product = new ArrayList<>();
 
         zakaz = getIntent().getBooleanExtra("zakaz", false);
         if (zakaz){
-
+            id_client = getIntent().getStringExtra("id_client");
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }else{
-
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
 
         lv = findViewById(R.id.lv);
@@ -122,6 +150,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Main.this, Add.class);
+                intent.putExtra("zakaz", false);
                 intent.putExtra("id", "null");
                 startActivity(intent);
             }
@@ -135,15 +164,15 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.activity_nomenklatura);
         initialize();
 
-
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (zakaz){
-                    dlg_nomenclatura = new Add_Dialog(Main.this, "nomenclatura_info", String.valueOf(products.get(position).getId()));
+                    dlg_nomenclatura = new Add_Dialog(Main.this, "nomenclatura_info", String.valueOf(products.get(position).getName()), String.valueOf(products.get(position).getId()));
                     dlg_nomenclatura.show(getFragmentManager(), "");
                 }else{
                     Intent intent = new Intent(Main.this, Add.class);
+                    intent.putExtra("zakaz", false);
                     intent.putExtra("id", products.get(position).getId());
                     startActivity(intent);
                 }
@@ -214,11 +243,16 @@ public class Main extends AppCompatActivity {
 
             }
         });
+
         load_filter();
     }
 
-    public void return_product(Product product){
-        Toast.makeText(this, product.getName(), Toast.LENGTH_SHORT).show();
+    public void return_product(String id){
+        Intent intent = new Intent(Main.this, Add.class);
+        intent.putExtra("zakaz", true);
+        intent.putExtra("id_client", id_client);
+        intent.putExtra("id", id);
+        startActivityForResult(intent, 1);
     }
 
     @Override
@@ -226,6 +260,27 @@ public class Main extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             search.setText(result.getContents());
+        }
+
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case 1:
+                    Zakaz_product product = data.getParcelableExtra(Zakaz_product.class.getCanonicalName());
+
+                    nav_product.add(product);
+
+                    nav_lv.setAdapter(new Nav_zakaz(this, nav_product));
+
+                    if (nav_product.size()!=0){
+                        nav_notfound.setVisibility(View.GONE);
+                    }else{
+                        nav_notfound.setVisibility(View.VISIBLE);
+                    }
+                    break;
+            }
+            // если вернулось не ОК
+        } else {
+            Toast.makeText(this, "Wrong result", Toast.LENGTH_SHORT).show();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

@@ -53,6 +53,7 @@ public class Add_Dialog extends DialogFragment {
     private Context context;
     private String id;
     private String tag;
+    private String name;
 
     private String type_client;
     private String type_provider;
@@ -60,12 +61,23 @@ public class Add_Dialog extends DialogFragment {
     private int type_zakaz = 1;
 
     private String image;
-    private String name_product;
     private Product product;
+
+    public Add_Dialog(Context context, String id) {
+        this.context = context;
+        this.id = id;
+    }
 
     public Add_Dialog(Context context, String id, String tag) {
         this.context = context;
         this.id = id;
+        this.tag = tag;
+    }
+
+    public Add_Dialog(Context context, String id, String name, String tag) {
+        this.context = context;
+        this.id = id;
+        this.name = name;
         this.tag = tag;
     }
 
@@ -705,7 +717,6 @@ public class Add_Dialog extends DialogFragment {
         view = inflater.inflate(R.layout.dialog_nomenklatura, null);
 
         final Button button_image = view.findViewById(R.id.button_image);
-        final TextView name = view.findViewById(R.id.name);
         final TextView artikul = view.findViewById(R.id.artikul);
         final TextView clas = view.findViewById(R.id.clas);
         final TextView predmet = view.findViewById(R.id.predmet);
@@ -721,8 +732,6 @@ public class Add_Dialog extends DialogFragment {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
                 product = response.body();
-                name_product = response.body().getName();
-                name.setText(name_product);
                 artikul.setText(response.body().getArtikul());
                 clas.setText(response.body().getClas());
                 //predmet.setText(response.body().get)
@@ -751,11 +760,12 @@ public class Add_Dialog extends DialogFragment {
             }
         });
 
-        builder.setView(view)
+        builder.setTitle(name)
+                .setView(view)
                 .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
-                        ((by.minskkniga.minskkniga.activity.Nomenklatura.Main)getActivity()).return_product(product);
+                        ((by.minskkniga.minskkniga.activity.Nomenklatura.Main)getActivity()).return_product(tag);
                         dialog.cancel();
                     }
                 })

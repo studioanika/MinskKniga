@@ -5,14 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,8 +29,10 @@ import java.util.Date;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.adapter.Nomenklatura.Nav_zakaz;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Couriers;
+import by.minskkniga.minskkniga.api.Class.Zakaz_product;
 import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,6 +43,7 @@ public class Zakaz_new extends AppCompatActivity {
     ImageButton back;
     ImageButton menu;
     TextView caption;
+    FloatingActionButton fab;
 
     DialogFragment dlg_zakaz;
     DialogFragment dlg_client;
@@ -70,8 +76,8 @@ public class Zakaz_new extends AppCompatActivity {
 
     Date currentDate;
     DateFormat df;
+    ArrayList<Zakaz_product> products;
 
-    final int REQUEST_CODE_PRODUCT = 1;
 
     public void initialize() {
         back = findViewById(R.id.back);
@@ -111,22 +117,25 @@ public class Zakaz_new extends AppCompatActivity {
 
         couriers = new ArrayList<>();
 
-
-        dlg_zakaz = new Add_Dialog(this, "zakaz_type","");
+        dlg_zakaz = new Add_Dialog(this, "zakaz_type");
         dlg_zakaz.setCancelable(false);
-        dlg_client = new Add_Dialog(this, "zakaz_client","");
+        dlg_client = new Add_Dialog(this, "zakaz_client");
         dlg_client.setCancelable(false);
 
         currentDate = new Date();
         df = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        products = new ArrayList<>();
+
+        fab = findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Zakaz_new.this, by.minskkniga.minskkniga.activity.Nomenklatura.Main.class);
                 intent.putExtra("zakaz", true);
-                startActivityForResult(intent, REQUEST_CODE_PRODUCT);
+                intent.putExtra("id_client", id_client);
+                startActivityForResult(intent, 1);
             }
         });
     }
@@ -136,14 +145,33 @@ public class Zakaz_new extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case REQUEST_CODE_PRODUCT:
+                case 1:
+                    ArrayList<Zakaz_product> product = data.getParcelableArrayListExtra(Zakaz_product.class.getCanonicalName());
+                    products.addAll(product);
+                    lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_new(this, products));
+                    setListViewHeightBasedOnChildren(lv);
 
-                    String name = data.getStringExtra("name");
-                    //data.getStringArrayExtra();
-                    //tvName.setText("Your name is " + name);
+                    double summa = 0;
+                    double ves = 0;
+                    int col = 0;
+                    for(Zakaz_product buffer : products){
+                        col++;
+                        summa += Double.parseDouble(buffer.summa);
+                        ves += Double.parseDouble(buffer.ves) * Double.parseDouble(buffer.col_zakaz);
+                    }
 
+                    tv1.setText("Итого "+col+" позиций на "+ summa +"BYN");
+                    tv2.setText("Вес: "+ves+"кг");
+//                    if (nav_product.size()!=0){
+//                        nav_notfound.setVisibility(View.GONE);
+//                    }else{
+//                        nav_notfound.setVisibility(View.VISIBLE);
+//                    }
                     break;
             }
+            // если вернулось не ОК
+        } else {
+            Toast.makeText(this, "Wrong result", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -209,5 +237,28 @@ public class Zakaz_new extends AppCompatActivity {
         linear_zametka.setVisibility(View.VISIBLE);
         linear_ok.setVisibility(View.VISIBLE);
         caption.setText(name);
+        fab.setVisibility(View.VISIBLE);
+    }
+
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null)
+            return;
+
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        int totalHeight = 0;
+        View view = null;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, listView);
+            if (i == 0)
+                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+        listView.requestLayout();
     }
 }

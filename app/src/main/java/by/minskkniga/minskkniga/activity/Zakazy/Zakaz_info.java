@@ -103,15 +103,19 @@ public class Zakaz_info extends AppCompatActivity {
                 date2.setText(zakaz.getDateIzm()    );
                 autor.setText(zakaz.getAutor());
 
-                double summa = 0;
-                double ves = 0;
-                for(int i = 0;i<zakaz.getWhatZakazal().size();i++){
-                    summa += Double.parseDouble(zakaz.getWhatZakazal().get(i).getCena());
-                    ves+=Double.parseDouble(zakaz.getWhatZakazal().get(i).getVes())* Double.parseDouble(zakaz.getWhatZakazal().get(i).getZakazano());
+                try {
+                    double summa = 0;
+                    double ves = 0;
+                    for (int i = 0; i < zakaz.getWhatZakazal().size(); i++) {
+                        summa += Double.parseDouble(zakaz.getWhatZakazal().get(i).getCena());
+                        ves += Double.parseDouble(zakaz.getWhatZakazal().get(i).getVes()) * Double.parseDouble(zakaz.getWhatZakazal().get(i).getZakazano());
+                    }
+                    tv1.setText("Итого " + zakaz.getWhatZakazal().size() + " позиция на " + summa + " BYN");
+                    tv2.setText("Вес: " + ves + " кг");
+                }catch(Exception e){
+                    Toast.makeText(Zakaz_info.this, "error", Toast.LENGTH_SHORT).show();
                 }
 
-                tv1.setText("Итого " + zakaz.getWhatZakazal().size() + " позиция на " + summa + " BYN");
-                tv2.setText("Вес: " + ves + " кг");
 
                 oplacheno.setChecked(zakaz.getOplacheno().equals("1"));
 
