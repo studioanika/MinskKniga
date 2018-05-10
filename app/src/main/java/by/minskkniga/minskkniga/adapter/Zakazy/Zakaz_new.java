@@ -16,10 +16,12 @@ public class Zakaz_new extends BaseAdapter {
 
     private Context _context;
     private ArrayList<Zakaz_product> _objects;
+    private String _status;
 
-    public Zakaz_new(Context context, ArrayList<Zakaz_product> objects) {
+    public Zakaz_new(Context context, ArrayList<Zakaz_product> objects, String status) {
         this._context = context;
         this._objects = objects;
+        this._status = status;
     }
 
     @Override

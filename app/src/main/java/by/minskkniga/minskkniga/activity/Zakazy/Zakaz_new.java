@@ -2,11 +2,14 @@ package by.minskkniga.minskkniga.activity.Zakazy;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -27,16 +30,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Nomenklatura.Nav_zakaz;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Couriers;
+import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.Zakaz_product;
 import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Query;
 
 public class Zakaz_new extends AppCompatActivity {
 
@@ -44,6 +50,7 @@ public class Zakaz_new extends AppCompatActivity {
     ImageButton menu;
     TextView caption;
     FloatingActionButton fab;
+    DrawerLayout drawer;
 
     DialogFragment dlg_zakaz;
     DialogFragment dlg_client;
@@ -68,28 +75,51 @@ public class Zakaz_new extends AppCompatActivity {
     ListView lv;
 
     ArrayList<String> couriers;
+    ArrayList<String> couriers_id;
     ArrayAdapter<String> adapter;
 
     SharedPreferences sp;
     boolean is_select_client = false;
     String id_client;
-
+    String admin_id;
     Date currentDate;
-    DateFormat df;
+    SimpleDateFormat df;
     ArrayList<Zakaz_product> products;
-
+    String product = "null";
+    AlertDialog.Builder ad;
 
     public void initialize() {
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                if (is_select_client && products.isEmpty()) {
+                    ad = new AlertDialog.Builder(Zakaz_new.this);
+                    ad.setMessage("Не выбрано не одной позиции товара. Выйти без сохранения?");
+                    ad.setPositiveButton("ПОДТВЕРДИТЬ", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int arg1) {
+                            onBackPressed();
+                        }
+                    });
+                    ad.setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int arg1) {
+                            dialog.cancel();
+                        }
+                    });
+                    ad.setCancelable(false);
+                    ad.show();
+
+                } else {
+                    onBackPressed();
+                }
             }
         });
         menu = findViewById(R.id.menu);
         caption = findViewById(R.id.caption);
 
+        drawer = findViewById(R.id.drawer);
+
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         blank = findViewById(R.id.blank);
         date1 = findViewById(R.id.date1);
         autor = findViewById(R.id.autor);
@@ -108,6 +138,14 @@ public class Zakaz_new extends AppCompatActivity {
         linear_ok.setVisibility(View.GONE);
         ok = findViewById(R.id.ok);
 
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ok();
+            }
+        });
+
         tv1 = findViewById(R.id.tv1);
         tv2 = findViewById(R.id.tv2);
 
@@ -116,6 +154,7 @@ public class Zakaz_new extends AppCompatActivity {
         sp = getSharedPreferences("login", Context.MODE_PRIVATE);
 
         couriers = new ArrayList<>();
+        couriers_id = new ArrayList<>();
 
         dlg_zakaz = new Add_Dialog(this, "zakaz_type");
         dlg_zakaz.setCancelable(false);
@@ -123,7 +162,8 @@ public class Zakaz_new extends AppCompatActivity {
         dlg_client.setCancelable(false);
 
         currentDate = new Date();
-        df = SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT);
+
+        df = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
 
         products = new ArrayList<>();
 
@@ -148,20 +188,24 @@ public class Zakaz_new extends AppCompatActivity {
                 case 1:
                     ArrayList<Zakaz_product> product = data.getParcelableArrayListExtra(Zakaz_product.class.getCanonicalName());
                     products.addAll(product);
-                    lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_new(this, products));
+                    lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_new(this, products, "1"));
                     setListViewHeightBasedOnChildren(lv);
 
-                    double summa = 0;
-                    double ves = 0;
-                    int col = 0;
-                    for(Zakaz_product buffer : products){
-                        col++;
-                        summa += Double.parseDouble(buffer.summa);
-                        ves += Double.parseDouble(buffer.ves) * Double.parseDouble(buffer.col_zakaz);
-                    }
+                    try {
+                        double summa = 0;
+                        double ves = 0;
+                        int col = 0;
+                        for (Zakaz_product buffer : products) {
+                            col++;
+                            summa += Double.parseDouble(buffer.summa);
+                            ves += Double.parseDouble(buffer.ves) * Double.parseDouble(buffer.col_zakaz);
+                        }
 
-                    tv1.setText("Итого "+col+" позиций на "+ summa +"BYN");
-                    tv2.setText("Вес: "+ves+"кг");
+                        tv1.setText("Итого " + col + " позиций на " + summa + "BYN");
+                        tv2.setText("Вес: " + ves + "кг");
+                    }catch (Exception e){
+
+                    }
 //                    if (nav_product.size()!=0){
 //                        nav_notfound.setVisibility(View.GONE);
 //                    }else{
@@ -184,6 +228,8 @@ public class Zakaz_new extends AppCompatActivity {
         dlg_zakaz.show(getFragmentManager(), "");
 
         autor.setText(sp.getString("login", ""));
+
+        admin_id = sp.getString("user_id", "");
         status.setTextColor(Color.rgb(97, 184, 126));
         date1.setText(df.format(currentDate));
         date2.setText(df.format(currentDate));
@@ -210,9 +256,11 @@ public class Zakaz_new extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Couriers>> call, Response<List<Couriers>> response) {
                 couriers.clear();
+                couriers_id.clear();
 
                 for(Couriers buffer : response.body()){
                     couriers.add(buffer.getName());
+                    couriers_id.add(buffer.getId());
                 }
 
                 adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, couriers);
@@ -238,6 +286,36 @@ public class Zakaz_new extends AppCompatActivity {
         linear_ok.setVisibility(View.VISIBLE);
         caption.setText(name);
         fab.setVisibility(View.VISIBLE);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    public void ok() {
+        if (products.size() != 0) {
+            product = products.get(0).id + "/~/" + products.get(0).col_zakaz + "/~/" + products.get(0).otgruzeno + "/~/" + products.get(0).col_podar + "/~/" + products.get(0).cena;
+            for (int i = 1; i < products.size(); i++) {
+                product += "/~~/" + products.get(i).id + "/~/" + products.get(i).col_zakaz + "/~/" + products.get(i).otgruzeno + "/~/" + products.get(i).col_podar + "/~/" + products.get(i).cena;
+            }
+        }
+
+        App.getApi().addZakaz(String.valueOf(
+                date1.getText()),
+                id_client,
+                admin_id,
+                String.valueOf(zametka.getText()),
+                couriers_id.get(courier.getSelectedItemPosition()),
+                "1",
+                product).enqueue(new Callback<ResultBody>() {
+            @Override
+            public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
+                Toast.makeText(Zakaz_new.this, "Номер заказа: " + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<ResultBody> call, Throwable t) {
+
+            }
+        });
     }
 
     public void setListViewHeightBasedOnChildren(ListView listView) {

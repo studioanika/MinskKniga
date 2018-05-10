@@ -33,15 +33,15 @@ import retrofit2.http.Query;
 public interface RestApi {
 
 
-    @GET("/api/login.php")
+    @GET("login.php")
     Call<Login> login(@Query("login") String login,
                       @Query("pass") String pass);
 
 
-    @GET("/api/get_clients.php")
+    @GET("get_clients.php")
     Call<List<Clients>> getClients();
 
-    @GET("/api/add_client.php")
+    @GET("add_client.php")
     Call<ResultBody> addClient(@Query("name") String name,
                                @Query("sokr_name") String sokr_name,
                                @Query("zametka") String zametka,
@@ -57,10 +57,10 @@ public interface RestApi {
                                @Query("smena") String smena,
                                @Query("contacts") String contacts);
 
-    @GET("/api/get_providers.php")
+    @GET("get_providers.php")
     Call<List<Providers>> getProviders();
 
-    @GET("/api/add_provider.php")
+    @GET("add_provider.php")
     Call<ResultBody> addProvider(@Query("name") String name,
                                  @Query("short_name") String short_name,
                                  @Query("zametka") String zametka,
@@ -72,110 +72,110 @@ public interface RestApi {
                                  @Query("napravl") String napravl,
                                  @Query("contacts") String contacts);
 
-    @GET("/api/get_goroda.php")
+    @GET("get_goroda.php")
     Call<List<Gorod>> getGoroda();
 
-    @GET("/api/get_products_filter.php")
+    @GET("get_products_filter.php")
     Call<Products_filter> getProducts_filter();
 
-    @GET("/api/get_products.php")
+    @GET("get_products.php")
     Call<List<Products>> getProducts(@Query("autor") String avtor,
-                                         @Query("izdatel") String izdatel,
-                                         @Query("obrazec") String obraz,
-                                         @Query("clas") String clas);
+                                     @Query("izdatel") String izdatel,
+                                     @Query("obrazec") String obraz,
+                                     @Query("clas") String clas);
 
-    @GET("/api/get_product.php")
+    @GET("get_product.php")
     Call<Product> getProduct(@Query("id") String id);
 
-    @GET("/api/get_product_client.php")
+    @GET("get_product_client.php")
     Call<Product_client> getProduct_client(@Query("id") String id,
                                            @Query("id_client") String id_client);
 
     @Multipart
-    @POST("/api/add_product.php")
+    @POST("add_product.php")
     Call<ResultBody> addProduct(@Part MultipartBody.Part image,
-                                     @Query("id") String id,
-                                     @Query("name") String name,
-                                     @Query("clas") String clas,
-                                     @Query("obrazec") String obrazec,
-                                     @Query("artikul") String artikul,
-                                     @Query("sokr_name") String sokr_name,
-                                     @Query("izdatel") String izdatel,
-                                     @Query("autor") String autor,
-                                     @Query("barcode") String barcode,
-                                     @Query("zakup_cena") String zakup_cena,
-                                     @Query("prod_cena") String prod_cena,
-                                     @Query("standart") String standart,
-                                     @Query("ves") String ves);
+                                @Query("id") String id,
+                                @Query("name") String name,
+                                @Query("clas") String clas,
+                                @Query("obrazec") String obrazec,
+                                @Query("artikul") String artikul,
+                                @Query("sokr_name") String sokr_name,
+                                @Query("izdatel") String izdatel,
+                                @Query("autor") String autor,
+                                @Query("barcode") String barcode,
+                                @Query("zakup_cena") String zakup_cena,
+                                @Query("prod_cena") String prod_cena,
+                                @Query("standart") String standart,
+                                @Query("ves") String ves);
 
-    @GET("/api/add_product.php")
+    @GET("add_product.php")
     Call<ResultBody> addProduct(@Query("id") String id,
-                                     @Query("name") String name,
-                                     @Query("clas") String clas,
-                                     @Query("obrazec") String obrazec,
-                                     @Query("artikul") String artikul,
-                                     @Query("sokr_name") String sokr_name,
-                                     @Query("izdatel") String izdatel,
-                                     @Query("autor") String autor,
-                                     @Query("barcode") String barcode,
-                                     @Query("zakup_cena") String zakup_cena,
-                                     @Query("prod_cena") String prod_cena,
-                                     @Query("standart") String standart,
-                                     @Query("ves") String ves);
+                                @Query("name") String name,
+                                @Query("clas") String clas,
+                                @Query("obrazec") String obrazec,
+                                @Query("artikul") String artikul,
+                                @Query("sokr_name") String sokr_name,
+                                @Query("izdatel") String izdatel,
+                                @Query("autor") String autor,
+                                @Query("barcode") String barcode,
+                                @Query("zakup_cena") String zakup_cena,
+                                @Query("prod_cena") String prod_cena,
+                                @Query("standart") String standart,
+                                @Query("ves") String ves);
 
 
-    @GET("/api/artikyl.php")
+    @GET("artikyl.php")
     Call<ResultBody> artikyl(@Query("name") String name);
 
-    @GET("/api/get_zakazy.php")
+    @GET("get_zakazy.php")
     Call<List<Zakazy>> getZakazy(@Query("id") int id);
 
-    @GET("/api/get_couriers.php")
+    @GET("get_couriers.php")
     Call<List<Couriers>> getCouriers();
 
-    @GET("/api/set_oplata.php")
+    @GET("set_oplata.php")
     Call<ResultBody> setOplata(@Query("id") String id);
 
-    @GET("/api/get_zakaz_info.php")
+    @GET("get_zakaz_info.php")
     Call<Zakaz> getZakaz_info(@Query("id") String id);
 
-    @GET("/api/get_courier_zakazy.php")
+    @GET("get_courier_zakazy.php")
     Call<List<Zakazy_courier_clients>> getCourier_zakazy(@Query("id") String id,
                                                          @Query("napravl") String napravl,
                                                          @Query("gorod") String gorod,
                                                          @Query("school") String school,
                                                          @Query("smena") String smena);
 
-    @GET("/api/get_courier_knigi.php")
+    @GET("get_courier_knigi.php")
     Call<List<Zakazy_courier_knigi>> getCourier_knigi(@Query("id") String id,
                                                       @Query("izdanie") String izdanie,
                                                       @Query("class") String _class);
 
-    @GET("/api/get_couriers_filter_1.php")
+    @GET("get_couriers_filter_1.php")
     Call<Courier_filter_1> getCourier_filter_1(@Query("id") String id);
 
-    @GET("/api/get_couriers_filter_2.php")
+    @GET("get_couriers_filter_2.php")
     Call<Courier_filter_2> getCourier_filter_2(@Query("id") String id);
 
-    @GET("/api/set_complete_zakaz.php")
+    @GET("set_complete_zakaz.php")
     Call<ResultBody> setComplete_zakaz(@Query("id") String id);
 
-    @GET("/api/get_organizer.php")
+    @GET("get_organizer.php")
     Call<List<Organizer>> getOrganizer(@Query("autor") String autor,
-                                  @Query("komy") String komy,
-                                  @Query("kontragent") String kontragent,
-                                  @Query("status") String status);
+                                       @Query("komy") String komy,
+                                       @Query("kontragent") String kontragent,
+                                       @Query("status") String status);
 
-    @GET("/api/get_organizer_filter.php")
+    @GET("get_organizer_filter.php")
     Call<Organizer_filter> getOrganizer_filter();
 
-    @GET("/api/set_organizer_ok.php")
+    @GET("set_organizer_ok.php")
     Call<ResultBody> setOrganizer_ok(@Query("id") String id);
 
-    @GET("/api/get_organizer_info.php")
+    @GET("get_organizer_info.php")
     Call<Organizer_info> getOrganizer_info();
 
-    @GET("/api/add_organizer.php")
+    @GET("add_organizer.php")
     Call<ResultBody> addOrganizer(@Query("id") String id,
                                   @Query("countragent_id") String countragent_id,
                                   @Query("autor_id") String autor_id,
@@ -184,16 +184,25 @@ public interface RestApi {
                                   @Query("status") String status,
                                   @Query("text") String text);
 
-    @GET("/api/get_notif.php")
+    @GET("get_notif.php")
     Call<Notif_count> getNotif(@Query("id") String id);
 
-    @GET("/api/set_courier_add_knigi.php")
+    @GET("set_courier_add_knigi.php")
     Call<ResultBody> addKnigi(@Query("id") String id);
 
-    @GET("/api/add_courier.php")
+    @GET("add_courier.php")
     Call<ResultBody> addCourier(@Query("name") String name,
                                 @Query("login") String login,
                                 @Query("pass") String pass,
                                 @Query("desc") String desc,
                                 @Query("contacts") String contacts);
+
+    @GET("add_zakaz.php")
+    Call<ResultBody> addZakaz(@Query("date") String date,
+                              @Query("client_id") String client_id,
+                              @Query("admin_id") String admin_id,
+                              @Query("koment") String koment,
+                              @Query("courier_id") String courier_id,
+                              @Query("status") String status,
+                              @Query("mas") String mas);
 }

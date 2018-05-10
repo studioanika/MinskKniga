@@ -68,6 +68,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Barcode;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Product;
 import by.minskkniga.minskkniga.api.Class.Product_client;
@@ -195,7 +196,10 @@ public class Add extends AppCompatActivity {
         barcode_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                qrScan.initiateScan();
+                new IntentIntegrator(Add.this)
+                        .setOrientationLocked(true)
+                        .setCaptureActivity(Barcode.class)
+                        .initiateScan();
             }
         });
 
@@ -420,8 +424,9 @@ public class Add extends AppCompatActivity {
                     String.valueOf(artikul.getText()),
                     String.valueOf(cena_zakaz.getText()),
                     String.valueOf(col_zakaz.getText()),
-                    String.valueOf(cena_podar.getText()),
+                    String.valueOf(col_podar.getText()),
                     String.valueOf(summa.getText()),
+                    "",
                     String.valueOf(ves.getText()));
 
             intent.putExtra(Zakaz_product.class.getCanonicalName(), product);

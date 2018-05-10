@@ -199,6 +199,7 @@ public class Main extends AppCompatActivity {
                         for (int j = 0; j < col; j++) {
                             if (cli.get(j).getGorod().equals(cli.get(i).getGorod())) {
                                 temp.add(cli.get(j).getName() + "@" + cli.get(j).getObrazec() + "@" + cli.get(j).getDolg());
+
                                 dolg += Double.parseDouble(cli.get(j).getDolg());
                                 if (cli.get(j).getObrazec().equals("1")) obraz = 1;
                             }

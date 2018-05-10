@@ -13,6 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Notif_count;
@@ -72,6 +75,9 @@ public class Menu extends AppCompatActivity {
                         Intent intent0 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Zakazy.Main.class);
                         startActivity(intent0);
                         break;
+                    case 1:
+
+                        break;
                     case 3:
                         Intent intent3 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Nomenklatura.Main.class);
                         intent3.putExtra("zakaz", false);
@@ -108,6 +114,7 @@ public class Menu extends AppCompatActivity {
 
 
     private Boolean exit = false;
+
     @Override
     public void onBackPressed() {
         if (exit) {
@@ -128,20 +135,20 @@ public class Menu extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         reload();
     }
 
-    public void reload(){
+    public void reload() {
         App.getApi().getNotif(user_id).enqueue(new Callback<Notif_count>() {
             @Override
             public void onResponse(Call<Notif_count> call, Response<Notif_count> response) {
                 col = response.body().getCol();
                 notif_count.setText(col);
-                if (!col.equals("0")){
+                if (!col.equals("0")) {
                     notif_count.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     notif_count.setVisibility(View.GONE);
                 }
             }
@@ -153,4 +160,10 @@ public class Menu extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null)
+            Toast.makeText(this, result.getContents(), Toast.LENGTH_SHORT).show();
+    }
 }

@@ -12,9 +12,10 @@ public class Zakaz_product implements Parcelable {
     public String col_zakaz;
     public String col_podar;
     public String summa;
+    public String otgruzeno;
     public String ves;
 
-    public Zakaz_product(String id, String name, String artukil, String cena, String col_zakaz, String col_podar, String summa, String ves) {
+    public Zakaz_product(String id, String name, String artukil, String cena, String col_zakaz, String col_podar, String summa, String otgruzeno, String ves) {
         this.id = id;
         this.name = name;
         this.artukil = artukil;
@@ -22,6 +23,7 @@ public class Zakaz_product implements Parcelable {
         this.col_zakaz = col_zakaz;
         this.col_podar = col_podar;
         this.summa = summa;
+        this.otgruzeno = otgruzeno;
         this.ves = ves;
     }
 
@@ -37,6 +39,7 @@ public class Zakaz_product implements Parcelable {
         parcel.writeString(col_zakaz);
         parcel.writeString(col_podar);
         parcel.writeString(summa);
+        parcel.writeString(otgruzeno);
         parcel.writeString(ves);
     }
 
@@ -58,6 +61,7 @@ public class Zakaz_product implements Parcelable {
         col_zakaz = parcel.readString();
         col_podar = parcel.readString();
         summa = parcel.readString();
+        otgruzeno = parcel.readString();
         ves = parcel.readString();
     }
 }

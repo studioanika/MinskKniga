@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Barcode;
 import by.minskkniga.minskkniga.adapter.Nomenklatura.Nav_zakaz;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Product;
@@ -192,7 +193,10 @@ public class Main extends AppCompatActivity {
         barcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                qrScan.initiateScan();
+                new IntentIntegrator(Main.this)
+                        .setOrientationLocked(true)
+                        .setCaptureActivity(Barcode.class)
+                        .initiateScan();
             }
         });
 

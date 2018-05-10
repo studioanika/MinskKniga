@@ -28,71 +28,74 @@
         <activity
             android:name=".activity.Menu"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.Spravoch_Clients.Main"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Spravoch_Clients.Add"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Spravoch_Clients.Add" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Spravoch_Providers.Main"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Spravoch_Providers.Main" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Spravoch_Providers.Add"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Spravoch_Providers.Add" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Nomenklatura.Main"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Nomenklatura.Main" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Nomenklatura.Add"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Nomenklatura.Add" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Zakazy.Main"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Zakazy.Main" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Zakazy.Zakazy_Client"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Zakazy.Zakazy_Client" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Spravoch_Couriers.Main"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Spravoch_Couriers.Main" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Spravoch_Couriers.Zakazy"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Spravoch_Couriers.Zakazy" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Zakazy.Zakaz_info"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Zakazy.Zakaz_info" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Spravoch_Couriers.Zakaz_info"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Spravoch_Couriers.Zakaz_info" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Organizer.Main"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Organizer.Main" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Organizer.Add"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Organizer.Add" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Spravoch_Couriers.Add"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Spravoch_Couriers.Add" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.Zakazy.Zakaz_new"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:name=".activity.Zakazy.Zakaz_new" />
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.Barcode" />
+        <activity android:name=".activity.Zakazy.Sborka" />
+        <activity android:name=".activity.Zakazy.Sborka_tab"></activity>
     </application>
 
 </manifest>
