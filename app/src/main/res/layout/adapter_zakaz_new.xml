@@ -49,10 +49,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Подарков" />
+            android:text="Собрано" />
 
         <TextView
             android:id="@+id/tv6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Подарков" />
+
+        <TextView
+            android:id="@+id/tv7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

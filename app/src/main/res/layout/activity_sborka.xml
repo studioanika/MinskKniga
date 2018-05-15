@@ -5,13 +5,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F8F8"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    android:background="#F8F8F8">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,20 +43,7 @@
                     android:layout_alignParentStart="true"
                     app:srcCompat="@drawable/ic_back" />
 
-                <ImageButton
-                    android:id="@+id/menu"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="56dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    app:srcCompat="@drawable/ic_menu" />
-
             </RelativeLayout>
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -89,7 +76,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -107,6 +94,7 @@
 
 
                             <TextView
+                                android:id="@+id/sobrano"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
@@ -156,7 +144,6 @@
 
                 </LinearLayout>
 
-            </ScrollView>
 
         </LinearLayout>
 
@@ -168,7 +155,7 @@
             android:layout_alignParentRight="true"
             android:layout_margin="16dp"
             app:backgroundTint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_cart" />
+            app:srcCompat="@drawable/ic_check" />
 
     </RelativeLayout>
 

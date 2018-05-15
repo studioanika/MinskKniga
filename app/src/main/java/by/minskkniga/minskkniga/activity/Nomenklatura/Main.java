@@ -1,9 +1,12 @@
 package by.minskkniga.minskkniga.activity.Nomenklatura;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -64,7 +67,6 @@ public class Main extends AppCompatActivity {
     Spinner spinner1, spinner2, spinner3, spinner4;
 
     ArrayList<String> yesno;
-    IntentIntegrator qrScan;
 
     String avtor = "Автор";
     String izdatel = "Издатель";
@@ -76,11 +78,12 @@ public class Main extends AppCompatActivity {
     DialogFragment dlg_nomenclatura;
 
     DrawerLayout drawer;
-    Button nav_ok;
+    FloatingActionButton nav_fab;
     TextView nav_notfound;
     ListView nav_lv;
     String id_client;
     ArrayList<Zakaz_product> nav_product;
+    AlertDialog.Builder ad;
 
     public void initialize(){
         back = findViewById(R.id.back);
@@ -102,9 +105,9 @@ public class Main extends AppCompatActivity {
         search = findViewById(R.id.search);
 
         drawer = findViewById(R.id.drawer);
-        nav_ok = findViewById(R.id.nav_ok);
+        nav_fab = findViewById(R.id.nav_fab);
 
-        nav_ok.setOnClickListener(new View.OnClickListener() {
+        nav_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -116,6 +119,38 @@ public class Main extends AppCompatActivity {
 
         nav_notfound = findViewById(R.id.nav_notfound);
         nav_lv = findViewById(R.id.nav_lv);
+
+        nav_lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                if (vibrator != null) {
+                    vibrator.vibrate(20);
+                }
+                ad = new AlertDialog.Builder(Main.this);
+                ad.setMessage("Удалить " + nav_product.get(i).name + "?");
+                ad.setPositiveButton("ПОДТВЕРДИТЬ", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        nav_product.remove(i);
+                        nav_lv.setAdapter(new Nav_zakaz(Main.this, nav_product));
+                        if (nav_product.size()!=0){
+                            nav_notfound.setVisibility(View.GONE);
+                        }else{
+                            nav_notfound.setVisibility(View.VISIBLE);
+                        }
+                        dialog.cancel();
+                    }
+                });
+                ad.setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        dialog.cancel();
+                    }
+                });
+                ad.setCancelable(true);
+                ad.show();
+                return false;
+            }
+        });
 
         nav_product = new ArrayList<>();
 
@@ -142,7 +177,6 @@ public class Main extends AppCompatActivity {
         yesno.add("Да");
         yesno.add("Нет");
 
-        qrScan = new IntentIntegrator(this);
         barcode = findViewById(R.id.barcode);
         search = findViewById(R.id.search);
 
@@ -169,7 +203,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (zakaz){
-                    dlg_nomenclatura = new Add_Dialog(Main.this, "nomenclatura_info", String.valueOf(products.get(position).getName()), String.valueOf(products.get(position).getId()));
+                    dlg_nomenclatura = new Add_Dialog(Main.this, "nomenclatura_info", String.valueOf(products.get(position).getId()), id_client);
                     dlg_nomenclatura.show(getFragmentManager(), "");
                 }else{
                     Intent intent = new Intent(Main.this, Add.class);
@@ -251,12 +285,23 @@ public class Main extends AppCompatActivity {
         load_filter();
     }
 
-    public void return_product(String id){
-        Intent intent = new Intent(Main.this, Add.class);
-        intent.putExtra("zakaz", true);
-        intent.putExtra("id_client", id_client);
-        intent.putExtra("id", id);
-        startActivityForResult(intent, 1);
+    public void return_product(Zakaz_product product){
+//        Intent intent = new Intent(Main.this, Add.class);
+//        intent.putExtra("zakaz", true);
+//        intent.putExtra("id_client", id_client);
+//        intent.putExtra("id", id);
+//        startActivityForResult(intent, 1);
+
+
+        nav_product.add(product);
+
+        nav_lv.setAdapter(new Nav_zakaz(this, nav_product));
+
+        if (nav_product.size()!=0){
+            nav_notfound.setVisibility(View.GONE);
+        }else{
+            nav_notfound.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -266,26 +311,6 @@ public class Main extends AppCompatActivity {
             search.setText(result.getContents());
         }
 
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case 1:
-                    Zakaz_product product = data.getParcelableExtra(Zakaz_product.class.getCanonicalName());
-
-                    nav_product.add(product);
-
-                    nav_lv.setAdapter(new Nav_zakaz(this, nav_product));
-
-                    if (nav_product.size()!=0){
-                        nav_notfound.setVisibility(View.GONE);
-                    }else{
-                        nav_notfound.setVisibility(View.VISIBLE);
-                    }
-                    break;
-            }
-            // если вернулось не ОК
-        } else {
-            Toast.makeText(this, "Wrong result", Toast.LENGTH_SHORT).show();
-        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 

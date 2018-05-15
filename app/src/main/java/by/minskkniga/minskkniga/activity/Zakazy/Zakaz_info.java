@@ -163,11 +163,10 @@ public class Zakaz_info extends AppCompatActivity {
         App.getApi().getCouriers().enqueue(new Callback<List<Couriers>>() {
             @Override
             public void onResponse(Call<List<Couriers>> call, Response<List<Couriers>> response) {
-                ArrayList<String> mass = new ArrayList();
-                ArrayList<String> id = new ArrayList();
-                for (int i = 0; i < response.body().size(); i++) {
-                    mass.add(response.body().get(i).getName());
-                    id.add(response.body().get(i).getId());
+                ArrayList<String> mass = new ArrayList<>();
+
+                for (Couriers buffer : response.body()){
+                    mass.add(buffer.getName());
                 }
 
                 adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, mass);
@@ -175,8 +174,8 @@ public class Zakaz_info extends AppCompatActivity {
 
                 courier.setAdapter(adapter);
 
-                for (int i = 0; i < adapter.getCount(); i++) {
-                    if (zakaz.getCourier().equals(id.get(i))) {
+                for (int i = 0; i < mass.size(); i++) {
+                    if (zakaz.getCourier().equals(mass.get(i))) {
                         courier.setSelection(i);
                     }
                 }

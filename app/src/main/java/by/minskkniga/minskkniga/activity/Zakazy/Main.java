@@ -1,5 +1,6 @@
 package by.minskkniga.minskkniga.activity.Zakazy;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Zakazy.Main_2;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Clients;
+import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,6 +40,8 @@ public class Main extends AppCompatActivity {
 
     TextView notfound_1;
     TextView notfound_2;
+
+    DialogFragment dlg_zakaz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +106,10 @@ public class Main extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Main.this, Zakaz_new.class);
-                startActivity(intent);
+                dlg_zakaz = new Add_Dialog(Main.this, "zakaz_type", "null", "null","");
+                dlg_zakaz.show(getFragmentManager(), "");
+                //Intent intent = new Intent(Main.this, Zakaz_new.class);
+                //startActivity(intent);
             }
         });
     }

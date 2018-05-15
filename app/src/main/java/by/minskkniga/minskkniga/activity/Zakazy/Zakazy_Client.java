@@ -1,7 +1,9 @@
 package by.minskkniga.minskkniga.activity.Zakazy;
 
 
+import android.app.DialogFragment;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,6 +21,7 @@ import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Zakazy.Zakazy_2;
 import by.minskkniga.minskkniga.api.*;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
+import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,6 +33,9 @@ public class Zakazy_Client extends AppCompatActivity {
     static String name;
     ImageButton back;
     TextView caption;
+
+    FloatingActionButton fab;
+    DialogFragment dlg_zakaz;
 
     ArrayList<Zakazy> zakazy;
     ArrayList<Zakazy> zakazy_buf;
@@ -78,6 +84,15 @@ public class Zakazy_Client extends AppCompatActivity {
         zakazy_buf = new ArrayList<>();
 
         expListView.setAdapter(new Zakazy_2(this, zakazy));
+
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dlg_zakaz = new Add_Dialog(Zakazy_Client.this, "zakaz_type", String.valueOf(caption.getText()), String.valueOf(id),"");
+                dlg_zakaz.show(getFragmentManager(), "");
+            }
+        });
 
         tabHost = findViewById(R.id.tabHost);
         tabHost.setup();

@@ -122,22 +122,11 @@ public class Add extends AppCompatActivity {
     private Uri outputFileUri;
 
     int isimage = 0;
-    boolean zakaz = false;
     String id = "";
 
     LinearLayout linear_add;
-    LinearLayout linear_add_zakaz;
 
-    EditText cena_zakaz;
-    EditText col_zakaz;
-    TextView summa_zakaz;
 
-    EditText cena_podar;
-    EditText col_podar;
-    TextView summa_podar;
-    TextView summa;
-
-    String id_client;
 
     public void initialize() {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -214,116 +203,14 @@ public class Add extends AppCompatActivity {
         Glide.with(this).load(R.drawable.ic_launcher_foreground).into(image);
 
         id = getIntent().getStringExtra("id");
-        zakaz = getIntent().getBooleanExtra("zakaz", false);
 
 
         linear_add = findViewById(R.id.linear_add);
-        linear_add_zakaz = findViewById(R.id.linear_add_zakaz);
 
-        cena_zakaz = findViewById(R.id.cena_zakaz);
-        col_zakaz = findViewById(R.id.col_zakaz);
-        summa_zakaz = findViewById(R.id.summa_zakaz);
-
-        cena_podar = findViewById(R.id.cena_podar);
-        col_podar = findViewById(R.id.col_podar);
-        summa_podar = findViewById(R.id.summa_podar);
-
-        summa = findViewById(R.id.summa);
-
-        if (zakaz) {
-            id_client = getIntent().getStringExtra("id_client");
-            linear_add.setVisibility(View.GONE);
-            linear_add_zakaz.setVisibility(View.VISIBLE);
-
-            cena_zakaz.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    try{
-                        summa_zakaz.setText(String.valueOf(Double.parseDouble(String.valueOf(cena_zakaz.getText())) * Double.parseDouble(String.valueOf(col_zakaz.getText()))));
-                        summa.setText(String.valueOf(Double.parseDouble(String.valueOf(summa_zakaz.getText()))+Double.parseDouble(String.valueOf(summa_podar.getText()))));
-                    }catch (Exception e){
-
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                }
-            });
-            col_zakaz.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    try{
-                        summa_zakaz.setText(String.valueOf(Double.parseDouble(String.valueOf(cena_zakaz.getText())) * Double.parseDouble(String.valueOf(col_zakaz.getText()))));
-                        summa.setText(String.valueOf(Double.parseDouble(String.valueOf(summa_zakaz.getText()))+Double.parseDouble(String.valueOf(summa_podar.getText()))));
-                    }catch (Exception e){
-
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-
-            cena_podar.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    try{
-                        summa_podar.setText("-"+String.valueOf(Double.parseDouble(String.valueOf(cena_podar.getText())) * Double.parseDouble(String.valueOf(col_podar.getText()))));
-                        summa.setText(String.valueOf(Double.parseDouble(String.valueOf(summa_zakaz.getText()))+Double.parseDouble(String.valueOf(summa_podar.getText()))));
-                    }catch (Exception e){
-
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                }
-            });
-            col_podar.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    try{
-                        summa_podar.setText("-"+String.valueOf(Double.parseDouble(String.valueOf(cena_podar.getText())) * Double.parseDouble(String.valueOf(col_podar.getText()))));
-                        summa.setText(String.valueOf(Double.parseDouble(String.valueOf(summa_zakaz.getText()))+Double.parseDouble(String.valueOf(summa_podar.getText()))));
-                    }catch (Exception e){
-
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-
-        } else {
-            linear_add.setVisibility(View.VISIBLE);
-            linear_add_zakaz.setVisibility(View.GONE);
-        }
+        linear_add.setVisibility(View.VISIBLE);
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -333,78 +220,44 @@ public class Add extends AppCompatActivity {
 
 
         if (!id.equals("null")) {
-            if (zakaz) {
-                Toast.makeText(this, id+" "+id_client, Toast.LENGTH_SHORT).show();
-                App.getApi().getProduct_client(id, id_client).enqueue(new Callback<Product_client>() {
-                    @Override
-                    public void onResponse(Call<Product_client> call, Response<Product_client> response) {
+            App.getApi().getProduct(id).enqueue(new Callback<Product>() {
+                @Override
+                public void onResponse(Call<Product> call, Response<Product> response) {
 
-                        name.setText(response.body().getName());
-                        clas.setText(response.body().getClas());
-                        obrazec_spinner.setSelection(response.body().getArtikul().equals("Есть") ? 1 : 0);
-                        artikul.setText(response.body().getArtikul());
-                        sokr_name.setText(response.body().getSokrName());
-                        izdatel.setText(response.body().getIzdatel());
-                        autor.setText(response.body().getAutor());
-                        barcode.setText(response.body().getBarcode());
-                        ves.setText(response.body().getVes());
+                    name.setText(response.body().getName());
+                    clas.setText(response.body().getClas());
+                    obrazec_spinner.setSelection(response.body().getArtikul().equals("Есть") ? 1 : 0);
+                    artikul.setText(response.body().getArtikul());
+                    sokr_name.setText(response.body().getSokrName());
+                    izdatel.setText(response.body().getIzdatel());
+                    autor.setText(response.body().getAutor());
+                    barcode.setText(response.body().getBarcode());
+                    zakup_cena.setText(response.body().getZakupCena());
+                    prod_cena.setText(response.body().getProdCena());
+                    standart.setText(response.body().getStandart());
+                    ves.setText(response.body().getVes());
 
-                        cena_zakaz.setText(response.body().getCena());
-                        cena_podar.setText(response.body().getCena());
+                    zakazano.setText(response.body().getZakazano());
+                    dostupno.setText(response.body().getDostupno());
+                    vozvrat.setText(response.body().getVozvrat());
+                    ogidanie.setText(response.body().getOgidanie());
+                    upakovok.setText(response.body().getUpakovok());
+                    ostatok.setText(response.body().getOstatok());
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
-                        } else {
-                            Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).into(image);
-                        }
 
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+                    } else {
+                        Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).into(image);
                     }
 
-                    @Override
-                    public void onFailure(Call<Product_client> call, Throwable t) {
+                }
 
-                    }
-                });
-            }else {
-                App.getApi().getProduct(id).enqueue(new Callback<Product>() {
-                    @Override
-                    public void onResponse(Call<Product> call, Response<Product> response) {
+                @Override
+                public void onFailure(Call<Product> call, Throwable t) {
 
-                        name.setText(response.body().getName());
-                        clas.setText(response.body().getClas());
-                        obrazec_spinner.setSelection(response.body().getArtikul().equals("Есть") ? 1 : 0);
-                        artikul.setText(response.body().getArtikul());
-                        sokr_name.setText(response.body().getSokrName());
-                        izdatel.setText(response.body().getIzdatel());
-                        autor.setText(response.body().getAutor());
-                        barcode.setText(response.body().getBarcode());
-                        zakup_cena.setText(response.body().getZakupCena());
-                        prod_cena.setText(response.body().getProdCena());
-                        standart.setText(response.body().getStandart());
-                        ves.setText(response.body().getVes());
-
-                        zakazano.setText(response.body().getZakazano());
-                        dostupno.setText(response.body().getDostupno());
-                        vozvrat.setText(response.body().getVozvrat());
-                        ogidanie.setText(response.body().getOgidanie());
-                        upakovok.setText(response.body().getUpakovok());
-                        ostatok.setText(response.body().getOstatok());
-
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
-                        } else {
-                            Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).into(image);
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<Product> call, Throwable t) {
-
-                    }
-                });
-            }
+                }
+            });
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -416,87 +269,70 @@ public class Add extends AppCompatActivity {
     }
 
     public void ok() {
-        if (zakaz) {
-            Intent intent = new Intent();
-            Zakaz_product product = new Zakaz_product(
+        if (name.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Поле 'Наименование' не заполнено", Toast.LENGTH_SHORT).show();
+            sv.smoothScrollTo(0, name.getTop());
+            name.requestFocus();
+            return;
+        }
+
+        if (isimage != 0) {
+            final RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file());
+            MultipartBody.Part body = MultipartBody.Part.createFormData("image", file().getName(), reqFile);
+
+            App.getApi().addProduct(body,
                     id,
-                    String.valueOf(name.getText()),
-                    String.valueOf(artikul.getText()),
-                    String.valueOf(cena_zakaz.getText()),
-                    String.valueOf(col_zakaz.getText()),
-                    String.valueOf(col_podar.getText()),
-                    String.valueOf(summa.getText()),
-                    "",
-                    String.valueOf(ves.getText()));
+                    name.getText().toString(),
+                    clas.getText().toString().isEmpty() ? "" : clas.getText().toString(),
+                    obrazec_spinner.getSelectedItemPosition() == 0 ? "" : "Есть",
+                    artikul.getText().toString().isEmpty() ? "" : artikul.getText().toString(),
+                    sokr_name.getText().toString().isEmpty() ? "" : sokr_name.getText().toString(),
+                    izdatel.getText().toString().isEmpty() ? "" : izdatel.getText().toString(),
+                    autor.getText().toString().isEmpty() ? "" : autor.getText().toString(),
+                    barcode.getText().toString().isEmpty() ? "" : barcode.getText().toString(),
+                    zakup_cena.getText().toString().isEmpty() ? "" : zakup_cena.getText().toString(),
+                    prod_cena.getText().toString().isEmpty() ? "" : prod_cena.getText().toString(),
+                    standart.getText().toString().isEmpty() ? "" : standart.getText().toString(),
+                    ves.getText().toString().isEmpty() ? "" : ves.getText().toString()
+            ).enqueue(new Callback<ResultBody>() {
+                @Override
+                public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
+                    Toast.makeText(Add.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
 
-            intent.putExtra(Zakaz_product.class.getCanonicalName(), product);
-            setResult(RESULT_OK, intent);
-            finish();
+                @Override
+                public void onFailure(Call<ResultBody> call, Throwable t) {
+                    Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
-            if (name.getText().toString().isEmpty()) {
-                Toast.makeText(this, "Поле 'Наименование' не заполнено", Toast.LENGTH_SHORT).show();
-                sv.smoothScrollTo(0, name.getTop());
-                name.requestFocus();
-                return;
-            }
+            App.getApi().addProduct(id,
+                    name.getText().toString(),
+                    clas.getText().toString().isEmpty() ? "" : clas.getText().toString(),
+                    obrazec_spinner.getSelectedItemPosition() == 0 ? "" : "Есть",
+                    artikul.getText().toString().isEmpty() ? "" : artikul.getText().toString(),
+                    sokr_name.getText().toString().isEmpty() ? "" : sokr_name.getText().toString(),
+                    izdatel.getText().toString().isEmpty() ? "" : izdatel.getText().toString(),
+                    autor.getText().toString().isEmpty() ? "" : autor.getText().toString(),
+                    barcode.getText().toString().isEmpty() ? "" : barcode.getText().toString(),
+                    zakup_cena.getText().toString().isEmpty() ? "" : zakup_cena.getText().toString(),
+                    prod_cena.getText().toString().isEmpty() ? "" : prod_cena.getText().toString(),
+                    standart.getText().toString().isEmpty() ? "" : standart.getText().toString(),
+                    ves.getText().toString().isEmpty() ? "" : ves.getText().toString()
+            ).enqueue(new Callback<ResultBody>() {
+                @Override
+                public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
+                    Toast.makeText(Add.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
+                }
 
-            if (isimage != 0) {
-                final RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file());
-                MultipartBody.Part body = MultipartBody.Part.createFormData("image", file().getName(), reqFile);
+                @Override
+                public void onFailure(Call<ResultBody> call, Throwable t) {
+                    Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-                App.getApi().addProduct(body,
-                        id,
-                        name.getText().toString(),
-                        clas.getText().toString().isEmpty() ? "" : clas.getText().toString(),
-                        obrazec_spinner.getSelectedItemPosition() == 0 ? "" : "Есть",
-                        artikul.getText().toString().isEmpty() ? "" : artikul.getText().toString(),
-                        sokr_name.getText().toString().isEmpty() ? "" : sokr_name.getText().toString(),
-                        izdatel.getText().toString().isEmpty() ? "" : izdatel.getText().toString(),
-                        autor.getText().toString().isEmpty() ? "" : autor.getText().toString(),
-                        barcode.getText().toString().isEmpty() ? "" : barcode.getText().toString(),
-                        zakup_cena.getText().toString().isEmpty() ? "" : zakup_cena.getText().toString(),
-                        prod_cena.getText().toString().isEmpty() ? "" : prod_cena.getText().toString(),
-                        standart.getText().toString().isEmpty() ? "" : standart.getText().toString(),
-                        ves.getText().toString().isEmpty() ? "" : ves.getText().toString()
-                ).enqueue(new Callback<ResultBody>() {
-                    @Override
-                    public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                        Toast.makeText(Add.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResultBody> call, Throwable t) {
-                        Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                App.getApi().addProduct(id,
-                        name.getText().toString(),
-                        clas.getText().toString().isEmpty() ? "" : clas.getText().toString(),
-                        obrazec_spinner.getSelectedItemPosition() == 0 ? "" : "Есть",
-                        artikul.getText().toString().isEmpty() ? "" : artikul.getText().toString(),
-                        sokr_name.getText().toString().isEmpty() ? "" : sokr_name.getText().toString(),
-                        izdatel.getText().toString().isEmpty() ? "" : izdatel.getText().toString(),
-                        autor.getText().toString().isEmpty() ? "" : autor.getText().toString(),
-                        barcode.getText().toString().isEmpty() ? "" : barcode.getText().toString(),
-                        zakup_cena.getText().toString().isEmpty() ? "" : zakup_cena.getText().toString(),
-                        prod_cena.getText().toString().isEmpty() ? "" : prod_cena.getText().toString(),
-                        standart.getText().toString().isEmpty() ? "" : standart.getText().toString(),
-                        ves.getText().toString().isEmpty() ? "" : ves.getText().toString()
-                ).enqueue(new Callback<ResultBody>() {
-                    @Override
-                    public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                        Toast.makeText(Add.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResultBody> call, Throwable t) {
-                        Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
         }
     }
 

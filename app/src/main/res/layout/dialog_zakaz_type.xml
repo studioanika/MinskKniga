@@ -31,7 +31,7 @@
         android:padding="10dp"
         android:textColor="#000"
         android:layout_weight="1"
-        android:text="Возврат образцов" />
+        android:text="Заказ образцов" />
 
     <TextView
         android:id="@+id/tv4"
@@ -40,14 +40,6 @@
         android:padding="10dp"
         android:textColor="#000"
         android:layout_weight="1"
-        android:text="Излишки" />
+        android:text="Возврат образцов" />
 
-    <TextView
-        android:id="@+id/tv5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textColor="#000"
-        android:layout_weight="1"
-        android:text="Недостача" />
 </LinearLayout>

@@ -16,12 +16,10 @@ public class Zakaz_new extends BaseAdapter {
 
     private Context _context;
     private ArrayList<Zakaz_product> _objects;
-    private String _status;
 
-    public Zakaz_new(Context context, ArrayList<Zakaz_product> objects, String status) {
+    public Zakaz_new(Context context, ArrayList<Zakaz_product> objects) {
         this._context = context;
         this._objects = objects;
-        this._status = status;
     }
 
     @Override
@@ -45,19 +43,21 @@ public class Zakaz_new extends BaseAdapter {
         LayoutInflater lInflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = lInflater.inflate(R.layout.adapter_zakaz_new, parent, false);
 
-        TextView tv1 = view.findViewById(R.id.tv1);
-        TextView tv2 = view.findViewById(R.id.tv2);
-        TextView tv3 = view.findViewById(R.id.tv3);
-        TextView tv4 = view.findViewById(R.id.tv4);
-        TextView tv5 = view.findViewById(R.id.tv5);
-        TextView tv6 = view.findViewById(R.id.tv6);
+        TextView tv1 = view.findViewById(R.id.tv1); //имя
+        TextView tv2 = view.findViewById(R.id.tv2); //артикул
+        TextView tv3 = view.findViewById(R.id.tv3); //цена
+        TextView tv4 = view.findViewById(R.id.tv4); //заказано
+        TextView tv5 = view.findViewById(R.id.tv5); //собрано
+        TextView tv6 = view.findViewById(R.id.tv6); //подарков
+        TextView tv7 = view.findViewById(R.id.tv7); //сумма
 
         tv1.setText(_objects.get(position).name);
         tv2.setText(_objects.get(position).artukil);
         tv3.setText(_objects.get(position).cena);
         tv4.setText(_objects.get(position).col_zakaz);
-        tv5.setText(_objects.get(position).col_podar);
-        tv6.setText(_objects.get(position).summa);
+        tv5.setText(_objects.get(position).otgruzeno);
+        tv6.setText(_objects.get(position).col_podar);
+        tv7.setText(_objects.get(position).summa);
 
         return view;
     }

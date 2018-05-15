@@ -6,49 +6,49 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/print"
+        android:id="@+id/nav_print"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:textColor="@color/drawer_text"
-        android:drawableLeft="@drawable/ic_print"
+        android:drawableStart="@drawable/ic_print"
         android:drawablePadding="10dp"
         android:gravity="left"
         android:text="Печать" />
 
     <TextView
-        android:id="@+id/otpravit"
+        android:id="@+id/nav_otpravit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:textColor="@color/drawer_text"
-        android:drawableLeft="@drawable/ic_share"
+        android:drawableStart="@drawable/ic_share"
         android:drawablePadding="10dp"
         android:gravity="left"
         android:text="Отправить" />
 
     <TextView
-        android:id="@+id/sobrat"
+        android:id="@+id/nav_sobrat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:textColor="@color/drawer_text"
-        android:drawableLeft="@drawable/ic_load"
+        android:drawableStart="@drawable/ic_load"
         android:drawablePadding="10dp"
         android:gravity="left"
         android:text="Собрать заказ" />
 
     <TextView
-        android:id="@+id/contacts"
+        android:id="@+id/nav_contacts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:textColor="@color/drawer_text"
-        android:drawableLeft="@drawable/ic_contacts"
+        android:drawableStart="@drawable/ic_contacts"
         android:drawablePadding="10dp"
         android:gravity="left"
         android:text="Контакты" />

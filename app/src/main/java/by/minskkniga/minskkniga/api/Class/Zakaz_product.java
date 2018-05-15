@@ -14,8 +14,12 @@ public class Zakaz_product implements Parcelable {
     public String summa;
     public String otgruzeno;
     public String ves;
+    public String image;
+    public String clas;
+    public String barcode;
+    public String barcode_status;
 
-    public Zakaz_product(String id, String name, String artukil, String cena, String col_zakaz, String col_podar, String summa, String otgruzeno, String ves) {
+    public Zakaz_product(String id, String name, String artukil, String cena, String col_zakaz, String col_podar, String summa, String otgruzeno, String ves, String image, String clas, String barcode, String barcode_status) {
         this.id = id;
         this.name = name;
         this.artukil = artukil;
@@ -25,6 +29,10 @@ public class Zakaz_product implements Parcelable {
         this.summa = summa;
         this.otgruzeno = otgruzeno;
         this.ves = ves;
+        this.image = image;
+        this.clas = clas;
+        this.barcode = barcode;
+        this.barcode_status = barcode_status;
     }
 
     public int describeContents() {
@@ -41,6 +49,10 @@ public class Zakaz_product implements Parcelable {
         parcel.writeString(summa);
         parcel.writeString(otgruzeno);
         parcel.writeString(ves);
+        parcel.writeString(image);
+        parcel.writeString(clas);
+        parcel.writeString(barcode);
+        parcel.writeString(barcode_status);
     }
 
     public static final Parcelable.Creator<Zakaz_product> CREATOR = new Parcelable.Creator<Zakaz_product>() {
@@ -63,5 +75,9 @@ public class Zakaz_product implements Parcelable {
         summa = parcel.readString();
         otgruzeno = parcel.readString();
         ves = parcel.readString();
+        image = parcel.readString();
+        clas = parcel.readString();
+        barcode = parcel.readString();
+        barcode_status = parcel.readString();
     }
 }

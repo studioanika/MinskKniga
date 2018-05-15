@@ -53,6 +53,18 @@ public class Product_client {
     @SerializedName("podarki")
     @Expose
     private String podarki;
+    @SerializedName("const_podar")
+    @Expose
+    private String constPodar;
+    @SerializedName("dostupno")
+    @Expose
+    private String dostupno;
+    @SerializedName("ostatok")
+    @Expose
+    private String ostatok;
+    @SerializedName("obrazec_col")
+    @Expose
+    private String obrazecCol;
 
     public String getId() {
         return id;
@@ -181,4 +193,37 @@ public class Product_client {
     public void setPodarki(String podarki) {
         this.podarki = podarki;
     }
+
+    public String getConstPodar() {
+        return constPodar;
+    }
+
+    public void setConstPodar(String constPodar) {
+        this.constPodar = constPodar;
+    }
+
+    public String getDostupno() {
+        return dostupno;
+    }
+
+    public void setDostupno(String dostupno) {
+        this.dostupno = dostupno;
+    }
+
+    public String getOstatok() {
+        return ostatok;
+    }
+
+    public void setOstatok(String ostatok) {
+        this.ostatok = ostatok;
+    }
+
+    public String getObrazecCol() {
+        return obrazecCol;
+    }
+
+    public void setObrazecCol(String obrazecCol) {
+        this.obrazecCol = obrazecCol;
+    }
+
 }

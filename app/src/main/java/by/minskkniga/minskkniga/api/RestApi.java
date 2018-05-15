@@ -204,5 +204,6 @@ public interface RestApi {
                               @Query("koment") String koment,
                               @Query("courier_id") String courier_id,
                               @Query("status") String status,
+                              @Query("oplacheno") String oplacheno,
                               @Query("mas") String mas);
 }

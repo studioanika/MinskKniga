@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,6 +30,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.w3c.dom.Text;
+
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +43,9 @@ import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Clients;
 import by.minskkniga.minskkniga.api.Class.Gorod;
 import by.minskkniga.minskkniga.api.Class.Product;
+import by.minskkniga.minskkniga.api.Class.Product_client;
 import by.minskkniga.minskkniga.api.Class.Products;
+import by.minskkniga.minskkniga.api.Class.Zakaz_product;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,9 +58,10 @@ public class Add_Dialog extends DialogFragment {
     private LayoutInflater inflater;
     private AlertDialog.Builder builder;
     private Context context;
-    private String id;
-    private String tag;
-    private String name;
+    private String type_dialog;
+    private String id_product;
+    private String url;
+
 
     private String type_client;
     private String type_provider;
@@ -61,24 +69,36 @@ public class Add_Dialog extends DialogFragment {
     private int type_zakaz = 1;
 
     private String image;
-    private Product product;
+    private String name_client = "null";
+    private String id_client = "null";
+    private Zakaz_product product;
+    private String const_podar;
+    private String ispodarki;
+    private String barcode;
 
-    public Add_Dialog(Context context, String id) {
+    public Add_Dialog(Context context, String type_dialog) {
         this.context = context;
-        this.id = id;
+        this.type_dialog = type_dialog;
     }
 
-    public Add_Dialog(Context context, String id, String tag) {
+    public Add_Dialog(Context context, String type_dialog, String url) {
         this.context = context;
-        this.id = id;
-        this.tag = tag;
+        this.type_dialog = type_dialog;
+        this.url = url;
     }
 
-    public Add_Dialog(Context context, String id, String name, String tag) {
+    public Add_Dialog(Context context, String type_dialog, String id_product, String id_client) {
         this.context = context;
-        this.id = id;
-        this.name = name;
-        this.tag = tag;
+        this.type_dialog = type_dialog;
+        this.id_product = id_product;
+        this.id_client = id_client;
+    }
+
+    public Add_Dialog(Context context, String type_dialog, String name_client, String id_client, String nul) {
+        this.context = context;
+        this.type_dialog = type_dialog;
+        this.name_client = name_client;
+        this.id_client = id_client;
     }
 
     @Override
@@ -86,7 +106,7 @@ public class Add_Dialog extends DialogFragment {
         builder = new AlertDialog.Builder(context);
         inflater = getActivity().getLayoutInflater();
 
-        switch (id) {
+        switch (type_dialog) {
             case "gorod_client":
                 gorod_client();
                 break;
@@ -241,52 +261,6 @@ public class Add_Dialog extends DialogFragment {
                 });
     }
 
-    public void contact_provider() {
-        view = inflater.inflate(R.layout.dialog_add_contacts, null);
-        final Spinner spinner_provider = view.findViewById(R.id.spinner);
-        final EditText edittext_provider = view.findViewById(R.id.edittext);
-
-        spinner_provider.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        edittext_provider.setHint("Номер телефона");
-                        type_provider = "tel";
-                        break;
-                    case 1:
-                        edittext_provider.setHint("Электронная почта");
-                        type_provider = "mail";
-                        break;
-                    case 2:
-                        edittext_provider.setHint("Контактное лицо");
-                        type_provider = "contact";
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        builder.setPositiveButton("Ок", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add) getActivity()).return_contact(type_provider, String.valueOf(edittext_provider.getText()));
-                dialog.cancel();
-            }
-        })
-                .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
-                .setTitle("Добавить контакт").setView(view);
-    }
-
     public void gorod_provider() {
         view = inflater.inflate(R.layout.dialog_add_gorod, null);
         final EditText search_provider = view.findViewById(R.id.search_gorod);
@@ -362,6 +336,52 @@ public class Add_Dialog extends DialogFragment {
         builder.setTitle("Выбор города").setView(view);
     }
 
+    public void contact_provider() {
+        view = inflater.inflate(R.layout.dialog_add_contacts, null);
+        final Spinner spinner_provider = view.findViewById(R.id.spinner);
+        final EditText edittext_provider = view.findViewById(R.id.edittext);
+
+        spinner_provider.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        edittext_provider.setHint("Номер телефона");
+                        type_provider = "tel";
+                        break;
+                    case 1:
+                        edittext_provider.setHint("Электронная почта");
+                        type_provider = "mail";
+                        break;
+                    case 2:
+                        edittext_provider.setHint("Контактное лицо");
+                        type_provider = "contact";
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        builder.setPositiveButton("Ок", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ((by.minskkniga.minskkniga.activity.Spravoch_Providers.Add) getActivity()).return_contact(type_provider, String.valueOf(edittext_provider.getText()));
+                dialog.cancel();
+            }
+        })
+                .setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setTitle("Добавить контакт").setView(view);
+    }
+
     public void contact_courier() {
         view = inflater.inflate(R.layout.dialog_add_contacts, null);
         final Spinner spinner_courier = view.findViewById(R.id.spinner);
@@ -416,7 +436,6 @@ public class Add_Dialog extends DialogFragment {
         final TextView tv2 = view.findViewById(R.id.tv2);
         final TextView tv3 = view.findViewById(R.id.tv3);
         final TextView tv4 = view.findViewById(R.id.tv4);
-        final TextView tv5 = view.findViewById(R.id.tv5);
 
         tv1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -426,7 +445,6 @@ public class Add_Dialog extends DialogFragment {
                 tv2.setBackgroundColor(Color.WHITE);
                 tv3.setBackgroundColor(Color.WHITE);
                 tv4.setBackgroundColor(Color.WHITE);
-                tv5.setBackgroundColor(Color.WHITE);
             }
         });
 
@@ -438,7 +456,6 @@ public class Add_Dialog extends DialogFragment {
                 tv2.setBackgroundColor(Color.rgb(221, 221, 221));
                 tv3.setBackgroundColor(Color.WHITE);
                 tv4.setBackgroundColor(Color.WHITE);
-                tv5.setBackgroundColor(Color.WHITE);
             }
         });
 
@@ -450,7 +467,6 @@ public class Add_Dialog extends DialogFragment {
                 tv2.setBackgroundColor(Color.WHITE);
                 tv3.setBackgroundColor(Color.rgb(221, 221, 221));
                 tv4.setBackgroundColor(Color.WHITE);
-                tv5.setBackgroundColor(Color.WHITE);
             }
         });
 
@@ -462,28 +478,21 @@ public class Add_Dialog extends DialogFragment {
                 tv2.setBackgroundColor(Color.WHITE);
                 tv3.setBackgroundColor(Color.WHITE);
                 tv4.setBackgroundColor(Color.rgb(221, 221, 221));
-                tv5.setBackgroundColor(Color.WHITE);
             }
         });
 
-        tv5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                type_zakaz = 5;
-                tv1.setBackgroundColor(Color.WHITE);
-                tv2.setBackgroundColor(Color.WHITE);
-                tv3.setBackgroundColor(Color.WHITE);
-                tv4.setBackgroundColor(Color.WHITE);
-                tv5.setBackgroundColor(Color.rgb(221, 221, 221));
-            }
-        });
 
         builder.setTitle("Выбор заявки")
                 .setView(view)
                 .setPositiveButton("Создать", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((Zakaz_new) getActivity()).return_zakaz_type(type_zakaz);
+                        //((Zakaz_new) getActivity()).return_zakaz_type(type_zakaz);
+                        Intent intent = new Intent(context, Zakaz_new.class);
+                        intent.putExtra("type", type_zakaz);
+                        intent.putExtra("id_client", id_client);
+                        intent.putExtra("name_client", name_client);
+                        context.startActivity(intent);
                         dialog.cancel();
                     }
                 })
@@ -491,7 +500,6 @@ public class Add_Dialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        getActivity().finish();
                     }
                 });
     }
@@ -597,6 +605,8 @@ public class Add_Dialog extends DialogFragment {
 
                 lv.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, clients));
 
+                clients_buf.clear();
+                clients_buf.addAll(clients);
             }
         });
 
@@ -604,11 +614,15 @@ public class Add_Dialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 search_gorod.setText("");
+
                 clients.clear();
+                clients_buf.clear();
 
                 for (Clients buffer : clients_zak) {
                     clients.add(buffer.getName());
+                    clients_buf.add(buffer.getName());
                 }
+
                 filter.setVisibility(View.VISIBLE);
                 notfound.setVisibility(View.GONE);
 
@@ -709,6 +723,7 @@ public class Add_Dialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+                        getActivity().finish();
                     }
                 });
     }
@@ -717,37 +732,126 @@ public class Add_Dialog extends DialogFragment {
         view = inflater.inflate(R.layout.dialog_nomenklatura, null);
 
         final Button button_image = view.findViewById(R.id.button_image);
+        final TextView name = view.findViewById(R.id.name);
         final TextView artikul = view.findViewById(R.id.artikul);
         final TextView clas = view.findViewById(R.id.clas);
-        final TextView predmet = view.findViewById(R.id.predmet);
+        //final TextView predmet = view.findViewById(R.id.predmet);
         final TextView izdatel = view.findViewById(R.id.izdatel);
         final TextView autor = view.findViewById(R.id.autor);
         final TextView sokr_name = view.findViewById(R.id.sokr_name);
+        final TextView ves = view.findViewById(R.id.ves);
         final TextView ostatok = view.findViewById(R.id.ostatok);
         final TextView dostupno = view.findViewById(R.id.dostupno);
         final TextView obrazec = view.findViewById(R.id.obrazec);
-        product = new Product();
+        final TextView zakup_cena = view.findViewById(R.id.zakup_cena);
+        final TextView prod_cena = view.findViewById(R.id.prod_cena);
 
-        App.getApi().getProduct(tag).enqueue(new Callback<Product>() {
+        final LinearLayout linear_podarki = view.findViewById(R.id.linear_podarki);
+        final EditText cena_zakaz = view.findViewById(R.id.cena_zakaz);
+        final TextView cena_podar = view.findViewById(R.id.cena_podar);
+        final EditText col_zakaz = view.findViewById(R.id.col_zakaz);
+        final EditText col_podar = view.findViewById(R.id.col_podar);
+
+        final TextView summa_zakaz = view.findViewById(R.id.summa_zakaz);
+        final TextView summa_podar = view.findViewById(R.id.summa_podar);
+        final TextView summa = view.findViewById(R.id.summa);
+
+        Toast.makeText(context, id_product+" "+id_client, Toast.LENGTH_SHORT).show();
+        App.getApi().getProduct_client(id_product, id_client).enqueue(new Callback<Product_client>() {
             @Override
-            public void onResponse(Call<Product> call, Response<Product> response) {
-                product = response.body();
+            public void onResponse(Call<Product_client> call, Response<Product_client> response) {
+                name.setText(response.body().getName());
                 artikul.setText(response.body().getArtikul());
                 clas.setText(response.body().getClas());
-                //predmet.setText(response.body().get)
-                predmet.setText("пусто");
+                //predmet.setText(response.body().get);
+                //predmet.setText("Предмет");
                 izdatel.setText(response.body().getIzdatel());
                 autor.setText(response.body().getAutor());
                 sokr_name.setText(response.body().getSokrName());
+                ves.setText(response.body().getVes());
                 ostatok.setText(response.body().getOstatok());
                 dostupno.setText(response.body().getDostupno());
-                obrazec.setText(response.body().getObrazec());
+                obrazec.setText(response.body().getObrazecCol());
+                zakup_cena.setText(String.format("Закупочная: %s", response.body().getZakupCena()));
+                prod_cena.setText(String.format("Продажная: %s", response.body().getProdCena()));
+                cena_zakaz.setText(response.body().getCena());
+                cena_podar.setText(response.body().getCena());
 
+                ispodarki = response.body().getPodarki();
+
+                if (ispodarki.equals("0")){
+                    linear_podarki.setVisibility(View.GONE);
+                }else{
+                    linear_podarki.setVisibility(View.VISIBLE);
+                }
+                const_podar = response.body().getConstPodar();
                 image = response.body().getImage();
+                barcode = response.body().getBarcode();
             }
 
             @Override
-            public void onFailure(Call<Product> call, Throwable t) {
+            public void onFailure(Call<Product_client> call, Throwable t) {
+
+            }
+        });
+
+        cena_zakaz.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (String.valueOf(cena_zakaz.getText()).isEmpty()) cena_zakaz.setText("0");
+                cena_podar.setText(cena_zakaz.getText());
+                summa(cena_zakaz, col_zakaz, col_podar, summa_zakaz, summa_podar, summa);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        col_zakaz.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if (ispodarki.equals("1")) {
+                        col_podar.setText(String.valueOf((int)Math.floor(Integer.parseInt(String.valueOf(col_zakaz.getText()))/Integer.parseInt(const_podar))));
+                    } else {
+                        col_podar.setText("0");
+                    }
+                }catch (Exception e){
+                    col_podar.setText("0");
+                }
+                summa(cena_zakaz, col_zakaz, col_podar, summa_zakaz, summa_podar, summa);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        col_podar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                summa(cena_zakaz, col_zakaz, col_podar, summa_zakaz, summa_podar, summa);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
 
             }
         });
@@ -760,12 +864,25 @@ public class Add_Dialog extends DialogFragment {
             }
         });
 
-        builder.setTitle(name)
-                .setView(view)
+        builder.setView(view)
                 .setPositiveButton("Добавить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
-                        ((by.minskkniga.minskkniga.activity.Nomenklatura.Main)getActivity()).return_product(tag);
+                        product = new Zakaz_product(
+                                id_product,
+                                String.valueOf(name.getText()),
+                                String.valueOf(artikul.getText()),
+                                String.valueOf(cena_zakaz.getText()).equals("")?"0":String.valueOf(cena_zakaz.getText()),
+                                String.valueOf(col_zakaz.getText()).equals("")?"0":String.valueOf(col_zakaz.getText()),
+                                String.valueOf(col_podar.getText()).equals("")?"0":String.valueOf(col_podar.getText()),
+                                String.valueOf(summa.getText()),
+                                "0",
+                                String.valueOf(ves.getText()),
+                                image,
+                                String.valueOf(clas.getText()),
+                                barcode,
+                                "0");
+                        ((by.minskkniga.minskkniga.activity.Nomenklatura.Main)getActivity()).return_product(product);
                         dialog.cancel();
                     }
                 })
@@ -784,9 +901,9 @@ public class Add_Dialog extends DialogFragment {
         Glide.with(context).load(R.drawable.ic_launcher_foreground).into(image);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Glide.with(context).load("http://query.pe.hu/admin/img/nomen/" + tag).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+            Glide.with(context).load("http://query.pe.hu/admin/img/nomen/" + url).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
         }else{
-            Glide.with(context).load("http://query.pe.hu/admin/img/nomen/" + tag).into(image);
+            Glide.with(context).load("http://query.pe.hu/admin/img/nomen/" + url).into(image);
         }
 
         builder.setView(view)
@@ -798,4 +915,38 @@ public class Add_Dialog extends DialogFragment {
                     }
                 });
     }
+
+    public void summa(EditText cena, EditText col_zakaz, EditText col_podar, TextView summa_z, TextView summa_p, TextView summa) {
+
+        double this_cena;
+        try{
+            this_cena = Double.parseDouble(cena.getText().toString());
+        }catch (Exception e) {
+            this_cena = 0;
+        }
+
+        int this_col_z;
+        try {
+             this_col_z = Integer.parseInt(col_zakaz.getText().toString());
+        }catch (Exception e){
+            this_col_z = 0;
+        }
+
+        int this_col_p;
+        try {
+            this_col_p = Integer.parseInt(col_podar.getText().toString());
+        }catch (Exception e){
+            this_col_p = 0;
+        }
+
+
+        double this_summa_z = this_cena * this_col_z;
+        double this_summa_p = this_cena * this_col_p;
+        double this_summa = this_summa_z - this_summa_p;
+
+        summa_z.setText(String.valueOf(Math.round(this_summa_z * 100.0) / 100.0));
+        summa_p.setText(String.valueOf(Math.round(this_summa_p * 100.0) / 100.0));
+        summa.setText(String.valueOf(Math.round(this_summa * 100.0) / 100.0));
+    }
+
 }
