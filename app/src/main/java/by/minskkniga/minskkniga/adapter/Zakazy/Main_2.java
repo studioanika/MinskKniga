@@ -19,13 +19,11 @@ import by.minskkniga.minskkniga.api.Class.Clients;
 public class Main_2 extends BaseAdapter {
 
     private Context _context;
-    private LayoutInflater lInflater;
     private ArrayList<Clients> _objects;
 
     public Main_2(Context context, ArrayList<Clients> objects) {
         this._context = context;
         this._objects = objects;
-        lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -43,16 +41,10 @@ public class Main_2 extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("ViewHolder")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-//        lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View view = lInflater.inflate(R.layout.adapter_zakazy_2, parent, false);
-
-        View view = convertView;
-        if (view == null) {
-            view = lInflater.inflate(R.layout.adapter_zakazy_2, parent, false);
-        }
+        View view = LayoutInflater.from(_context).inflate(R.layout.adapter_zakazy_2, parent,false);
 
         TextView tv1 = view.findViewById(R.id.tv1);
         TextView tv2 = view.findViewById(R.id.tv2);

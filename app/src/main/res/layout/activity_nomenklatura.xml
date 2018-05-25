@@ -52,61 +52,73 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/filter_layout"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:background="@color/colorPrimary">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/spinner1"
-                android:layout_width="150dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"/>
+                android:padding="8dp">
 
-            <Spinner
-                android:id="@+id/spinner2"
-                android:layout_width="150dp"
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Spinner
+                    android:id="@+id/spinner2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="10dp"/>
+                android:padding="8dp">
 
-            <Spinner
-                android:id="@+id/spinner3"
-                android:layout_width="150dp"
+                <Spinner
+                    android:id="@+id/spinner3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Spinner
+                    android:id="@+id/spinner4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="50dp"/>
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/clear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:text="Очистить"/>
 
-            <Spinner
-                android:id="@+id/spinner4"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="50dp"/>
+                <Button
+                    android:id="@+id/ok"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:text="Готово"/>
 
-            <Button
-                android:id="@+id/clear"
-                android:layout_width="122dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="false"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="90dp"
-                android:text="Очистить"/>
-
-            <Button
-                android:id="@+id/ok"
-                android:layout_width="122dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="32dp"
-                android:layout_marginTop="90dp"
-                android:text="Готово"/>
-
-        </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

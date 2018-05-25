@@ -52,6 +52,7 @@ public class Zakaz_new extends AppCompatActivity {
     DrawerLayout drawer;
 
     DialogFragment dlg_client;
+    DialogFragment dlg_product;
 
     LinearLayout linear_zametka;
     LinearLayout linear_ok;
@@ -70,6 +71,7 @@ public class Zakaz_new extends AppCompatActivity {
     TextView tv1;
     TextView tv2;
     ListView lv;
+    TextView notfound;
 
     ArrayList<String> couriers;
     ArrayList<String> couriers_id;
@@ -87,30 +89,16 @@ public class Zakaz_new extends AppCompatActivity {
     CheckBox chernovik;
     CheckBox oplacheno;
 
+    double summa = 0;
+    double ves = 0;
+    int col = 0;
+
     public void initialize() {
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (products.isEmpty()) {
-                    ad = new AlertDialog.Builder(Zakaz_new.this);
-                    ad.setMessage("Не выбрано не одной позиции товара. Выйти без сохранения?");
-                    ad.setPositiveButton("ПОДТВЕРДИТЬ", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int arg1) {
-                            onBackPressed();
-                        }
-                    });
-                    ad.setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int arg1) {
-                            dialog.cancel();
-                        }
-                    });
-                    ad.setCancelable(false);
-                    ad.show();
-
-                } else {
-                    onBackPressed();
-                }
+                onBackPressed();
             }
         });
         menu = findViewById(R.id.menu);
@@ -140,7 +128,7 @@ public class Zakaz_new extends AppCompatActivity {
         status = header.findViewById(R.id.status);
         date2 = header.findViewById(R.id.date2);
 
-
+        notfound = findViewById(R.id.notfound);
         linear_zametka = header.findViewById(R.id.linear_zametka);
         zametka = header.findViewById(R.id.zametka);
 
@@ -159,7 +147,14 @@ public class Zakaz_new extends AppCompatActivity {
         tv2 = header.findViewById(R.id.tv2);
 
 
-
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                dlg_client = new Add_Dialog(Zakaz_new.this, "zakaz_product", products.get(i-1), String.valueOf(i-1));
+                dlg_client.setCancelable(true);
+                dlg_client.show(getFragmentManager(), "");
+            }
+        });
 
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -173,6 +168,7 @@ public class Zakaz_new extends AppCompatActivity {
                 ad.setPositiveButton("ПОДТВЕРДИТЬ", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
                         products.remove(i-1);
+                        summa();
                         lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_new(Zakaz_new.this, products));
                         dialog.cancel();
                     }
@@ -184,7 +180,7 @@ public class Zakaz_new extends AppCompatActivity {
                 });
                 ad.setCancelable(true);
                 ad.show();
-                return false;
+                return true;
             }
         });
 
@@ -246,6 +242,52 @@ public class Zakaz_new extends AppCompatActivity {
         });
     }
 
+
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_zakaz_new);
+        initialize();
+
+        autor.setText(sp.getString("login", ""));
+
+        admin_id = sp.getString("user_id", "");
+        status.setTextColor(Color.rgb(97, 184, 126));
+        status.setText("Новый");
+        status_id = 1;
+        date1.setText(df.format(currentDate));
+        date2.setText(df.format(currentDate));
+
+
+        load_couriers();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (products.isEmpty()) {
+            ad = new AlertDialog.Builder(Zakaz_new.this);
+            ad.setMessage("Не выбрано не одной позиции товара. Выйти без сохранения?");
+            ad.setPositiveButton("ПОДТВЕРДИТЬ", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int arg1) {
+                    finish();
+                }
+            });
+            ad.setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int arg1) {
+                    dialog.cancel();
+                }
+            });
+            ad.setCancelable(false);
+            ad.show();
+
+        } else {
+            finish();
+        }
+    }
+
     public void optimiz(){
         ArrayList<Zakaz_product> buffer = new ArrayList<>(products);
         products.clear();
@@ -253,12 +295,20 @@ public class Zakaz_new extends AppCompatActivity {
 
         for (int i=0; i < buffer.size(); i++) {
             for (int j = i+1; j < buffer.size(); j++) {
-                if (buffer.get(i).artukil.equals(buffer.get(j).artukil)) {
+                if (buffer.get(i).artukil.equals(buffer.get(j).artukil) && Integer.parseInt(buffer.get(i).col_zakaz)>=0 && Integer.parseInt(buffer.get(j).col_zakaz)>=0) {
                     buffer.get(i).col_zakaz = String.valueOf(Integer.parseInt(buffer.get(i).col_zakaz) + Integer.parseInt(buffer.get(j).col_zakaz));
                     buffer.get(i).col_podar = String.valueOf(Double.parseDouble(buffer.get(i).col_podar) + Double.parseDouble(buffer.get(j).col_podar));
                     buffer.get(i).otgruzeno = String.valueOf(Integer.parseInt(buffer.get(i).otgruzeno) + Integer.parseInt(buffer.get(j).otgruzeno));
                     buffer.get(j).artukil="";
                 }
+
+                if (buffer.get(i).artukil.equals(buffer.get(j).artukil) && Integer.parseInt(buffer.get(i).col_zakaz)<0 && Integer.parseInt(buffer.get(j).col_zakaz)<0) {
+                    buffer.get(i).col_zakaz = String.valueOf(Integer.parseInt(buffer.get(i).col_zakaz) + Integer.parseInt(buffer.get(j).col_zakaz));
+                    buffer.get(i).col_podar = String.valueOf(Double.parseDouble(buffer.get(i).col_podar) + Double.parseDouble(buffer.get(j).col_podar));
+                    buffer.get(i).otgruzeno = String.valueOf(Integer.parseInt(buffer.get(i).otgruzeno) + Integer.parseInt(buffer.get(j).otgruzeno));
+                    buffer.get(j).artukil="";
+                }
+
             }
 
             if (!buffer.get(i).artukil.equals("")) {
@@ -301,22 +351,11 @@ public class Zakaz_new extends AppCompatActivity {
                         status_id=1;
                     }
 
-                    try {
-                        double summa = 0;
-                        double ves = 0;
-                        int col = 0;
-                        for (Zakaz_product buffer : products) {
-                            col++;
-                            summa += Double.parseDouble(buffer.summa);
-                            ves += Double.parseDouble(buffer.ves) * Double.parseDouble(buffer.col_zakaz);
-                        }
+                    summa();
 
-                        tv1.setText(String.format("Итого %s позиций на %sBYN", String.valueOf(Math.round(col)), String.valueOf(Math.round(summa * 100.0) / 100.0)));
-                        tv2.setText(String.format("Вес: %sкг", String.valueOf(Math.round(ves * 100.0) / 100.0)));
-                    }catch (Exception e){
-                        tv1.setText(String.format("Итого %s позиций на %sBYN", 0,0));
-                        tv2.setText(String.format("Вес: %sкг", 0));
-                    }
+                    tv1.setText(String.format("Итого %s позиций на %sBYN", String.valueOf(Math.round(col)), String.valueOf(Math.round(summa * 100.0) / 100.0)));
+                    tv2.setText(String.format("Вес: %sкг", String.valueOf(Math.round(ves * 100.0) / 100.0)));
+
 
                     break;
 
@@ -347,52 +386,36 @@ public class Zakaz_new extends AppCompatActivity {
                         status_id=1;
                     }
 
+                    summa();
 
-                    try {
-                        double summa = 0;
-                        double ves = 0;
-                        int col = 0;
-                        for (Zakaz_product buffer : products) {
-                            col++;
-                            summa += Double.parseDouble(buffer.summa);
-                            ves += Double.parseDouble(buffer.ves) * Double.parseDouble(buffer.col_zakaz);
-                        }
 
-                        tv1.setText(String.format("Итого %s позиций на %sBYN", String.valueOf(Math.round(col)), String.valueOf(Math.round(summa * 100.0) / 100.0)));
-                        tv2.setText(String.format("Вес: %sкг", String.valueOf(Math.round(ves * 100.0) / 100.0)));
-                    }catch (Exception e){
-                        tv1.setText(String.format("Итого %s позиций на %sBYN", 0, 0));
-                        tv2.setText(String.format("Вес: %sкг", 0));
-                    }
+                    tv1.setText(String.format("Итого %s позиций на %sBYN", String.valueOf(Math.round(col)), String.valueOf(Math.round(summa * 100.0) / 100.0)));
+                    tv2.setText(String.format("Вес: %sкг", String.valueOf(Math.round(ves * 100.0) / 100.0)));
 
                     break;
 
             }
-            // если вернулось не ОК
         } else {
             Toast.makeText(this, "Wrong result", Toast.LENGTH_SHORT).show();
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_zakaz_new);
-        initialize();
+    public void summa(){
+        summa = 0;
+        ves = 0;
+        col = 0;
+        for (Zakaz_product buffer : products) {
+            col++;
+            summa += Double.parseDouble(buffer.summa.equals("")?"0":buffer.summa);
+            ves += Double.parseDouble(buffer.ves.equals("")?"0":buffer.ves) * Double.parseDouble(buffer.col_zakaz);
+        }
 
-        autor.setText(sp.getString("login", ""));
-
-        admin_id = sp.getString("user_id", "");
-        status.setTextColor(Color.rgb(97, 184, 126));
-        status.setText("Новый");
-        status_id = 1;
-        date1.setText(df.format(currentDate));
-        date2.setText(df.format(currentDate));
-
-
-        load_couriers();
+        if (products.size()==0){
+            notfound.setVisibility(View.VISIBLE);
+        }else{
+            notfound.setVisibility(View.GONE);
+        }
     }
-
 
     public void load_couriers(){
         App.getApi().getCouriers().enqueue(new Callback<List<Couriers>>() {
@@ -421,6 +444,17 @@ public class Zakaz_new extends AppCompatActivity {
     public void return_client(String id, String name){
         id_client = id;
         caption.setText(name);
+    }
+
+    public void return_product(Zakaz_product product, String id){
+        products.get(Integer.parseInt(id)).cena = product.cena;
+        products.get(Integer.parseInt(id)).col_zakaz = product.col_zakaz;
+        products.get(Integer.parseInt(id)).col_podar = product.col_podar;
+        products.get(Integer.parseInt(id)).summa = product.summa;
+
+        summa();
+
+        lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_new(this, products));
     }
 
     public void ok() {

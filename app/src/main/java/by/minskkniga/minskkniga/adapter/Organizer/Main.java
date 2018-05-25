@@ -1,5 +1,6 @@
 package by.minskkniga.minskkniga.adapter.Organizer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,7 +28,6 @@ import retrofit2.Response;
 public class Main extends BaseAdapter {
 
     private Context _context;
-    private LayoutInflater lInflater;
     private ArrayList<Organizer> _objects;
     private AlertDialog.Builder ad;
     private int id;
@@ -53,11 +53,10 @@ public class Main extends BaseAdapter {
         return position;
     }
 
+    @SuppressLint("ViewHolder")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
-        lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = lInflater.inflate(R.layout.adapter_organizer, parent, false);
+        View view = LayoutInflater.from(_context).inflate(R.layout.adapter_organizer, parent, false);
 
         TextView tv1 = view.findViewById(R.id.tv1);
         TextView tv2 = view.findViewById(R.id.tv2);

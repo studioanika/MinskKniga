@@ -11,24 +11,30 @@ public class WhatZakazal {
     @SerializedName("name")
     @Expose
     private String name;
-    @SerializedName("clas")
-    @Expose
-    private String clas;
-    @SerializedName("izdatel")
-    @Expose
-    private String izdatel;
     @SerializedName("artikul")
     @Expose
     private String artikul;
+    @SerializedName("clas")
+    @Expose
+    private String clas;
     @SerializedName("sokr_name")
     @Expose
     private String sokrName;
-    @SerializedName("zakazano")
+    @SerializedName("izdatel")
     @Expose
-    private String zakazano;
+    private String izdatel;
     @SerializedName("ves")
     @Expose
     private String ves;
+    @SerializedName("zakazano")
+    @Expose
+    private String zakazano;
+    @SerializedName("otgruzeno")
+    @Expose
+    private String otgruzeno;
+    @SerializedName("podarki")
+    @Expose
+    private String podarki;
     @SerializedName("cena")
     @Expose
     private String cena;
@@ -49,28 +55,20 @@ public class WhatZakazal {
         this.name = name;
     }
 
-    public String getClas() {
-        return clas;
-    }
-
-    public void setClas(String clas) {
-        this.clas = clas;
-    }
-
-    public String getIzdatel() {
-        return izdatel;
-    }
-
-    public void setIzdatel(String izdatel) {
-        this.izdatel = izdatel;
-    }
-
     public String getArtikul() {
         return artikul;
     }
 
     public void setArtikul(String artikul) {
         this.artikul = artikul;
+    }
+
+    public String getClas() {
+        return clas;
+    }
+
+    public void setClas(String clas) {
+        this.clas = clas;
     }
 
     public String getSokrName() {
@@ -81,12 +79,12 @@ public class WhatZakazal {
         this.sokrName = sokrName;
     }
 
-    public String getZakazano() {
-        return zakazano;
+    public String getIzdatel() {
+        return izdatel;
     }
 
-    public void setZakazano(String zakazano) {
-        this.zakazano = zakazano;
+    public void setIzdatel(String izdatel) {
+        this.izdatel = izdatel;
     }
 
     public String getVes() {
@@ -97,6 +95,30 @@ public class WhatZakazal {
         this.ves = ves;
     }
 
+    public String getZakazano() {
+        return zakazano;
+    }
+
+    public void setZakazano(String zakazano) {
+        this.zakazano = zakazano;
+    }
+
+    public String getOtgruzeno() {
+        return otgruzeno;
+    }
+
+    public void setOtgruzeno(String otgruzeno) {
+        this.otgruzeno = otgruzeno;
+    }
+
+    public String getPodarki() {
+        return podarki;
+    }
+
+    public void setPodarki(String podarki) {
+        this.podarki = podarki;
+    }
+
     public String getCena() {
         return cena;
     }
@@ -104,4 +126,5 @@ public class WhatZakazal {
     public void setCena(String cena) {
         this.cena = cena;
     }
+
 }

@@ -24,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -52,7 +53,7 @@ import com.google.zxing.integration.android.IntentResult;
 public class Main extends AppCompatActivity {
 
     ImageButton filter;
-    RelativeLayout filter_layout;
+    LinearLayout filter_layout;
     ImageButton back;
     ImageButton barcode;
     Button clear;

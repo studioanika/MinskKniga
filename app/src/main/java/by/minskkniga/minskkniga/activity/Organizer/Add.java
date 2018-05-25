@@ -1,14 +1,10 @@
 package by.minskkniga.minskkniga.activity.Organizer;
 
 import android.app.DatePickerDialog;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,7 +20,8 @@ import java.util.Calendar;
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Organizer_info;
-import by.minskkniga.minskkniga.api.Class.Organizer_info_mas;
+import by.minskkniga.minskkniga.api.Class.Organizer_info_mas_1;
+import by.minskkniga.minskkniga.api.Class.Organizer_info_mas_2;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +30,7 @@ import retrofit2.Response;
 public class Add extends AppCompatActivity {
 
     ImageButton back;
+    TextView caption;
     String id;
     String tab;
     String contragent_id;
@@ -46,17 +44,18 @@ public class Add extends AppCompatActivity {
     Spinner spinner1;
     Spinner spinner2;
     Spinner spinner3;
-    EditText ed_autor;
+    TextView ed_autor;
     TextView autor_lab;
-    EditText ed_date;
+    TextView ed_date;
     EditText ed_text;
 
-    ArrayList<Organizer_info_mas> clients;
-    ArrayList<Organizer_info_mas> couriers;
+
+    ArrayList<Organizer_info_mas_1> clients = new ArrayList<>();
+    ArrayList<Organizer_info_mas_2> couriers = new ArrayList<>();
 
     ArrayAdapter<String> adapter;
-    ArrayList<String> clients_buf;
-    ArrayList<String> couriers_buf;
+    ArrayList<String> clients_buf = new ArrayList<>();
+    ArrayList<String> couriers_buf = new ArrayList<>();
     String[] stat = {"Новое","Выполнено"};
 
     Button save;
@@ -64,11 +63,7 @@ public class Add extends AppCompatActivity {
 
     Calendar dateAndTime;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_organizer_add);
-
+    public void initialize(){
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +71,7 @@ public class Add extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        caption = findViewById(R.id.caption);
 
         save = findViewById(R.id.save);
         cancel = findViewById(R.id.cancel);
@@ -87,7 +83,6 @@ public class Add extends AppCompatActivity {
             }
         });
 
-
         ed_autor = findViewById(R.id.autor);
         autor_lab = findViewById(R.id.autor_lab);
         ed_date = findViewById(R.id.date);
@@ -97,23 +92,11 @@ public class Add extends AppCompatActivity {
         spinner3 = findViewById(R.id.spinner3);
 
 
+
         dateAndTime = Calendar.getInstance();
         ed_date.setText(DateUtils.formatDateTime(this,
                 dateAndTime.getTimeInMillis(),
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
-
-        ed_date.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(Add.this, d,
-                        dateAndTime.get(Calendar.YEAR),
-                        dateAndTime.get(Calendar.MONTH),
-                        dateAndTime.get(Calendar.DAY_OF_MONTH))
-                        .show();
-            }
-        });
-
 
         tab = getIntent().getStringExtra("tab");
         id = getIntent().getStringExtra("id");
@@ -128,20 +111,21 @@ public class Add extends AppCompatActivity {
         ed_autor.setText(autor_name);
         if (!date.equals("null")) ed_date.setText(date);
         ed_text.setText(text);
-        adapter = new ArrayAdapter<String>(Add.this, R.layout.adapter_nomenklatura_filter, stat);
+        adapter = new ArrayAdapter<>(Add.this, R.layout.adapter_nomenklatura_filter, stat);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner3.setAdapter(adapter);
 
         if (!tab.equals("null")) {
             if (tab.equals("1")) {
+                caption.setText("Просмотр поручения");
                 spinner1.setEnabled(false);
                 spinner2.setEnabled(false);
                 spinner3.setEnabled(false);
                 ed_date.setEnabled(false);
-                ed_autor.setEnabled(false);
                 ed_text.setEnabled(false);
             } else {
                 spinner3.setEnabled(false);
+                caption.setText("Редактирование поручения");
             }
         }
 
@@ -155,16 +139,34 @@ public class Add extends AppCompatActivity {
             ed_autor.setVisibility(View.GONE);
             autor_lab.setVisibility(View.GONE);
         }
-        clients = new ArrayList<>();
-        couriers = new ArrayList<>();
-        clients_buf = new ArrayList<>();
-        couriers_buf = new ArrayList<>();
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_organizer);
+        initialize();
+
+
+        ed_date.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(Add.this, d,
+                        dateAndTime.get(Calendar.YEAR),
+                        dateAndTime.get(Calendar.MONTH),
+                        dateAndTime.get(Calendar.DAY_OF_MONTH))
+                        .show();
+            }
+        });
+
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contragent_id = clients.get(spinner1.getSelectedItemPosition()).getId().toString();
-                ispolnitel = couriers.get(spinner2.getSelectedItemPosition()).getId().toString();
+                contragent_id = clients.get(spinner1.getSelectedItemPosition()).getId();
+                ispolnitel = couriers.get(spinner2.getSelectedItemPosition()).getId();
                 date = DateUtils.formatDateTime(Add.this,
                         dateAndTime.getTimeInMillis(),
                         DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_YEAR);
@@ -224,11 +226,11 @@ public class Add extends AppCompatActivity {
                 couriers.addAll(response.body().getCouriers());
 
                 for (int i = 0; i < response.body().getClients().size(); i++) {
-                    clients_buf.add(response.body().getClients().get(i).getName().toString());
+                    clients_buf.add(response.body().getClients().get(i).getName());
                 }
 
                 for (int i = 0; i < response.body().getCouriers().size(); i++) {
-                    couriers_buf.add(response.body().getCouriers().get(i).getName().toString());
+                    couriers_buf.add((response.body().getCouriers().get(i).getRank().equals("admin")?"Админ ":"Курьер ") + response.body().getCouriers().get(i).getName());
                 }
 
                 adapter = new ArrayAdapter<>(Add.this, R.layout.adapter_nomenklatura_filter, clients_buf);

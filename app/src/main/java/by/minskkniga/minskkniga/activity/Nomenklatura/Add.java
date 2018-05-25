@@ -244,11 +244,11 @@ public class Add extends AppCompatActivity {
                     upakovok.setText(response.body().getUpakovok());
                     ostatok.setText(response.body().getOstatok());
 
-
+                    Toast.makeText(Add.this, response.body().getImage(), Toast.LENGTH_SHORT).show();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+                        Glide.with(Add.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
                     } else {
-                        Glide.with(Add.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).into(image);
+                        Glide.with(Add.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + response.body().getImage()).into(image);
                     }
 
                 }

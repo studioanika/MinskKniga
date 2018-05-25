@@ -36,7 +36,6 @@ public class Add extends AppCompatActivity {
     EditText name_ed;
     EditText login_ed;
     EditText pass_ed;
-    EditText desc_ed;
 
     ArrayList<String> contact_type;
     ArrayList<String> contact_text;
@@ -70,10 +69,8 @@ public class Add extends AppCompatActivity {
         name_ed = findViewById(R.id.name_ed);
         login_ed = findViewById(R.id.login_ed);
         pass_ed = findViewById(R.id.pass_ed);
-        desc_ed = findViewById(R.id.desc_ed);
 
         list_contact = findViewById(R.id.contacts_listview);
-
 
         contact_type = new ArrayList<>();
         contact_text = new ArrayList<>();
@@ -127,7 +124,6 @@ public class Add extends AppCompatActivity {
         App.getApi().addCourier(name_ed.getText().toString(),
                 login_ed.getText().toString(),
                 pass_ed.getText().toString(),
-                desc_ed.getText().toString(),
                 contacts).enqueue(new Callback<ResultBody>() {
 
             @Override

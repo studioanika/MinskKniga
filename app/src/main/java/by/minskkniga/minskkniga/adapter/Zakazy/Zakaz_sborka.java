@@ -63,9 +63,9 @@ public class Zakaz_sborka extends BaseAdapter {
             linear.setBackgroundColor(Color.LTGRAY);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Glide.with(_context).load("http://query.pe.hu/admin/img/nomen/" + _objects.get(position).image).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(iv1);
+            Glide.with(_context).load("http://cc96297.tmweb.ru/admin/img/nomen/" + _objects.get(position).image).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(iv1);
         } else {
-            Glide.with(_context).load("http://query.pe.hu/admin/img/nomen/" +  _objects.get(position).image).into(iv1);
+            Glide.with(_context).load("http://cc96297.tmweb.ru/admin/img/nomen/" +  _objects.get(position).image).into(iv1);
         }
         tv1.setText(_objects.get(position).clas);
         tv2.setText(_objects.get(position).name);

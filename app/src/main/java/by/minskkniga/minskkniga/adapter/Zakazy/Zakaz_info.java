@@ -46,25 +46,25 @@ public class Zakaz_info extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
 
         lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = lInflater.inflate(R.layout.adapter_zakaz_info, parent, false);
+        View view = lInflater.inflate(R.layout.adapter_zakaz_new, parent, false);
 
         TextView tv1 = view.findViewById(R.id.tv1);
         TextView tv2 = view.findViewById(R.id.tv2);
         TextView tv3 = view.findViewById(R.id.tv3);
         TextView tv4 = view.findViewById(R.id.tv4);
         TextView tv5 = view.findViewById(R.id.tv5);
-        EditText ed1 = view.findViewById(R.id.ed1);
+        TextView tv6 = view.findViewById(R.id.tv6);
+        TextView tv7 = view.findViewById(R.id.tv7);
 
-        try {
-            tv1.setText(_objects.get(position).getName());
-            tv2.setText(_objects.get(position).getClas());
-            tv3.setText(_objects.get(position).getIzdatel().substring(0, 1));
-            tv4.setText(_objects.get(position).getArtikul());
-            tv5.setText(_objects.get(position).getSokrName());
-            ed1.setText(_objects.get(position).getZakazano());
-        }catch (Exception e){
 
-        }
+        tv1.setText(_objects.get(position).getName());
+        tv2.setText(_objects.get(position).getArtikul());
+        tv3.setText(_objects.get(position).getCena());
+        tv4.setText(_objects.get(position).getZakazano());
+        tv5.setText(_objects.get(position).getOtgruzeno().equals("")?"0":_objects.get(position).getOtgruzeno());
+        tv6.setText(_objects.get(position).getPodarki());
+        tv7.setText(String.valueOf(Double.parseDouble(_objects.get(position).getZakazano())*Double.parseDouble(_objects.get(position).getCena())));
+
         return view;
     }
 }

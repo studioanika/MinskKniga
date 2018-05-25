@@ -39,8 +39,10 @@ import java.util.List;
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Spravoch_Clients.Add;
 import by.minskkniga.minskkniga.activity.Zakazy.Zakaz_new;
+import by.minskkniga.minskkniga.adapter.Dialog.Main;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Clients;
+import by.minskkniga.minskkniga.api.Class.Dialog_clients;
 import by.minskkniga.minskkniga.api.Class.Gorod;
 import by.minskkniga.minskkniga.api.Class.Product;
 import by.minskkniga.minskkniga.api.Class.Product_client;
@@ -53,7 +55,7 @@ import retrofit2.Response;
 @SuppressLint("ValidFragment")
 public class Add_Dialog extends DialogFragment {
 
-    DialogFragment dlg_image;
+    private DialogFragment dlg_image;
     private View view;
     private LayoutInflater inflater;
     private AlertDialog.Builder builder;
@@ -61,7 +63,6 @@ public class Add_Dialog extends DialogFragment {
     private String type_dialog;
     private String id_product;
     private String url;
-
 
     private String type_client;
     private String type_provider;
@@ -101,6 +102,13 @@ public class Add_Dialog extends DialogFragment {
         this.id_client = id_client;
     }
 
+    public Add_Dialog(Context context, String type_dialog, Zakaz_product product, String id_product) {
+        this.context = context;
+        this.type_dialog = type_dialog;
+        this.product = product;
+        this.id_product = id_product;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         builder = new AlertDialog.Builder(context);
@@ -130,6 +138,9 @@ public class Add_Dialog extends DialogFragment {
                 break;
             case "nomenclatura_info":
                 nomenclatura_info();
+                break;
+            case "zakaz_product":
+                zakaz_product();
                 break;
             case "image":
                 image();
@@ -434,8 +445,6 @@ public class Add_Dialog extends DialogFragment {
 
         final TextView tv1 = view.findViewById(R.id.tv1);
         final TextView tv2 = view.findViewById(R.id.tv2);
-        final TextView tv3 = view.findViewById(R.id.tv3);
-        final TextView tv4 = view.findViewById(R.id.tv4);
 
         tv1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -443,8 +452,6 @@ public class Add_Dialog extends DialogFragment {
                 type_zakaz = 1;
                 tv1.setBackgroundColor(Color.rgb(221, 221, 221));
                 tv2.setBackgroundColor(Color.WHITE);
-                tv3.setBackgroundColor(Color.WHITE);
-                tv4.setBackgroundColor(Color.WHITE);
             }
         });
 
@@ -454,30 +461,6 @@ public class Add_Dialog extends DialogFragment {
                 type_zakaz = 2;
                 tv1.setBackgroundColor(Color.WHITE);
                 tv2.setBackgroundColor(Color.rgb(221, 221, 221));
-                tv3.setBackgroundColor(Color.WHITE);
-                tv4.setBackgroundColor(Color.WHITE);
-            }
-        });
-
-        tv3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                type_zakaz = 3;
-                tv1.setBackgroundColor(Color.WHITE);
-                tv2.setBackgroundColor(Color.WHITE);
-                tv3.setBackgroundColor(Color.rgb(221, 221, 221));
-                tv4.setBackgroundColor(Color.WHITE);
-            }
-        });
-
-        tv4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                type_zakaz = 4;
-                tv1.setBackgroundColor(Color.WHITE);
-                tv2.setBackgroundColor(Color.WHITE);
-                tv3.setBackgroundColor(Color.WHITE);
-                tv4.setBackgroundColor(Color.rgb(221, 221, 221));
             }
         });
 
@@ -487,7 +470,6 @@ public class Add_Dialog extends DialogFragment {
                 .setPositiveButton("Создать", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //((Zakaz_new) getActivity()).return_zakaz_type(type_zakaz);
                         Intent intent = new Intent(context, Zakaz_new.class);
                         intent.putExtra("type", type_zakaz);
                         intent.putExtra("id_client", id_client);
@@ -510,8 +492,8 @@ public class Add_Dialog extends DialogFragment {
         final EditText search = view.findViewById(R.id.search);
         final ListView lv = view.findViewById(R.id.lv);
         final TextView notfound = view.findViewById(R.id.notfound);
-        final ArrayList<String> clients = new ArrayList<>();
-        final ArrayList<String> clients_buf = new ArrayList<>();
+        final ArrayList<Dialog_clients> clients = new ArrayList<>();
+        final ArrayList<Dialog_clients> clients_buf = new ArrayList<>();
         final ArrayList<Clients> clients_zak = new ArrayList<>();
 
         final EditText search_gorod = view.findViewById(R.id.search_gorod);
@@ -591,8 +573,8 @@ public class Add_Dialog extends DialogFragment {
                 clients.clear();
                 for (Clients buffer : clients_zak) {
                     if (buffer.getGorod().equals(spinner.getSelectedItem().toString())) {
-                        clients.add(buffer.getName());
-                        clients_buf.add(buffer.getName());
+                        clients.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
+                        clients_buf.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
                     }
                 }
 
@@ -603,7 +585,7 @@ public class Add_Dialog extends DialogFragment {
                 }
                 notfound.setText("Ничего не найдено");
 
-                lv.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, clients));
+                lv.setAdapter(new Main(context, clients));
 
                 clients_buf.clear();
                 clients_buf.addAll(clients);
@@ -619,8 +601,8 @@ public class Add_Dialog extends DialogFragment {
                 clients_buf.clear();
 
                 for (Clients buffer : clients_zak) {
-                    clients.add(buffer.getName());
-                    clients_buf.add(buffer.getName());
+                    clients.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
+                    clients_buf.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
                 }
 
                 filter.setVisibility(View.VISIBLE);
@@ -628,7 +610,7 @@ public class Add_Dialog extends DialogFragment {
 
                 notfound.setText("Ничего не найдено");
 
-                lv.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, clients));
+                lv.setAdapter(new Main(context, clients));
 
                 goroda.addAll(goroda_buf);
 
@@ -642,8 +624,8 @@ public class Add_Dialog extends DialogFragment {
                 clients.clear();
                 clients_buf.clear();
                 for (Clients buffer : response.body()) {
-                    clients.add(buffer.getName());
-                    clients_buf.add(buffer.getName());
+                    clients.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
+                    clients_buf.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
                 }
                 clients_zak.addAll(response.body());
 
@@ -655,7 +637,7 @@ public class Add_Dialog extends DialogFragment {
                 notfound.setText("Ничего не найдено");
 
 
-                lv.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, clients));
+                lv.setAdapter(new Main(context, clients));
             }
 
             @Override
@@ -679,14 +661,14 @@ public class Add_Dialog extends DialogFragment {
                 clients.clear();
                 if (!search.getText().toString().isEmpty()) {
                     for (int i = 0; i < clients_buf.size(); i++) {
-                        if (clients_buf.get(i).toLowerCase().contains(search.getText().toString().toLowerCase())) {
+                        if (clients_buf.get(i).getName().toLowerCase().contains(search.getText().toString().toLowerCase())) {
                             clients.add(clients_buf.get(i));
                         }
                     }
                 } else {
                     clients.addAll(clients_buf);
                 }
-                lv.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, clients));
+                lv.setAdapter(new Main(context, clients));
 
                 if (clients.size() == 0) {
                     notfound.setVisibility(View.VISIBLE);
@@ -701,8 +683,8 @@ public class Add_Dialog extends DialogFragment {
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
                                     long id) {
                 for (Clients buf : clients_zak) {
-                    if (buf.getName().equals(clients.get(position)))
-                        ((Zakaz_new) getActivity()).return_client(buf.getId(), clients.get(position));
+                    if (buf.getName().equals(clients.get(position).getName()))
+                        ((Zakaz_new) getActivity()).return_client(buf.getId(), clients.get(position).getName());
                     getDialog().dismiss();
                 }
 
@@ -743,8 +725,6 @@ public class Add_Dialog extends DialogFragment {
         final TextView ostatok = view.findViewById(R.id.ostatok);
         final TextView dostupno = view.findViewById(R.id.dostupno);
         final TextView obrazec = view.findViewById(R.id.obrazec);
-        final TextView zakup_cena = view.findViewById(R.id.zakup_cena);
-        final TextView prod_cena = view.findViewById(R.id.prod_cena);
 
         final LinearLayout linear_podarki = view.findViewById(R.id.linear_podarki);
         final EditText cena_zakaz = view.findViewById(R.id.cena_zakaz);
@@ -756,7 +736,7 @@ public class Add_Dialog extends DialogFragment {
         final TextView summa_podar = view.findViewById(R.id.summa_podar);
         final TextView summa = view.findViewById(R.id.summa);
 
-        Toast.makeText(context, id_product+" "+id_client, Toast.LENGTH_SHORT).show();
+
         App.getApi().getProduct_client(id_product, id_client).enqueue(new Callback<Product_client>() {
             @Override
             public void onResponse(Call<Product_client> call, Response<Product_client> response) {
@@ -772,8 +752,6 @@ public class Add_Dialog extends DialogFragment {
                 ostatok.setText(response.body().getOstatok());
                 dostupno.setText(response.body().getDostupno());
                 obrazec.setText(response.body().getObrazecCol());
-                zakup_cena.setText(String.format("Закупочная: %s", response.body().getZakupCena()));
-                prod_cena.setText(String.format("Продажная: %s", response.body().getProdCena()));
                 cena_zakaz.setText(response.body().getCena());
                 cena_podar.setText(response.body().getCena());
 
@@ -875,6 +853,8 @@ public class Add_Dialog extends DialogFragment {
                                 String.valueOf(cena_zakaz.getText()).equals("")?"0":String.valueOf(cena_zakaz.getText()),
                                 String.valueOf(col_zakaz.getText()).equals("")?"0":String.valueOf(col_zakaz.getText()),
                                 String.valueOf(col_podar.getText()).equals("")?"0":String.valueOf(col_podar.getText()),
+                                ispodarki,
+                                const_podar,
                                 String.valueOf(summa.getText()),
                                 "0",
                                 String.valueOf(ves.getText()),
@@ -894,6 +874,120 @@ public class Add_Dialog extends DialogFragment {
                 });
     }
 
+    public void zakaz_product(){
+        view = inflater.inflate(R.layout.dialog_zakaz_product, null);
+
+        final EditText cena_zakaz = view.findViewById(R.id.cena_zakaz);
+        final EditText col_zakaz = view.findViewById(R.id.col_zakaz);
+        final TextView summa_zakaz = view.findViewById(R.id.summa_zakaz);
+
+        final LinearLayout linear_podarki = view.findViewById(R.id.linear_podarki);
+        final TextView cena_podar = view.findViewById(R.id.cena_podar);
+        final EditText col_podar = view.findViewById(R.id.col_podar);
+        final TextView summa_podar = view.findViewById(R.id.summa_podar);
+
+        final TextView summa = view.findViewById(R.id.summa);
+
+        ispodarki = product.ispodar;
+        const_podar = product.const_podar;
+
+        if (ispodarki.equals("0")){
+            linear_podarki.setVisibility(View.GONE);
+        }else{
+            linear_podarki.setVisibility(View.VISIBLE);
+        }
+
+        cena_zakaz.setText(product.cena);
+        cena_podar.setText(product.cena);
+        col_zakaz.setText(product.col_zakaz);
+        col_podar.setText(product.col_podar);
+
+        summa(cena_zakaz, col_zakaz, col_podar, summa_zakaz, summa_podar, summa);
+
+        cena_zakaz.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (String.valueOf(cena_zakaz.getText()).isEmpty()) cena_zakaz.setText("0");
+                cena_podar.setText(cena_zakaz.getText());
+                summa(cena_zakaz, col_zakaz, col_podar, summa_zakaz, summa_podar, summa);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        col_zakaz.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if (ispodarki.equals("1")) {
+                        col_podar.setText(String.valueOf((int)Math.floor(Integer.parseInt(String.valueOf(col_zakaz.getText()))/Integer.parseInt(const_podar))));
+                    } else {
+                        col_podar.setText("0");
+                    }
+                }catch (Exception e){
+                    col_podar.setText("0");
+                }
+                summa(cena_zakaz, col_zakaz, col_podar, summa_zakaz, summa_podar, summa);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        col_podar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                summa(cena_zakaz, col_zakaz, col_podar, summa_zakaz, summa_podar, summa);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        builder.setTitle(product.name)
+                .setView(view)
+                .setPositiveButton("Изменить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, int which) {
+
+                        product.cena = String.valueOf(cena_zakaz.getText());
+                        product.col_zakaz = String.valueOf(col_zakaz.getText());
+                        product.col_podar = String.valueOf(col_podar.getText());
+                        product.summa = String.valueOf(summa.getText());
+
+                        ((by.minskkniga.minskkniga.activity.Zakazy.Zakaz_new)getActivity()).return_product(product, id_product);
+                        dialog.cancel();
+                    }
+                })
+                .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+    }
+
     public void image(){
         view = inflater.inflate(R.layout.dialog_image, null);
         final ImageView image = view.findViewById(R.id.image);
@@ -901,9 +995,9 @@ public class Add_Dialog extends DialogFragment {
         Glide.with(context).load(R.drawable.ic_launcher_foreground).into(image);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Glide.with(context).load("http://query.pe.hu/admin/img/nomen/" + url).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+            Glide.with(context).load("http://cc96297.tmweb.ru/admin/img/nomen/" + url).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
         }else{
-            Glide.with(context).load("http://query.pe.hu/admin/img/nomen/" + url).into(image);
+            Glide.with(context).load("http://cc96297.tmweb.ru/admin/img/nomen/" + url).into(image);
         }
 
         builder.setView(view)
@@ -938,7 +1032,6 @@ public class Add_Dialog extends DialogFragment {
         }catch (Exception e){
             this_col_p = 0;
         }
-
 
         double this_summa_z = this_cena * this_col_z;
         double this_summa_p = this_cena * this_col_p;

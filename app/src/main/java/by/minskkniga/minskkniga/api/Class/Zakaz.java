@@ -3,6 +3,7 @@ package by.minskkniga.minskkniga.api.Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Zakaz {
@@ -33,7 +34,7 @@ public class Zakaz {
     private String status;
     @SerializedName("what_zakazal")
     @Expose
-    private List<WhatZakazal> whatZakazal = null;
+    private ArrayList<WhatZakazal> whatZakazal = null;
 
     public String getId() {
         return id;
@@ -99,11 +100,11 @@ public class Zakaz {
         this.status = status;
     }
 
-    public List<WhatZakazal> getWhatZakazal() {
+    public ArrayList<WhatZakazal> getWhatZakazal() {
         return whatZakazal;
     }
 
-    public void setWhatZakazal(List<WhatZakazal> whatZakazal) {
+    public void setWhatZakazal(ArrayList<WhatZakazal> whatZakazal) {
         this.whatZakazal = whatZakazal;
     }
 

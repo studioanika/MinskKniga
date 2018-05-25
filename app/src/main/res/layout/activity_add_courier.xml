@@ -61,7 +61,7 @@
                     android:id="@+id/name_ed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Имя курьера" />
+                    android:hint="Имя" />
 
                 <EditText
                     android:id="@+id/login_ed"
@@ -74,13 +74,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Пароль" />
-
-                <EditText
-                    android:id="@+id/desc_ed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Описание" />
-
 
             </LinearLayout>
 

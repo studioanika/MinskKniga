@@ -61,6 +61,7 @@ public class Sborka_tab extends AppCompatActivity {
     FloatingActionButton fab;
 
     LinearLayout ll;
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
@@ -69,7 +70,7 @@ public class Sborka_tab extends AppCompatActivity {
         finish();
     }
 
-    public void initialize(){
+    public void initialize() {
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,8 +173,10 @@ public class Sborka_tab extends AppCompatActivity {
                 id--;
                 reload(id);
 
-                if (id==0) prev.setEnabled(false); else prev.setEnabled(true);
-                if (id==products.size()-1) next.setEnabled(false); else next.setEnabled(true);
+                if (id == 0) prev.setEnabled(false);
+                else prev.setEnabled(true);
+                if (id == products.size() - 1) next.setEnabled(false);
+                else next.setEnabled(true);
             }
         });
 
@@ -183,8 +186,10 @@ public class Sborka_tab extends AppCompatActivity {
                 id++;
                 reload(id);
 
-                if (id==0) prev.setEnabled(false); else prev.setEnabled(true);
-                if (id==products.size()-1) next.setEnabled(false); else next.setEnabled(true);
+                if (id == 0) prev.setEnabled(false);
+                else prev.setEnabled(true);
+                if (id == products.size() - 1) next.setEnabled(false);
+                else next.setEnabled(true);
             }
         });
     }
@@ -200,18 +205,20 @@ public class Sborka_tab extends AppCompatActivity {
         caption.setText(getIntent().getStringExtra("name"));
         products.addAll(getIntent().<Zakaz_product>getParcelableArrayListExtra(Zakaz_product.class.getCanonicalName()));
 
-        if (id==0) prev.setEnabled(false); else prev.setEnabled(true);
-        if (id==products.size()-1) next.setEnabled(false); else next.setEnabled(true);
+        if (id == 0) prev.setEnabled(false);
+        else prev.setEnabled(true);
+        if (id == products.size() - 1) next.setEnabled(false);
+        else next.setEnabled(true);
 
         reload(id);
     }
 
-    public void reload(int id){
+    public void reload(int id) {
         zakazano.setText(products.get(id).col_zakaz);
         otgruzeno.setText(products.get(id).otgruzeno);
-        if (products.get(id).barcode_status.equals("1")){
+        if (products.get(id).barcode_status.equals("1")) {
             ll.setBackgroundColor(Color.LTGRAY);
-        }else{
+        } else {
             ll.setBackgroundColor(Color.WHITE);
         }
         App.getApi().getProduct(products.get(id).id).enqueue(new Callback<Product>() {
@@ -221,14 +228,14 @@ public class Sborka_tab extends AppCompatActivity {
                 artikul.setText(response.body().getArtikul());
                 clas.setText(response.body().getClas());
                 izdatel.setText(response.body().getIzdatel());
-                obrazec.setText(response.body().getObrazec().equals("1")?"Есть":"Нет");
+                obrazec.setText(response.body().getObrazec().equals("1") ? "Есть" : "Нет");
                 autor.setText(response.body().getAutor());
                 sokr_name.setText(response.body().getSokrName());
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Glide.with(Sborka_tab.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+                    Glide.with(Sborka_tab.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
                 } else {
-                    Glide.with(Sborka_tab.this).load("http://query.pe.hu/admin/img/nomen/" + response.body().getImage()).into(image);
+                    Glide.with(Sborka_tab.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + response.body().getImage()).into(image);
                 }
             }
 
@@ -242,13 +249,19 @@ public class Sborka_tab extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String res;
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
-            if (products.get(id).barcode.contains(result.getContents())) {
+            try {
+                res = result.getContents().isEmpty() ? "" : result.getContents();
+            }catch (Exception e){
+                res = "null";
+            }
+            if (products.get(id).barcode.contains(res)) {
                 products.get(id).barcode_status = "1";
                 Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show();
                 ll.setBackgroundColor(Color.LTGRAY);
-            }else{
+            } else {
                 Toast.makeText(this, "ERROR", Toast.LENGTH_SHORT).show();
                 ll.setBackgroundColor(Color.WHITE);
             }

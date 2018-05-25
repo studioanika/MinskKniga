@@ -159,6 +159,10 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
                 tv2.setTextColor(Color.rgb(139, 0, 0));
                 tv2.setText("Отгружен");
                 break;
+            case "6"://возвращение darkred
+                tv2.setText("Возвращение");
+                tv2.setTextColor(Color.rgb(100, 0, 0));
+                break;
         }
 
         if (_zakazy.get(groupPosition).getOplacheno().equals("0")) {

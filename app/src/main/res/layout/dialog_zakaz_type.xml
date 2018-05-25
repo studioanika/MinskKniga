@@ -22,24 +22,6 @@
         android:padding="10dp"
         android:textColor="#000"
         android:layout_weight="1"
-        android:text="Возврат" />
-
-    <TextView
-        android:id="@+id/tv3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textColor="#000"
-        android:layout_weight="1"
         android:text="Заказ образцов" />
-
-    <TextView
-        android:id="@+id/tv4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textColor="#000"
-        android:layout_weight="1"
-        android:text="Возврат образцов" />
 
 </LinearLayout>

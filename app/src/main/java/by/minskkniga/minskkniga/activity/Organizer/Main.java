@@ -81,7 +81,6 @@ public class Main extends AppCompatActivity {
         id = sp.getString("id", "");
         name = sp.getString("name","");
 
-        Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
         spinner1 = findViewById(R.id.spinner1);
         spinner2 = findViewById(R.id.spinner2);
         spinner3 = findViewById(R.id.spinner3);
@@ -300,19 +299,5 @@ public class Main extends AppCompatActivity {
 
         spinner.setAdapter(spinnerArrayAdapter);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItemText = (String) parent.getItemAtPosition(position);
-                if (position > 0) {
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 }

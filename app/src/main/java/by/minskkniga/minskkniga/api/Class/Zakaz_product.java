@@ -11,6 +11,8 @@ public class Zakaz_product implements Parcelable {
     public String cena;
     public String col_zakaz;
     public String col_podar;
+    public String ispodar;
+    public String const_podar;
     public String summa;
     public String otgruzeno;
     public String ves;
@@ -19,13 +21,15 @@ public class Zakaz_product implements Parcelable {
     public String barcode;
     public String barcode_status;
 
-    public Zakaz_product(String id, String name, String artukil, String cena, String col_zakaz, String col_podar, String summa, String otgruzeno, String ves, String image, String clas, String barcode, String barcode_status) {
+    public Zakaz_product(String id, String name, String artukil, String cena, String col_zakaz, String col_podar, String ispodar, String const_podar, String summa, String otgruzeno, String ves, String image, String clas, String barcode, String barcode_status) {
         this.id = id;
         this.name = name;
         this.artukil = artukil;
         this.cena = cena;
         this.col_zakaz = col_zakaz;
         this.col_podar = col_podar;
+        this.ispodar = ispodar;
+        this.const_podar = const_podar;
         this.summa = summa;
         this.otgruzeno = otgruzeno;
         this.ves = ves;
@@ -46,6 +50,8 @@ public class Zakaz_product implements Parcelable {
         parcel.writeString(cena);
         parcel.writeString(col_zakaz);
         parcel.writeString(col_podar);
+        parcel.writeString(ispodar);
+        parcel.writeString(const_podar);
         parcel.writeString(summa);
         parcel.writeString(otgruzeno);
         parcel.writeString(ves);
@@ -72,6 +78,8 @@ public class Zakaz_product implements Parcelable {
         cena = parcel.readString();
         col_zakaz = parcel.readString();
         col_podar = parcel.readString();
+        ispodar = parcel.readString();
+        const_podar = parcel.readString();
         summa = parcel.readString();
         otgruzeno = parcel.readString();
         ves = parcel.readString();

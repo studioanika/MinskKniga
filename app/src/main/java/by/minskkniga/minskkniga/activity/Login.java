@@ -1,6 +1,7 @@
 package by.minskkniga.minskkniga.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,7 @@ public class Login extends AppCompatActivity {
 
     ProgressDialog pd;
 
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +87,7 @@ public class Login extends AppCompatActivity {
                     if (!response.body().getMessage().equals("error")) {
                         pd.cancel();
                         Toast.makeText(Login.this, response.body().getRank()+" "+response.body().getUser_id(), Toast.LENGTH_SHORT).show();
+                        ed.putString("id", response.body().getId());
                         ed.putString("login", login.getText().toString());
                         ed.putString("pass", pass.getText().toString());
                         ed.putString("rank", response.body().getRank());

@@ -78,6 +78,10 @@ public class Menu extends AppCompatActivity {
                     case 1:
 
                         break;
+                    case 2:
+                        Intent intent2 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Kassa.Kassa_add.class);
+                        startActivity(intent2);
+                        break;
                     case 3:
                         Intent intent3 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Nomenklatura.Main.class);
                         intent3.putExtra("zakaz", false);

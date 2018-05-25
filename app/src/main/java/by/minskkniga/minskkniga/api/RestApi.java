@@ -19,9 +19,11 @@ import by.minskkniga.minskkniga.api.Class.Providers;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.Gorod;
 import by.minskkniga.minskkniga.api.Class.Zakaz;
+import by.minskkniga.minskkniga.api.Class.Zakaz_filter;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
+import by.minskkniga.minskkniga.api.Class.Zakazy_short;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -127,8 +129,8 @@ public interface RestApi {
     @GET("artikyl.php")
     Call<ResultBody> artikyl(@Query("name") String name);
 
-    @GET("get_zakazy.php")
-    Call<List<Zakazy>> getZakazy(@Query("id") int id);
+    @GET("get_zakazy_client.php")
+    Call<List<Zakazy>> getZakazy_client(@Query("id") int id);
 
     @GET("get_couriers.php")
     Call<List<Couriers>> getCouriers();
@@ -194,7 +196,6 @@ public interface RestApi {
     Call<ResultBody> addCourier(@Query("name") String name,
                                 @Query("login") String login,
                                 @Query("pass") String pass,
-                                @Query("desc") String desc,
                                 @Query("contacts") String contacts);
 
     @GET("add_zakaz.php")
@@ -206,4 +207,11 @@ public interface RestApi {
                               @Query("status") String status,
                               @Query("oplacheno") String oplacheno,
                               @Query("mas") String mas);
+
+    @GET("get_zakaz_filter.php")
+    Call<Zakaz_filter> getZakaz_filter();
+
+    @GET("get_zakazy.php")
+    Call<List<Zakazy_short>> getZakazy();
+
 }

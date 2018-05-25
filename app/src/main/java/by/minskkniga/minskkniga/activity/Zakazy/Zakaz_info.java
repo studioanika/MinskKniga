@@ -1,25 +1,24 @@
 package by.minskkniga.minskkniga.activity.Zakazy;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
-import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.WhatZakazal;
 import by.minskkniga.minskkniga.api.Class.Zakaz;
 import retrofit2.Call;
@@ -43,17 +42,44 @@ public class Zakaz_info extends AppCompatActivity {
     CheckBox oplacheno;
     TextView tv1;
     TextView tv2;
-
-    Spinner courier;
-    ArrayAdapter<String> adapter;
+    TextView courier;
 
     ListView lv;
+
+    public void initialize(){
+
+        caption = findViewById(R.id.caption);
+        id = getIntent().getStringExtra("id");
+        name = getIntent().getStringExtra("name");
+        caption.setText(name);
+
+        lv = findViewById(R.id.lv);
+        @SuppressLint("InflateParams") View header = getLayoutInflater().inflate(R.layout.include_zakaz_info, null);
+        lv.addHeaderView(header);
+
+        blank = header.findViewById(R.id.blank);
+        date1 = header.findViewById(R.id.date1);
+        date2 = header.findViewById(R.id.date2);
+        autor = header.findViewById(R.id.autor);
+        status = header.findViewById(R.id.status);
+        tv1 = header.findViewById(R.id.tv1);
+        tv2 = header.findViewById(R.id.tv2);
+
+
+        courier = header.findViewById(R.id.courier);
+
+        chernovik = header.findViewById(R.id.chernovik);
+        oplacheno = header.findViewById(R.id.oplacheno);
+
+        zakaz = new Zakaz();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_zakazy_zakaz_info);
-
+        setContentView(R.layout.activity_zakaz_info);
+        initialize();
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,29 +88,6 @@ public class Zakaz_info extends AppCompatActivity {
             }
         });
 
-        caption = findViewById(R.id.caption);
-        id = getIntent().getStringExtra("id");
-        name = getIntent().getStringExtra("name");
-        caption.setText(name);
-
-        Toast.makeText(this, id+" "+name, Toast.LENGTH_SHORT).show();
-
-        blank = findViewById(R.id.blank);
-        date1 = findViewById(R.id.date1);
-        date2 = findViewById(R.id.date2);
-        autor = findViewById(R.id.autor);
-        status = findViewById(R.id.status);
-        tv1 = findViewById(R.id.tv1);
-        tv2 = findViewById(R.id.tv2);
-
-        lv = findViewById(R.id.lv);
-
-        courier = findViewById(R.id.courier);
-
-        chernovik = findViewById(R.id.chernovik);
-        oplacheno = findViewById(R.id.oplacheno);
-
-        zakaz = new Zakaz();
     }
 
     @Override
@@ -93,63 +96,74 @@ public class Zakaz_info extends AppCompatActivity {
         reload();
     }
 
+    double summa = 0;
+    double ves = 0;
+    int col = 0;
+
     public void reload() {
         App.getApi().getZakaz_info(id).enqueue(new Callback<Zakaz>() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onResponse(Call<Zakaz> call, Response<Zakaz> response) {
                 zakaz = response.body();
                 blank.setText(zakaz.getId());
                 date1.setText(zakaz.getDate());
-                date2.setText(zakaz.getDateIzm()    );
+                date2.setText(zakaz.getDateIzm());
                 autor.setText(zakaz.getAutor());
+                oplacheno.setChecked(zakaz.getOplacheno().equals("1"));
+                courier.setText(response.body().getCourier());
 
-                try {
-                    double summa = 0;
-                    double ves = 0;
-                    for (int i = 0; i < zakaz.getWhatZakazal().size(); i++) {
-                        summa += Double.parseDouble(zakaz.getWhatZakazal().get(i).getCena());
-                        ves += Double.parseDouble(zakaz.getWhatZakazal().get(i).getVes()) * Double.parseDouble(zakaz.getWhatZakazal().get(i).getZakazano());
-                    }
-                    tv1.setText("Итого " + zakaz.getWhatZakazal().size() + " позиция на " + summa + " BYN");
-                    tv2.setText("Вес: " + ves + " кг");
-                }catch(Exception e){
-                    Toast.makeText(Zakaz_info.this, "error", Toast.LENGTH_SHORT).show();
+
+                summa = 0;
+                ves = 0;
+                col = 0;
+                for (WhatZakazal buffer : response.body().getWhatZakazal()) {
+                    col++;
+                    summa += Double.parseDouble(buffer.getCena().equals("")?"0":buffer.getCena()) * Double.parseDouble(buffer.getZakazano());
+                    ves += Double.parseDouble(buffer.getVes().equals("")?"0":buffer.getVes()) * Double.parseDouble(buffer.getZakazano());
                 }
 
+                tv1.setText(String.format("Итого %s позиций на %sBYN", col, Math.round(summa * 100.0) / 100.0));
+                tv2.setText(String.format("Вес: %sкг", Math.round(ves * 100.0) / 100.0));
 
-                oplacheno.setChecked(zakaz.getOplacheno().equals("1"));
+
 
                 switch (zakaz.getStatus()) {
-                    case "0"://chernovik новый  green
+                    case "0"://chernovik новый green
                         status.setText("Новый");
                         status.setTextColor(Color.rgb(97, 184, 126));
                         chernovik.setChecked(true);
                         break;
-                    case "1"://новый  green
+                    case "1"://новый green
                         status.setText("Новый");
                         status.setTextColor(Color.rgb(97, 184, 126));
                         break;
-                    case "2"://в сборке  yellow
+                    case "2"://в сборке yellow
                         status.setText("В сборке");
                         status.setTextColor(Color.rgb(242, 201, 76));
                         break;
-                    case "3"://собран  blue
+                    case "3"://собран blue
                         status.setText("Собран");
                         status.setTextColor(Color.BLUE);
                         break;
-                    case "4"://в доставке   lightred
+                    case "4"://в доставке lightred
                         status.setText("В доставке");
                         status.setTextColor(Color.rgb(242, 0, 86));
                         break;
-                    case "5"://отгружен   darkred
+                    case "5"://отгружен darkred
                         status.setText("Отгружен");
                         status.setTextColor(Color.rgb(139, 0, 0));
                         break;
+                    case "6"://возвращение darkred
+                        status.setText("Возвращение");
+                        status.setTextColor(Color.rgb(100, 0, 0));
+                        break;
 
                 }
-                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_info(Zakaz_info.this, (ArrayList<WhatZakazal>) zakaz.getWhatZakazal()));
-                setListViewHeightBasedOnChildren(lv);
-                load_couriers();
+
+
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_info(Zakaz_info.this, response.body().getWhatZakazal()));
+                //lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_info(Zakaz_info.this, (ArrayList<WhatZakazal>) zakaz.getWhatZakazal()));
             }
 
             @Override
@@ -159,55 +173,4 @@ public class Zakaz_info extends AppCompatActivity {
         });
     }
 
-    public void load_couriers(){
-        App.getApi().getCouriers().enqueue(new Callback<List<Couriers>>() {
-            @Override
-            public void onResponse(Call<List<Couriers>> call, Response<List<Couriers>> response) {
-                ArrayList<String> mass = new ArrayList<>();
-
-                for (Couriers buffer : response.body()){
-                    mass.add(buffer.getName());
-                }
-
-                adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, mass);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                courier.setAdapter(adapter);
-
-                for (int i = 0; i < mass.size(); i++) {
-                    if (zakaz.getCourier().equals(mass.get(i))) {
-                        courier.setSelection(i);
-                    }
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<Couriers>> call, Throwable t) {
-                Toast.makeText(Zakaz_info.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void setListViewHeightBasedOnChildren(ListView listView) {
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
-
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
-        int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-    }
 }

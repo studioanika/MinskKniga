@@ -9,24 +9,24 @@ public class Organizer_info {
 
     @SerializedName("clients")
     @Expose
-    private ArrayList<Organizer_info_mas> clients = null;
+    private ArrayList<Organizer_info_mas_1> clients = null;
     @SerializedName("couriers")
     @Expose
-    private ArrayList<Organizer_info_mas> couriers = null;
+    private ArrayList<Organizer_info_mas_2> couriers = null;
 
-    public ArrayList<Organizer_info_mas> getClients() {
+    public ArrayList<Organizer_info_mas_1> getClients() {
         return clients;
     }
 
-    public void setClients(ArrayList<Organizer_info_mas> clients) {
+    public void setClients(ArrayList<Organizer_info_mas_1> clients) {
         this.clients = clients;
     }
 
-    public ArrayList<Organizer_info_mas> getCouriers() {
+    public ArrayList<Organizer_info_mas_2> getCouriers() {
         return couriers;
     }
 
-    public void setCouriers(ArrayList<Organizer_info_mas> couriers) {
+    public void setCouriers(ArrayList<Organizer_info_mas_2> couriers) {
         this.couriers = couriers;
     }
 }

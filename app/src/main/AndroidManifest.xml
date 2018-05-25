@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".api.App"
@@ -19,6 +19,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.Login"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -94,13 +95,21 @@
             android:name=".activity.Zakazy.Zakaz_new"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.Barcode" />
-        <activity android:name=".activity.Zakazy.Sborka"
+        <activity
+            android:name=".activity.Barcode"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.Zakazy.Sborka_tab"
+        <activity
+            android:name=".activity.Zakazy.Sborka"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.Zakazy.Sborka_tab"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.Kassa.Main" />
+        <activity android:name=".activity.Kassa.Kassa_info" />
+        <activity android:name=".activity.Kassa.Kassa_add"></activity>
     </application>
 
 </manifest>
