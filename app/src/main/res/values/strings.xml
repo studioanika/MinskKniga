@@ -40,4 +40,10 @@
         <item>Вторая смена</item>
     </string-array>
 
+    <string name="title_activity_providers_list">ProvidersListActivity</string>
+    <string name="title_activity_provider_zayavki_list">ProviderZayavkiListActivity</string>
+    <string name="title_activity_description_zayavka">DescriptionZayavkaActivity</string>
+    <string name="title_activity_description_zayavka_book">DescriptionZayavkaBookActivity</string>
+    <string name="title_activity_new_provider_zayavka">Новая заявка</string>
+
 </resources>

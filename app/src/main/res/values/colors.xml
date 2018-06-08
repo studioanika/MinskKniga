@@ -6,4 +6,11 @@
     <color name="colorWhite">#ffffff</color>
     <color name="drawer_background">#292929</color>
     <color name="drawer_text">#ffffff</color>
+    <color name="tab_indicator">#000</color>
+    <color name="white">#FFF</color>
+    <color name="header_color">#b7fcfcfc</color>
+    <color name="header_1">#FBF8D6</color>
+    <color name="header_rel">#b7f1f1f1</color>
+    <color name="text_blue">#2E28C5</color>
+
 </resources>

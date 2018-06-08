@@ -109,7 +109,36 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.Kassa.Main" />
         <activity android:name=".activity.Kassa.Kassa_info" />
-        <activity android:name=".activity.Kassa.Kassa_add"></activity>
+        <activity android:name=".activity.Kassa.Kassa_add" />
+        <activity
+            android:name=".activity.providers.ProvidersListActivity"
+            android:label="@string/title_activity_providers_list"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.providers.ProviderZayavkiListActivity"
+            android:label="@string/title_activity_provider_zayavki_list"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.providers.DescriptionZayavkaActivity"
+            android:label="@string/title_activity_description_zayavka"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.providers.DescriptionZayavkaBookActivity"
+            android:label="@string/title_activity_description_zayavka_book"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.providers.NewProviderZayavka"
+            android:label="@string/title_activity_new_provider_zayavka"
+            android:theme="@style/AppTheme"></activity>
+
+        <activity
+            android:name=".activity.providers.SelectNomeclaturaActivity"
+            android:label="Номеклатура"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.providers.ProvidersListActivity;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Notif_count;
 import retrofit2.Call;
@@ -76,7 +77,7 @@ public class Menu extends AppCompatActivity {
                         startActivity(intent0);
                         break;
                     case 1:
-
+                        startActivity(new Intent(Menu.this, ProvidersListActivity.class));
                         break;
                     case 2:
                         Intent intent2 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Kassa.Kassa_add.class);

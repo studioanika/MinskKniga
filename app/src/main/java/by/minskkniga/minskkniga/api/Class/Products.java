@@ -3,7 +3,9 @@ package by.minskkniga.minskkniga.api.Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Products {
+import java.io.Serializable;
+
+public class Products implements Serializable {
 
     @SerializedName("id")
     @Expose

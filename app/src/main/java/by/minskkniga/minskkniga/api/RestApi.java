@@ -24,7 +24,15 @@ import by.minskkniga.minskkniga.api.Class.Zakazy;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import by.minskkniga.minskkniga.api.Class.Zakazy_short;
+import by.minskkniga.minskkniga.api.Class.providers.InfoZayavkaBook;
+import by.minskkniga.minskkniga.api.Class.providers.Money;
+import by.minskkniga.minskkniga.api.Class.providers.ProviderObject;
+import by.minskkniga.minskkniga.api.Class.providers.ProviderZayavkiIzdatelstva;
+import by.minskkniga.minskkniga.api.Class.providers.ProviderZayavkiNews;
+import by.minskkniga.minskkniga.api.Class.providers.ProvidersZayavkiId;
+import by.minskkniga.minskkniga.api.Class.providers.ZavInfo;
 import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -214,4 +222,30 @@ public interface RestApi {
     @GET("get_zakazy.php")
     Call<List<Zakazy_short>> getZakazy();
 
+    @GET("/api/get_providers_izd.php")
+    Call<List<ProviderZayavkiIzdatelstva>> getProvidersZ();
+
+    @GET("/admin/srcipts/auto_z_all.php")
+    Call<ResponseBody> getAutoZAll();
+
+    @GET("/api/get_providers_new.php")
+    Call<ProviderZayavkiNews> getProvidersNewsZ();
+
+    @GET("/api/get_zav_prov.php?")
+    Call<List<ProvidersZayavkiId>> getProvidersZayavki(@Query("id") String id);
+
+    @GET("/api/get_prov_d.php?")
+    Call<List<Money>> getProviderMoney(@Query("id") String id);
+
+    @GET("/api/get_zav_info.php?")
+    Call<ZavInfo> getZavInfo(@Query("id") String id);
+
+    @GET("/api/get_info_k.php?")
+    Call<List<InfoZayavkaBook>> getInfoBookZ(@Query("id") String id, @Query("zak") String zak);
+
+    @GET("/api/get_list_providers.php?")
+    Call<List<ProviderObject>> getAllProviders();
+
+    @GET("/api/get_couriers.php?")
+    Call<List<by.minskkniga.minskkniga.api.Class.providers.Couriers>> getAllCouriers();
 }
