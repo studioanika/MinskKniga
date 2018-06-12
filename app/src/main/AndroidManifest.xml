@@ -133,11 +133,21 @@
         <activity
             android:name=".activity.providers.NewProviderZayavka"
             android:label="@string/title_activity_new_provider_zayavka"
-            android:theme="@style/AppTheme"></activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.providers.SelectNomeclaturaActivity"
             android:label="Номеклатура"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.providers.RashodOrder"
+            android:label="@string/title_activity_rashod_order"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.Kassa.SchetOperation"
+            android:label="@string/title_activity_schet_operation"
             android:theme="@style/AppTheme"></activity>
     </application>
 

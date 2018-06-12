@@ -24,7 +24,7 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     String id, name;
-
+    FloatingActionButton fab;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -54,9 +54,13 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
         initViewPager();
 
 
+
     }
 
     public void initViewPager(){
+
+
+
         try {
             final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
             final PagerAdapter adapter = new PagerAdapter

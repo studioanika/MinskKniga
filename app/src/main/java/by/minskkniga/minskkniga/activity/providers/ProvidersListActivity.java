@@ -41,13 +41,13 @@ public class ProvidersListActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("ИЗДАТЕЛЬСТВА"));
         tabLayout.addTab(tabLayout.newTab().setText("НОВЫЕ"));
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ProvidersListActivity.this, NewProviderZayavka.class));
-            }
-        });
+//        fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(ProvidersListActivity.this, NewProviderZayavka.class));
+//            }
+//        });
 
         TabLayout.Tab tab = tabLayout.getTabAt(0);
         tab.select();
@@ -123,12 +123,8 @@ public class ProvidersListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if( id == android.R.id.home){
             finish();
         }

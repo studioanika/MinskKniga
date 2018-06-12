@@ -80,7 +80,8 @@ public class Menu extends AppCompatActivity {
                         startActivity(new Intent(Menu.this, ProvidersListActivity.class));
                         break;
                     case 2:
-                        Intent intent2 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Kassa.Kassa_add.class);
+                        //Intent intent2 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Kassa.Kassa_info.class);
+                        Intent intent2 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Kassa.SchetOperation.class);
                         startActivity(intent2);
                         break;
                     case 3:

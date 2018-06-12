@@ -24,7 +24,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:fontFamily="@font/roboto"
-                android:text="Счета"
+                android:text="Касса"
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
 
@@ -53,9 +53,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:text="Итого активы" />
+                    android:text="Итого приход:" />
 
                 <TextView
+                    android:id="@+id/cassa_prihod"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -72,28 +73,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:text="Итого обязательства" />
+                    android:text="Итого расход:" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:text="textview" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:text="Баланс" />
-
-                <TextView
+                    android:id="@+id/cassa_rashod"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
     compileSdkVersion 27
     defaultConfig {
         applicationId "by.minskkniga.minskkniga"
@@ -26,11 +34,11 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
-
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
-
+    implementation 'com.daimajia.easing:library:2.0@aar'
+    implementation 'com.daimajia.androidanimations:library:2.3@aar'
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
 
     testImplementation 'junit:junit:4.12'

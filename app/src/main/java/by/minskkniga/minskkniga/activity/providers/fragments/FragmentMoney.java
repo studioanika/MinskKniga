@@ -2,9 +2,11 @@ package by.minskkniga.minskkniga.activity.providers.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +22,7 @@ import java.util.List;
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.providers.ProviderZayavkiListActivity;
 import by.minskkniga.minskkniga.activity.providers.ProvidersListActivity;
+import by.minskkniga.minskkniga.activity.providers.RashodOrder;
 import by.minskkniga.minskkniga.activity.providers.adapter.FragmentNewsAdapter;
 import by.minskkniga.minskkniga.activity.providers.adapter.MoneyAdapter;
 import by.minskkniga.minskkniga.api.App;
@@ -48,6 +51,8 @@ public class FragmentMoney extends Fragment implements IFragmentProvider {
     private LinearLayoutManager mLayoutManager;
     Context activity;
 
+    FloatingActionButton fab;
+
 
     @SuppressLint("ValidFragment")
     public FragmentMoney(String id) {
@@ -74,6 +79,16 @@ public class FragmentMoney extends Fragment implements IFragmentProvider {
         tv_oplacheno = (TextView) v.findViewById(R.id.fragment_money_oplacheno);
         tv_itogo = (TextView) v.findViewById(R.id.fragment_money_result);
         tv_dolg = (TextView) v.findViewById(R.id.fragment_money_nam_dolzhni);
+
+        fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), RashodOrder.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
 
     }
 

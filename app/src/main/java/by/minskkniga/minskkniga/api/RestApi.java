@@ -24,6 +24,9 @@ import by.minskkniga.minskkniga.api.Class.Zakazy;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import by.minskkniga.minskkniga.api.Class.Zakazy_short;
+import by.minskkniga.minskkniga.api.Class.cassa.Scheta;
+import by.minskkniga.minskkniga.api.Class.cassa.SchetaResponse;
+import by.minskkniga.minskkniga.api.Class.category.ResponseProvScheta;
 import by.minskkniga.minskkniga.api.Class.providers.InfoZayavkaBook;
 import by.minskkniga.minskkniga.api.Class.providers.Money;
 import by.minskkniga.minskkniga.api.Class.providers.ProviderObject;
@@ -248,4 +251,10 @@ public interface RestApi {
 
     @GET("/api/get_couriers.php?")
     Call<List<by.minskkniga.minskkniga.api.Class.providers.Couriers>> getAllCouriers();
+
+    @GET("/api/get_scheta.php?")
+    Call<List<SchetaResponse>> getAllScheta();
+
+    @GET("/api/get_prov_schet.php?")
+    Call<List<ResponseProvScheta>> getProvScheta(@Query("id") String id);
 }
