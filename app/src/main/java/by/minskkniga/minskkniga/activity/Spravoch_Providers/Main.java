@@ -173,6 +173,9 @@ public class Main extends AppCompatActivity {
     }
 
     public void reload_1(){
+
+        // TODO pltсь переделать экран с городами
+
         App.getApi().getProviders().enqueue(new Callback<List<Providers>>() {
             @Override
             public void onResponse(Call<List<Providers>> call, Response<List<Providers>> response) {
@@ -202,7 +205,11 @@ public class Main extends AppCompatActivity {
                         for (int j = 0; j < col; j++) {
                             if (pro.get(j).getCity().equals(pro.get(i).getCity())) {
                                 temp.add(pro.get(j).getName() + "@" + pro.get(j).getCreditSize());
-                                dolg += pro.get(j).getCreditSize();
+                                try {
+                                    dolg += Double.parseDouble(pro.get(j).getCreditSize());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                         listDataHeader.add(pro.get(i).getCity() + "@" + dolg);
@@ -220,6 +227,7 @@ public class Main extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Providers>> call, Throwable t) {
+                String s = t.getMessage();
                 Toast.makeText(Main.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });

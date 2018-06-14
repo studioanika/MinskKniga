@@ -5,6 +5,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class Category {
 
+    private boolean selected = false;
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     @SerializedName("id")
     @Expose
     private String id;

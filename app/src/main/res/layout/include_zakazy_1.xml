@@ -11,7 +11,8 @@
         android:id="@+id/filter_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,18 +20,18 @@
 
             <Spinner
                 android:id="@+id/spinner1"
-                android:spinnerMode="dialog"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_weight="0.2" />
+                android:layout_weight="0.2"
+                android:spinnerMode="dialog" />
 
             <Button
                 android:id="@+id/clear1"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_weight="1"
-                android:text="X"/>
+                android:text="X" />
 
         </LinearLayout>
 
@@ -40,18 +41,18 @@
 
             <Spinner
                 android:id="@+id/spinner2"
-                android:spinnerMode="dialog"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_weight="0.2" />
+                android:layout_weight="0.2"
+                android:spinnerMode="dialog" />
 
             <Button
                 android:id="@+id/clear2"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_weight="1"
-                android:text="X"/>
+                android:text="X" />
 
         </LinearLayout>
 
@@ -61,18 +62,18 @@
 
             <Spinner
                 android:id="@+id/spinner3"
-                android:spinnerMode="dialog"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_weight="0.2" />
+                android:layout_weight="0.2"
+                android:spinnerMode="dialog" />
 
             <Button
                 android:id="@+id/clear3"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_weight="1"
-                android:text="X"/>
+                android:text="X" />
 
         </LinearLayout>
 

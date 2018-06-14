@@ -146,9 +146,20 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.Kassa.SchetOperation"
             android:label="@string/title_activity_schet_operation"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".activity.category.CategoryActivity"
+            android:label="@string/title_activity_category"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".activity.category.SchetaListActivity"
+            android:label="@string/title_activity_scheta_list"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

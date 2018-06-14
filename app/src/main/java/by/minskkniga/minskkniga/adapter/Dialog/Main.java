@@ -55,10 +55,14 @@ public class Main extends BaseAdapter {
         tv1.setText(_objects.get(position).getName());
 
         if (_objects.get(position).getPodar().equals("1")) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                Glide.with(_context).load(R.drawable.ic_gift).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(iv1);
-            } else {
-                Glide.with(_context).load(R.drawable.ic_gift).into(iv1);
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Glide.with(_context).load(R.drawable.ic_gift).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(iv1);
+                } else {
+                    Glide.with(_context).load(R.drawable.ic_gift).into(iv1);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

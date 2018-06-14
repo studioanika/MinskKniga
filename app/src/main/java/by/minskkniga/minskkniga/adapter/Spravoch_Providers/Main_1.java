@@ -54,12 +54,17 @@ public class Main_1 extends BaseExpandableListAdapter {
 
         String[] buffer = childText.split("@");
         tv1.setText(buffer[0]);
-        if (Double.parseDouble(buffer[1]) < 0) {
-            tv2.setTextColor(Color.RED);
-        } else {
+        try{
+            if (Double.parseDouble(buffer[1]) < 0) {
+                tv2.setTextColor(Color.RED);
+            } else {
+                tv2.setTextColor(Color.BLACK);
+            }
+            tv2.setText(buffer[1]);
+
+        }catch (Exception e){
             tv2.setTextColor(Color.BLACK);
         }
-        tv2.setText(buffer[1]);
 
         return convertView;
     }

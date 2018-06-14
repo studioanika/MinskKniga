@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,9 +13,12 @@ import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,14 +27,28 @@ import java.util.Locale;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Kassa.SchetOperation;
+import by.minskkniga.minskkniga.activity.category.CategoryActivity;
+import by.minskkniga.minskkniga.activity.category.SchetaListActivity;
+import by.minskkniga.minskkniga.activity.providers.NewProviderZayavka;
+import by.minskkniga.minskkniga.activity.providers.SelectNomeclaturaActivity;
+import by.minskkniga.minskkniga.api.App;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 @SuppressLint("ValidFragment")
 public class FragmentDohod extends Fragment implements IFragmentSchetOperation, View.OnClickListener {
 
     View v;
 
+    private static final int REQUEST_CODE = 201;
+    private static final int REQUEST_CODE_1 = 202;
+
+    TextView cat_tv, schet_tv, pol_tv;
+
     TextView tv_date, tv_time, tv_summa;
-    ImageView img_left, img_right;
+    ImageView img_left, img_right, img_money;
 
     SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy",Locale.getDefault());
     SimpleDateFormat dft = new SimpleDateFormat("HH:mm");
@@ -38,6 +56,15 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
     long currentTimeMillis = currentDate.getTime();
 
     Context context;
+
+    String schet_ID ="";
+    String cat_ID = "";
+    String podcat_ID ="";
+    String kontragent = "";
+
+    Button btn_save;
+
+    EditText et_comment;
 
     public FragmentDohod(Context context) {
         this.context = context;
@@ -57,12 +84,34 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
     @Override
     public void initView() {
 
+
+        tv_summa = (TextView) v.findViewById(R.id.dohod_summa);
+        img_money = (ImageView) v.findViewById(R.id.dohod_img_money);
+        img_money.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SchetOperation operation = (SchetOperation) context;
+                if(tv_summa != null)operation.showMonyDialog(tv_summa);
+            }
+        });
+        et_comment = (EditText) v.findViewById(R.id.dohod_note);
+        btn_save = (Button) v.findViewById(R.id.r_o_save);
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                send();
+            }
+        });
+        cat_tv = (TextView) v.findViewById(R.id.r_o_cat);
+        schet_tv = (TextView) v.findViewById(R.id.r_o_chet);
+        pol_tv = (TextView) v.findViewById(R.id.r_o_pod_cat);
+
         tv_date = (TextView) v.findViewById(R.id.dohod_date);
         tv_time = (TextView) v.findViewById(R.id.dohod_time);
         img_left = (ImageView) v.findViewById(R.id.dohod_img_left);
         img_right = (ImageView) v.findViewById(R.id.dohod_img_right);
 
-        tv_summa = (TextView) v.findViewById(R.id.dohod_summa);
+
 
         img_right.setOnClickListener(this);
         img_left.setOnClickListener(this);
@@ -70,6 +119,28 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
         tv_date.setOnClickListener(this);
         tv_time.setOnClickListener(this);
         tv_summa.setOnClickListener(this);
+
+        cat_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startCat();
+            }
+        });
+
+        schet_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startScheta();
+            }
+        });
+
+        pol_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SchetOperation operation = (SchetOperation) context;
+                operation.showSelectProvider("1");
+            }
+        });
     }
 
     @Override
@@ -151,5 +222,90 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
     public void onResume() {
         setTimeAndDate();
         super.onResume();
+    }
+
+    private void startCat(){
+        SchetOperation schetOperation = (SchetOperation) context;
+        schetOperation.startCat("1");
+
+    }
+
+    private void startScheta(){
+
+        SchetOperation schetOperation = (SchetOperation) context;
+        schetOperation.startScheta();
+
+    }
+
+    public void setCategory(String category, String cat_ID, String podcat_ID){
+        if(category != null) cat_tv.setText(category);
+        if(cat_ID != null) this.cat_ID = cat_ID;
+        if(podcat_ID != null) this.podcat_ID = podcat_ID;
+    }
+
+    public void setScheta(String id, String schet){
+        if(schet != null) schet_tv.setText(schet);
+        if(id != null) schet_ID = id;
+    }
+
+    public void setKontragent(String name, String id){
+        if(name != null) pol_tv.setText(name);
+        if(id != null) kontragent = id;
+    }
+
+    private void send(){
+
+        if(cat_ID.isEmpty()) {
+            Toast.makeText(getContext(), "Выберите категорию", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(podcat_ID.isEmpty()) {
+            Toast.makeText(getContext(), "Выберите подкатегорию", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(schet_ID.isEmpty()) {
+            Toast.makeText(getContext(), "Выберите счет", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        String summ = tv_summa.getText().toString();
+        if(summ.isEmpty()) {
+            Toast.makeText(getContext(), "Заполните сумму", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String date = tv_date.getText().toString();
+
+        if(kontragent.isEmpty()){
+            Toast.makeText(getContext(), "Выберите контрагента", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String com = et_comment.getText().toString();
+
+        String type = "1";
+
+        String schet_perevoda = "0";
+
+        App.getApi().addOperationCassa(cat_ID, podcat_ID,schet_ID, summ, date,
+                kontragent, com, type, schet_perevoda).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                if(response.body() != null){
+
+                    Toast.makeText(getContext(), "Операция одобрена", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 }

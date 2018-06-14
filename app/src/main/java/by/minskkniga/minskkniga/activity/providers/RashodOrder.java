@@ -2,22 +2,33 @@ package by.minskkniga.minskkniga.activity.providers;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
@@ -25,21 +36,32 @@ import by.minskkniga.minskkniga.api.Class.category.Category;
 import by.minskkniga.minskkniga.api.Class.category.PodCat;
 import by.minskkniga.minskkniga.api.Class.category.ResponseProvScheta;
 import by.minskkniga.minskkniga.api.Class.category.Schetum;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RashodOrder extends AppCompatActivity {
 
+
+    String phone = "";
+    SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+    Date currentDate = new Date();
     TextView tv_name;
     Spinner sp_chet, sp_cat, sp_podcat;
     EditText summa, comment;
     Button btn_cancel, btn_save;
 
     List<Category> categoryListFinal = null;
+    List<Category> categoryListFinal2 = null;
     List<Schetum> schetumListFinal = null;
+    List<Schetum> schetumListFinal2 = null;
 
     String id = "";
+
+    RelativeLayout drawer, rel_send_email, rel_call;
+
+    boolean isOk = false;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -78,6 +100,32 @@ public class RashodOrder extends AppCompatActivity {
             }
         });
 
+        drawer = (RelativeLayout) findViewById(R.id.rel_dr_right);
+        rel_send_email = (RelativeLayout) findViewById(R.id.rel_1);
+        rel_call = (RelativeLayout) findViewById(R.id.rel_2);
+
+        rel_send_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isOk) Toast.makeText(RashodOrder.this, "Требуется создать ордер", Toast.LENGTH_SHORT).show();
+                else {
+                   // TODO здесь нужно отправку сделать
+                }
+            }
+        });
+
+        rel_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(phone != null && !phone.isEmpty()){
+
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                    startActivity(intent);
+
+                }else Toast.makeText(RashodOrder.this, "В базе нет номера телефона", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         loadData();
     }
 
@@ -95,6 +143,7 @@ public class RashodOrder extends AppCompatActivity {
 
                         ArrayList<String> arr = new ArrayList<>();
                         categoryListFinal = responseProvScheta.getCategory();
+                        categoryListFinal2 = responseProvScheta.getCategory();
                         for (Category category :responseProvScheta.getCategory()
                              ) {
                             arr.add(category.getName());
@@ -120,7 +169,7 @@ public class RashodOrder extends AppCompatActivity {
                     }
 
                     if(responseProvScheta.getProviders() != null) {
-
+                        phone = responseProvScheta.getPhone();
                         tv_name.setText(responseProvScheta.getProviders());
                     }
 
@@ -128,6 +177,7 @@ public class RashodOrder extends AppCompatActivity {
 
                         ArrayList<String> arrayList = new ArrayList<>();
                         schetumListFinal = responseProvScheta.getScheta();
+                        schetumListFinal2 = responseProvScheta.getScheta();
                         for (Schetum schetum:responseProvScheta.getScheta()
                              ) {
                             arrayList.add(schetum.getName());
@@ -172,7 +222,75 @@ public class RashodOrder extends AppCompatActivity {
 
     private void sendData() {
 
+        int cat_pos = sp_cat.getSelectedItemPosition();
+        int pod_cat_pos = sp_podcat.getSelectedItemPosition();
 
+        if(categoryListFinal.get(cat_pos).getId() == null
+                || categoryListFinal.get(cat_pos).getId().isEmpty()) {
+            Toast.makeText(RashodOrder.this, "Не выбрана категория", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(categoryListFinal.get(pod_cat_pos).getList().get(sp_podcat.getSelectedItemPosition()).getId() == null ||
+                categoryListFinal.get(pod_cat_pos).getList().get(sp_podcat.getSelectedItemPosition()).getId().isEmpty()) {
+            Toast.makeText(RashodOrder.this, "Не выбрана подкатегория", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(schetumListFinal == null) {
+                Toast.makeText(RashodOrder.this, "Не выбран счет", Toast.LENGTH_SHORT).show();
+                return;
+        }
+
+        String schet = schetumListFinal.get(sp_chet.getSelectedItemPosition()).getId();
+
+        String sum = summa.getText().toString();
+
+        if(sum.isEmpty()){
+            Toast.makeText(RashodOrder.this, "Введите сумму", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String date = df.format(currentDate);
+
+        String com = comment.getText().toString();
+
+        App.getApi().addOperationCassa(categoryListFinal.get(sp_cat.getSelectedItemPosition()).getId(),
+                categoryListFinal.get(sp_cat.getSelectedItemPosition()).getList().get(sp_podcat.getSelectedItemPosition()).getId(),
+                schet, sum, date, id, com, "2", "0").enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                isOk = false;
+                if(response.body() != null){
+
+                    try {
+                        if(response.body().string().contains("ok")){
+                            isOk = true;
+                            showDrawer();
+                            Toast.makeText(RashodOrder.this, "Расходный ордер успешно создан", Toast.LENGTH_SHORT).show();
+                        }
+                        else Toast.makeText(RashodOrder.this, "Расходный ордер успешно создан", Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.new_provider, menu);
+        return true;
     }
 
     @Override
@@ -183,11 +301,41 @@ public class RashodOrder extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if( id == android.R.id.home){
-            finish();
+        if (id == R.id.more) {
+            if(drawer.getVisibility() == View.GONE) showDrawer();
         }
-
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                // do what you want to be done on home button click event
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
+    private void showDrawer(){
+
+        drawer.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.SlideInRight)
+                .duration(1000)
+                .playOn(drawer);
+
+    }
+
+    private void hideDrawer(){
+        YoYo.with(Techniques.FadeOutRight)
+                .duration(1000)
+                .playOn(drawer);
+        drawer.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawer.getVisibility() == View.VISIBLE) {
+            hideDrawer();
+            return;
+        }
+        super.onBackPressed();
+    }
 }

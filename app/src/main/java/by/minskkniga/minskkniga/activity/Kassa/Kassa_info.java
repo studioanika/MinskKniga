@@ -1,9 +1,12 @@
 package by.minskkniga.minskkniga.activity.Kassa;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -39,6 +42,9 @@ public class Kassa_info extends AppCompatActivity {
 
     TextView tv_act, tv_ob, tv_balans;
 
+    ArrayList<Scheta> listItog = new ArrayList<>();
+    ArrayList<Scheta> listNeItog = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +69,37 @@ public class Kassa_info extends AppCompatActivity {
 
         loadData();
 
+        lv_itog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                startMain(listItog.get(i).getId(), listItog.get(i).getName());
+            }
+        });
+
+       lv_neitog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+               startMain(listNeItog.get(i).getId(), listNeItog.get(i).getName());
+           }
+       });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Kassa_info.this, SchetOperation.class));
+            }
+        });
+
+    }
+
+    private void startMain(String id, String name){
+
+        Intent intent = new Intent(Kassa_info.this, Main.class);
+        intent.putExtra("id", id);
+        intent.putExtra("name", name);
+        startActivity(intent);
+
     }
 
     private void loadData(){
@@ -75,8 +112,8 @@ public class Kassa_info extends AppCompatActivity {
 
                 if(response.body() != null){
 
-                    ArrayList<Scheta> listItog = new ArrayList<>();
-                    ArrayList<Scheta> listNeItog = new ArrayList<>();
+                    listItog.clear();
+                    listNeItog.clear();
 
                     if(response.body().get(0).getSchetaItog() != null){
 
@@ -85,6 +122,7 @@ public class Kassa_info extends AppCompatActivity {
                             Scheta scheta = new Scheta();
                             scheta.setName(schetaItog.getName());
                             scheta.setValue(schetaItog.getNachSum());
+                            scheta.setId(schetaItog.getId());
                             listItog.add(scheta);
                         }
 
@@ -98,6 +136,7 @@ public class Kassa_info extends AppCompatActivity {
                             Scheta scheta = new Scheta();
                             scheta.setName(schetaNoItog.getName());
                             scheta.setValue(schetaNoItog.getNachSum());
+                            scheta.setId(schetaNoItog.getId());
                             listNeItog.add(scheta);
                         }
                     }

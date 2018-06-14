@@ -41,13 +41,13 @@ public class ProvidersListActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("ИЗДАТЕЛЬСТВА"));
         tabLayout.addTab(tabLayout.newTab().setText("НОВЫЕ"));
 
-//        fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(ProvidersListActivity.this, NewProviderZayavka.class));
-//            }
-//        });
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ProvidersListActivity.this, NewProviderZayavka.class));
+            }
+        });
 
         TabLayout.Tab tab = tabLayout.getTabAt(0);
         tab.select();

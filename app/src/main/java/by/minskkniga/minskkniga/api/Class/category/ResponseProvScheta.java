@@ -10,6 +10,11 @@ public class ResponseProvScheta {
     @SerializedName("id")
     @Expose
     private String id;
+
+    @SerializedName("phone")
+    @Expose
+    private String phone;
+
     @SerializedName("providers")
     @Expose
     private String providers;
@@ -50,5 +55,13 @@ public class ResponseProvScheta {
 
     public void setCategory(List<Category> category) {
         this.category = category;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

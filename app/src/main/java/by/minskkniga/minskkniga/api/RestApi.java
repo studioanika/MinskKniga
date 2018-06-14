@@ -24,9 +24,13 @@ import by.minskkniga.minskkniga.api.Class.Zakazy;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import by.minskkniga.minskkniga.api.Class.Zakazy_short;
+import by.minskkniga.minskkniga.api.Class.cassa.InfoSchetaResponse;
+import by.minskkniga.minskkniga.api.Class.cassa.ObjectTransaction;
 import by.minskkniga.minskkniga.api.Class.cassa.Scheta;
 import by.minskkniga.minskkniga.api.Class.cassa.SchetaResponse;
+import by.minskkniga.minskkniga.api.Class.category.ResponseCategory;
 import by.minskkniga.minskkniga.api.Class.category.ResponseProvScheta;
+import by.minskkniga.minskkniga.api.Class.category.Schetum;
 import by.minskkniga.minskkniga.api.Class.providers.InfoZayavkaBook;
 import by.minskkniga.minskkniga.api.Class.providers.Money;
 import by.minskkniga.minskkniga.api.Class.providers.ProviderObject;
@@ -257,4 +261,40 @@ public interface RestApi {
 
     @GET("/api/get_prov_schet.php?")
     Call<List<ResponseProvScheta>> getProvScheta(@Query("id") String id);
+
+    @GET("/api/get_scheta_cat.php?")
+    Call<ResponseCategory> getCategory(@Query("type") String type);
+
+    @GET("/api/get_scheta_cassa.php?")
+    Call<List<Schetum>> getScheta();
+
+    @GET("/api/get_scheta_kontragent.php?")
+    Call<List<ObjectTransaction>> getKontragent(@Query("type") String type);
+
+    @GET("/api/get_scheta_info.php?")
+    Call<InfoSchetaResponse> getSchetaInfo(@Query("id") String id);
+
+    @GET("/api/add_scheta_category.php?")
+    Call<ResponseBody> addCategory(@Query("type") String type, @Query("name") String name);
+
+    @GET("/api/add_scheta_pod_cat.php?")
+    Call<ResponseBody> addPodCategory(@Query("cat_id") String cat_id, @Query("name") String name);
+
+    @GET("/api/edit_scheta_category.php?")
+    Call<ResponseBody> editCategory(@Query("id") String id, @Query("name") String name);
+
+    @GET("/api/edit_scheta_pod_cat.php?")
+    Call<ResponseBody> editPodCategory(@Query("id") String id, @Query("name") String name);
+
+    @GET("/api/add_new_schet.php?")
+    Call<ResponseBody> addNewSchet(@Query("name") String name, @Query("type") String type,
+                                   @Query("nach_sum") String nach_sum, @Query("itog") String itog,
+                                   @Query("kom") String kom);
+
+    @GET("/api/set_kassa_order.php?")
+    Call<ResponseBody> addOperationCassa(@Query("cat_id") String cat_id, @Query("pod_cat_id") String pod_cat_id,
+                                   @Query("schet_id") String schet_id, @Query("summa") String summa,
+                                   @Query("date") String date, @Query("prov_id") String prov_id,
+                                   @Query("com") String com,
+                                   @Query("type") String type,@Query("schet_perevoda") String schet_perevoda);
 }

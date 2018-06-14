@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -25,9 +26,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +56,7 @@ public class NewProviderZayavka extends AppCompatActivity {
     private static final int REQUEST_CODE = 201;
 
     List<ProviderObject> list = new ArrayList<>();
+    List<ProviderObject> listF = new ArrayList<>();
     List<Products> listPr = new ArrayList<>();
     List<ProductForZayackaProvider> productForZayackaProviderList = new ArrayList<>();
     ProviderObject providerObject;
@@ -67,6 +73,9 @@ public class NewProviderZayavka extends AppCompatActivity {
     Spinner couriers_sp, status_sp;
     RecyclerView recyclerView;
     Button btn;
+
+    RelativeLayout rel_drawer;
+
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -123,23 +132,9 @@ public class NewProviderZayavka extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if( id == android.R.id.home){
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private void initView() {
 
+        rel_drawer = (RelativeLayout) findViewById(R.id.drawer_right);
         tv_inf_1 = (TextView) findViewById(R.id.new_z_p_inf_1);
         tv_inf_2 = (TextView) findViewById(R.id.new_z_p_inf_2);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_pr_z);
@@ -219,31 +214,7 @@ public class NewProviderZayavka extends AppCompatActivity {
         final ProgressBar progressBar = (ProgressBar) dialogEdit.findViewById(R.id.progressBar);
         final ListView lv = (ListView) dialogEdit.findViewById(R.id.recycler);
 
-        SearchView search = (SearchView) dialogEdit.findViewById(R.id.search);
-
-        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                ArrayList<String> providers = new ArrayList<>();
-                for (ProviderObject obj: list
-                     ) {
-                    if(obj.getName().toLowerCase().contains(s.toLowerCase()) || obj.getName().contains(s.toUpperCase()) || obj.getName().contains(s))
-                        providers.add(obj.getName());
-                }
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(NewProviderZayavka.this,
-                        android.R.layout.simple_list_item_1, providers);
-                lv.setAdapter(adapter);
-
-                return false;
-            }
-        });
-
+        final SearchView search = (SearchView) dialogEdit.findViewById(R.id.search);
 
 
         App.getApi().getAllProviders().enqueue(new Callback<List<ProviderObject>>() {
@@ -254,6 +225,7 @@ public class NewProviderZayavka extends AppCompatActivity {
                 providers.clear();
                 if(response.body() != null) {
                     list = response.body();
+                    listF = response.body();
                     for (ProviderObject object: response.body()
                          ) {
                         providers.add(object.getName());
@@ -263,6 +235,8 @@ public class NewProviderZayavka extends AppCompatActivity {
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(NewProviderZayavka.this,
                         android.R.layout.simple_list_item_1, providers);
                 lv.setAdapter(adapter);
+
+                setQueryList(search, lv, list);
             }
 
             @Override
@@ -271,13 +245,15 @@ public class NewProviderZayavka extends AppCompatActivity {
             }
         });
 
+
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(list != null){
 
                     try{
-                        providerObject = list.get(i);
+                        providerObject = listF.get(i);
                         dialogEdit.dismiss();
                     }
                     catch (Exception e){}
@@ -376,4 +352,91 @@ public class NewProviderZayavka extends AppCompatActivity {
         setInfoList();
     }
 
+    private void setQueryList(SearchView searchView, final ListView lv, final List<ProviderObject> lists){
+        int i = lists.size();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                ArrayList<String> providers = new ArrayList<>();
+                listF.clear();
+                for (ProviderObject obj: lists
+                        ) {
+                    if(obj.getName().toLowerCase().contains(s.toLowerCase()) || obj.getName().contains(s.toUpperCase()) || obj.getName().contains(s))
+                    {
+                        listF.add(obj);
+                        providers.add(obj.getName());
+                    }
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(NewProviderZayavka.this,
+                        android.R.layout.simple_list_item_1, providers);
+                lv.setAdapter(adapter);
+
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.new_provider, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.more) {
+            more();
+        }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                // do what you want to be done on home button click event
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void more() {
+
+        showDrawer();
+
+    }
+
+    private void showDrawer(){
+        rel_drawer.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.SlideInRight)
+                .duration(1000)
+                .playOn(rel_drawer);
+    }
+
+    private void hideDrawer(){
+
+        YoYo.with(Techniques.FadeOutRight)
+                .duration(1000)
+                .playOn(rel_drawer);
+        rel_drawer.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(rel_drawer.getVisibility() == View.VISIBLE) {
+            hideDrawer();
+            return;
+        }
+        super.onBackPressed();
+    }
 }

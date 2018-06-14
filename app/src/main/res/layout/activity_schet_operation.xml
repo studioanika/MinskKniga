@@ -14,7 +14,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Поставщики">
+            app:title="Управление счетами">
 
         </android.support.v7.widget.Toolbar>
 
@@ -56,16 +56,42 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
-        <TextView
-            android:id="@+id/operation.txt"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@color/colorWhite"
-            android:gravity="right"
-            android:paddingLeft="16dp"
-            android:textSize="16sp" />
+            android:layout_height="wrap_content"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/operation.txt"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_toLeftOf="@+id/operation.cancel"
+                android:background="@color/colorWhite"
+                android:paddingRight="16dp"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/operation.cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:layout_toLeftOf="@+id/operation.done"
+                android:text="Отмена"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/operation.done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
+                android:text="Готово"
+                android:textSize="16sp" />
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/row2"
@@ -291,11 +317,18 @@
                     android:layout_height="0dp"
                     android:layout_weight=".50">
 
+                    <ImageView
+                        android:id="@+id/imgClear"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight=".33"
+                        android:background="@drawable/border_yellow" />
+
                     <Button
                         android:id="@+id/button0"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight=".66"
+                        android:layout_weight=".33"
                         android:background="@drawable/border_white"
                         android:text="@string/button0"
                         android:textSize="25sp" />

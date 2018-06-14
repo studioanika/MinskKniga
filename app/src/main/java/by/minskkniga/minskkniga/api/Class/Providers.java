@@ -26,9 +26,18 @@ public class Providers {
     @SerializedName("price_sale")
     @Expose
     private String priceSale;
+
+    public String getCreditSize() {
+        return creditSize;
+    }
+
+    public void setCreditSize(String creditSize) {
+        this.creditSize = creditSize;
+    }
+
     @SerializedName("credit_size")
     @Expose
-    private Double creditSize;
+    private String creditSize;
     @SerializedName("city")
     @Expose
     private String city;
@@ -92,13 +101,7 @@ public class Providers {
         this.priceSale = priceSale;
     }
 
-    public Double getCreditSize() {
-        return creditSize;
-    }
 
-    public void setCreditSize(Double creditSize) {
-        this.creditSize = creditSize;
-    }
 
     public String getCity() {
         return city;

@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -42,7 +43,18 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/cassa_balans"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_horizontal"
+                android:textColor="@android:color/holo_green_light"
+                android:textSize="22sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -53,14 +65,36 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:text="Итого приход:" />
+                    android:text="Начальная сумма:"
+                    android:textColor="@color/tab_indicator" />
+
+                <TextView
+                    android:id="@+id/cassa_nach"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:textColor="@color/tab_indicator" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="Итого приход:"
+                    android:textColor="@color/tab_indicator" />
 
                 <TextView
                     android:id="@+id/cassa_prihod"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="textview" />
+                    android:textColor="@android:color/holo_green_light" />
 
             </RelativeLayout>
 
@@ -73,22 +107,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:text="Итого расход:" />
+                    android:text="Итого расход:"
+                    android:textColor="@color/tab_indicator" />
 
                 <TextView
                     android:id="@+id/cassa_rashod"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:text="textview" />
+                    android:textColor="@color/zxing_viewfinder_laser" />
 
             </RelativeLayout>
 
         </LinearLayout>
 
         <ListView
+            android:id="@+id/cassa_lv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:dividerHeight="1dp" />
 
     </LinearLayout>
 

@@ -42,8 +42,8 @@
 
     <string name="title_activity_providers_list">ProvidersListActivity</string>
     <string name="title_activity_provider_zayavki_list">ProviderZayavkiListActivity</string>
-    <string name="title_activity_description_zayavka">DescriptionZayavkaActivity</string>
-    <string name="title_activity_description_zayavka_book">DescriptionZayavkaBookActivity</string>
+    <string name="title_activity_description_zayavka">Инфо заявки</string>
+    <string name="title_activity_description_zayavka_book">Инфо заявки</string>
     <string name="title_activity_new_provider_zayavka">Новая заявка</string>
     <string name="title_activity_rashod_order">Расходный ордер</string>
     <string name="title_activity_schet_operation">SchetOperation</string>
@@ -76,5 +76,8 @@
     <string name="buttonSine">sin</string>
     <string name="buttonCosine">cos</string>
     <string name="buttonTangent">tan</string>
+    <string name="title_activity_category">CategoryActivity</string>
+    <string name="title_activity_scheta_list">SchetaListActivity</string>
+    <string name="title_activity_money_calculator">MoneyCalculatorActivity</string>
 
 </resources>

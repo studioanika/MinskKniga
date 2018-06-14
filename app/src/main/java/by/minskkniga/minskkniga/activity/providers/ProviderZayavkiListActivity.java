@@ -26,6 +26,9 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
     String id, name;
     FloatingActionButton fab;
 
+    PagerAdapter adapter;
+    ViewPager viewPager;
+
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +56,15 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
 
         initViewPager();
 
-
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(viewPager.getCurrentItem() == 1) {
+                    startActivity(new Intent(ProviderZayavkiListActivity.this, NewProviderZayavka.class));
+                }
+            }
+        });
 
     }
 
@@ -62,8 +73,8 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
 
 
         try {
-            final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-            final PagerAdapter adapter = new PagerAdapter
+            viewPager = (ViewPager) findViewById(R.id.pager);
+            adapter = new PagerAdapter
                     (getSupportFragmentManager(), tabLayout.getTabCount());
             viewPager.setAdapter(adapter);
             viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

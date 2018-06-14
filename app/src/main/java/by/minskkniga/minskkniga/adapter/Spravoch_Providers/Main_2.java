@@ -56,12 +56,18 @@ public class Main_2 extends BaseAdapter {
         TextView tv2 = view.findViewById(R.id.tv2);
 
         tv1.setText(_objects.get(position).getName());
-
-        if (_objects.get(position).getCreditSize() >= 0) {
-            tv2.setTextColor(Color.BLACK);
-        } else {
+        try{
+            if (Double.parseDouble(_objects.get(position).getCreditSize()) >= 0) {}
+            if (Double.parseDouble(_objects.get(position).getCreditSize()) >= 0) {
+                tv2.setTextColor(Color.BLACK);
+            } else {
+                tv2.setTextColor(Color.RED);
+            }
+        }
+        catch (Exception e){
             tv2.setTextColor(Color.RED);
         }
+
         tv2.setText(_objects.get(position).getCreditSize().toString());
 
         return view;

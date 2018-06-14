@@ -13,4 +13,7 @@
     <color name="header_rel">#b7f1f1f1</color>
     <color name="text_blue">#2E28C5</color>
     <color name="trans">#00ffffff</color>
+    <color name="darkmy">#b6e7e7e7</color>
+    <color name="green">#1eff00</color>
+    <color name="red">#ff0000</color>
 </resources>

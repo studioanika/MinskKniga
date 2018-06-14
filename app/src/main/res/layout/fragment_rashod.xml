@@ -24,11 +24,17 @@
             android:layout_height="50dp"
             app:srcCompat="@drawable/ic_barcode_scan" />
 
-        <EditText
+        <TextView
             android:id="@+id/dohod.summa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/dohod.img_money" />
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:layout_toRightOf="@+id/dohod.img_money"
+            android:gravity="right"
+            android:text="0"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
@@ -122,7 +128,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/r_o_cat_1" />
+            android:layout_toRightOf="@+id/r_o_cat_1"
+            android:gravity="right"
+            android:text="Выбрать категорию" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -146,7 +154,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/r_o_chet_1" />
+            android:layout_toRightOf="@+id/r_o_chet_1"
+            android:gravity="right"
+            android:text="Выбрать счет" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -170,7 +180,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/r_o_pod_cat_1" />
+            android:layout_toRightOf="@+id/r_o_pod_cat_1"
+            android:gravity="right"
+            android:text="Выбрать получателя" />
     </RelativeLayout>
 
     <TextView
