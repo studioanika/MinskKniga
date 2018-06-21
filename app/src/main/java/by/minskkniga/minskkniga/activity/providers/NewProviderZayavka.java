@@ -6,11 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.icu.util.Calendar;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,7 +38,6 @@ import java.util.List;
 import java.util.Locale;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.providers.adapter.ZayavkiBoobIAdapter;
 import by.minskkniga.minskkniga.activity.providers.adapter.ZayavkiProvidersNewAdapter;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Products;
@@ -75,6 +71,8 @@ public class NewProviderZayavka extends AppCompatActivity {
     Button btn;
 
     RelativeLayout rel_drawer;
+
+    RelativeLayout rel_add_product, rel_send, rel_view_oper;
 
 
     @SuppressLint("RestrictedApi")
@@ -164,6 +162,26 @@ public class NewProviderZayavka extends AppCompatActivity {
             public void onClick(View view) {
                 if(productForZayackaProviderList.size() == 0) showDialogEmpty();
                 else sendZayavka();
+            }
+        });
+
+        rel_add_product = (RelativeLayout) findViewById(R.id.rel_2);
+        rel_add_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(providerObject != null) {
+                    Intent intent = new Intent(NewProviderZayavka.this, SelectNomeclaturaActivity.class);
+                    intent.putExtra("izdatel", providerObject.getName());
+                    startActivityForResult(intent, REQUEST_CODE);
+                }else showSelectProvider();
+            }
+        });
+
+        rel_send = (RelativeLayout) findViewById(R.id.rel_1);
+        rel_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
@@ -419,7 +437,7 @@ public class NewProviderZayavka extends AppCompatActivity {
     private void showDrawer(){
         rel_drawer.setVisibility(View.VISIBLE);
         YoYo.with(Techniques.SlideInRight)
-                .duration(1000)
+                .duration(500)
                 .playOn(rel_drawer);
     }
 

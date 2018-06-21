@@ -5,23 +5,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Kassa.Main;
 import by.minskkniga.minskkniga.api.Class.cassa.DescInfoSchet;
-import by.minskkniga.minskkniga.api.Class.cassa.Scheta;
 
 public class AdapterSchetaInfo extends BaseAdapter {
 
     private Context _context;
     private LayoutInflater lInflater;
     private ArrayList<DescInfoSchet> _objects;
+    Main calculator;
 
     public AdapterSchetaInfo(Context context, ArrayList<DescInfoSchet> objects) {
         this._context = context;
         this._objects = objects;
+        calculator = (Main) context;
     }
 
     @Override
@@ -40,13 +43,14 @@ public class AdapterSchetaInfo extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
+    public View getView(int position, final View convertView, ViewGroup parent) {
+        int type = 0;
         lInflater = (LayoutInflater)_context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = lInflater.inflate(R.layout.item_desc_scheta, parent, false);
 
-        DescInfoSchet item = _objects.get(position);
+        final DescInfoSchet item = _objects.get(position);
 
+        LinearLayout lin = view.findViewById(R.id.desc_schet_lin);
         TextView tv_cat_podcat = view.findViewById(R.id.desc_schet_category_podcategory);
         TextView tv_date = view.findViewById(R.id.desc_schet_date);
         TextView tv_dohod = view.findViewById(R.id.desc_schet_dohod);
@@ -61,10 +65,13 @@ public class AdapterSchetaInfo extends BaseAdapter {
         );
 
         if(item.getDohod() != null && (item.getDohod() > 0.01)) {
+            type = 0;
             tv_rashod.setTextColor(_context.getResources().getColor(R.color.green));
             tv_rashod.setText(String.valueOf(item.getDohod()));
         }
         else {
+
+            type = 1;
             tv_rashod.setTextColor(_context.getResources().getColor(R.color.red));
             tv_rashod.setText(String.valueOf(item.getRashod()));
         }
@@ -73,7 +80,7 @@ public class AdapterSchetaInfo extends BaseAdapter {
         if(item.getComment() != null) tv_note.setText(item.getComment());
 
         if(item.getSchet_perevoda() != null && !item.getSchet_perevoda().isEmpty()){
-
+            type = 2;
             if(item.getDohod() != null && (item.getDohod() > 0.01)) {
 
                 if(item.getSchet_perevoda() != null && !item.getSchet_perevoda().isEmpty()) tv_schet_perevoda.setText(item.getSchet_perevoda());
@@ -96,9 +103,24 @@ public class AdapterSchetaInfo extends BaseAdapter {
             }
         }else {
             tv_schet_perevoda.setText(item.getSchet());
+
         }
 
+        final int finalType = type;
+        lin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(item.getId() != null) calculator.startInfoOperation(item.getId(), finalType);
+            }
+        });
 
+        lin.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(item.getId() != null) calculator.startLongInfoOperation(item.getId(), finalType);
+                return false;
+            }
+        });
 
         return view;
     }

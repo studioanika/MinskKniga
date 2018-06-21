@@ -1,13 +1,12 @@
 package by.minskkniga.minskkniga.activity.Kassa;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -19,7 +18,10 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Kassa.adapter.AdapterItogScheta;
-import by.minskkniga.minskkniga.activity.providers.NewProviderZayavka;
+import by.minskkniga.minskkniga.activity.Kassa.calculator.CalculatorGB;
+import by.minskkniga.minskkniga.activity.Kassa.calculator.CalculatorL;
+import by.minskkniga.minskkniga.activity.Kassa.calculator.Utils;
+import by.minskkniga.minskkniga.activity.prefs.Prefs;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.cassa.GeneralItog;
 import by.minskkniga.minskkniga.api.Class.cassa.Scheta;
@@ -87,9 +89,19 @@ public class Kassa_info extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Kassa_info.this, SchetOperation.class));
+                if (Utils.hasLollipop()) {
+                    startActivity(new Intent(Kassa_info.this, CalculatorL.class));
+                } else {
+                    startActivity(new Intent(Kassa_info.this, CalculatorGB.class));
+                }
+                //finish();
             }
         });
+
+        Prefs prefs = new Prefs(Kassa_info.this);
+        prefs.setSessionIdSchet("");
+        prefs.setSessionIdOper("");
+
 
     }
 

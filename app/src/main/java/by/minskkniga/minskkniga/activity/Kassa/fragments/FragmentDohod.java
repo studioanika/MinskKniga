@@ -1,36 +1,27 @@
 package by.minskkniga.minskkniga.activity.Kassa.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.Kassa.SchetOperation;
-import by.minskkniga.minskkniga.activity.category.CategoryActivity;
-import by.minskkniga.minskkniga.activity.category.SchetaListActivity;
-import by.minskkniga.minskkniga.activity.providers.NewProviderZayavka;
-import by.minskkniga.minskkniga.activity.providers.SelectNomeclaturaActivity;
+import by.minskkniga.minskkniga.activity.Kassa.calculator.Calculator;
+import by.minskkniga.minskkniga.activity.prefs.Prefs;
 import by.minskkniga.minskkniga.api.App;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -66,8 +57,14 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
 
     EditText et_comment;
 
-    public FragmentDohod(Context context) {
+    Calculator operation;
+
+    String id = "";
+
+    public FragmentDohod(Context context,String _id) {
         this.context = context;
+        this.id = _id;
+        operation = (Calculator) context;
     }
 
     @Nullable
@@ -78,7 +75,16 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
 
         initView();
         setTimeAndDate();
+        Prefs prefs = new Prefs(operation);
+        if(prefs.getSessionIdSchet() != null && !prefs.getSessionIdSchet().isEmpty()) getInfoScheet(id);
+
         return v;
+    }
+
+    private void getInfoScheet(String id) {
+        // TODO pдесь нужно получить счет по ид
+        Toast.makeText(operation, "has id true", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -90,7 +96,7 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
         img_money.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SchetOperation operation = (SchetOperation) context;
+                Calculator operation = (Calculator) context;
                 if(tv_summa != null)operation.showMonyDialog(tv_summa);
             }
         });
@@ -137,7 +143,7 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
         pol_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SchetOperation operation = (SchetOperation) context;
+                Calculator operation = (Calculator) context;
                 operation.showSelectProvider("1");
             }
         });
@@ -171,7 +177,7 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
 
     @Override
     public void showDateDialog() {
-        SchetOperation operation = (SchetOperation) context;
+        Calculator operation = (Calculator) context;
         operation.showDialogSelect(1);
     }
 
@@ -192,7 +198,7 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
 
     @Override
     public void showCalculator() {
-        SchetOperation operation = (SchetOperation) context;
+        Calculator operation = (Calculator) context;
         operation.showCalculator(tv_summa);
     }
 
@@ -225,14 +231,14 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
     }
 
     private void startCat(){
-        SchetOperation schetOperation = (SchetOperation) context;
+        Calculator schetOperation = (Calculator) context;
         schetOperation.startCat("1");
 
     }
 
     private void startScheta(){
 
-        SchetOperation schetOperation = (SchetOperation) context;
+        Calculator schetOperation = (Calculator) context;
         schetOperation.startScheta();
 
     }

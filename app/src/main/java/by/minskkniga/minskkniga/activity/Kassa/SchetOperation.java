@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -21,43 +20,39 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.nineoldandroids.animation.Animator;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Kassa.calculator.RevealColorView;
 import by.minskkniga.minskkniga.activity.Kassa.fragments.FragmentDohod;
 import by.minskkniga.minskkniga.activity.Kassa.fragments.FragmentPerevod;
 import by.minskkniga.minskkniga.activity.Kassa.fragments.FragmentRashod;
 import by.minskkniga.minskkniga.activity.category.CategoryActivity;
 import by.minskkniga.minskkniga.activity.category.SchetaListActivity;
-import by.minskkniga.minskkniga.activity.providers.NewProviderZayavka;
-import by.minskkniga.minskkniga.activity.providers.ProvidersListActivity;
-import by.minskkniga.minskkniga.activity.providers.fragments.FragmentNews;
-import by.minskkniga.minskkniga.activity.providers.fragments.FragmentPublishing;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.cassa.ObjectTransaction;
-import by.minskkniga.minskkniga.api.Class.providers.ProviderObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SchetOperation extends AppCompatActivity implements View.OnClickListener {
+    private Animator mCurrentAnimator;
+    private RevealColorView revealColorView;
+
 
     TabLayout tabLayout;
     FloatingActionButton fab;
@@ -78,11 +73,6 @@ public class SchetOperation extends AppCompatActivity implements View.OnClickLis
     TextView tv_cancel, tv_done;
 
     private TextView mCalculatorDisplay, operationTXT;
-    private Boolean userIsInTheMiddleOfTypingANumber = false;
-    private CalculatorBrain mCalculatorBrain;
-    private static final String DIGITS = "0123456789.";
-
-    DecimalFormat df = new DecimalFormat("@###########");
 
     LinearLayout calculator;
 
@@ -110,43 +100,15 @@ public class SchetOperation extends AppCompatActivity implements View.OnClickLis
         tabLayout.addTab(tabLayout.newTab().setText("Расходы"));
         tabLayout.addTab(tabLayout.newTab().setText("Переводы"));
 
-//
         TabLayout.Tab tab = tabLayout.getTabAt(0);
         tab.select();
 
         initViewPager();
         img_clear = (ImageView) findViewById(R.id.imgClear);
-        mCalculatorBrain = new CalculatorBrain();
-        operationTXT = (TextView) findViewById(R.id.operation_txt);
+
         calculator = (LinearLayout)findViewById(R.id.operation_calculate);
 
-        df.setMinimumFractionDigits(0);
-        df.setMinimumIntegerDigits(1);
-        df.setMaximumIntegerDigits(8);
 
-        findViewById(R.id.button0).setOnClickListener(this);
-        findViewById(R.id.button1).setOnClickListener(this);
-        findViewById(R.id.button2).setOnClickListener(this);
-        findViewById(R.id.button3).setOnClickListener(this);
-        findViewById(R.id.button4).setOnClickListener(this);
-        findViewById(R.id.button5).setOnClickListener(this);
-        findViewById(R.id.button6).setOnClickListener(this);
-        findViewById(R.id.button7).setOnClickListener(this);
-        findViewById(R.id.button8).setOnClickListener(this);
-        findViewById(R.id.button9).setOnClickListener(this);
-
-        findViewById(R.id.buttonAdd).setOnClickListener(this);
-        findViewById(R.id.buttonSubtract).setOnClickListener(this);
-        findViewById(R.id.buttonMultiply).setOnClickListener(this);
-        findViewById(R.id.buttonDivide).setOnClickListener(this);
-        findViewById(R.id.buttonToggleSign).setOnClickListener(this);
-        findViewById(R.id.buttonDecimalPoint).setOnClickListener(this);
-        findViewById(R.id.buttonEquals).setOnClickListener(this);
-        findViewById(R.id.buttonClear).setOnClickListener(this);
-        findViewById(R.id.buttonClearMemory).setOnClickListener(this);
-        findViewById(R.id.buttonAddToMemory).setOnClickListener(this);
-        findViewById(R.id.buttonSubtractFromMemory).setOnClickListener(this);
-        findViewById(R.id.buttonRecallMemory).setOnClickListener(this);
         img_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,7 +177,6 @@ public class SchetOperation extends AppCompatActivity implements View.OnClickLis
 
     private void resetCalculator(){
         mCalculatorDisplay.setText("0");
-        operationTXT.setText("");
         if(calculator != null){
 
             YoYo.with(Techniques.SlideInDown)
@@ -226,7 +187,7 @@ public class SchetOperation extends AppCompatActivity implements View.OnClickLis
     }
 
     private void hideCalculator(){
-        operationTXT.setText("");
+
         if(calculator != null){
 
             YoYo.with(Techniques.SlideInDown)
@@ -255,13 +216,13 @@ public class SchetOperation extends AppCompatActivity implements View.OnClickLis
 
             switch (position) {
                 case 0:
-                    tab1 = new FragmentDohod(SchetOperation.this);
+                    tab1 = new FragmentDohod(SchetOperation.this, null);
                     return tab1;
                 case 1:
-                    tab2 = new FragmentRashod(SchetOperation.this);
+                    tab2 = new FragmentRashod(SchetOperation.this, null);
                     return tab2;
                 case 2:
-                    tab3 = new FragmentPerevod(SchetOperation.this);
+                    tab3 = new FragmentPerevod(SchetOperation.this, null);
                     return tab3;
                 default:
                     return null;
@@ -307,70 +268,9 @@ public class SchetOperation extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
 
-        String buttonPressed = ((Button) v).getText().toString();
-
-        if (DIGITS.contains(buttonPressed)) {
-            operationTXT.setText(operationTXT.getText().toString()+buttonPressed);
-            // digit was pressed
-            if (userIsInTheMiddleOfTypingANumber) {
-
-                if (buttonPressed.equals(".") && mCalculatorDisplay.getText().toString().contains(".")) {
-                    // ERROR PREVENTION
-                    // Eliminate entering multiple decimals
-                } else {
-                    mCalculatorDisplay.append(buttonPressed);
-                }
-
-            } else {
-
-                if (buttonPressed.equals(".")) {
-                    // ERROR PREVENTION
-                    // This will avoid error if only the decimal is hit before an operator, by placing a leading zero
-                    // before the decimal
-                    mCalculatorDisplay.setText(0 + buttonPressed);
-                } else {
-                    mCalculatorDisplay.setText(buttonPressed);
-                }
-
-                userIsInTheMiddleOfTypingANumber = true;
-            }
-
-        } else {
-            operationTXT.setText(operationTXT.getText().toString()+buttonPressed);
-            // operation was pressed
-            if (userIsInTheMiddleOfTypingANumber) {
-
-                mCalculatorBrain.setOperand(Double.parseDouble(mCalculatorDisplay.getText().toString()));
-                userIsInTheMiddleOfTypingANumber = false;
-            }
-
-            mCalculatorBrain.performOperation(buttonPressed);
-
-            if(v.getId() == R.id.buttonEquals) {
-                mCalculatorDisplay.setText(df.format(mCalculatorBrain.getResult()));
-                operationTXT.setText(df.format(mCalculatorBrain.getResult()));
-            }
-
-        }
 
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        // Save variables on screen orientation change
-        outState.putDouble("OPERAND", mCalculatorBrain.getResult());
-        outState.putDouble("MEMORY", mCalculatorBrain.getMemory());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        // Restore variables on screen orientation change
-        mCalculatorBrain.setOperand(savedInstanceState.getDouble("OPERAND"));
-        mCalculatorBrain.setMemory(savedInstanceState.getDouble("MEMORY"));
-        mCalculatorDisplay.setText(df.format(mCalculatorBrain.getResult()));
-    }
 
     public void showCalculator(TextView tv){
         mCalculatorDisplay = tv;

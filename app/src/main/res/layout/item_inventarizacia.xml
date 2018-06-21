@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/i_info_lin2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/i_info_lin1"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/item_inventarizacia_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:text="20.01"
+        android:textColor="@color/tab_indicator" />
+
+    <TextView
+        android:id="@+id/item_inventarizacia_contragent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:text="Барановичи 13"
+        android:textColor="@color/tab_indicator" />
+
+    <TextView
+        android:id="@+id/item_inventarizacia_colvo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="12"
+        android:textColor="@color/tab_indicator" />
+
+    <TextView
+        android:id="@+id/item_inventarizacia_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="Продажа"
+        android:textColor="@color/tab_indicator" />
+
+</LinearLayout>

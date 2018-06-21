@@ -22,7 +22,7 @@
             android:id="@+id/dohod.img_money"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            app:srcCompat="@drawable/ic_barcode_scan" />
+            app:srcCompat="@drawable/icons8_money_100" />
 
         <TextView
             android:id="@+id/dohod.summa"
@@ -208,6 +208,13 @@
         android:layout_marginTop="16dp"
         android:weightSum="2">
 
+        <ImageView
+            android:id="@+id/dohod.delete"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_delete_black_24dp" />
         <Button
             android:id="@+id/r_o_save"
             android:layout_width="match_parent"

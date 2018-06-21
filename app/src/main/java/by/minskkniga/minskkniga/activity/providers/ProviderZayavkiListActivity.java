@@ -65,6 +65,7 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
                 }
             }
         });
+        fab.setVisibility(View.GONE);
 
     }
 
@@ -82,6 +83,8 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     viewPager.setCurrentItem(tab.getPosition());
+                    if(viewPager.getCurrentItem() == 1) fab.setVisibility(View.VISIBLE);
+                    else fab.setVisibility(View.GONE);
                 }
 
                 @Override

@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.Kassa.SchetOperation;
+import by.minskkniga.minskkniga.activity.Kassa.calculator.Calculator;
 import by.minskkniga.minskkniga.api.App;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -60,8 +60,14 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
     ImageView img_money;
 
-    public FragmentPerevod(Context context) {
+    Calculator operation;
+
+    String id = "";
+
+    public FragmentPerevod(Context context,String _id) {
         this.context = context;
+        this.id = _id;
+        operation = (Calculator) context;
     }
 
     @Nullable
@@ -72,7 +78,13 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
         initView();
         setTimeAndDate();
+        if(id != null && !id.isEmpty()) getInfoScheet(id);
+
         return v;
+    }
+
+    private void getInfoScheet(String id) {
+        // TODO pдесь нужно получить счет по ид
     }
 
     @Override
@@ -82,7 +94,7 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
         img_money.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SchetOperation operation = (SchetOperation) context;
+
                 if(tv_summa != null)operation.showMonyDialog(tv_summa);
             }
         });
@@ -129,7 +141,7 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
         pol_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SchetOperation operation = (SchetOperation) context;
+                Calculator operation = (Calculator) context;
                 operation.startCat("3");
             }
         });
@@ -163,7 +175,7 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
     @Override
     public void showDateDialog() {
-        SchetOperation operation = (SchetOperation) context;
+
         operation.showDialogSelect(1);
     }
 
@@ -184,7 +196,7 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
     @Override
     public void showCalculator() {
-        SchetOperation operation = (SchetOperation) context;
+
         operation.showCalculator(tv_summa);
     }
 
@@ -217,16 +229,16 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
     }
 
     private void startCat(){
-        SchetOperation schetOperation = (SchetOperation) context;
-        schetOperation.startCat("3");
+
+        operation.startCat("3");
 
     }
 
     private void startScheta(){
 
-        SchetOperation schetOperation = (SchetOperation) context;
-        if(t_perevod != -1) schetOperation.type_perevod = t_perevod;
-        schetOperation.startScheta();
+
+        if(t_perevod != -1) operation.type_perevod = t_perevod;
+        operation.startScheta();
 
     }
 

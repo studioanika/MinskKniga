@@ -29,7 +29,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
-
+    implementation 'com.nineoldandroids:library:2.4.0'
     testImplementation 'junit:junit:4.12'
+    implementation files('arity-2.1.2.jar')
 }

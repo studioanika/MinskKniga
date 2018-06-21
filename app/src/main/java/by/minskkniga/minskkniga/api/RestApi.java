@@ -6,27 +6,28 @@ import by.minskkniga.minskkniga.api.Class.Clients;
 import by.minskkniga.minskkniga.api.Class.Courier_filter_1;
 import by.minskkniga.minskkniga.api.Class.Courier_filter_2;
 import by.minskkniga.minskkniga.api.Class.Couriers;
+import by.minskkniga.minskkniga.api.Class.Gorod;
 import by.minskkniga.minskkniga.api.Class.Login;
-import by.minskkniga.minskkniga.api.Class.Product;
-import by.minskkniga.minskkniga.api.Class.Product_client;
-import by.minskkniga.minskkniga.api.Class.Products;
-import by.minskkniga.minskkniga.api.Class.Products_filter;
 import by.minskkniga.minskkniga.api.Class.Notif_count;
 import by.minskkniga.minskkniga.api.Class.Organizer;
 import by.minskkniga.minskkniga.api.Class.Organizer_filter;
 import by.minskkniga.minskkniga.api.Class.Organizer_info;
+import by.minskkniga.minskkniga.api.Class.Product;
+import by.minskkniga.minskkniga.api.Class.Product_client;
+import by.minskkniga.minskkniga.api.Class.Products;
+import by.minskkniga.minskkniga.api.Class.Products_filter;
 import by.minskkniga.minskkniga.api.Class.Providers;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
-import by.minskkniga.minskkniga.api.Class.Gorod;
 import by.minskkniga.minskkniga.api.Class.Zakaz;
 import by.minskkniga.minskkniga.api.Class.Zakaz_filter;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import by.minskkniga.minskkniga.api.Class.Zakazy_short;
+import by.minskkniga.minskkniga.api.Class.cassa.GetDohodResponse;
+import by.minskkniga.minskkniga.api.Class.cassa.GetRashodResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.InfoSchetaResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.ObjectTransaction;
-import by.minskkniga.minskkniga.api.Class.cassa.Scheta;
 import by.minskkniga.minskkniga.api.Class.cassa.SchetaResponse;
 import by.minskkniga.minskkniga.api.Class.category.ResponseCategory;
 import by.minskkniga.minskkniga.api.Class.category.ResponseProvScheta;
@@ -297,4 +298,17 @@ public interface RestApi {
                                    @Query("date") String date, @Query("prov_id") String prov_id,
                                    @Query("com") String com,
                                    @Query("type") String type,@Query("schet_perevoda") String schet_perevoda);
+
+    @GET("get_providers_filter_products.php")
+    Call<Products_filter> getProductsfilter(@Query("clas") String clas, @Query("obrazec") String obrazec,
+                                            @Query("autor") String autor, @Query("izdatel") String izdatel,
+                                            @Query("filter") String filter);
+    @GET("/api/get_prihod_id.php?")
+    Call<List<GetRashodResponse>> getRashodID(@Query("id") String id);
+
+    @GET("/api/get_perevod_id.php?")
+    Call<ResponseBody> getPerevodID(@Query("id") String id);
+
+    @GET("/api/get_dohod_id.php?")
+    Call<List<GetDohodResponse>> getDohodID(@Query("id") String id);
 }

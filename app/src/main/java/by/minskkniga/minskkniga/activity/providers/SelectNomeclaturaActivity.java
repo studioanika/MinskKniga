@@ -1,24 +1,16 @@
 package by.minskkniga.minskkniga.activity.providers;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Vibrator;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,33 +18,32 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Barcode;
-import by.minskkniga.minskkniga.activity.Nomenklatura.Add;
 import by.minskkniga.minskkniga.adapter.Nomenklatura.Nav_zakaz;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.Product;
 import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.Products_filter;
 import by.minskkniga.minskkniga.api.Class.Zakaz_product;
-import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 public class SelectNomeclaturaActivity extends AppCompatActivity {
+
+    ProgressBar progressBar;
 
     List<Products> list = new ArrayList<>();
 
@@ -66,6 +57,8 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
     TextView notfound;
     EditText search;
 
+    boolean load_filter_1 = false;
+
     ArrayList<Products> products;
     ArrayList<Products> products_buf;
 
@@ -77,6 +70,7 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
     String izdatel = "Издатель";
     String obraz = "Образец";
     String class_ = "Класс";
+    String filter_ = "";
 
     boolean zakaz = false;
 
@@ -160,6 +154,8 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setVisibility(View.GONE);
 
+        progressBar = (ProgressBar) findViewById(R.id.prgrs);
+
     }
 
     Intent intent;
@@ -168,6 +164,9 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nomenklatura);
+        intent = getIntent();
+        izdatel = intent.getStringExtra("izdatel");
+        filter_ = "izdatel";
         initialize();
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -179,7 +178,6 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
             }
         });
 
-        intent = getIntent();
 
 
         filter.setOnClickListener(new View.OnClickListener() {
@@ -206,6 +204,8 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                filter_ = "";
+                load_filter();
                 spinner1.setSelection(0);
                 spinner2.setSelection(0);
                 spinner3.setSelection(0);
@@ -223,10 +223,14 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                avtor = spinner1.getSelectedItem().toString();
-                izdatel = spinner2.getSelectedItem().toString();
-                obraz = spinner3.getSelectedItem().toString();
-                class_ = spinner4.getSelectedItem().toString();
+                try {
+                    avtor = spinner1.getSelectedItem().toString();
+                    izdatel = spinner2.getSelectedItem().toString();
+                    obraz = spinner3.getSelectedItem().toString();
+                    class_ = spinner4.getSelectedItem().toString();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 reload();
                 lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(SelectNomeclaturaActivity.this, products));
                 filter_layout.setVisibility(View.GONE);
@@ -249,9 +253,12 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
 
             }
         });
-        spinner2.setEnabled(false);
-        spinner2.setClickable(false);
-        load_filter();
+
+        //spinner2.setEnabled(false);
+        //spinner2.setClickable(false);
+        //load_filter();
+        getNewFilter();
+        reload();
     }
 
     private void addToList(int position) {
@@ -334,12 +341,17 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
     }
 
     public void reload() {
+        progressBar.setVisibility(View.VISIBLE);
+
         if (spinner1.getSelectedItemPosition() == 0) avtor = "null";
-        if (spinner2.getSelectedItemPosition() == 0) izdatel = "null";
+        if (spinner2.getSelectedItemPosition() == 0) {
+            if(izdatel.isEmpty() || izdatel.contains("Издатель")) izdatel = "null";
+        }
         if (spinner3.getSelectedItemPosition() == 0) obraz = "null";
         if (spinner4.getSelectedItemPosition() == 0) class_ = "null";
 
-        izdatel = intent.getStringExtra("izdatel");
+        // TODO uncomment
+
 
         App.getApi().getProducts(avtor, izdatel, obraz, class_).enqueue(new Callback<List<Products>>() {
             @Override
@@ -356,13 +368,16 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
                     notfound.setVisibility(View.VISIBLE);
                 }
                 notfound.setText("Ничего не найдено");
+                // TODO uncomment
                 spinner2.setEnabled(false);
                 spinner2.setClickable(false);
+                progressBar.setVisibility(View.GONE);
+
             }
 
             @Override
             public void onFailure(Call<List<Products>> call, Throwable t) {
-
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -385,11 +400,14 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<Products_filter> call, Response<Products_filter> response) {
+
                 setAdapter(spinner1, response.body().getAutor(), 1);
                 setAdapter(spinner2, response.body().getIzdatel(), 2);
                 setAdapter(spinner3, yesno, 3);
                 setAdapter(spinner4, response.body().getClas(), 4);
                 reload();
+
+
             }
 
             @Override
@@ -399,7 +417,7 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
         });
     }
 
-    private void setAdapter(Spinner spinner, ArrayList<String> arr, int id) {
+    private void setAdapter(Spinner spinner, ArrayList<String> arr, final int id) {
         switch (id) {
             case 1:
                 arr.add(0, "Автор");
@@ -441,17 +459,60 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
         };
 
         spinner.setAdapter(spinnerArrayAdapter);
+        load_filter_1 = true;
 
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItemText = (String) parent.getItemAtPosition(position);
-                if (position > 0) {
-                    Toast.makeText
-                            (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                            .show();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id_) {
+
+                int i = position + (int)id_;
+                if(id == 1) {
+                    if(position != 0) {
+                        avtor = spinner1.getSelectedItem().toString();
+                        if(filter_.contains("clas") || filter_.contains("izdatel") ||
+                                filter_.contains("obtazec")){
+                            filter_ = filter_+",autor";
+                        } else filter_ = "autor";
+
+                        getNewFilter();
+                    }
+
                 }
+                if(id == 2) {
+                    if(position != 0) {
+                        izdatel = spinner2.getSelectedItem().toString();
+                        if(filter_.contains("clas") || filter_.contains("autor") ||
+                                filter_.contains("obtazec")){
+                            filter_ = filter_+",izdatel";
+                        } else filter_ = "izdatel";
+
+                        getNewFilter();
+                    }
+                }
+                if(id == 3) {
+                    if(position != 0) {
+                        obraz = spinner3.getSelectedItem().toString();
+                        if(filter_.contains("clas") || filter_.contains("izdatel") ||
+                                filter_.contains("autor")){
+                            filter_ = filter_+",obtazec";
+                        } else filter_ = "obtazec";
+
+                        getNewFilter();
+                    }
+                }
+                if(id == 4) {
+                    if(position != 0) {
+                        class_ = spinner4.getSelectedItem().toString();
+                        if(filter_.contains("autor") || filter_.contains("izdatel") ||
+                                filter_.contains("obtazec")){
+                            filter_ = filter_+",clas";
+                        } else filter_ = "clas";
+
+                        getNewFilter();
+                    }
+                }
+
             }
 
             @Override
@@ -459,5 +520,44 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void getNewFilter(){
+        String _class = "";
+        if(!class_.contains("null")) _class = class_;
+        if(class_.contains("Класс")) _class = "";
+
+        String _autor = "";
+        if(!avtor.contains("null")) _autor = avtor;
+        if(avtor.contains("Автор")) _autor = "";
+
+        String _obraz = "";
+        if(!obraz.contains("null")) _obraz = obraz;
+        if(obraz.contains("Образец")) _obraz = "";
+
+        String _izdatel = "";
+        if(!izdatel.contains("null")) _izdatel = izdatel;
+        if(izdatel.contains("Издатель")) _izdatel = "";
+
+        App.getApi().getProductsfilter(_class, _obraz, _autor, _izdatel,filter_).enqueue(new Callback<Products_filter>() {
+            @Override
+            public void onResponse(Call<Products_filter> call, Response<Products_filter> response) {
+
+                if(response.body() != null){
+                    if(!filter_.contains("autor"))setAdapter(spinner1, response.body().getAutor(), 1);
+                    if(!filter_.contains("izdatel"))setAdapter(spinner2, response.body().getIzdatel(), 2);
+                    if(!filter_.contains("obrazec"))setAdapter(spinner3, yesno, 3);
+                    if(!filter_.contains("clas"))setAdapter(spinner4, response.body().getClas(), 4);
+                    reload();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Products_filter> call, Throwable t) {
+
+            }
+        });
+
     }
 }

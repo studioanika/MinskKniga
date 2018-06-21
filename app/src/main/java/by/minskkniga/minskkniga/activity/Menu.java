@@ -3,9 +3,9 @@ package by.minskkniga.minskkniga.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -17,6 +17,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.inventarizacia.InventarizaciaActivity;
 import by.minskkniga.minskkniga.activity.providers.ProvidersListActivity;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Notif_count;
@@ -81,7 +82,7 @@ public class Menu extends AppCompatActivity {
                         break;
                     case 2:
                         Intent intent2 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Kassa.Kassa_info.class);
-                        //Intent intent2 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Kassa.SchetOperation.class);
+
                         startActivity(intent2);
                         break;
                     case 3:
@@ -92,6 +93,10 @@ public class Menu extends AppCompatActivity {
                     case 4:
                         Intent intent4 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Organizer.Main.class);
                         startActivity(intent4);
+                        break;
+                    case 5:
+                        Intent intent5 = new Intent(Menu.this, InventarizaciaActivity.class);
+                        startActivity(intent5);
                         break;
                     case 7:
                         Intent intent7 = new Intent(Menu.this, by.minskkniga.minskkniga.activity.Spravoch_Clients.Main.class);

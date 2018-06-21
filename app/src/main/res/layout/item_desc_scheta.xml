@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/desc.schet.lin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -50,16 +51,18 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp">
+        android:layout_marginTop="4dp"
+        android:weightSum="10">
 
         <TextView
             android:id="@+id/desc.schet.date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:text="04.12.18" />
 
         <TextView
@@ -68,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_toRightOf="@+id/desc.schet.date"
+            android:layout_weight="4"
             android:singleLine="true"
             android:text="Пинск 10" />
 
@@ -77,9 +81,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_toRightOf="@+id/desc.schet.note"
+            android:layout_weight="4"
             android:gravity="right"
             android:text="Дима >> Петя" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

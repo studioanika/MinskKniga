@@ -5,6 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class DescInfoSchet {
 
+    @SerializedName("id")
+    @Expose
+    private String id;
+
     @SerializedName("date")
     @Expose
     private String date;
@@ -123,5 +127,13 @@ public class DescInfoSchet {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

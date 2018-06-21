@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -62,6 +61,7 @@ public class RashodOrder extends AppCompatActivity {
     RelativeLayout drawer, rel_send_email, rel_call;
 
     boolean isOk = false;
+    ProgressBar progressBar;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -126,17 +126,19 @@ public class RashodOrder extends AppCompatActivity {
             }
         });
 
+        progressBar = (ProgressBar) findViewById(R.id.order_progress);
+
         loadData();
     }
 
     private void loadData() {
-
+        progressBar.setVisibility(View.VISIBLE);
         App.getApi().getProvScheta(id).enqueue(new Callback<List<ResponseProvScheta>>() {
             @Override
             public void onResponse(Call<List<ResponseProvScheta>> call, Response<List<ResponseProvScheta>> response) {
 
                 if(response.body() != null) {
-
+                    progressBar.setVisibility(View.GONE);
                     final ResponseProvScheta responseProvScheta = response.body().get(0);
 
                     if(responseProvScheta.getCategory() != null){
@@ -192,7 +194,7 @@ public class RashodOrder extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<ResponseProvScheta>> call, Throwable t) {
-
+                progressBar.setVisibility(View.GONE);
             }
         });
 
@@ -254,7 +256,7 @@ public class RashodOrder extends AppCompatActivity {
         String date = df.format(currentDate);
 
         String com = comment.getText().toString();
-
+        progressBar.setVisibility(View.VISIBLE);
         App.getApi().addOperationCassa(categoryListFinal.get(sp_cat.getSelectedItemPosition()).getId(),
                 categoryListFinal.get(sp_cat.getSelectedItemPosition()).getList().get(sp_podcat.getSelectedItemPosition()).getId(),
                 schet, sum, date, id, com, "2", "0").enqueue(new Callback<ResponseBody>() {
@@ -262,7 +264,7 @@ public class RashodOrder extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 isOk = false;
                 if(response.body() != null){
-
+                    progressBar.setVisibility(View.GONE);
                     try {
                         if(response.body().string().contains("ok")){
                             isOk = true;
@@ -280,7 +282,7 @@ public class RashodOrder extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                progressBar.setVisibility(View.GONE);
             }
         });
 

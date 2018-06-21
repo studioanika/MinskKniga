@@ -56,7 +56,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/darkmy"></RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -322,7 +327,8 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight=".33"
-                        android:background="@drawable/border_yellow" />
+                        android:background="@drawable/border_yellow"
+                        app:srcCompat="@drawable/ic_backspace_black_24dp" />
 
                     <Button
                         android:id="@+id/button0"
