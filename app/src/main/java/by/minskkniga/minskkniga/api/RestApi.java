@@ -25,6 +25,7 @@ import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import by.minskkniga.minskkniga.api.Class.Zakazy_short;
 import by.minskkniga.minskkniga.api.Class.cassa.GetDohodResponse;
+import by.minskkniga.minskkniga.api.Class.cassa.GetPerevodResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.GetRashodResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.InfoSchetaResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.ObjectTransaction;
@@ -303,12 +304,12 @@ public interface RestApi {
     Call<Products_filter> getProductsfilter(@Query("clas") String clas, @Query("obrazec") String obrazec,
                                             @Query("autor") String autor, @Query("izdatel") String izdatel,
                                             @Query("filter") String filter);
-    @GET("/api/get_prihod_id.php?")
+    @GET("/api/get_rashod_id.php?")
     Call<List<GetRashodResponse>> getRashodID(@Query("id") String id);
 
     @GET("/api/get_perevod_id.php?")
-    Call<ResponseBody> getPerevodID(@Query("id") String id);
+    Call<List<GetPerevodResponse>> getPerevodID(@Query("id") String id);
 
-    @GET("/api/get_dohod_id.php?")
+    @GET("/api/get_prihod_id.php?")
     Call<List<GetDohodResponse>> getDohodID(@Query("id") String id);
 }

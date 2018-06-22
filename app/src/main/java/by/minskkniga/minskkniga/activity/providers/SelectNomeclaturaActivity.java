@@ -350,9 +350,6 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
         if (spinner3.getSelectedItemPosition() == 0) obraz = "null";
         if (spinner4.getSelectedItemPosition() == 0) class_ = "null";
 
-        // TODO uncomment
-
-
         App.getApi().getProducts(avtor, izdatel, obraz, class_).enqueue(new Callback<List<Products>>() {
             @Override
             public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
@@ -368,7 +365,7 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
                     notfound.setVisibility(View.VISIBLE);
                 }
                 notfound.setText("Ничего не найдено");
-                // TODO uncomment
+
                 spinner2.setEnabled(false);
                 spinner2.setClickable(false);
                 progressBar.setVisibility(View.GONE);

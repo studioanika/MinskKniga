@@ -77,13 +77,8 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
         initView();
         setTimeAndDate();
 
-        if(id != null && !id.isEmpty()) getInfoScheet(id);
 
         return v;
-    }
-
-    private void getInfoScheet(String id) {
-        // TODO pдесь нужно получить счет по ид
     }
 
 

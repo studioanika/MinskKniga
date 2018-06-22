@@ -76,16 +76,10 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
         initView();
         setTimeAndDate();
         Prefs prefs = new Prefs(operation);
-        if(prefs.getSessionIdSchet() != null && !prefs.getSessionIdSchet().isEmpty()) getInfoScheet(id);
 
         return v;
     }
 
-    private void getInfoScheet(String id) {
-        // TODO pдесь нужно получить счет по ид
-        Toast.makeText(operation, "has id true", Toast.LENGTH_SHORT).show();
-
-    }
 
     @Override
     public void initView() {

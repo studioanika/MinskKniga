@@ -33,6 +33,7 @@ import by.minskkniga.minskkniga.activity.prefs.Prefs;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.cassa.DescInfoSchet;
 import by.minskkniga.minskkniga.api.Class.cassa.GetDohodResponse;
+import by.minskkniga.minskkniga.api.Class.cassa.GetPerevodResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.GetRashodResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.InfoSchetaItog;
 import by.minskkniga.minskkniga.api.Class.cassa.InfoSchetaResponse;
@@ -59,6 +60,23 @@ public class Main extends AppCompatActivity {
     List<ObjectTransaction> list = new ArrayList<>();
     ArrayList<String> providers = new ArrayList<>();
     ArrayList<String> providersID = new ArrayList<>();
+
+    String cat, cat_id, podcat, podcat_id;
+    String schet, schetid, schet2, schetid2;
+    String provider_id;
+
+    boolean isPr2 = false;
+
+    TextView cat_tv, schet_tv, pol_tv, iz_tv;
+
+    TextView tv_date, tv_time, tv_summa;
+    ImageView img_left, img_right, img_money;
+
+    Button btn_save;
+
+    EditText et_comment;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,29 +144,16 @@ public class Main extends AppCompatActivity {
     public void startLongInfoOperation(String id_oper, int type){
 
         if(type == 0) {
-
-
-
+            showDialogEditDohod(id_oper);
         }else if(type == 1){
-
-
+            showDialogEditRashod(id_oper);
         }else {
-
-
+            showDialogEditPerevod(id_oper);
         }
 
     }
 
     private void showDialogDohod(String id){
-
-        final TextView cat_tv, schet_tv, pol_tv;
-
-        final TextView tv_date, tv_time, tv_summa;
-        ImageView img_left, img_right, img_money;
-
-        Button btn_save;
-
-        final EditText et_comment;
 
         final Dialog dialogEdit = new Dialog(this);
         //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -164,7 +169,9 @@ public class Main extends AppCompatActivity {
             }
         });
         et_comment = (EditText) dialogEdit.findViewById(R.id.dohod_note);
+        et_comment.setEnabled(false);
         btn_save = (Button) dialogEdit.findViewById(R.id.r_o_save);
+        btn_save.setVisibility(View.GONE);
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -213,14 +220,7 @@ public class Main extends AppCompatActivity {
     }
 
     private void showDialogRashod(String id){
-        final TextView cat_tv, schet_tv, pol_tv;
 
-        final TextView tv_date, tv_time, tv_summa;
-        ImageView img_left, img_right, img_money;
-
-        Button btn_save;
-
-        final EditText et_comment;
 
         final Dialog dialogEdit = new Dialog(this);
         //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -236,7 +236,10 @@ public class Main extends AppCompatActivity {
             }
         });
         et_comment = (EditText) dialogEdit.findViewById(R.id.dohod_note);
+        et_comment.setEnabled(false);
+
         btn_save = (Button) dialogEdit.findViewById(R.id.r_o_save);
+        btn_save.setVisibility(View.GONE);
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -286,29 +289,19 @@ public class Main extends AppCompatActivity {
 
     private void showDialogPervod(String id){
 
-        TextView iz_tv, schet_tv, pol_tv;
-
-        TextView tv_date, tv_time, tv_summa;
-        ImageView img_left, img_right;
-
-        Button btn_save;
-
-        EditText et_comment;
-
-        ImageView img_money;
-
         final Dialog dialogEdit = new Dialog(this);
         //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogEdit.setContentView(R.layout.fragment_perevod);
-
+        cat_tv = (TextView) dialogEdit.findViewById(R.id.r_o_pod_cat);
         tv_summa = (TextView) dialogEdit.findViewById(R.id.dohod_summa);
         img_money = (ImageView) dialogEdit.findViewById(R.id.dohod_img_money);
 
         et_comment = (EditText) dialogEdit.findViewById(R.id.dohod_note);
+        et_comment.setEnabled(false);
         btn_save = (Button) dialogEdit.findViewById(R.id.r_o_save);
 
-
+        btn_save.setVisibility(View.GONE);
         iz_tv = (TextView) dialogEdit.findViewById(R.id.r_o_cat);
         schet_tv = (TextView) dialogEdit.findViewById(R.id.r_o_chet);
         pol_tv = (TextView) dialogEdit.findViewById(R.id.r_o_pod_cat);
@@ -317,6 +310,31 @@ public class Main extends AppCompatActivity {
         tv_time = (TextView) dialogEdit.findViewById(R.id.dohod_time);
         img_left = (ImageView) dialogEdit.findViewById(R.id.dohod_img_left);
         img_right = (ImageView) dialogEdit.findViewById(R.id.dohod_img_right);
+
+        App.getApi().getPerevodID(id).enqueue(new Callback<List<GetPerevodResponse>>() {
+            @Override
+            public void onResponse(Call<List<GetPerevodResponse>> call, Response<List<GetPerevodResponse>> response) {
+
+                if(response.body() != null){
+
+                    GetPerevodResponse perevodResponse = response.body().get(0);
+
+                    tv_date.setText(perevodResponse.getDate());
+                    et_comment.setText(perevodResponse.getKom());
+                    tv_summa.setText(perevodResponse.getPerevod());
+                    iz_tv.setText(perevodResponse.getIz());
+                    schet_tv.setText(perevodResponse.getV());
+                    cat_tv.setText(perevodResponse.getCategory());
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<GetPerevodResponse>> call, Throwable t) {
+
+            }
+        });
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialogEdit.getWindow().getAttributes());
@@ -330,14 +348,6 @@ public class Main extends AppCompatActivity {
 
     private void showDialogEditDohod(String id){
 
-        TextView cat_tv, schet_tv, pol_tv;
-
-        TextView tv_date, tv_time, tv_summa;
-        ImageView img_left, img_right, img_money;
-
-        Button btn_save;
-
-        EditText et_comment;
 
         final Dialog dialogEdit = new Dialog(this);
         //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -360,6 +370,12 @@ public class Main extends AppCompatActivity {
 
             }
         });
+        tv_summa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogEditMony(tv_summa);
+            }
+        });
         cat_tv = (TextView) dialogEdit.findViewById(R.id.r_o_cat);
         schet_tv = (TextView) dialogEdit.findViewById(R.id.r_o_chet);
         pol_tv = (TextView) dialogEdit.findViewById(R.id.r_o_pod_cat);
@@ -369,13 +385,239 @@ public class Main extends AppCompatActivity {
         img_left = (ImageView) dialogEdit.findViewById(R.id.dohod_img_left);
         img_right = (ImageView) dialogEdit.findViewById(R.id.dohod_img_right);
 
+        cat_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startCat("1");
+            }
+        });
 
+        pol_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSelectProvider("1");
+            }
+        });
+
+        schet_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startScheta();
+            }
+        });
+
+        tv_summa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogEditMony(tv_summa);
+            }
+        });;
+
+        App.getApi().getDohodID(id).enqueue(new Callback<List<GetDohodResponse>>() {
+            @Override
+            public void onResponse(Call<List<GetDohodResponse>> call, Response<List<GetDohodResponse>> response) {
+                if(response.body() != null){
+                    GetDohodResponse dohodResponse = response.body().get(0);
+
+                    tv_date.setText(dohodResponse.getDate());
+                    tv_summa.setText(dohodResponse.getPrihod());
+                    pol_tv.setText(dohodResponse.getClient());
+                    schet_tv.setText(dohodResponse.getSchet());
+                    et_comment.setText(dohodResponse.getKom());
+                    cat_tv.setText(dohodResponse.getCategory());
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<GetDohodResponse>> call, Throwable t) {
+
+            }
+        });
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(dialogEdit.getWindow().getAttributes());
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        dialogEdit.setCancelable(false);
+        dialogEdit.show();
+        dialogEdit.getWindow().setAttributes(lp);
+
+    }
+
+    private void showDialogEditRashod(String id){
+        final Dialog dialogEdit = new Dialog(this);
+        //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogEdit.setContentView(R.layout.fragment_rashod);
+
+        tv_summa = (TextView) dialogEdit.findViewById(R.id.dohod_summa);
+        img_money = (ImageView) dialogEdit.findViewById(R.id.dohod_img_money);
+        img_money.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        et_comment = (EditText) dialogEdit.findViewById(R.id.dohod_note);
+        btn_save = (Button) dialogEdit.findViewById(R.id.r_o_save);
+
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        tv_summa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogEditMony(tv_summa);
+            }
+        });
+
+        cat_tv = (TextView) dialogEdit.findViewById(R.id.r_o_cat);
+        schet_tv = (TextView) dialogEdit.findViewById(R.id.r_o_chet);
+        pol_tv = (TextView) dialogEdit.findViewById(R.id.r_o_pod_cat);
+
+        tv_date = (TextView) dialogEdit.findViewById(R.id.dohod_date);
+        tv_time = (TextView) dialogEdit.findViewById(R.id.dohod_time);
+        img_left = (ImageView) dialogEdit.findViewById(R.id.dohod_img_left);
+        img_right = (ImageView) dialogEdit.findViewById(R.id.dohod_img_right);
+
+        cat_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startCat("1");
+            }
+        });
+
+        pol_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSelectProvider("2");
+            }
+        });
+
+        schet_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startScheta();
+            }
+        });
+
+        App.getApi().getRashodID(id).enqueue(new Callback<List<GetRashodResponse>>() {
+            @Override
+            public void onResponse(Call<List<GetRashodResponse>> call, Response<List<GetRashodResponse>> response) {
+                if(response.body() != null) {
+                    GetRashodResponse dohodResponse = response.body().get(0);
+
+                    tv_date.setText(dohodResponse.getDate());
+                    tv_summa.setText(dohodResponse.getRashod());
+                    pol_tv.setText(dohodResponse.getClient());
+                    schet_tv.setText(dohodResponse.getSchet());
+                    et_comment.setText(dohodResponse.getKom());
+                    cat_tv.setText(dohodResponse.getCategory());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<GetRashodResponse>> call, Throwable t) {
+
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialogEdit.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        //dialogEdit.setCancelable(false);
+        dialogEdit.show();
+        dialogEdit.getWindow().setAttributes(lp);
+    }
+
+    private void showDialogEditPerevod(String id){
+        final Dialog dialogEdit = new Dialog(this);
+        //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogEdit.setContentView(R.layout.fragment_perevod);
+        cat_tv = (TextView) dialogEdit.findViewById(R.id.r_o_pod_cat);
+        tv_summa = (TextView) dialogEdit.findViewById(R.id.dohod_summa);
+        img_money = (ImageView) dialogEdit.findViewById(R.id.dohod_img_money);
+
+        et_comment = (EditText) dialogEdit.findViewById(R.id.dohod_note);
+
+        btn_save = (Button) dialogEdit.findViewById(R.id.r_o_save);
+
+        tv_summa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogEditMony(tv_summa);
+            }
+        });
+
+
+        iz_tv = (TextView) dialogEdit.findViewById(R.id.r_o_cat);
+        schet_tv = (TextView) dialogEdit.findViewById(R.id.r_o_chet);
+        pol_tv = (TextView) dialogEdit.findViewById(R.id.r_o_pod_cat);
+
+        tv_date = (TextView) dialogEdit.findViewById(R.id.dohod_date);
+        tv_time = (TextView) dialogEdit.findViewById(R.id.dohod_time);
+        img_left = (ImageView) dialogEdit.findViewById(R.id.dohod_img_left);
+        img_right = (ImageView) dialogEdit.findViewById(R.id.dohod_img_right);
+
+        cat_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startCat("1");
+            }
+        });
+
+        schet_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isPr2 = true;
+                startScheta();
+            }
+        });
+        iz_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isPr2 = false;
+                startScheta();
+            }
+        });
+
+
+        App.getApi().getPerevodID(id).enqueue(new Callback<List<GetPerevodResponse>>() {
+            @Override
+            public void onResponse(Call<List<GetPerevodResponse>> call, Response<List<GetPerevodResponse>> response) {
+
+                if(response.body() != null){
+
+                    GetPerevodResponse perevodResponse = response.body().get(0);
+
+                    tv_date.setText(perevodResponse.getDate());
+                    et_comment.setText(perevodResponse.getKom());
+                    tv_summa.setText(perevodResponse.getPerevod());
+                    iz_tv.setText(perevodResponse.getIz());
+                    schet_tv.setText(perevodResponse.getV());
+                    cat_tv.setText(perevodResponse.getCategory());
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<GetPerevodResponse>> call, Throwable t) {
+
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialogEdit.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        //dialogEdit.setCancelable(false);
         dialogEdit.show();
         dialogEdit.getWindow().setAttributes(lp);
 
@@ -418,7 +660,6 @@ public class Main extends AppCompatActivity {
 
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE) {
@@ -426,13 +667,15 @@ public class Main extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
 
-                String cat = data.getStringExtra("cat");
-                String cat_id = data.getStringExtra("cat_id");
-                String podcat = data.getStringExtra("podcat");
-                String podcat_id = data.getStringExtra("podcat_id");
+                cat = data.getStringExtra("cat");
+                cat_id = data.getStringExtra("cat_id");
+                podcat = data.getStringExtra("podcat");
+                podcat_id = data.getStringExtra("podcat_id");
 
                 if(cat.isEmpty()) return;
                 try {
+                    if(podcat!=null)cat_tv.setText(cat+"-"+podcat);
+                    else cat_tv.setText(cat);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -443,13 +686,27 @@ public class Main extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
                 try {
-                    String schet = data.getStringExtra("schet");
-                    String schetid = data.getStringExtra("schetid");
 
-                    if(schet.isEmpty()) return;
-                    else {
+                    if(!isPr2) {
+                        schet = data.getStringExtra("schet");
+                        schetid = data.getStringExtra("schetid");
 
+
+                        if(schet.isEmpty()) return;
+                        else {
+                            iz_tv.setText(schet);
+                        }
+                    }else {
+                        schet2 = data.getStringExtra("schet");
+                        schetid2 = data.getStringExtra("schetid");
+
+
+                        if(schet2.isEmpty()) return;
+                        else {
+                            schet_tv.setText(schet2);
+                        }
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -482,7 +739,7 @@ public class Main extends AppCompatActivity {
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                dialogEdit.dismiss();
             }
         });
 
@@ -533,6 +790,7 @@ public class Main extends AppCompatActivity {
                             ) {
                         providers.add(object.getName());
                         providersID.add(object.getId());
+
                     }
                 }
 
@@ -553,8 +811,10 @@ public class Main extends AppCompatActivity {
                 if(list != null){
                     //ObjectTransaction objectTransaction = (ObjectTransaction) lv.getAdapter().getItem(i);
                     try{
+                        if(pol_tv != null)pol_tv.setText(list.get(i).getName());
+                        provider_id = list.get(i).getId();
+                        dialogEdit.dismiss();
 
-                    // TODO здесь нужно записать в переменную
                     }
                     catch (Exception e){}
                 }
@@ -568,5 +828,43 @@ public class Main extends AppCompatActivity {
         dialogEdit.setCancelable(false);
         dialogEdit.show();
         dialogEdit.getWindow().setAttributes(lp);
+    }
+
+    private void showDialogEditMony(final TextView tv){
+
+        final Dialog dialogEdit = new Dialog(this);
+        //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogEdit.setContentView(R.layout.alert_edit_money);
+
+        TextView tv_cancel = (TextView) dialogEdit.findViewById(R.id.editmoney_cancel);
+        TextView tv_done = (TextView) dialogEdit.findViewById(R.id.editmoney_done);
+
+        final EditText et = (EditText) dialogEdit.findViewById(R.id.editmoney_et);
+
+        et.setText(tv.getText().toString());
+
+        tv_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv.setText(et.getText().toString());
+                dialogEdit.dismiss();
+            }
+        });
+
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogEdit.dismiss();
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialogEdit.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialogEdit.show();
+        dialogEdit.getWindow().setAttributes(lp);
+
     }
 }

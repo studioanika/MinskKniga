@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class GetDohodResponse {
 
+    // TODO здесь нужно id category, podcategory, schet, schet2
+
     @SerializedName("date")
     @Expose
     private String date;
@@ -29,16 +31,16 @@ public class GetDohodResponse {
     @Expose
     private String category;
 
-    public String getPrihod() {
-        return prihod;
-    }
-
     public String getDate() {
         return date;
     }
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getPrihod() {
+        return prihod;
     }
 
     public void setPrihod(String prihod) {
