@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class GetPerevodResponse {
 
-    // TODO здесь нужно id category, podcategory, schet, schet2
+    // TODO здесь нужно id, category, podcategory, schet, schet2
 
     @SerializedName("date")
     @Expose

@@ -34,6 +34,8 @@ import retrofit2.Response;
 
 public class Add extends AppCompatActivity {
 
+    // TODO исправить контакты, а то не добавляются
+
     ScrollView sv;
     ImageButton back;
 

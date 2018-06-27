@@ -92,7 +92,7 @@ public abstract class Calculator extends AppCompatActivity
     protected enum CalculatorState {
         INPUT, EVALUATE, RESULT, ERROR
     }
-
+    String results = "0";
     ViewPager viewPager;
 
     private final TextWatcher mFormulaTextWatcher = new TextWatcher() {
@@ -372,15 +372,24 @@ public abstract class Calculator extends AppCompatActivity
 
     @Override
     public void onEvaluate(String expr, String result, int errorResourceId) {
+
         if (mCurrentState == CalculatorState.INPUT) {
-            mResultEditText.setText(result);
-            if(mCalculatorDisplay != null) mCalculatorDisplay.setText(result);
+            if(result != null){
+                mResultEditText.setText(result);
+                results = result;
+                if(mCalculatorDisplay != null) mCalculatorDisplay.setText(result);
+            }
         } else if (errorResourceId != INVALID_RES_ID) {
             onError(errorResourceId);
         } else if (!TextUtils.isEmpty(result)) {
             onResult(result);
-
+            mResultEditText.setText(result);
+            results = result;
+            if(mCalculatorDisplay != null) mCalculatorDisplay.setText(result);
         } else if (mCurrentState == CalculatorState.EVALUATE) {
+            mResultEditText.setText(result);
+            results = result;
+            if(mCalculatorDisplay != null) mCalculatorDisplay.setText(result);
             // The current expression cannot be evaluated -> return to the input state.
             setState(CalculatorState.INPUT);
         }
@@ -507,9 +516,10 @@ public abstract class Calculator extends AppCompatActivity
     }
 
     private void hideCalculator(){
-
+        try{mCalculatorDisplay.setText(results);}
+        catch (Exception e){}
         if(calculator != null){
-
+            //onClear();
             YoYo.with(Techniques.SlideInDown)
                     .duration(1000)
                     .playOn(calculator);

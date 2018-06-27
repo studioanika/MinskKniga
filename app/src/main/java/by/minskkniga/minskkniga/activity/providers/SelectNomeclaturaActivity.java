@@ -85,6 +85,7 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
     AlertDialog.Builder ad;
 
     public void initialize(){
+
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +155,7 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setVisibility(View.GONE);
 
-        progressBar = (ProgressBar) findViewById(R.id.prgrs);
+
 
     }
 
@@ -167,6 +168,7 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
         intent = getIntent();
         izdatel = intent.getStringExtra("izdatel");
         filter_ = "izdatel";
+        progressBar = (ProgressBar) findViewById(R.id.prgrs);
         initialize();
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -254,8 +256,8 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
             }
         });
 
-        //spinner2.setEnabled(false);
-        //spinner2.setClickable(false);
+        spinner2.setEnabled(false);
+        spinner2.setClickable(false);
         //load_filter();
         getNewFilter();
         reload();

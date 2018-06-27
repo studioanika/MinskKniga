@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class GetRashodResponse {
 
-    // TODO здесь нужно id category, podcategory, schet, schet2
+    // TODO здесь нужно id ,category, podcategory, schet
 
     @SerializedName("date")
     @Expose
@@ -34,7 +34,6 @@ public class GetRashodResponse {
     public String getRashod() {
         return rashod;
     }
-
 
     public void setRashod(String rashod) {
         this.rashod = rashod;
@@ -71,8 +70,6 @@ public class GetRashodResponse {
     public void setDate(String date) {
         this.date = date;
     }
-
-
 
     public String getKom() {
         return kom;

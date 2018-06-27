@@ -1,12 +1,13 @@
 package by.minskkniga.minskkniga.activity.providers.adapter;
 
+import android.app.Dialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,10 +15,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.providers.DescriptionZayavkaActivity;
 import by.minskkniga.minskkniga.activity.providers.NewProviderZayavka;
 import by.minskkniga.minskkniga.api.Class.providers.ProductForZayackaProvider;
-import by.minskkniga.minskkniga.api.Class.providers.ZavInfoTovar;
 
 public class ZayavkiProvidersNewAdapter extends RecyclerView.Adapter {
     private final int VIEW_ITEM = 1;
@@ -68,9 +67,6 @@ public class ZayavkiProvidersNewAdapter extends RecyclerView.Adapter {
         if (holder instanceof StudentViewHolder) {
 
             final ProductForZayackaProvider bookI = (ProductForZayackaProvider) list.get(position);
-            //final BookI bookI = (BookI) item.getLists().get(0);
-
-
 
             ((StudentViewHolder) holder).fullname.setText(bookI.getProducts().getName());
             ((StudentViewHolder) holder).classs.setText(bookI.getProducts().getClas());
@@ -78,31 +74,14 @@ public class ZayavkiProvidersNewAdapter extends RecyclerView.Adapter {
             ((StudentViewHolder) holder).articul.setText(bookI.getProducts().getArtikul());
             ((StudentViewHolder) holder).sokr.setText(bookI.getProducts().getSokrName());
             ((StudentViewHolder) holder).zayavka.setText(bookI.getZayavka());
-            ((StudentViewHolder) holder).zayavka.setFocusable(true);
-
-            ((StudentViewHolder) holder).zayavka.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    activity.setList(position, editable.toString());
-                }
-            });
-
             ((StudentViewHolder) holder).lin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    showDialogEditMony(((StudentViewHolder) holder).zayavka, position);
                 }
             });
+
+
         }
     }
 
@@ -117,7 +96,7 @@ public class ZayavkiProvidersNewAdapter extends RecyclerView.Adapter {
 
     public static class StudentViewHolder extends RecyclerView.ViewHolder {
         public TextView fullname, classs, izdatel,articul, sokr;
-        public EditText zayavka;
+        public TextView zayavka;
         LinearLayout lin;
 
         public StudentViewHolder(View v) {
@@ -127,10 +106,50 @@ public class ZayavkiProvidersNewAdapter extends RecyclerView.Adapter {
             izdatel = (TextView) v.findViewById(R.id.item_zayavki_booki_izdatel);
             articul = (TextView) v.findViewById(R.id.item_zayavki_booki_articul);
             sokr = (TextView) v.findViewById(R.id.item_zayavki_booki_sokr);
-            zayavka = (EditText) v.findViewById(R.id.item_zayavki_booki_zayavka);
+            zayavka = (TextView) v.findViewById(R.id.item_zayavki_booki_zayavka);
             lin = (LinearLayout) v.findViewById(R.id.lin);
 
 
         }
+    }
+
+    public void showDialogEditMony(final TextView tv, final int position){
+
+        final Dialog dialogEdit = new Dialog(activity);
+        //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogEdit.setContentView(R.layout.alert_edit_money);
+
+        TextView tv_cancel = (TextView) dialogEdit.findViewById(R.id.editmoney_cancel);
+        TextView tv_done = (TextView) dialogEdit.findViewById(R.id.editmoney_done);
+
+        final EditText et = (EditText) dialogEdit.findViewById(R.id.editmoney_et);
+
+        et.setText(tv.getText().toString());
+
+        tv_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tv.setText(et.getText().toString());
+                dialogEdit.dismiss();
+                activity.setList(position,
+                        et.getText().toString());
+            }
+        });
+
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogEdit.dismiss();
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialogEdit.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialogEdit.show();
+        dialogEdit.getWindow().setAttributes(lp);
+
     }
 }

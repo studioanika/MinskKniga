@@ -3,65 +3,42 @@ package by.minskkniga.minskkniga.api.Class.inventarizacia;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class InventarizaciaObject {
 
-    @SerializedName("id")
+    @SerializedName("result")
     @Expose
-    private String id;
-
-    @SerializedName("date")
+    private String result;
+    @SerializedName("kniga")
     @Expose
-    private String date;
-
-    @SerializedName("contragent")
+    private Kniga kniga;
+    @SerializedName("kont")
     @Expose
-    private String contragent;
+    private List<Kont> kont = null;
 
-    @SerializedName("colvo")
-    @Expose
-    private String colvo;
-
-    @SerializedName("osnovanie")
-    @Expose
-    private String osnavanie;
-
-    public String getId() {
-        return id;
+    public String getResult() {
+        return result;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setResult(String result) {
+        this.result = result;
     }
 
-    public String getDate() {
-        return date;
+    public Kniga getKniga() {
+        return kniga;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setKniga(Kniga kniga) {
+        this.kniga = kniga;
     }
 
-    public String getContragent() {
-        return contragent;
+    public List<Kont> getKont() {
+        return kont;
     }
 
-    public void setContragent(String contragent) {
-        this.contragent = contragent;
+    public void setKont(List<Kont> kont) {
+        this.kont = kont;
     }
 
-    public String getColvo() {
-        return colvo;
-    }
-
-    public void setColvo(String colvo) {
-        this.colvo = colvo;
-    }
-
-    public String getOsnavanie() {
-        return osnavanie;
-    }
-
-    public void setOsnavanie(String osnavanie) {
-        this.osnavanie = osnavanie;
-    }
 }

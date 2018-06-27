@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -34,8 +35,10 @@ import com.daimajia.androidanimations.library.YoYo;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.providers.adapter.ZayavkiProvidersNewAdapter;
@@ -44,6 +47,7 @@ import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.providers.Couriers;
 import by.minskkniga.minskkniga.api.Class.providers.ProductForZayackaProvider;
 import by.minskkniga.minskkniga.api.Class.providers.ProviderObject;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,6 +77,7 @@ public class NewProviderZayavka extends AppCompatActivity {
     RelativeLayout rel_drawer;
 
     RelativeLayout rel_add_product, rel_send, rel_view_oper;
+    List<Couriers> couriersList = new ArrayList<>();
 
 
     @SuppressLint("RestrictedApi")
@@ -112,12 +117,15 @@ public class NewProviderZayavka extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Couriers>> call, Response<List<Couriers>> response) {
                 ArrayList<String> arr = new ArrayList<>();
+                // TODO курьеры еще нужны
                 if(response.body() != null){
                     for (Couriers cour: response.body()
                          ) {
                         arr.add(cour.getName());
+                        couriersList.add(cour);
                     }
                 }
+                arr.add("Без курьера");
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(NewProviderZayavka.this, R.layout.adapter_nomenklatura_filter, arr);
                 couriers_sp.setAdapter(spinnerArrayAdapter);
                 if(arr != null) couriers_sp.setSelection(0);
@@ -131,6 +139,8 @@ public class NewProviderZayavka extends AppCompatActivity {
     }
 
     private void initView() {
+
+        // TODO здесь нужно показать расчет и отправить, позвонить
 
         rel_drawer = (RelativeLayout) findViewById(R.id.drawer_right);
         tv_inf_1 = (TextView) findViewById(R.id.new_z_p_inf_1);
@@ -181,7 +191,7 @@ public class NewProviderZayavka extends AppCompatActivity {
         rel_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //sendZayavka();
             }
         });
 
@@ -190,6 +200,50 @@ public class NewProviderZayavka extends AppCompatActivity {
     private void sendZayavka() {
 
         int i = productForZayackaProviderList.size();
+
+        String date = tv_date.getText().toString();
+        String author = sp.getString("id", "");
+        String providers = providerObject.getId();
+        String status = "1";
+        String comment = "";
+        String auto = "0";
+        String oplacheno = "0";
+        String mass = "";
+
+        if(productForZayackaProviderList != null) {
+            for (ProductForZayackaProvider productForZayackaProviderList: productForZayackaProviderList
+                 ) {
+                mass = mass+ productForZayackaProviderList.getProducts().getArtikul()+"/~/" +
+                        productForZayackaProviderList.getZayavka()+"/~~/";
+            }
+        }
+
+        Map<String, String> body = new HashMap();
+        body.put("date", date);
+        body.put("provedires", providers);
+        body.put("autor", author);
+        body.put("status", status);
+        body.put("komment", comment);
+        body.put("auto", auto);
+        body.put("oplacheno", oplacheno);
+        body.put("mas", mass);
+
+        App.getApi().addNewProviderZayavka(body).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.body() != null){
+                    if(response.body().toString().contains("message:")){
+                        Toast.makeText(getApplicationContext(), "Заявка успешно отправлена.", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(getApplicationContext(), "Ошибка отправки заявки...", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Ошибка отправки заявки...", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         String ds = "";
 
     }

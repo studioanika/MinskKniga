@@ -1,6 +1,7 @@
 package by.minskkniga.minskkniga.api;
 
 import java.util.List;
+import java.util.Map;
 
 import by.minskkniga.minskkniga.api.Class.Clients;
 import by.minskkniga.minskkniga.api.Class.Courier_filter_1;
@@ -33,6 +34,7 @@ import by.minskkniga.minskkniga.api.Class.cassa.SchetaResponse;
 import by.minskkniga.minskkniga.api.Class.category.ResponseCategory;
 import by.minskkniga.minskkniga.api.Class.category.ResponseProvScheta;
 import by.minskkniga.minskkniga.api.Class.category.Schetum;
+import by.minskkniga.minskkniga.api.Class.inventarizacia.InventarizaciaObject;
 import by.minskkniga.minskkniga.api.Class.providers.InfoZayavkaBook;
 import by.minskkniga.minskkniga.api.Class.providers.Money;
 import by.minskkniga.minskkniga.api.Class.providers.ProviderObject;
@@ -43,11 +45,14 @@ import by.minskkniga.minskkniga.api.Class.providers.ZavInfo;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 public interface RestApi {
 
@@ -312,4 +317,17 @@ public interface RestApi {
 
     @GET("/api/get_prihod_id.php?")
     Call<List<GetDohodResponse>> getDohodID(@Query("id") String id);
+
+    @POST("/api/add_zakaz_provider.php?")
+    @FormUrlEncoded
+    Call<ResponseBody> addNewProviderZayavka(@FieldMap Map<String, String> map);
+
+    @GET("/api/inv_kniga.php?")
+    Call<InventarizaciaObject> getInventarizacia(@Query("id") String id);
+
+    @GET("/api/update_prihod.php?")
+    Call<ResponseBody> setUpdatePrihod(@Url String url);
+
+    @GET("/api/update_rashod.php?")
+    Call<ResponseBody> setUpdateRashod(@Url String url);
 }

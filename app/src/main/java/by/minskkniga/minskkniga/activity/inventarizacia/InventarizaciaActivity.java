@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -34,7 +32,6 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Barcode;
-import by.minskkniga.minskkniga.activity.providers.SelectNomeclaturaActivity;
 import by.minskkniga.minskkniga.adapter.Nomenklatura.Nav_zakaz;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Products;
@@ -69,6 +66,7 @@ public class InventarizaciaActivity extends AppCompatActivity {
     String izdatel = "Издатель";
     String obraz = "Образец";
     String class_ = "Класс";
+    String filter_ = "";
 
     boolean zakaz = false;
 
@@ -165,10 +163,11 @@ public class InventarizaciaActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO xz
-                //addToList(position);
 
-                startActivity(new Intent(InventarizaciaActivity.this, InventarizaciaInfoActivity.class));
+                Intent intent = new Intent(InventarizaciaActivity.this, InventarizaciaInfoActivity.class);
+                if(products_buf != null) intent.putExtra("id", products_buf.get(position).getId());
+                startActivity(intent);
+
             }
         });
 
@@ -242,9 +241,10 @@ public class InventarizaciaActivity extends AppCompatActivity {
 
             }
         });
-        spinner2.setEnabled(false);
-        spinner2.setClickable(false);
-        load_filter();
+        //spinner2.setEnabled(false);
+        //spinner2.setClickable(false);
+        //load_filter();
+        getNewFilter();
     }
 
     private void addToList(int position) {
@@ -329,10 +329,10 @@ public class InventarizaciaActivity extends AppCompatActivity {
     public void reload() {
         if (spinner1.getSelectedItemPosition() == 0) avtor = "null";
         if (spinner2.getSelectedItemPosition() == 0) izdatel = "null";
-        if (spinner3.getSelectedItemPosition() == 0) obraz = "null";
-        if (spinner4.getSelectedItemPosition() == 0) class_ = "null";
+        obraz = "null";
+        class_ = "null";
 
-        izdatel = intent.getStringExtra("izdatel");
+        //izdatel = intent.getStringExtra("izdatel");
 
         App.getApi().getProducts(avtor, izdatel, obraz, class_).enqueue(new Callback<List<Products>>() {
             @Override
@@ -349,8 +349,8 @@ public class InventarizaciaActivity extends AppCompatActivity {
                     notfound.setVisibility(View.VISIBLE);
                 }
                 notfound.setText("Ничего не найдено");
-                spinner2.setEnabled(false);
-                spinner2.setClickable(false);
+//                spinner2.setEnabled(false);
+//                spinner2.setClickable(false);
             }
 
             @Override
@@ -374,6 +374,11 @@ public class InventarizaciaActivity extends AppCompatActivity {
     }
 
     public void load_filter(){
+        if (spinner1.getSelectedItemPosition() == 0) avtor = "null";
+        if (spinner2.getSelectedItemPosition() == 0) izdatel = "null";
+        if (spinner3.getSelectedItemPosition() == 0) obraz = "null";
+        if (spinner4.getSelectedItemPosition() == 0) class_ = "null";
+
         App.getApi().getProducts_filter().enqueue(new Callback<Products_filter>() {
 
             @Override
@@ -392,7 +397,7 @@ public class InventarizaciaActivity extends AppCompatActivity {
         });
     }
 
-    private void setAdapter(Spinner spinner, ArrayList<String> arr, int id) {
+    private void setAdapter(final Spinner spinner, ArrayList<String> arr, int id) {
         switch (id) {
             case 1:
                 arr.add(0, "Автор");
@@ -439,12 +444,36 @@ public class InventarizaciaActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItemText = (String) parent.getItemAtPosition(position);
-                if (position > 0) {
-                    Toast.makeText
-                            (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                            .show();
+
+                long i1 = R.id.spinner1;
+                long i2 = R.id.spinner2;
+                long vi = spinner.getId();
+
+
+                if(vi == i1) {
+                    if(position != 0) {
+                        avtor = spinner1.getSelectedItem().toString();
+                        if(filter_.contains("clas") || filter_.contains("izdatel") ||
+                                filter_.contains("obtazec")){
+                            filter_ = filter_+",autor";
+                        } else filter_ = "autor";
+
+                        getNewFilter();
+                    }
+
                 }
+                if(vi == i2) {
+                    if(position != 0) {
+                        izdatel = spinner2.getSelectedItem().toString();
+                        if(filter_.contains("clas") || filter_.contains("autor") ||
+                                filter_.contains("obtazec")){
+                            filter_ = filter_+",izdatel";
+                        } else filter_ = "izdatel";
+
+                        getNewFilter();
+                    }
+                }
+
             }
 
             @Override
@@ -452,5 +481,41 @@ public class InventarizaciaActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void getNewFilter(){
+        String _class = "";
+//        if(!class_.contains("null")) _class = class_;
+//        if(class_.contains("Класс")) _class = "";
+
+        String _autor = "";
+        if(!avtor.contains("null")) _autor = avtor;
+        if(avtor.contains("Автор")) _autor = "";
+
+        String _obraz = "";
+//        if(!obraz.contains("null")) _obraz = obraz;
+//        if(obraz.contains("Образец")) _obraz = "";
+
+        String _izdatel = "";
+        if(!izdatel.contains("null")) _izdatel = izdatel;
+        if(izdatel.contains("Издатель")) _izdatel = "";
+
+        App.getApi().getProductsfilter(_class, _obraz, _autor, _izdatel,filter_).enqueue(new Callback<Products_filter>() {
+            @Override
+            public void onResponse(Call<Products_filter> call, Response<Products_filter> response) {
+
+                if(response.body() != null){
+                    if(!filter_.contains("autor"))setAdapter(spinner1, response.body().getAutor(), 1);
+                    if(!filter_.contains("izdatel"))setAdapter(spinner2, response.body().getIzdatel(), 2);
+                    reload();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Products_filter> call, Throwable t) {
+
+            }
+        });
+
     }
 }

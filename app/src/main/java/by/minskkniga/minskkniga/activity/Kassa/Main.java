@@ -38,6 +38,7 @@ import by.minskkniga.minskkniga.api.Class.cassa.GetRashodResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.InfoSchetaItog;
 import by.minskkniga.minskkniga.api.Class.cassa.InfoSchetaResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.ObjectTransaction;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,7 +77,7 @@ public class Main extends AppCompatActivity {
 
     EditText et_comment;
 
-
+    String url_prihod = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -367,7 +368,19 @@ public class Main extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // id , prov_id, summa, schet_id, cat_id, pod_cat_id, com
+                url_prihod = url_prihod + "?id=" + tv_summa.getText().toString()+"&";
+                App.getApi().setUpdatePrihod(url_prihod).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
             }
         });
         tv_summa.setOnClickListener(new View.OnClickListener() {
@@ -417,6 +430,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<GetDohodResponse>> call, Response<List<GetDohodResponse>> response) {
                 if(response.body() != null){
+
                     GetDohodResponse dohodResponse = response.body().get(0);
 
                     tv_date.setText(dohodResponse.getDate());

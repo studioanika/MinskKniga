@@ -1,7 +1,6 @@
 package by.minskkniga.minskkniga.activity.providers.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.providers.ProviderZayavkiListActivity;
 import by.minskkniga.minskkniga.api.Class.providers.Book;
 import by.minskkniga.minskkniga.api.Class.providers.ProvidersZayavkiId;
-import by.minskkniga.minskkniga.api.Class.providerzayavka.ProviderZayavkaI;
 
 /**
  * Created by root on 14.4.18.
@@ -77,21 +75,17 @@ public class ProvidersZayavkiAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.item_list_providers_zayavki_zakaz);
         LinearLayout lin = (LinearLayout) convertView
                 .findViewById(R.id.lin);
-        if(book.getClasss().equals("-1")) {
-            //lin.setBackgroundColor(Color.parseColor("#FBF8D6"));
-        }else {
-            try{
-                txtName.setText(book.getName());
-                txtClass.setText(book.getClasss());
-                txtIzdanie.setText(book.getIzdatel().substring(0,1));
-                txtSokr.setText(book.getSokrName());
-                txtZakaz.setText(_listDataHeader.get(groupPosition).getWhatZakazal()
-                        .get(childPosition).getZav());
+        try{
+            txtName.setText(book.getName());
+            txtClass.setText(book.getClasss());
+            txtIzdanie.setText(book.getIzdatel().substring(0,1));
+            txtSokr.setText(book.getSokrName());
+            txtZakaz.setText(_listDataHeader.get(groupPosition).getWhatZakazal()
+                    .get(childPosition).getZav());
 
 
-            }
-            catch (Exception e){}
         }
+        catch (Exception e){}
 
 
 

@@ -6,19 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.api.Class.inventarizacia.InventarizaciaObject;
+import by.minskkniga.minskkniga.api.Class.inventarizacia.Kont;
 
 public class AdapterInventarizacia extends BaseAdapter {
 
     private Context _context;
-    private List<InventarizaciaObject> _objects;
+    private List<Kont> _objects;
 
-    public AdapterInventarizacia(Context context, List<InventarizaciaObject> objects) {
+    public AdapterInventarizacia(Context context, List<Kont> objects) {
         this._context = context;
         this._objects = new ArrayList<>();
         this._objects.addAll(objects);
@@ -49,7 +50,21 @@ public class AdapterInventarizacia extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = LayoutInflater.from(_context).inflate(R.layout.item_inventarizacia, parent, false);
 
-        InventarizaciaObject object = _objects.get(position);
+        Kont object = _objects.get(position);
+
+        TextView tv_date = (TextView) view.findViewById(R.id.item_inventarizacia_date);
+        TextView tv_colvo = (TextView) view.findViewById(R.id.item_inventarizacia_colvo);
+        TextView tv_contragent = (TextView) view.findViewById(R.id.item_inventarizacia_contragent);
+        TextView tv_type = (TextView) view.findViewById(R.id.item_inventarizacia_type);
+
+        tv_date.setText(object.getDate());
+        tv_contragent.setText(object.getClient());
+        tv_colvo.setText(object.getKolVo());
+        if(Integer.parseInt(object.getKolVo()) > 0){
+            tv_colvo.setTextColor(_context.getResources().getColor(R.color.green));
+        }else tv_colvo.setTextColor(_context.getResources().getColor(R.color.red));
+
+        // TODO здесь нужно еще тип правильно прописать
 
         return view;
     }
