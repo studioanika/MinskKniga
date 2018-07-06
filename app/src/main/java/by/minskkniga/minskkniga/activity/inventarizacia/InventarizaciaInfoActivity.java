@@ -33,9 +33,13 @@ import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.inventarizacia.InventarizaciaObject;
 import by.minskkniga.minskkniga.api.Class.inventarizacia.Kniga;
 import by.minskkniga.minskkniga.api.Class.inventarizacia.Kont;
+import by.minskkniga.minskkniga.api.RestApi;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class InventarizaciaInfoActivity extends AppCompatActivity {
 
@@ -47,6 +51,7 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
     Kniga _kniga;
 
     String id = "0";
+    String url = "/api/inv_ed.php?";
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -102,6 +107,44 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 getResult(tv_sclad, tv_nedos, tv_nedos_i);
+                url = url +"id="+id;
+                try{
+                    Double d = Double.parseDouble(tv_nedos.getText().toString());
+                    Double fact = Double.parseDouble(String.valueOf(_kniga.getFakt()));
+
+                    double result = Double.parseDouble(tv_nedos.getText().toString());
+                    if(result >0) url = url + "&ned=0&izl="+String.valueOf(result);
+                    else if(result < 0)url = url + "&izl=0&ned="+String.valueOf(result);
+                    else url = url + "&izl=0&ned=0";
+                }
+                catch (Exception e){}
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://cc96297.tmweb.ru/api/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                RestApi api = retrofit.create(RestApi.class);
+
+                api.setInvEd(url).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.body() != null) {
+                            String d = response.body().toString();
+                            dialogEdit.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                        Toast.makeText(InventarizaciaInfoActivity.this,
+                                "Проверьте подключение к интернету....",
+                                Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+
             }
         });
 

@@ -59,7 +59,7 @@ public class Main_2 extends BaseAdapter {
         }
 
         tv2.setText(_objects.get(position).getDolg());
-        if (Double.parseDouble(_objects.get(position).getDolg())>=0) {
+        if (!_objects.get(position).getDolg().isEmpty() && Double.parseDouble(_objects.get(position).getDolg())>=0) {
             tv2.setTextColor(Color.BLACK);
         } else {
             tv2.setTextColor(Color.RED);

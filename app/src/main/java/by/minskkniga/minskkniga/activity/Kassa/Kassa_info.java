@@ -101,6 +101,7 @@ public class Kassa_info extends AppCompatActivity {
         Prefs prefs = new Prefs(Kassa_info.this);
         prefs.setSessionIdSchet("");
         prefs.setSessionIdOper("");
+        prefs.setSchet("");
 
 
     }
@@ -209,5 +210,11 @@ public class Kassa_info extends AppCompatActivity {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() -1));
         listView.setLayoutParams(params);
+    }
+
+    @Override
+    protected void onPostResume() {
+        loadData();
+        super.onPostResume();
     }
 }

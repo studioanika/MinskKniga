@@ -11,6 +11,10 @@ public class ZavInfo {
     @Expose
     private String id;
 
+    @SerializedName("chern")
+    @Expose
+    private String chern;
+
     public String getAutor() {
         return autor;
     }
@@ -26,6 +30,10 @@ public class ZavInfo {
     @SerializedName("provedires")
     @Expose
     private String provedires;
+
+    @SerializedName("provedires_name")
+    @Expose
+    private String provedires_name;
 
     @SerializedName("date")
     @Expose
@@ -138,5 +146,21 @@ public class ZavInfo {
 
     public void setWhat_zakazal(List<ZavInfoTovar> what_zakazal) {
         this.what_zakazal = what_zakazal;
+    }
+
+    public String getProvedires_name() {
+        return provedires_name;
+    }
+
+    public void setProvedires_name(String provedires_name) {
+        this.provedires_name = provedires_name;
+    }
+
+    public String getChern() {
+        return chern;
+    }
+
+    public void setChern(String chern) {
+        this.chern = chern;
     }
 }

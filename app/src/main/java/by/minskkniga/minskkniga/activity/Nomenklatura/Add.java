@@ -1,37 +1,24 @@
 package by.minskkniga.minskkniga.activity.Nomenklatura;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapRegionDecoder;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,41 +31,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.target.ViewTarget;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Barcode;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Product;
-import by.minskkniga.minskkniga.api.Class.Product_client;
-import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
-import by.minskkniga.minskkniga.api.Class.Zakaz_product;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -100,7 +69,7 @@ public class Add extends AppCompatActivity {
     EditText zakup_cena;
     EditText prod_cena;
     EditText standart;
-    EditText ves;
+    EditText ves, reserv;
 
     TextView zakazano;
     TextView dostupno;
@@ -180,6 +149,7 @@ public class Add extends AppCompatActivity {
         ogidanie = findViewById(R.id.ogidanie);
         upakovok = findViewById(R.id.upakovok);
         ostatok = findViewById(R.id.ostatok);
+        reserv = (EditText) findViewById(R.id.reserv);
 
         qrScan = new IntentIntegrator(this);
         barcode_button.setOnClickListener(new View.OnClickListener() {
@@ -218,6 +188,7 @@ public class Add extends AppCompatActivity {
         setContentView(R.layout.activity_add_nomenklatura);
         initialize();
 
+        // TODO добавить резерв
 
         if (!id.equals("null")) {
             App.getApi().getProduct(id).enqueue(new Callback<Product>() {
@@ -246,7 +217,7 @@ public class Add extends AppCompatActivity {
 
                     Toast.makeText(Add.this, response.body().getImage(), Toast.LENGTH_SHORT).show();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Glide.with(Add.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+                        Glide.with(Add.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + response.body().getImage()).into(image);
                     } else {
                         Glide.with(Add.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + response.body().getImage()).into(image);
                     }
@@ -293,7 +264,8 @@ public class Add extends AppCompatActivity {
                     zakup_cena.getText().toString().isEmpty() ? "" : zakup_cena.getText().toString(),
                     prod_cena.getText().toString().isEmpty() ? "" : prod_cena.getText().toString(),
                     standart.getText().toString().isEmpty() ? "" : standart.getText().toString(),
-                    ves.getText().toString().isEmpty() ? "" : ves.getText().toString()
+                    ves.getText().toString().isEmpty() ? "" : ves.getText().toString(),
+                    reserv.getText().toString().isEmpty() ? "" : ves.getText().toString()
             ).enqueue(new Callback<ResultBody>() {
                 @Override
                 public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {

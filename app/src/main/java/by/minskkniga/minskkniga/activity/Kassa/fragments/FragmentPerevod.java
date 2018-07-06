@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Kassa.calculator.Calculator;
+import by.minskkniga.minskkniga.activity.prefs.Prefs;
 import by.minskkniga.minskkniga.api.App;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -34,9 +35,9 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
     private static final int REQUEST_CODE = 201;
     private static final int REQUEST_CODE_1 = 202;
 
-    TextView iz_tv, schet_tv, pol_tv;
+    public TextView iz_tv, schet_tv, pol_tv;
 
-    TextView tv_date, tv_time, tv_summa;
+    public TextView tv_date, tv_time, tv_summa;
     ImageView img_left, img_right;
 
     SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
@@ -46,7 +47,7 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
     Context context;
 
-    String schet_ID ="0";
+    public String schet_ID ="0";
     String schet_ID_1 ="0";
     String cat_ID = "0";
     String podcat_ID ="0";
@@ -64,6 +65,9 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
     String id = "";
 
+    public boolean isCat = false;
+    public boolean isSchet = false;
+
     public FragmentPerevod(Context context,String _id) {
         this.context = context;
         this.id = _id;
@@ -78,7 +82,13 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
         initView();
         setTimeAndDate();
+        update();
 
+        Prefs prefs = new Prefs(operation);
+        if(!prefs.getSeshet().isEmpty()){
+            schet_ID = prefs.getSessionIdSchet();
+            iz_tv.setText(prefs.getSeshet());
+        }
 
         return v;
     }
@@ -195,7 +205,12 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
     @Override
     public void showCalculator() {
 
-        operation.showCalculator(tv_summa);
+        operation.showCalculator(tv_summa, tv_summa.getText().toString());
+    }
+
+    @Override
+    public void setResultTV(String text) {
+        if(tv_summa != null) tv_summa.setText(text);
     }
 
 
@@ -222,8 +237,42 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
     @Override
     public void onResume() {
-        setTimeAndDate();
         super.onResume();
+        update();
+        setTimeAndDate();
+    }
+
+    private void update() {
+
+//        if(!isCat){
+//            iz_tv.setText("Откуда");
+//            schet_tv.setText("Куда");
+//            pol_tv.setText("Выберите категорию");
+//            schet_ID = "";
+//            schet_ID_1 = "";
+//            cat_ID = "";
+//            podcat_ID = "";
+//        }
+
+        Calculator calculator = (Calculator) context;
+        String text = calculator.mFormulaEditText.getText().toString();
+        String text2 = calculator.mResultEditText.getText().toString();
+
+        if(!text.isEmpty()){
+            try{
+                Double.parseDouble(text);
+                setResultTV(text);
+            }
+            catch (Exception e){
+                if(!text2.isEmpty()) setResultTV(text2);
+                else setResultTV(calculator.money);
+            }
+
+        }else {
+            if(!text2.isEmpty()) setResultTV(text2);
+            else setResultTV(calculator.money);
+        }
+
     }
 
     private void startCat(){
@@ -280,7 +329,7 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
 
         String summ = tv_summa.getText().toString();
-        if(summ.isEmpty()) {
+        if(summ.isEmpty() || summ.equals("0")) {
             Toast.makeText(getContext(), "Заполните сумму", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -300,6 +349,8 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
         String schet_perevoda = schet_ID_1;
 
+
+        btn_save.setEnabled(false);
         App.getApi().addOperationCassa(cat_ID, podcat_ID,schet_ID, summ, date,
                 kontragent, com, type, schet_perevoda).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -307,14 +358,17 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
                 if(response.body() != null){
 
+                    btn_save.setEnabled(true);
                     Toast.makeText(getContext(), "Операция одобрена", Toast.LENGTH_SHORT).show();
+                    Calculator calculator = (Calculator) context;
+                    calculator.finish();
                 }
 
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                btn_save.setEnabled(true);
             }
         });
 

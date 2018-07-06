@@ -6,229 +6,256 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/header_rel">
-
-    </RelativeLayout>
-    
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/dohod.img_money"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            app:srcCompat="@drawable/icons8_money_100" />
-
-        <TextView
-            android:id="@+id/dohod.summa"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:layout_toRightOf="@+id/dohod.img_money"
-            android:gravity="right"
-            android:text="0"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-        
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/header_rel">
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/header_rel">
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/dohod.img_right"
-            android:layout_toRightOf="@+id/dohod.img_left"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/dohod.date"
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/header_rel">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/dohod.img_money"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    app:srcCompat="@drawable/icons8_money_100" />
+
+                <TextView
+                    android:id="@+id/dohod.summa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:layout_toRightOf="@+id/dohod.img_money"
+                    android:gravity="right"
+                    android:text="0"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/header_rel">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/header_rel">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/dohod.img_right"
+                    android:layout_toRightOf="@+id/dohod.img_left"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/dohod.date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/dohod.time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/dohod.img_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:alpha="0.54"
+                    app:srcCompat="@drawable/ic_chevron_left_black_24dp" />
+
+                <ImageView
+                    android:id="@+id/dohod.img_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="16dp"
+                    android:alpha="0.54"
+                    app:srcCompat="@drawable/ic_chevron_right" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/header_rel">
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textSize="18sp" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/dohod.time"
+                <TextView
+                    android:id="@+id/r_o_cat_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Категория"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/r_o_cat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toRightOf="@+id/r_o_cat_1"
+                    android:gravity="right"
+                    android:text="Выбрать категорию" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textSize="16sp" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/r_o_chet_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Счет"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/r_o_chet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toRightOf="@+id/r_o_chet_1"
+                    android:gravity="right"
+                    android:text="Выбрать счет" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/r_o_pod_cat_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Контрагент"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/r_o_pod_cat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_toRightOf="@+id/r_o_pod_cat_1"
+                    android:gravity="right"
+                    android:text="Выбрать получателя" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="24dp"
+                android:text="Заметка"
+                android:textColor="@color/tab_indicator" />
+
+            <EditText
+                android:id="@+id/dohod.note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
+                android:inputType="textMultiLine" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="16dp"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/r_o_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/tab_indicator"
+                    android:text="Редактировать"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/dohod.delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_delete_black_24dp" />
+
+                <Button
+                    android:id="@+id/r_o_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="1"
+                    android:background="@color/tab_indicator"
+                    android:text="Сохранить"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/dohod.img_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:alpha="0.54"
-            app:srcCompat="@drawable/ic_chevron_left_black_24dp" />
-
-        <ImageView
-            android:id="@+id/dohod.img_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
-            android:alpha="0.54"
-            app:srcCompat="@drawable/ic_chevron_right" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/header_rel">
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/r_o_cat_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="Категория"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/r_o_cat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/r_o_cat_1"
-            android:gravity="right"
-            android:text="Выбрать категорию" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="24dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/r_o_chet_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="Счет"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/r_o_chet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/r_o_chet_1"
-            android:gravity="right"
-            android:text="Выбрать счет" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="24dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/r_o_pod_cat_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="Получатель"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/r_o_pod_cat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@+id/r_o_pod_cat_1"
-            android:gravity="right"
-            android:text="Выбрать получателя" />
-    </RelativeLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Заметка"
-        android:textColor="@color/tab_indicator" />
-
-    <EditText
-        android:id="@+id/dohod.note"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:inputType="textMultiLine" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="16dp"
-        android:weightSum="2">
-
-        <ImageView
-            android:id="@+id/dohod.delete"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_weight="1"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_delete_black_24dp" />
-
-        <Button
-            android:id="@+id/r_o_save"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_weight="1"
-            android:background="@color/tab_indicator"
-            android:text="Сохранить"
-            android:textColor="@color/colorWhite"
-            android:textSize="16sp" />
-
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

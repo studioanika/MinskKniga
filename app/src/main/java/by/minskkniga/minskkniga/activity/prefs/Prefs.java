@@ -8,6 +8,7 @@ public class Prefs {
     Context context;
     private static final String APP_PREFERENCES = "config";
     private static final String APP_PREFERENCES_SESSION_ID_SCHET = "session_id_sched";
+    private static final String APP_PREFERENCES_SESSION_NAME_SCHET = "session_name_sched";
     private static final String APP_PREFERENCES_SESSION_ID_OPER = "session_id_oper";
     private SharedPreferences mSettings;
 
@@ -33,6 +34,16 @@ public class Prefs {
     public void setSessionIdOper(String id){
         SharedPreferences.Editor editor = mSettings.edit();
         editor.putString(APP_PREFERENCES_SESSION_ID_SCHET, id);
+        editor.apply();
+    }
+
+    public String  getSeshet(){
+        return mSettings.getString(APP_PREFERENCES_SESSION_NAME_SCHET,"0");
+    }
+
+    public void setSchet(String id){
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.putString(APP_PREFERENCES_SESSION_NAME_SCHET, id);
         editor.apply();
     }
 

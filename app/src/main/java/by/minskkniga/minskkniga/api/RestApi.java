@@ -35,6 +35,8 @@ import by.minskkniga.minskkniga.api.Class.category.ResponseCategory;
 import by.minskkniga.minskkniga.api.Class.category.ResponseProvScheta;
 import by.minskkniga.minskkniga.api.Class.category.Schetum;
 import by.minskkniga.minskkniga.api.Class.inventarizacia.InventarizaciaObject;
+import by.minskkniga.minskkniga.api.Class.providers.GetOzhidaemResponse;
+import by.minskkniga.minskkniga.api.Class.providers.GetZakK;
 import by.minskkniga.minskkniga.api.Class.providers.InfoZayavkaBook;
 import by.minskkniga.minskkniga.api.Class.providers.Money;
 import by.minskkniga.minskkniga.api.Class.providers.ProviderObject;
@@ -42,6 +44,7 @@ import by.minskkniga.minskkniga.api.Class.providers.ProviderZayavkiIzdatelstva;
 import by.minskkniga.minskkniga.api.Class.providers.ProviderZayavkiNews;
 import by.minskkniga.minskkniga.api.Class.providers.ProvidersZayavkiId;
 import by.minskkniga.minskkniga.api.Class.providers.ZavInfo;
+import by.minskkniga.minskkniga.api.Class.providers.ZayavkaInfo;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -130,7 +133,8 @@ public interface RestApi {
                                 @Query("zakup_cena") String zakup_cena,
                                 @Query("prod_cena") String prod_cena,
                                 @Query("standart") String standart,
-                                @Query("ves") String ves);
+                                @Query("ves") String ves,
+                                @Query("rezerv") String rezerv);
 
     @GET("add_product.php")
     Call<ResultBody> addProduct(@Query("id") String id,
@@ -322,12 +326,37 @@ public interface RestApi {
     @FormUrlEncoded
     Call<ResponseBody> addNewProviderZayavka(@FieldMap Map<String, String> map);
 
-    @GET("/api/inv_kniga.php?")
+    @GET("/api/ostatok_na_sklade.php?")
     Call<InventarizaciaObject> getInventarizacia(@Query("id") String id);
 
-    @GET("/api/update_prihod.php?")
+    @GET
     Call<ResponseBody> setUpdatePrihod(@Url String url);
 
-    @GET("/api/update_rashod.php?")
+    @GET
     Call<ResponseBody> setUpdateRashod(@Url String url);
+
+    @GET
+    Call<ResponseBody> setUpdatePerevod(@Url String url);
+
+    @GET
+    Call<ResponseBody> setInvEd(@Url String url);
+
+    @GET("/api/delete_scheta_info.php?")
+    Call<ResponseBody> getDeleteOperationId(@Query("id") String id, @Query("type") String type);
+
+    @GET("get_providers_products.php")
+    Call<List<ZayavkaInfo>> getProductsZayavka(@Query("autor") String avtor,
+                                               @Query("izdatel") String izdatel,
+                                               @Query("obrazec") String obraz,
+                                               @Query("clas") String clas);
+    @GET("/api/get_zak_k.php?")
+    Call<List<GetZakK>> getZakK(@Query("id") String id);
+
+    @GET("/api/get_ojidaem_k.php?")
+    Call<List<GetOzhidaemResponse>> getOjidaem(@Query("id") String id);
+
+    @POST("/api/update_zav_providers.php?")
+    @FormUrlEncoded
+    Call<ResponseBody> updateProviderZayavka(@FieldMap Map<String, String> map);
+
 }

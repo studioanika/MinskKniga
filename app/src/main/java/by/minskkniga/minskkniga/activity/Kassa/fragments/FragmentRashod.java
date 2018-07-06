@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Kassa.calculator.Calculator;
+import by.minskkniga.minskkniga.activity.prefs.Prefs;
 import by.minskkniga.minskkniga.api.App;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -35,9 +36,9 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
     private static final int REQUEST_CODE = 201;
     private static final int REQUEST_CODE_1 = 202;
 
-    TextView cat_tv, schet_tv, pol_tv;
+    public TextView cat_tv, schet_tv, pol_tv;
 
-    TextView tv_date, tv_time, tv_summa;
+    public TextView tv_date, tv_time, tv_summa;
     ImageView img_left, img_right;
 
     SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
@@ -47,7 +48,7 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
 
     Context context;
 
-    String schet_ID ="0";
+    public String schet_ID ="0";
     String cat_ID = "0";
     String podcat_ID ="0";
     String kontragent = "0";
@@ -62,6 +63,10 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
 
     String id = "";
 
+    public boolean isCat = false;
+    public boolean isSchet = false;
+    private boolean pause = false;
+
     public FragmentRashod(Context context,String _id) {
         this.context = context;
         this.id = _id;
@@ -72,12 +77,16 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        v = inflater.inflate(R.layout.fragment_dohod, container, false);
+        v = inflater.inflate(R.layout.fragment_rashod, container, false);
 
         initView();
         setTimeAndDate();
-
-
+        update();
+        Prefs prefs = new Prefs(operation);
+        if(!prefs.getSeshet().isEmpty()){
+            schet_ID = prefs.getSessionIdSchet();
+            schet_tv.setText(prefs.getSeshet());
+        }
         return v;
     }
 
@@ -174,6 +183,12 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
     }
 
     @Override
+    public void onPause() {
+        pause = true;
+        super.onPause();
+    }
+
+    @Override
     public void updateDateTime(int y, int m, int d) {
         String m_;
         String d_;
@@ -191,7 +206,12 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
     @Override
     public void showCalculator() {
         Calculator operation = (Calculator) context;
-        operation.showCalculator(tv_summa);
+        operation.showCalculator(tv_summa, tv_summa.getText().toString());
+    }
+
+    @Override
+    public void setResultTV(String text) {
+        if(tv_summa != null) tv_summa.setText(text);
     }
 
 
@@ -218,8 +238,44 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
 
     @Override
     public void onResume() {
-        setTimeAndDate();
         super.onResume();
+        if(!pause) update();
+        setTimeAndDate();
+    }
+
+    private void update() {
+
+
+//        if(!isCat) {
+//            cat_tv.setText("Веберите категорию");
+//            podcat_ID = "";
+//            cat_ID = "";
+//        }
+//        if(!isSchet){
+//            schet_tv.setText("Выберите счет");
+//            schet_ID = "";
+//        }
+
+        Calculator calculator = (Calculator) context;
+        String text = calculator.mFormulaEditText.getText().toString();
+        String text2 = calculator.mResultEditText.getText().toString();
+
+        if(!text.isEmpty()){
+            try{
+                Double.parseDouble(text);
+                setResultTV(text);
+            }
+            catch (Exception e){
+                if(!text2.isEmpty()) setResultTV(text2);
+                else setResultTV(calculator.money);
+            }
+
+        }else {
+            if(!text2.isEmpty()) setResultTV(text2);
+            else setResultTV(calculator.money);
+        }
+
+
     }
 
     private void startCat(){
@@ -270,17 +326,17 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
 
 
         String summ = tv_summa.getText().toString();
-        if(summ.isEmpty()) {
+        if(summ.isEmpty() || summ.equals("0")) {
             Toast.makeText(getContext(), "Заполните сумму", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String date = tv_date.getText().toString();
 
-        if(kontragent.isEmpty()){
-            Toast.makeText(getContext(), "Выберите контрагента", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if(kontragent.isEmpty()){
+//            Toast.makeText(getContext(), "Выберите контрагента", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         String com = et_comment.getText().toString();
 
@@ -288,22 +344,27 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
 
         String schet_perevoda = "0";
 
+        btn_save.setEnabled(false);
         App.getApi().addOperationCassa(cat_ID, podcat_ID,schet_ID, summ, date,
                 kontragent, com, type, schet_perevoda).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 if(response.body() != null){
-
+                    btn_save.setEnabled(true);
                     Toast.makeText(getContext(), "Операция одобрена", Toast.LENGTH_SHORT).show();
+                    Calculator calculator = (Calculator) context;
+                    calculator.finish();
                 }
 
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                btn_save.setEnabled(true);
             }
         });
     }
+
+
 }

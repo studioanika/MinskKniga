@@ -26,21 +26,23 @@
         android:id="@+id/ch1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="false"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:focusable="false" />
 
     <TextView
         android:id="@+id/tv3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="TextView" />
+        android:text="TextView"
+        android:visibility="visible" />
 
     <ImageView
         android:id="@+id/info"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        app:srcCompat="@drawable/ic_info"/>
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_info" />
 
     <ImageView
         android:id="@+id/iv1"

@@ -5,11 +5,28 @@ import com.google.gson.annotations.SerializedName;
 
 public class GetDohodResponse {
 
-    // TODO здесь нужно id, category, podcategory, schet
+
 
     @SerializedName("date")
     @Expose
     private String date;
+
+    @SerializedName("id")
+    @Expose
+    private String id;
+
+
+    @SerializedName("schet_id")
+    @Expose
+    private String schet_id;
+
+    @SerializedName("category_id")
+    @Expose
+    private String cat_id;
+
+    @SerializedName("podcategory_id")
+    @Expose
+    private String pod_cat_id;
 
     @SerializedName("prihod")
     @Expose
@@ -22,6 +39,10 @@ public class GetDohodResponse {
     @SerializedName("client")
     @Expose
     private String client;
+
+    @SerializedName("client_id")
+    @Expose
+    private String client_id;
 
     @SerializedName("schet")
     @Expose
@@ -77,5 +98,45 @@ public class GetDohodResponse {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSchet_id() {
+        return schet_id;
+    }
+
+    public void setSchet_id(String schet_id) {
+        this.schet_id = schet_id;
+    }
+
+    public String getCat_id() {
+        return cat_id;
+    }
+
+    public void setCat_id(String cat_id) {
+        this.cat_id = cat_id;
+    }
+
+    public String getPod_cat_id() {
+        return pod_cat_id;
+    }
+
+    public void setPod_cat_id(String pod_cat_id) {
+        this.pod_cat_id = pod_cat_id;
+    }
+
+    public String getClient_id() {
+        return client_id;
+    }
+
+    public void setClient_id(String client_id) {
+        this.client_id = client_id;
     }
 }

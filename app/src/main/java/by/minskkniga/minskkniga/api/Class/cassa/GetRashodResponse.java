@@ -5,7 +5,26 @@ import com.google.gson.annotations.SerializedName;
 
 public class GetRashodResponse {
 
-    // TODO здесь нужно id ,category, podcategory, schet
+    @SerializedName("id")
+    @Expose
+    private String id;
+
+
+    @SerializedName("schet_id")
+    @Expose
+    private String schet_id;
+
+    @SerializedName("category_id")
+    @Expose
+    private String cat_id;
+
+    @SerializedName("podcategory_id")
+    @Expose
+    private String pod_cat_id;
+
+    @SerializedName("client_id")
+    @Expose
+    private String client_id;
 
     @SerializedName("date")
     @Expose
@@ -77,5 +96,45 @@ public class GetRashodResponse {
 
     public void setKom(String kom) {
         this.kom = kom;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getSchet_id() {
+        return schet_id;
+    }
+
+    public void setSchet_id(String schet_id) {
+        this.schet_id = schet_id;
+    }
+
+    public String getCat_id() {
+        return cat_id;
+    }
+
+    public void setCat_id(String cat_id) {
+        this.cat_id = cat_id;
+    }
+
+    public String getPod_cat_id() {
+        return pod_cat_id;
+    }
+
+    public void setPod_cat_id(String pod_cat_id) {
+        this.pod_cat_id = pod_cat_id;
+    }
+
+    public String getClient_id() {
+        return client_id;
+    }
+
+    public void setClient_id(String client_id) {
+        this.client_id = client_id;
     }
 }

@@ -227,6 +227,76 @@
             android:layout_centerInParent="true"
             android:visibility="gone" />
 
+
+        <RelativeLayout
+            android:id="@+id/relll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/drawer_background"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Артикул"
+                    android:textColor="@color/drawer_text" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Цена"
+                    android:textColor="@color/drawer_text" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Заказано"
+                    android:textColor="@color/drawer_text" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Подарков"
+                    android:textColor="@color/drawer_text" />
+
+                <TextView
+                    android:id="@+id/tv6666"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Сумма"
+                    android:textColor="@color/drawer_text" />
+
+            </LinearLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/nav_fab2"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="false"
+                android:layout_margin="16dp"
+                app:backgroundTint="@color/drawer_text"
+                app:srcCompat="@drawable/ic_check" />
+
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
 

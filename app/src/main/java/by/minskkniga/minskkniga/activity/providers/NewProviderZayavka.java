@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -55,6 +56,9 @@ import retrofit2.Response;
 public class NewProviderZayavka extends AppCompatActivity {
     private static final int REQUEST_CODE = 201;
 
+
+    String id_zayavki = "";
+
     List<ProviderObject> list = new ArrayList<>();
     List<ProviderObject> listF = new ArrayList<>();
     List<Products> listPr = new ArrayList<>();
@@ -78,6 +82,10 @@ public class NewProviderZayavka extends AppCompatActivity {
 
     RelativeLayout rel_add_product, rel_send, rel_view_oper;
     List<Couriers> couriersList = new ArrayList<>();
+    EditText comment_et;
+
+
+    boolean isSend = false;
 
 
     @SuppressLint("RestrictedApi")
@@ -117,6 +125,7 @@ public class NewProviderZayavka extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Couriers>> call, Response<List<Couriers>> response) {
                 ArrayList<String> arr = new ArrayList<>();
+                arr.add("Без курьера");
                 // TODO курьеры еще нужны
                 if(response.body() != null){
                     for (Couriers cour: response.body()
@@ -125,7 +134,7 @@ public class NewProviderZayavka extends AppCompatActivity {
                         couriersList.add(cour);
                     }
                 }
-                arr.add("Без курьера");
+
                 ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(NewProviderZayavka.this, R.layout.adapter_nomenklatura_filter, arr);
                 couriers_sp.setAdapter(spinnerArrayAdapter);
                 if(arr != null) couriers_sp.setSelection(0);
@@ -141,7 +150,8 @@ public class NewProviderZayavka extends AppCompatActivity {
     private void initView() {
 
         // TODO здесь нужно показать расчет и отправить, позвонить
-
+        comment_et = (EditText) findViewById(R.id.new_z_comment);
+        rel_view_oper = (RelativeLayout) findViewById(R.id.rel_3);
         rel_drawer = (RelativeLayout) findViewById(R.id.drawer_right);
         tv_inf_1 = (TextView) findViewById(R.id.new_z_p_inf_1);
         tv_inf_2 = (TextView) findViewById(R.id.new_z_p_inf_2);
@@ -195,6 +205,21 @@ public class NewProviderZayavka extends AppCompatActivity {
             }
         });
 
+        rel_view_oper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isSend) {
+                    Intent intent = new Intent(NewProviderZayavka.this, ProvidersZayavkiRaschetActivity.class);
+                    intent.putExtra("izdatel", providerObject.getName());
+                    intent.putExtra("id", providerObject.getId());
+                    // TODO здесь походу еще ид будет
+                    startActivity(intent);
+                }
+
+
+            }
+        });
+
     }
 
     private void sendZayavka() {
@@ -205,10 +230,21 @@ public class NewProviderZayavka extends AppCompatActivity {
         String author = sp.getString("id", "");
         String providers = providerObject.getId();
         String status = "1";
-        String comment = "";
+        String comment = comment_et.getText().toString();
         String auto = "0";
         String oplacheno = "0";
         String mass = "";
+        String courier = "";
+
+        if(couriers_sp.getSelectedItemPosition() == 0) courier = "-1";
+        else {
+            try{
+                courier = couriersList.get(couriers_sp.getSelectedItemPosition()).getId();
+            }
+            catch (Exception e){
+
+            }
+        }
 
         if(productForZayackaProviderList != null) {
             for (ProductForZayackaProvider productForZayackaProviderList: productForZayackaProviderList
@@ -224,16 +260,33 @@ public class NewProviderZayavka extends AppCompatActivity {
         body.put("autor", author);
         body.put("status", status);
         body.put("komment", comment);
+        body.put("courier_id", courier);
         body.put("auto", auto);
         body.put("oplacheno", oplacheno);
+        body.put("komment", comment);
         body.put("mas", mass);
 
         App.getApi().addNewProviderZayavka(body).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.body() != null){
-                    if(response.body().toString().contains("message:")){
-                        Toast.makeText(getApplicationContext(), "Заявка успешно отправлена.", Toast.LENGTH_SHORT).show();
+                    String body_s = null;
+                    try {
+                        body_s = response.body().string();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if(body_s.contains("message")){
+                       try {
+                           String[] ds =body_s.split("\":");
+                           id_zayavki = ds[1];
+                           id_zayavki = id_zayavki.substring(0, id_zayavki.length() - 1);                          //id_zayavki = id_zayavki.replaceAll("]", "");
+                           isSend = true;
+                           Toast.makeText(getApplicationContext(), "Заявка успешно отправлена.", Toast.LENGTH_SHORT).show();
+                       }
+                       catch (Exception e){
+                            String sd = e.toString();
+                       }
                     }else Toast.makeText(getApplicationContext(), "Ошибка отправки заявки...", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -487,14 +540,12 @@ public class NewProviderZayavka extends AppCompatActivity {
         showDrawer();
 
     }
-
     private void showDrawer(){
         rel_drawer.setVisibility(View.VISIBLE);
         YoYo.with(Techniques.SlideInRight)
                 .duration(500)
                 .playOn(rel_drawer);
     }
-
     private void hideDrawer(){
 
         YoYo.with(Techniques.FadeOutRight)
@@ -502,7 +553,6 @@ public class NewProviderZayavka extends AppCompatActivity {
                 .playOn(rel_drawer);
         rel_drawer.setVisibility(View.GONE);
     }
-
     @Override
     public void onBackPressed() {
         if(rel_drawer.getVisibility() == View.VISIBLE) {

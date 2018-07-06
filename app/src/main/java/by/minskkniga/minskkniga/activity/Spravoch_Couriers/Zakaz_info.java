@@ -80,6 +80,8 @@ public class Zakaz_info extends AppCompatActivity {
 
         courier = findViewById(R.id.courier);
         zametka = findViewById(R.id.zametka);
+        zametka.setEnabled(false);
+
         ok = findViewById(R.id.ok);
         ok.setVisibility(View.GONE);
 
@@ -161,7 +163,7 @@ public class Zakaz_info extends AppCompatActivity {
 
                 }
                 lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_info(Zakaz_info.this, (ArrayList<WhatZakazal>) zakaz.getWhatZakazal()));
-                setListViewHeightBasedOnChildren(lv);
+                setListViewBase(lv);
                 load_couriers();
             }
 
@@ -183,8 +185,8 @@ public class Zakaz_info extends AppCompatActivity {
                     id.add(response.body().get(i).getId());
                 }
 
-                adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, mass);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, mass);
+                //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
                 courier.setAdapter(adapter);
 
@@ -203,25 +205,43 @@ public class Zakaz_info extends AppCompatActivity {
         });
     }
 
-    public  void setListViewHeightBasedOnChildren(ListView listView) {
+//    public  void setListViewHeightBasedOnChildren(ListView listView) {
+//        ListAdapter listAdapter = listView.getAdapter();
+//        if (listAdapter == null)
+//            return;
+//
+//        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+//        int totalHeight = 0;
+//        View view = null;
+//        for (int i = 0; i < listAdapter.getCount(); i++) {
+//            view = listAdapter.getView(i, view, listView);
+//            if (i == 0)
+//                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
+//
+//            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+//            totalHeight += view.getMeasuredHeight();
+//        }
+//        ViewGroup.LayoutParams params = listView.getLayoutParams();
+//        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+//        listView.setLayoutParams(params);
+//        listView.requestLayout();
+//    }
+
+    private void setListViewBase(ListView listView){
         ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null)
-            return;
 
-        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        if(listAdapter == null) return;
+
         int totalHeight = 0;
-        View view = null;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            view = listAdapter.getView(i, view, listView);
-            if (i == 0)
-                view.setLayoutParams(new ViewGroup.LayoutParams(desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-            totalHeight += view.getMeasuredHeight();
+        for ( int i = 0; i < listAdapter.getCount(); i++){
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0 ,0);
+            totalHeight+=listItem.getMeasuredHeight();
         }
+
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() -1));
         listView.setLayoutParams(params);
-        listView.requestLayout();
     }
 }

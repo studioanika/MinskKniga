@@ -151,5 +151,6 @@
     <string name="desc_del">delete</string>
     <!-- Content description for '=' button. [CHAR_LIMIT=NONE] -->
     <string name="desc_eq">equals</string>
+    <string name="title_activity_providers_zayavki_raschet">ProvidersZayavkiRaschetActivity</string>
 
 </resources>

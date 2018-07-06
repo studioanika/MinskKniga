@@ -7,13 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -63,7 +61,7 @@ public class Zakaz_sborka extends BaseAdapter {
             linear.setBackgroundColor(Color.LTGRAY);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Glide.with(_context).load("http://cc96297.tmweb.ru/admin/img/nomen/" + _objects.get(position).image).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(iv1);
+            Glide.with(_context).load("http://cc96297.tmweb.ru/admin/img/nomen/" + _objects.get(position).image).into(iv1);
         } else {
             Glide.with(_context).load("http://cc96297.tmweb.ru/admin/img/nomen/" +  _objects.get(position).image).into(iv1);
         }

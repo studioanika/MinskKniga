@@ -167,18 +167,19 @@
         <activity
             android:name=".activity.inventarizacia.InventarizaciaInfoActivity"
             android:label="@string/title_activity_inventarizacia_info"
-            android:theme="@style/AppTheme"></activity>
-
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.Kassa.calculator.CalculatorGB"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
         <activity
             android:name=".activity.Kassa.calculator.CalculatorL"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
+        <activity
+            android:name=".activity.providers.ProvidersZayavkiRaschetActivity"
+            android:label="@string/title_activity_providers_zayavki_raschet"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

@@ -93,6 +93,7 @@ public abstract class Calculator extends AppCompatActivity
         INPUT, EVALUATE, RESULT, ERROR
     }
     String results = "0";
+    public String money = "0";
     ViewPager viewPager;
 
     private final TextWatcher mFormulaTextWatcher = new TextWatcher() {
@@ -102,12 +103,16 @@ public abstract class Calculator extends AppCompatActivity
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
+
         }
 
         @Override
         public void afterTextChanged(Editable editable) {
             setState(CalculatorState.INPUT);
             mEvaluator.evaluate(editable, Calculator.this);
+            if(mCalculatorDisplay != null) {
+                mCalculatorDisplay.setText(editable.toString());
+            }
         }
     };
 
@@ -141,8 +146,8 @@ public abstract class Calculator extends AppCompatActivity
     private CalculatorExpressionEvaluator mEvaluator;
 
     protected RelativeLayout mDisplayView;
-    protected CalculatorEditText mFormulaEditText;
-    protected CalculatorEditText mResultEditText;
+    public CalculatorEditText mFormulaEditText;
+    public CalculatorEditText mResultEditText;
     private NineOldViewPager mPadViewPager;
     private View mDeleteButton;
     private View mClearButton;
@@ -375,21 +380,45 @@ public abstract class Calculator extends AppCompatActivity
 
         if (mCurrentState == CalculatorState.INPUT) {
             if(result != null){
-                mResultEditText.setText(result);
-                results = result;
-                if(mCalculatorDisplay != null) mCalculatorDisplay.setText(result);
+                if(!mResultEditText.getText().toString().isEmpty()
+                        && mResultEditText != null) {
+                    mResultEditText.setText(result);
+                    results = result;
+                }
+                else if(!mFormulaEditText.getText().toString().isEmpty()
+                        && mFormulaEditText != null) {
+                    results = mFormulaEditText.getText().toString();
+                }
+
+                if(mCalculatorDisplay != null) mCalculatorDisplay.setText(results);
             }
         } else if (errorResourceId != INVALID_RES_ID) {
             onError(errorResourceId);
         } else if (!TextUtils.isEmpty(result)) {
             onResult(result);
-            mResultEditText.setText(result);
-            results = result;
-            if(mCalculatorDisplay != null) mCalculatorDisplay.setText(result);
+            if(!mResultEditText.getText().toString().isEmpty()
+                    && mResultEditText != null) {
+                mResultEditText.setText(result);
+                results = result;
+            }
+            else if(!mFormulaEditText.getText().toString().isEmpty()
+                    && mFormulaEditText != null) {
+                results = mFormulaEditText.getText().toString();
+            }
+
+            if(mCalculatorDisplay != null) mCalculatorDisplay.setText(results);
         } else if (mCurrentState == CalculatorState.EVALUATE) {
-            mResultEditText.setText(result);
-            results = result;
-            if(mCalculatorDisplay != null) mCalculatorDisplay.setText(result);
+            if(!mResultEditText.getText().toString().isEmpty()
+                    && mResultEditText != null) {
+                mResultEditText.setText(result);
+                results = result;
+            }
+            else if(!mFormulaEditText.getText().toString().isEmpty()
+                    && mFormulaEditText != null) {
+                results = mFormulaEditText.getText().toString();
+            }
+
+            if(mCalculatorDisplay != null) mCalculatorDisplay.setText(results);
             // The current expression cannot be evaluated -> return to the input state.
             setState(CalculatorState.INPUT);
         }
@@ -505,7 +534,7 @@ public abstract class Calculator extends AppCompatActivity
     }
 
     private void resetCalculator(){
-        mCalculatorDisplay.setText("0");
+        if(mCalculatorDisplay.getText().toString().isEmpty()) mCalculatorDisplay.setText("0");
         if(calculator != null){
 
             YoYo.with(Techniques.SlideInDown)
@@ -516,8 +545,25 @@ public abstract class Calculator extends AppCompatActivity
     }
 
     private void hideCalculator(){
-        try{mCalculatorDisplay.setText(results);}
-        catch (Exception e){}
+        try{
+            if(!results.isEmpty() && results != null) {
+                mCalculatorDisplay.setText(results);
+                tab1.setResultTV(results);
+                tab2.setResultTV(results);
+                tab3.setResultTV(results);
+            }
+            if(!mFormulaEditText.getText().toString().isEmpty()) {
+                mCalculatorDisplay.setText(mFormulaEditText.getText().toString());
+                tab1.setResultTV(mFormulaEditText.getText().toString());
+                tab2.setResultTV(mFormulaEditText.getText().toString());
+                tab3.setResultTV(mFormulaEditText.getText().toString());
+            }
+
+
+        }
+        catch (Exception e){
+
+        }
         if(calculator != null){
             //onClear();
             YoYo.with(Techniques.SlideInDown)
@@ -598,9 +644,9 @@ public abstract class Calculator extends AppCompatActivity
         showDialog(DIALOG_DATE);
     }
 
-    public void showCalculator(TextView tv){
+    public void showCalculator(TextView tv, String value){
         mCalculatorDisplay = tv;
-
+        if(mFormulaEditText != null) mFormulaEditText.setText(value);
         if(tv != null && calculator != null){
             calculator.setVisibility(View.VISIBLE);
             YoYo.with(Techniques.SlideInUp)
@@ -633,13 +679,13 @@ public abstract class Calculator extends AppCompatActivity
                 if(cat.isEmpty()) return;
                 try {
                     if(podcat.isEmpty()) {
-                        tab1.setCategory(cat, cat_id, podcat_id);
-                        tab2.setCategory(cat, cat_id, podcat_id);
-                        tab3.setCategory(cat, cat_id, podcat_id);
+                        if(viewPager.getCurrentItem() == 0) tab1.setCategory(cat, cat_id, podcat_id);
+                        if(viewPager.getCurrentItem() == 1) tab2.setCategory(cat, cat_id, podcat_id);
+                        if(viewPager.getCurrentItem() == 2) tab3.setCategory(cat, cat_id, podcat_id);
                     }else {
-                        tab1.setCategory(cat+">>"+podcat, cat_id, podcat_id);
-                        tab2.setCategory(cat+">>"+podcat, cat_id, podcat_id);
-                        tab3.setCategory(cat+">>"+podcat, cat_id, podcat_id);
+                        if(viewPager.getCurrentItem() == 0) tab1.setCategory(cat+">>"+podcat, cat_id, podcat_id);
+                        if(viewPager.getCurrentItem() == 1) tab2.setCategory(cat+">>"+podcat, cat_id, podcat_id);
+                        if(viewPager.getCurrentItem() == 2) tab3.setCategory(cat+">>"+podcat, cat_id, podcat_id);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -655,9 +701,9 @@ public abstract class Calculator extends AppCompatActivity
 
                     if(schet.isEmpty()) return;
                     else {
-                        tab1.setScheta(schetid, schet);
-                        tab2.setScheta(schetid, schet);
-                        tab3.setScheta(schetid, schet, type_perevod);
+                        if(viewPager.getCurrentItem() == 0) tab1.setScheta(schetid, schet);
+                        if(viewPager.getCurrentItem() == 1) tab2.setScheta(schetid, schet);
+                        if(viewPager.getCurrentItem() == 2) tab3.setScheta(schetid, schet, type_perevod);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1037,6 +1083,10 @@ public abstract class Calculator extends AppCompatActivity
 
             itog.setText("Итог : "+String.valueOf(sum));
             if(mCalculatorDisplay != null) mCalculatorDisplay.setText(String.valueOf(sum));
+            money = String.valueOf(sum);
+            tab1.tv_summa.setText(money);
+            tab2.tv_summa.setText(money);
+            tab3.tv_summa.setText(money);
 
         }catch (Exception e){
 

@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +39,13 @@ import by.minskkniga.minskkniga.api.Class.cassa.GetRashodResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.InfoSchetaItog;
 import by.minskkniga.minskkniga.api.Class.cassa.InfoSchetaResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.ObjectTransaction;
+import by.minskkniga.minskkniga.api.RestApi;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Main extends AppCompatActivity {
 
@@ -77,7 +81,13 @@ public class Main extends AppCompatActivity {
 
     EditText et_comment;
 
-    String url_prihod = "";
+    String url_prihod = "/api/update_prihod.php?";
+    String url_rashod = "/api/update_rashod.php?";
+    String url_perevod = "/api/update_perevod.php?";
+
+    GetDohodResponse getDohodResponse;
+    GetRashodResponse getRashodResponse;
+    GetPerevodResponse getPerevodResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +122,7 @@ public class Main extends AppCompatActivity {
                 if (Utils.hasLollipop()) {
                     Prefs prefs = new Prefs(Main.this);
                     prefs.setSessionIdSchet(id);
+                    prefs.setSchet(name);
                     Intent calL = new Intent(Main.this, CalculatorL.class);
 
                     startActivity(calL);
@@ -154,12 +165,22 @@ public class Main extends AppCompatActivity {
 
     }
 
-    private void showDialogDohod(String id){
+    private void showDialogDohod(final String id){
 
         final Dialog dialogEdit = new Dialog(this);
         //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogEdit.setContentView(R.layout.fragment_dohod);
+
+        Button btn = (Button) dialogEdit.findViewById(R.id.r_o_edit);
+        btn.setVisibility(View.VISIBLE);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogEdit.dismiss();
+                showDialogEditDohod(id);
+            }
+        });
 
         tv_summa = (TextView) dialogEdit.findViewById(R.id.dohod_summa);
         img_money = (ImageView) dialogEdit.findViewById(R.id.dohod_img_money);
@@ -220,7 +241,7 @@ public class Main extends AppCompatActivity {
 
     }
 
-    private void showDialogRashod(String id){
+    private void showDialogRashod(final String id){
 
 
         final Dialog dialogEdit = new Dialog(this);
@@ -228,6 +249,15 @@ public class Main extends AppCompatActivity {
         dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogEdit.setContentView(R.layout.fragment_rashod);
 
+        Button btn = (Button) dialogEdit.findViewById(R.id.r_o_edit);
+        btn.setVisibility(View.VISIBLE);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogEdit.dismiss();
+                showDialogEditRashod(id);
+            }
+        });
         tv_summa = (TextView) dialogEdit.findViewById(R.id.dohod_summa);
         img_money = (ImageView) dialogEdit.findViewById(R.id.dohod_img_money);
         img_money.setOnClickListener(new View.OnClickListener() {
@@ -288,12 +318,23 @@ public class Main extends AppCompatActivity {
 
     }
 
-    private void showDialogPervod(String id){
+    private void showDialogPervod(final String id){
 
         final Dialog dialogEdit = new Dialog(this);
         //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogEdit.setContentView(R.layout.fragment_perevod);
+
+        Button btn = (Button) dialogEdit.findViewById(R.id.r_o_edit);
+        btn.setVisibility(View.VISIBLE);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogEdit.dismiss();
+                showDialogEditPerevod(id);
+            }
+        });
+
         cat_tv = (TextView) dialogEdit.findViewById(R.id.r_o_pod_cat);
         tv_summa = (TextView) dialogEdit.findViewById(R.id.dohod_summa);
         img_money = (ImageView) dialogEdit.findViewById(R.id.dohod_img_money);
@@ -368,17 +409,40 @@ public class Main extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // id , prov_id, summa, schet_id, cat_id, pod_cat_id, com
-                url_prihod = url_prihod + "?id=" + tv_summa.getText().toString()+"&";
-                App.getApi().setUpdatePrihod(url_prihod).enqueue(new Callback<ResponseBody>() {
+
+                if(getDohodResponse != null )url_prihod = url_prihod + "id=" + getDohodResponse.getId()+"&";
+                else return;
+
+                url_prihod = url_prihod + "prov_id=" + provider_id+"&";
+                url_prihod = url_prihod + "summa=" + tv_summa.getText().toString()+"&";
+                url_prihod = url_prihod + "schet_id=" + schetid +"&";
+                url_prihod = url_prihod + "cat_id=" + cat_id +"&";
+                url_prihod = url_prihod + "pod_cat_id=" + podcat_id +"&";
+                url_prihod = url_prihod + "com=" + et_comment.getText().toString() +"&";
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://cc96297.tmweb.ru/api/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                RestApi api = retrofit.create(RestApi.class);
+
+                api.setUpdatePrihod(url_prihod).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+                        if(response.body() != null) {
+                            String d = response.body().toString();
+                            dialogEdit.dismiss();
+                            loadData();
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                        Toast.makeText(Main.this,
+                                "Проверьте подключение к интернету....",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -389,6 +453,43 @@ public class Main extends AppCompatActivity {
                 showDialogEditMony(tv_summa);
             }
         });
+
+        ImageView btn_del = (ImageView) dialogEdit.findViewById(R.id.dohod_delete);
+        btn_del.setVisibility(View.VISIBLE);
+        btn_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                App.getApi().getDeleteOperationId(getDohodResponse.getId(), "1").enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                        if(response.body() != null){
+                            String b = response.body().toString();
+                            if(b.contains("ok")){
+                                Toast.makeText(Main.this,
+                                        "Удалено!",
+                                        Toast.LENGTH_SHORT).show();
+                                dialogEdit.dismiss();
+                                loadData();
+                            }else {
+                                Toast.makeText(Main.this,
+                                        "Проверьте подключение к интернету....",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(Main.this,
+                                "Проверьте подключение к интернету....",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
         cat_tv = (TextView) dialogEdit.findViewById(R.id.r_o_cat);
         schet_tv = (TextView) dialogEdit.findViewById(R.id.r_o_chet);
         pol_tv = (TextView) dialogEdit.findViewById(R.id.r_o_pod_cat);
@@ -432,7 +533,11 @@ public class Main extends AppCompatActivity {
                 if(response.body() != null){
 
                     GetDohodResponse dohodResponse = response.body().get(0);
-
+                    getDohodResponse = dohodResponse;
+                    schetid = getDohodResponse.getSchet_id();
+                    provider_id = getDohodResponse.getClient_id();
+                    cat_id = getDohodResponse.getCat_id();
+                    podcat_id = getDohodResponse.getPod_cat_id();
                     tv_date.setText(dohodResponse.getDate());
                     tv_summa.setText(dohodResponse.getPrihod());
                     pol_tv.setText(dohodResponse.getClient());
@@ -479,6 +584,39 @@ public class Main extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                if(getRashodResponse != null )url_rashod = url_prihod + "id=" + getRashodResponse.getId()+"&";
+                else return;
+
+                url_rashod = url_rashod + "prov_id=" + provider_id+"&";
+                url_rashod = url_rashod + "summa=" + tv_summa.getText().toString()+"&";
+                url_rashod = url_rashod + "schet_id=" + schetid +"&";
+                url_rashod = url_rashod + "cat_id=" + cat_id +"&";
+                url_rashod = url_rashod + "pod_cat_id=" + podcat_id +"&";
+                url_rashod = url_rashod + "com=" + et_comment.getText().toString() +"&";
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://cc96297.tmweb.ru/api/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                RestApi api = retrofit.create(RestApi.class);
+
+                api.setUpdateRashod(url_rashod).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.body() != null) {
+                            String d = response.body().toString();
+                            dialogEdit.dismiss();
+                            loadData();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(Main.this,
+                                "Проверьте подключение к интернету....",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -497,6 +635,42 @@ public class Main extends AppCompatActivity {
         tv_time = (TextView) dialogEdit.findViewById(R.id.dohod_time);
         img_left = (ImageView) dialogEdit.findViewById(R.id.dohod_img_left);
         img_right = (ImageView) dialogEdit.findViewById(R.id.dohod_img_right);
+
+        ImageView btn_del = (ImageView) dialogEdit.findViewById(R.id.dohod_delete);
+        btn_del.setVisibility(View.VISIBLE);
+        btn_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                App.getApi().getDeleteOperationId(getRashodResponse.getId(), "2").enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                        if(response.body() != null){
+                            String b = response.body().toString();
+                            if(b.contains("ok")){
+                                Toast.makeText(Main.this,
+                                        "Удалено!",
+                                        Toast.LENGTH_SHORT).show();
+                                dialogEdit.dismiss();
+                                loadData();
+                            }else {
+                                Toast.makeText(Main.this,
+                                        "Проверьте подключение к интернету....",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(Main.this,
+                                "Проверьте подключение к интернету....",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
 
         cat_tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -524,7 +698,11 @@ public class Main extends AppCompatActivity {
             public void onResponse(Call<List<GetRashodResponse>> call, Response<List<GetRashodResponse>> response) {
                 if(response.body() != null) {
                     GetRashodResponse dohodResponse = response.body().get(0);
-
+                    getRashodResponse = dohodResponse;
+                    schetid = getRashodResponse.getSchet_id();
+                    provider_id = getRashodResponse.getClient_id();
+                    cat_id = getRashodResponse.getCat_id();
+                    podcat_id = getRashodResponse.getPod_cat_id();
                     tv_date.setText(dohodResponse.getDate());
                     tv_summa.setText(dohodResponse.getRashod());
                     pol_tv.setText(dohodResponse.getClient());
@@ -561,6 +739,46 @@ public class Main extends AppCompatActivity {
         et_comment = (EditText) dialogEdit.findViewById(R.id.dohod_note);
 
         btn_save = (Button) dialogEdit.findViewById(R.id.r_o_save);
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(getPerevodResponse != null )url_perevod = url_perevod + "id=" + getPerevodResponse.getId()+"&";
+                else return;
+
+                url_perevod = url_perevod + "schet_perevoda_id=" + provider_id+"&";
+                url_perevod = url_perevod + "summa=" + tv_summa.getText().toString()+"&";
+                url_perevod = url_perevod + "schet_id=" + schetid +"&";
+                url_perevod = url_perevod + "cat_id=" + cat_id +"&";
+                url_perevod = url_perevod + "pod_cat_id=" + podcat_id +"&";
+                url_perevod = url_perevod + "com=" + et_comment.getText().toString() +"&";
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://cc96297.tmweb.ru/api/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                RestApi api = retrofit.create(RestApi.class);
+
+                api.setUpdatePerevod(url_perevod).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(response.body() != null) {
+                            String d = response.body().toString();
+                            dialogEdit.dismiss();
+                            loadData();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(Main.this,
+                                "Проверьте подключение к интернету....",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
 
         tv_summa.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -569,7 +787,41 @@ public class Main extends AppCompatActivity {
             }
         });
 
+        ImageView btn_del = (ImageView) dialogEdit.findViewById(R.id.dohod_delete);
+        btn_del.setVisibility(View.VISIBLE);
+        btn_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                App.getApi().getDeleteOperationId(getPerevodResponse.getId(), "3").enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
+                        if(response.body() != null){
+                            String b = response.body().toString();
+                            if(b.contains("ok")){
+                                Toast.makeText(Main.this,
+                                        "Удалено!",
+                                        Toast.LENGTH_SHORT).show();
+                                dialogEdit.dismiss();
+                                loadData();
+                            }else {
+                                Toast.makeText(Main.this,
+                                        "Проверьте подключение к интернету....",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(Main.this,
+                                "Проверьте подключение к интернету....",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
         iz_tv = (TextView) dialogEdit.findViewById(R.id.r_o_cat);
         schet_tv = (TextView) dialogEdit.findViewById(R.id.r_o_chet);
         pol_tv = (TextView) dialogEdit.findViewById(R.id.r_o_pod_cat);
@@ -609,7 +861,12 @@ public class Main extends AppCompatActivity {
                 if(response.body() != null){
 
                     GetPerevodResponse perevodResponse = response.body().get(0);
+                    getPerevodResponse = perevodResponse;
 
+                    schetid = getPerevodResponse.getIz_id();
+                    provider_id = getPerevodResponse.getV_id();
+                    cat_id = getPerevodResponse.getCat_id();
+                    podcat_id = getPerevodResponse.getPod_cat_id();
                     tv_date.setText(perevodResponse.getDate());
                     et_comment.setText(perevodResponse.getKom());
                     tv_summa.setText(perevodResponse.getPerevod());
@@ -708,12 +965,14 @@ public class Main extends AppCompatActivity {
 
                         if(schet.isEmpty()) return;
                         else {
+                            schet_tv.setText(schet);
                             iz_tv.setText(schet);
+
                         }
                     }else {
                         schet2 = data.getStringExtra("schet");
                         schetid2 = data.getStringExtra("schetid");
-
+                        provider_id = schetid2;
 
                         if(schet2.isEmpty()) return;
                         else {
@@ -880,5 +1139,10 @@ public class Main extends AppCompatActivity {
         dialogEdit.show();
         dialogEdit.getWindow().setAttributes(lp);
 
+    }
+    @Override
+    protected void onPostResume() {
+        loadData();
+        super.onPostResume();
     }
 }

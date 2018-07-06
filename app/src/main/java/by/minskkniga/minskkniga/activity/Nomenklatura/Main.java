@@ -1,24 +1,22 @@
 package by.minskkniga.minskkniga.activity.Nomenklatura;
 
+import android.animation.Animator;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,7 +29,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +41,6 @@ import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Barcode;
 import by.minskkniga.minskkniga.adapter.Nomenklatura.Nav_zakaz;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.Product;
 import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.Products_filter;
 import by.minskkniga.minskkniga.api.Class.Zakaz_product;
@@ -47,8 +48,6 @@ import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 public class Main extends AppCompatActivity {
 
@@ -86,6 +85,11 @@ public class Main extends AppCompatActivity {
     ArrayList<Zakaz_product> nav_product;
     AlertDialog.Builder ad;
 
+    NavigationView nv;
+    RelativeLayout rel;
+
+    String filter_ = "";
+
     public void initialize(){
         back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -100,10 +104,12 @@ public class Main extends AppCompatActivity {
         spinner3 = findViewById(R.id.spinner3);
         spinner4 = findViewById(R.id.spinner4);
 
-
+        rel = (RelativeLayout) findViewById(R.id.relll);
         clear = findViewById(R.id.clear);
         ok = findViewById(R.id.ok);
         search = findViewById(R.id.search);
+
+        nv = (NavigationView) findViewById(R.id.nav_view);
 
         drawer = findViewById(R.id.drawer);
         nav_fab = findViewById(R.id.nav_fab);
@@ -192,6 +198,27 @@ public class Main extends AppCompatActivity {
             }
         });
 
+        startAnimation();
+
+
+
+    }
+
+    private void startAnimation() {
+
+        rel.setVisibility(View.VISIBLE);
+
+        YoYo.with(Techniques.FlipOutX)
+                .delay(1000)
+                .onEnd(new YoYo.AnimatorCallback() {
+                    @Override
+                    public void call(Animator animator) {
+                        rel.setVisibility(View.GONE);
+                    }
+                })
+                .playOn(rel);
+
+
     }
 
     @Override
@@ -243,6 +270,7 @@ public class Main extends AppCompatActivity {
                 spinner2.setSelection(0);
                 spinner3.setSelection(0);
                 spinner4.setSelection(0);
+                filter_ = "";
                 avtor = "Автор";
                 izdatel = "Издатель";
                 obraz = "Образец";
@@ -283,7 +311,8 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        load_filter();
+        //load_filter();
+        getNewFilter();
     }
 
     public void return_product(Zakaz_product product){
@@ -398,7 +427,7 @@ public class Main extends AppCompatActivity {
         });
     }
 
-    private void setAdapter(Spinner spinner, ArrayList<String> arr, int id) {
+    private void setAdapter(final Spinner spinner, ArrayList<String> arr, final int id) {
         switch (id) {
             case 1:
                 arr.add(0, "Автор");
@@ -444,13 +473,60 @@ public class Main extends AppCompatActivity {
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItemText = (String) parent.getItemAtPosition(position);
-                if (position > 0) {
-                    Toast.makeText
-                            (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                            .show();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id_) {
+
+                long i1 = R.id.spinner1;
+                long i2 = R.id.spinner2;
+                long i3 = R.id.spinner3;
+                long i4 = R.id.spinner4;
+                long vi = spinner.getId();
+
+                if(vi == i1) {
+                    if(position != 0) {
+                        avtor = spinner1.getSelectedItem().toString();
+                        if(filter_.contains("clas") || filter_.contains("izdatel") ||
+                                filter_.contains("obtazec")){
+                            filter_ = filter_+",autor";
+                        } else filter_ = "autor";
+
+                        getNewFilter();
+                    }
+
                 }
+                if(vi == i2) {
+                    if(position != 0) {
+                        izdatel = spinner2.getSelectedItem().toString();
+                        if(filter_.contains("clas") || filter_.contains("autor") ||
+                                filter_.contains("obtazec")){
+                            filter_ = filter_+",izdatel";
+                        } else filter_ = "izdatel";
+
+                        getNewFilter();
+                    }
+                }
+                if(vi == i3) {
+                    if(position != 0) {
+                        obraz = spinner3.getSelectedItem().toString();
+                        if(filter_.contains("clas") || filter_.contains("izdatel") ||
+                                filter_.contains("autor")){
+                            filter_ = filter_+",obtazec";
+                        } else filter_ = "obtazec";
+
+                        getNewFilter();
+                    }
+                }
+                if(vi == i4) {
+                    if(position != 0) {
+                        class_ = spinner4.getSelectedItem().toString();
+                        if(filter_.contains("autor") || filter_.contains("izdatel") ||
+                                filter_.contains("obtazec")){
+                            filter_ = filter_+",clas";
+                        } else filter_ = "clas";
+
+                        getNewFilter();
+                    }
+                }
+
             }
 
             @Override
@@ -458,5 +534,44 @@ public class Main extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void getNewFilter(){
+        String _class = "";
+        if(!class_.contains("null")) _class = class_;
+        if(class_.contains("Класс")) _class = "";
+
+        String _autor = "";
+        if(!avtor.contains("null")) _autor = avtor;
+        if(avtor.contains("Автор")) _autor = "";
+
+        String _obraz = "";
+        if(!obraz.contains("null")) _obraz = obraz;
+        if(obraz.contains("Образец")) _obraz = "";
+
+        String _izdatel = "";
+        if(!izdatel.contains("null")) _izdatel = izdatel;
+        if(izdatel.contains("Издатель")) _izdatel = "";
+
+        App.getApi().getProductsfilter(_class, _obraz, _autor, _izdatel,filter_).enqueue(new Callback<Products_filter>() {
+            @Override
+            public void onResponse(Call<Products_filter> call, Response<Products_filter> response) {
+
+                if(response.body() != null){
+                    if(!filter_.contains("autor"))setAdapter(spinner1, response.body().getAutor(), 1);
+                    if(!filter_.contains("izdatel"))setAdapter(spinner2, response.body().getIzdatel(), 2);
+                    if(!filter_.contains("obrazec"))setAdapter(spinner3, yesno, 3);
+                    if(!filter_.contains("clas"))setAdapter(spinner4, response.body().getClas(), 4);
+                    reload();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Products_filter> call, Throwable t) {
+
+            }
+        });
+
     }
 }

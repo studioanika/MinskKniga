@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -63,7 +62,7 @@ public class ZayavkiBoobIAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof StudentViewHolder) {
 
             final ZavInfoTovar bookI = (ZavInfoTovar) list.get(position);
@@ -83,6 +82,14 @@ public class ZayavkiBoobIAdapter extends RecyclerView.Adapter {
                 activity.startInfoDescr(bookI.getK_id(), bookI.getZayavka());
                 }
             });
+
+            ((StudentViewHolder) holder).lin.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    activity.longClickItem(bookI, ((StudentViewHolder) holder).zayavka, position);
+                    return false;
+                }
+            });
         }
     }
 
@@ -97,7 +104,7 @@ public class ZayavkiBoobIAdapter extends RecyclerView.Adapter {
 
     public static class StudentViewHolder extends RecyclerView.ViewHolder {
         public TextView fullname, classs, izdatel,articul, sokr;
-        public EditText zayavka;
+        public TextView zayavka;
         LinearLayout lin;
 
         public StudentViewHolder(View v) {
@@ -107,7 +114,7 @@ public class ZayavkiBoobIAdapter extends RecyclerView.Adapter {
             izdatel = (TextView) v.findViewById(R.id.item_zayavki_booki_izdatel);
             articul = (TextView) v.findViewById(R.id.item_zayavki_booki_articul);
             sokr = (TextView) v.findViewById(R.id.item_zayavki_booki_sokr);
-            zayavka = (EditText) v.findViewById(R.id.item_zayavki_booki_zayavka);
+            zayavka = (TextView) v.findViewById(R.id.item_zayavki_booki_zayavka);
             lin = (LinearLayout) v.findViewById(R.id.lin);
 
 

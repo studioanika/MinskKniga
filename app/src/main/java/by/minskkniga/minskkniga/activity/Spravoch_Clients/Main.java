@@ -1,11 +1,9 @@
 package by.minskkniga.minskkniga.activity.Spravoch_Clients;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -20,11 +18,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Spravoch_Clients.Main_1;
 import by.minskkniga.minskkniga.adapter.Spravoch_Clients.Main_2;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Clients;
-import by.minskkniga.minskkniga.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,6 +44,8 @@ public class Main extends AppCompatActivity {
 
     TabHost tabHost;
 
+
+    // TODO еще нужно добавить просмотр/редактирование клиента
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,7 +200,7 @@ public class Main extends AppCompatActivity {
                             if (cli.get(j).getGorod().equals(cli.get(i).getGorod())) {
                                 temp.add(cli.get(j).getName() + "@" + cli.get(j).getObrazec() + "@" + cli.get(j).getDolg());
 
-                                dolg += Double.parseDouble(cli.get(j).getDolg());
+                                if(!cli.get(j).getDolg().isEmpty())dolg += Double.parseDouble(cli.get(j).getDolg());
                                 if (cli.get(j).getObrazec().equals("1")) obraz = 1;
                             }
                         }

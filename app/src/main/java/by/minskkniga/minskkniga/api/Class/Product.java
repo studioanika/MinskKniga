@@ -10,6 +10,11 @@ public class Product implements Serializable{
     @SerializedName("id")
     @Expose
     private String id;
+
+    @SerializedName("rezerv")
+    @Expose
+    private String rezerv;
+
     @SerializedName("artikul")
     @Expose
     private String artikul;
@@ -226,5 +231,13 @@ public class Product implements Serializable{
 
     public void setOstatok(String ostatok) {
         this.ostatok = ostatok;
+    }
+
+    public String getRezerv() {
+        return rezerv;
+    }
+
+    public void setRezerv(String rezerv) {
+        this.rezerv = rezerv;
     }
 }

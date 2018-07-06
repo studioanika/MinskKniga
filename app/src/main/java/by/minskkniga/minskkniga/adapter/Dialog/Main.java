@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -57,7 +56,7 @@ public class Main extends BaseAdapter {
         if (_objects.get(position).getPodar().equals("1")) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Glide.with(_context).load(R.drawable.ic_gift).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(iv1);
+                    Glide.with(_context).load(R.drawable.ic_gift).into(iv1);
                 } else {
                     Glide.with(_context).load(R.drawable.ic_gift).into(iv1);
                 }

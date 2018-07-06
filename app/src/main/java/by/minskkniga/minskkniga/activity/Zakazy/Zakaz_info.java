@@ -2,20 +2,13 @@ package by.minskkniga.minskkniga.activity.Zakazy;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
@@ -45,6 +38,8 @@ public class Zakaz_info extends AppCompatActivity {
     TextView courier;
 
     ListView lv;
+
+    // TODO добавить деньги в заказы
 
     public void initialize(){
 

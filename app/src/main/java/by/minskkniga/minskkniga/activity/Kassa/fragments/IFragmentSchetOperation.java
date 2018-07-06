@@ -9,5 +9,6 @@ public interface IFragmentSchetOperation {
     void showDateDialog();
     void updateDateTime(int y, int m, int d);
     void showCalculator();
+    void setResultTV(String text);
 
 }

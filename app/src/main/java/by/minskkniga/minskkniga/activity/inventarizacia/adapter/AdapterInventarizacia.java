@@ -64,7 +64,22 @@ public class AdapterInventarizacia extends BaseAdapter {
             tv_colvo.setTextColor(_context.getResources().getColor(R.color.green));
         }else tv_colvo.setTextColor(_context.getResources().getColor(R.color.red));
 
-        // TODO здесь нужно еще тип правильно прописать
+
+        //1 получено - зел
+        // 2 продажа - кр
+        // 3 возврат - зел
+
+        if(object.getType() == 1) {
+            tv_type.setText("Получено");
+            tv_type.setTextColor(_context.getResources().getColor(R.color.green));
+        }else if(object.getType() == 2) {
+            tv_type.setText("Продажа");
+            tv_type.setTextColor(_context.getResources().getColor(R.color.red));
+        }else {
+            tv_type.setText("Возврат");
+            tv_type.setTextColor(_context.getResources().getColor(R.color.green));
+        }
+
 
         return view;
     }

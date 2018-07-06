@@ -1,24 +1,31 @@
 package by.minskkniga.minskkniga.activity.Zakazy;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -33,16 +40,22 @@ import java.util.List;
 import java.util.Locale;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.adapter.Dialog.Main;
 import by.minskkniga.minskkniga.api.App;
+import by.minskkniga.minskkniga.api.Class.Clients;
 import by.minskkniga.minskkniga.api.Class.Couriers;
+import by.minskkniga.minskkniga.api.Class.Dialog_clients;
+import by.minskkniga.minskkniga.api.Class.Gorod;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.Zakaz_product;
-import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Zakaz_new extends AppCompatActivity {
+
+    private String ispodarki;
+    private String const_podar;
 
     ImageButton back;
     ImageButton menu;
@@ -92,6 +105,10 @@ public class Zakaz_new extends AppCompatActivity {
     double summa = 0;
     double ves = 0;
     int col = 0;
+
+
+    // TODO дату для каждой позиции
+
 
     public void initialize() {
         back = findViewById(R.id.back);
@@ -150,9 +167,10 @@ public class Zakaz_new extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                dlg_client = new Add_Dialog(Zakaz_new.this, "zakaz_product", products.get(i-1), String.valueOf(i-1));
-                dlg_client.setCancelable(true);
-                dlg_client.show(getFragmentManager(), "");
+//                dlg_client = new Add_Dialog(Zakaz_new.this, "zakaz_product", products.get(i-1), String.valueOf(i-1));
+//                dlg_client.setCancelable(true);
+//                dlg_client.show(getFragmentManager(), "");
+                showDialogZakazProducts(products.get(i-1), String.valueOf(i-1));
             }
         });
 
@@ -190,10 +208,10 @@ public class Zakaz_new extends AppCompatActivity {
         couriers_id = new ArrayList<>();
 
 
-        dlg_client = new Add_Dialog(this, "zakaz_client");
-        dlg_client.setCancelable(false);
+//        dlg_client = new Add_Dialog(this, "zakaz_client");
+//        dlg_client.setCancelable(false);
         if (getIntent().getStringExtra("name_client").equals("null")){
-            dlg_client.show(getFragmentManager(), "");
+            showDialogZakazClient();
         }else{
             id_client = getIntent().getStringExtra("id_client");
             caption.setText(getIntent().getStringExtra("name_client"));
@@ -243,8 +261,364 @@ public class Zakaz_new extends AppCompatActivity {
     }
 
 
+    private void showDialogZakazClient(){
+
+        final Dialog view = new Dialog(this);
+        //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        view.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        view.setContentView(R.layout.dialog_zakaz_client);
 
 
+        final EditText search = view.findViewById(R.id.search);
+        final ListView lv = view.findViewById(R.id.lv);
+        final TextView notfound = view.findViewById(R.id.notfound);
+        final ArrayList<Dialog_clients> clients = new ArrayList<>();
+        final ArrayList<Dialog_clients> clients_buf = new ArrayList<>();
+        final ArrayList<Clients> clients_zak = new ArrayList<>();
+
+        final EditText search_gorod = view.findViewById(R.id.search_gorod);
+        final Spinner spinner = view.findViewById(R.id.spinner);
+        final LinearLayout filter = view.findViewById(R.id.filter);
+        final Button select_gorod = view.findViewById(R.id.select_gorod);
+        final Button clear_filter = view.findViewById(R.id.clear_filter);
+        final TextView notfound_gorod = view.findViewById(R.id.notfound_gorod);
+        final ArrayList<String> goroda = new ArrayList<>();
+        final ArrayList<String> goroda_buf = new ArrayList<>();
+
+        App.getApi().getGoroda().enqueue(new Callback<List<Gorod>>() {
+            @Override
+            public void onResponse(Call<List<Gorod>> call, Response<List<Gorod>> response) {
+                goroda.clear();
+                goroda_buf.clear();
+                for (Gorod buffer : response.body()) {
+                    goroda.add(buffer.getName());
+                    goroda_buf.add(buffer.getName());
+                }
+
+                if (!goroda.isEmpty()) {
+                    notfound_gorod.setVisibility(View.GONE);
+                    filter.setVisibility(View.VISIBLE);
+                } else {
+                    notfound_gorod.setVisibility(View.VISIBLE);
+                    filter.setVisibility(View.GONE);
+                }
+                notfound_gorod.setText("Ничего не найдено");
+
+                spinner.setAdapter(new ArrayAdapter<>(Zakaz_new.this, android.R.layout.simple_list_item_1, goroda));
+            }
+
+            @Override
+            public void onFailure(Call<List<Gorod>> call, Throwable t) {
+
+            }
+        });
+
+        search_gorod.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                goroda.clear();
+                if (!search_gorod.getText().toString().isEmpty()) {
+                    for (int i = 0; i < goroda_buf.size(); i++) {
+                        if (goroda_buf.get(i).toLowerCase().contains(search_gorod.getText().toString().toLowerCase())) {
+                            goroda.add(goroda_buf.get(i));
+                        }
+                    }
+                } else {
+                    goroda.addAll(goroda_buf);
+                }
+                spinner.setAdapter(new ArrayAdapter<>(Zakaz_new.this, android.R.layout.simple_list_item_1, goroda));
+
+                if (goroda.size() == 0) {
+                    notfound_gorod.setVisibility(View.VISIBLE);
+                    filter.setVisibility(View.GONE);
+                } else {
+                    notfound_gorod.setVisibility(View.GONE);
+                    filter.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        select_gorod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clients.clear();
+                for (Clients buffer : clients_zak) {
+                    if (buffer.getGorod().equals(spinner.getSelectedItem().toString())) {
+                        clients.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
+                        clients_buf.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
+                    }
+                }
+
+                if (!clients.isEmpty()) {
+                    notfound.setVisibility(View.GONE);
+                } else {
+                    notfound.setVisibility(View.VISIBLE);
+                }
+                notfound.setText("Ничего не найдено");
+
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Dialog.Main(Zakaz_new.this, clients));
+
+                clients_buf.clear();
+                clients_buf.addAll(clients);
+            }
+        });
+
+        clear_filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search_gorod.setText("");
+
+                clients.clear();
+                clients_buf.clear();
+
+                for (Clients buffer : clients_zak) {
+                    clients.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
+                    clients_buf.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
+                }
+
+                filter.setVisibility(View.VISIBLE);
+                notfound.setVisibility(View.GONE);
+
+                notfound.setText("Ничего не найдено");
+
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Dialog.Main(Zakaz_new.this, clients));
+
+                goroda.addAll(goroda_buf);
+
+                spinner.setAdapter(new ArrayAdapter<>(Zakaz_new.this, android.R.layout.simple_list_item_1, goroda));
+            }
+        });
+
+        App.getApi().getClients().enqueue(new Callback<List<Clients>>() {
+            @Override
+            public void onResponse(Call<List<Clients>> call, Response<List<Clients>> response) {
+                clients.clear();
+                clients_buf.clear();
+                for (Clients buffer : response.body()) {
+                    clients.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
+                    clients_buf.add(new Dialog_clients(buffer.getName(), buffer.getPodarki()));
+                }
+                clients_zak.addAll(response.body());
+
+                if (!clients.isEmpty()) {
+                    notfound.setVisibility(View.GONE);
+                } else {
+                    notfound.setVisibility(View.VISIBLE);
+                }
+                notfound.setText("Ничего не найдено");
+
+
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Dialog.Main(Zakaz_new.this, clients));
+            }
+
+            @Override
+            public void onFailure(Call<List<Clients>> call, Throwable t) {
+                Toast.makeText(Zakaz_new.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        search.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                clients.clear();
+                if (!search.getText().toString().isEmpty()) {
+                    for (int i = 0; i < clients_buf.size(); i++) {
+                        if (clients_buf.get(i).getName().toLowerCase().contains(search.getText().toString().toLowerCase())) {
+                            clients.add(clients_buf.get(i));
+                        }
+                    }
+                } else {
+                    clients.addAll(clients_buf);
+                }
+                lv.setAdapter(new Main(Zakaz_new.this, clients));
+
+                if (clients.size() == 0) {
+                    notfound.setVisibility(View.VISIBLE);
+                } else {
+                    notfound.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View itemClicked, int position,
+                                    long id) {
+                for (Clients buf : clients_zak) {
+                    if (buf.getName().equals(clients.get(position).getName()))
+                        return_client(buf.getId(), clients.get(position).getName());
+                    view.dismiss();
+                }
+
+            }
+        });
+
+//        builder.setTitle("Выбор клиента")
+//                .setView(view)
+//                .setPositiveButton("Создать клиента", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(final DialogInterface dialog, int which) {
+//                        Intent intent = new Intent(context, Add.class);
+//                        context.startActivity(intent);
+//                        dialog.cancel();
+//                    }
+//                })
+//                .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.cancel();
+//                        getActivity().finish();
+//                    }
+//                });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(view.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        view.setCancelable(false);
+        view.show();
+        view.getWindow().setAttributes(lp);
+
+    }
+    private void showDialogZakazProducts(final Zakaz_product product, final String id_product){
+        final Dialog view = new Dialog(this);
+        //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        view.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        view.setContentView(R.layout.dialog_zakaz_product);
+
+
+        final EditText cena_zakaz = view.findViewById(R.id.cena_zakaz);
+        final EditText col_zakaz = view.findViewById(R.id.col_zakaz);
+        final TextView summa_zakaz = view.findViewById(R.id.summa_zakaz);
+        final TextView tv_change = view.findViewById(R.id.btn_change);
+        final TextView tv_close = view.findViewById(R.id.btn_close);
+
+
+
+        final LinearLayout linear_podarki = view.findViewById(R.id.linear_podarki);
+        final TextView cena_podar = view.findViewById(R.id.cena_podar);
+        final EditText col_podar = view.findViewById(R.id.col_podar);
+        final TextView summa_podar = view.findViewById(R.id.summa_podar);
+
+        final TextView summa = view.findViewById(R.id.summa);
+
+        ispodarki = product.ispodar;
+        const_podar = product.const_podar;
+
+        if (ispodarki.equals("0")){
+            linear_podarki.setVisibility(View.GONE);
+        }else{
+            linear_podarki.setVisibility(View.VISIBLE);
+        }
+
+        cena_zakaz.setText(product.cena);
+        cena_podar.setText(product.cena);
+        col_zakaz.setText(product.col_zakaz);
+        col_podar.setText(product.col_podar);
+
+        summas(cena_zakaz, col_zakaz, col_podar, summa_zakaz, summa_podar, summa);
+
+        cena_zakaz.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (String.valueOf(cena_zakaz.getText()).isEmpty()) cena_zakaz.setText("0");
+                cena_podar.setText(cena_zakaz.getText());
+                summas(cena_zakaz, col_zakaz, col_podar, summa_zakaz, summa_podar, summa);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        col_zakaz.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if (ispodarki.equals("1")) {
+                        col_podar.setText(String.valueOf((int)Math.floor(Integer.parseInt(String.valueOf(col_zakaz.getText()))/Integer.parseInt(const_podar))));
+                    } else {
+                        col_podar.setText("0");
+                    }
+                }catch (Exception e){
+                    col_podar.setText("0");
+                }
+                summas(cena_zakaz, col_zakaz, col_podar, summa_zakaz, summa_podar, summa);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        col_podar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                summas(cena_zakaz, col_zakaz, col_podar, summa_zakaz, summa_podar, summa);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        view.setTitle(product.name);
+        tv_change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                product.cena = String.valueOf(cena_zakaz.getText());
+                        product.col_zakaz = String.valueOf(col_zakaz.getText());
+                        product.col_podar = String.valueOf(col_podar.getText());
+                        product.summa = String.valueOf(summa.getText());
+
+                        return_product(product, id_product);
+                        view.dismiss();
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(view.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        view.setCancelable(false);
+        view.show();
+        view.getWindow().setAttributes(lp);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,7 +641,7 @@ public class Zakaz_new extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (products.isEmpty()) {
+        if (products != null && products.isEmpty()) {
             ad = new AlertDialog.Builder(Zakaz_new.this);
             ad.setMessage("Не выбрано не одной позиции товара. Выйти без сохранения?");
             ad.setPositiveButton("ПОДТВЕРДИТЬ", new DialogInterface.OnClickListener() {
@@ -282,9 +656,15 @@ public class Zakaz_new extends AppCompatActivity {
             });
             ad.setCancelable(false);
             ad.show();
+            return;
 
         } else {
-            finish();
+            try {
+                finish();
+            } catch (Exception e) {
+                Log.e("ZAKAZ_NEW", e.toString());
+                e.printStackTrace();
+            }
         }
     }
 
@@ -489,4 +869,41 @@ public class Zakaz_new extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+    }
+
+    public void summas(EditText cena, EditText col_zakaz, EditText col_podar, TextView summa_z, TextView summa_p, TextView summa) {
+
+        double this_cena;
+        try{
+            this_cena = Double.parseDouble(cena.getText().toString());
+        }catch (Exception e) {
+            this_cena = 0;
+        }
+
+        int this_col_z;
+        try {
+            this_col_z = Integer.parseInt(col_zakaz.getText().toString());
+        }catch (Exception e){
+            this_col_z = 0;
+        }
+
+        int this_col_p;
+        try {
+            this_col_p = Integer.parseInt(col_podar.getText().toString());
+        }catch (Exception e){
+            this_col_p = 0;
+        }
+
+        double this_summa_z = this_cena * this_col_z;
+        double this_summa_p = this_cena * this_col_p;
+        double this_summa = this_summa_z - this_summa_p;
+
+        summa_z.setText(String.valueOf(Math.round(this_summa_z * 100.0) / 100.0));
+        summa_p.setText(String.valueOf(Math.round(this_summa_p * 100.0) / 100.0));
+        summa.setText(String.valueOf(Math.round(this_summa * 100.0) / 100.0));
+    }
 }

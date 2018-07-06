@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,11 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
-import org.w3c.dom.Text;
-
-import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,9 +38,7 @@ import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Clients;
 import by.minskkniga.minskkniga.api.Class.Dialog_clients;
 import by.minskkniga.minskkniga.api.Class.Gorod;
-import by.minskkniga.minskkniga.api.Class.Product;
 import by.minskkniga.minskkniga.api.Class.Product_client;
-import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.Zakaz_product;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -995,7 +987,7 @@ public class Add_Dialog extends DialogFragment {
         Glide.with(context).load(R.drawable.ic_launcher_foreground).into(image);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Glide.with(context).load("http://cc96297.tmweb.ru/admin/img/nomen/" + url).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+            Glide.with(context).load("http://cc96297.tmweb.ru/admin/img/nomen/" + url).into(image);
         }else{
             Glide.with(context).load("http://cc96297.tmweb.ru/admin/img/nomen/" + url).into(image);
         }

@@ -2,9 +2,10 @@ package by.minskkniga.minskkniga.activity.Zakazy;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -25,6 +26,8 @@ public class Sborka extends AppCompatActivity {
     FloatingActionButton fab;
     ArrayList<Zakaz_product> products;
     ListView lv;
+
+    NavigationView nv;
 
     @Override
     public void onBackPressed() {
@@ -54,6 +57,8 @@ public class Sborka extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        nv = (NavigationView) findViewById(R.id.nav_view);
     }
 
     int i = 0;
@@ -92,7 +97,10 @@ public class Sborka extends AppCompatActivity {
             }
         });
 
+
     }
+
+
 
 
     @SuppressLint("DefaultLocale")

@@ -1,17 +1,13 @@
 package by.minskkniga.minskkniga.adapter.Zakazy;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.Class.WhatZakazal;
@@ -63,7 +59,7 @@ public class Zakaz_info extends BaseAdapter{
         tv4.setText(_objects.get(position).getZakazano());
         tv5.setText(_objects.get(position).getOtgruzeno().equals("")?"0":_objects.get(position).getOtgruzeno());
         tv6.setText(_objects.get(position).getPodarki());
-        tv7.setText(String.valueOf(Double.parseDouble(_objects.get(position).getZakazano())*Double.parseDouble(_objects.get(position).getCena())));
+        tv7.setText(String.format("%.2f", Double.parseDouble(_objects.get(position).getZakazano())*Double.parseDouble(_objects.get(position).getCena())));
 
         return view;
     }
