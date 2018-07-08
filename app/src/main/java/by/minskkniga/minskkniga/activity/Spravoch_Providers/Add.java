@@ -2,14 +2,13 @@ package by.minskkniga.minskkniga.activity.Spravoch_Providers;
 
 import android.app.DialogFragment;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,11 +21,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Add_Contacts;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
+import by.minskkniga.minskkniga.api.Class.provider_sp.ProviderInfo;
 import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +43,7 @@ public class Add extends AppCompatActivity {
     Spinner type_ceni;
     Spinner dolg_type;
 
+    Button btn_ok;
 
     TextView price_caption;
     TextView vzaimo_caption;
@@ -73,6 +75,8 @@ public class Add extends AppCompatActivity {
     ImageButton back;
     int city = -1;
 
+    String id_provider;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +89,8 @@ public class Add extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        btn_ok = (Button) findViewById(R.id.add_client);
 
         dlg_gorod = new Add_Dialog(this, "gorod_provider");
         dlg_contact = new Add_Dialog(this, "contact_provider");
@@ -229,6 +235,45 @@ public class Add extends AppCompatActivity {
             }
         });
 
+        Intent intent = getIntent();
+        id_provider = intent.getStringExtra("id");
+        if(id_provider != null) {
+            btn_ok.setText("Изменить");
+            loadInfoProvider(id_provider);
+        }
+
+    }
+
+    private void loadInfoProvider(String id_provider) {
+
+        App.getApi().getProviderId(id_provider).enqueue(new Callback<List<ProviderInfo>>() {
+            @Override
+            public void onResponse(Call<List<ProviderInfo>> call, Response<List<ProviderInfo>> response) {
+                if(response.body() != null){
+
+                    setInfoProvider(response.body().get(0));
+
+                }
+                else Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<List<ProviderInfo>> call, Throwable t) {
+                Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    private void setInfoProvider(ProviderInfo providerInfo) {
+
+        name_ed.setText(providerInfo.getName());
+        short_name_ed.setText(providerInfo.getShortName());
+        zametka_ed.setText(providerInfo.getShortName());
+        info_ed.setText(providerInfo.getInfo());
+
+        //if(providerInfo.getPriceType())
+
     }
 
     public void return_gorod(int id, String name) {
@@ -346,32 +391,36 @@ public class Add extends AppCompatActivity {
 
         if (contacts.isEmpty()) contacts = "null";
 
-        App.getApi().addProvider(name_ed.getText().toString(),
-                short_name_ed.getText().toString(),
-                zametka_ed.getText().toString(),
-                info_ed.getText().toString(),
-                price_type,
-                Double.parseDouble(nakrytka_ed.getText().toString()),
-                creditsize,
-                String.valueOf(city),
-                naprav_ed.getText().toString(),
-                contacts).enqueue(new Callback<ResultBody>() {
+        if(id_provider != null){
 
-            @Override
-            public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                finish();
-            }
 
-            @Override
-            public void onFailure(Call<ResultBody> call, Throwable t) {
-                Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+        }
+        else {
+            App.getApi().addProvider(name_ed.getText().toString(),
+                    short_name_ed.getText().toString(),
+                    zametka_ed.getText().toString(),
+                    info_ed.getText().toString(),
+                    price_type,
+                    Double.parseDouble(nakrytka_ed.getText().toString()),
+                    creditsize,
+                    String.valueOf(city),
+                    naprav_ed.getText().toString(),
+                    contacts).enqueue(new Callback<ResultBody>() {
+
+                @Override
+                public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
+                    finish();
+                }
+
+                @Override
+                public void onFailure(Call<ResultBody> call, Throwable t) {
+                    Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
     }
-
-
-
 
 
     public void setListViewHeightBasedOnChildren(ListView listView) {

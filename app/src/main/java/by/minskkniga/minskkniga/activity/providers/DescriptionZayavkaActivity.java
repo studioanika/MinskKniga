@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -253,17 +254,30 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
                 if(response.body() != null) {
                     try {
                         String d = response.body().string();
+                        if(d.contains("error")) {
+                            Toast.makeText(DescriptionZayavkaActivity.this,
+                                    "Ошибка редактирования....",
+                                    Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(DescriptionZayavkaActivity.this,
+                                    "Заявка отредактирована.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
 
-                        // TODO yужно обработать ответ
                     } catch (Exception e) {
                          e.printStackTrace();
+                        Toast.makeText(DescriptionZayavkaActivity.this,
+                                "Ошибка редактирования....",
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                Toast.makeText(DescriptionZayavkaActivity.this,
+                        "Проверьте подключение к интернету....",
+                        Toast.LENGTH_SHORT).show();
             }
         });
         //body.put("mas", mass);

@@ -58,12 +58,20 @@ public class Main_1 extends BaseExpandableListAdapter {
         }else{
             ch1.setChecked(false);
         }
-        if (Double.parseDouble(buffer[2])<0){
-            tv2.setTextColor(Color.RED);
-        }else{
-            tv2.setTextColor(Color.BLACK);
+        try {
+            if (Double.parseDouble(buffer[2])<0){
+                tv2.setTextColor(Color.RED);
+            }else{
+                tv2.setTextColor(Color.BLACK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        tv2.setText(buffer[2]);
+        try {
+            tv2.setText(buffer[2]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return convertView;
     }

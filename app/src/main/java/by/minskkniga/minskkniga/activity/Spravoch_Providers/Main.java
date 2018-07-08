@@ -1,14 +1,13 @@
 package by.minskkniga.minskkniga.activity.Spravoch_Providers;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
@@ -106,13 +105,23 @@ public class Main extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        listDataHeader.get(groupPosition)
-                                + " : "
-                                + listDataChild.get(groupPosition).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();
+
+                try{
+
+                    String ds = listDataChild.get(groupPosition).get(
+                            childPosition);
+
+                    String id_prov = ds.split("@")[2];
+
+                    Intent intent = new Intent(Main.this, Add.class);
+                    intent.putExtra("id", id_prov);
+                    startActivity(intent);
+
+                }
+                catch (Exception e){
+
+                }
+
                 return false;
             }
         });
@@ -161,6 +170,15 @@ public class Main extends AppCompatActivity {
         }
         notfound_2.setText("Ничего не найдено");
         lv2.setAdapter(new Main_2(this, prov));
+
+        lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(Main.this, Add.class);
+                intent.putExtra("id", prov.get(i).getId());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -204,7 +222,8 @@ public class Main extends AppCompatActivity {
                         ArrayList<String> temp = new ArrayList<String>();
                         for (int j = 0; j < col; j++) {
                             if (pro.get(j).getCity().equals(pro.get(i).getCity())) {
-                                temp.add(pro.get(j).getName() + "@" + pro.get(j).getCreditSize());
+                                temp.add(pro.get(j).getName() + "@" + pro.get(j).getCreditSize()+
+                                "@"+ pro.get(j).getId());
                                 try {
                                     dolg += Double.parseDouble(pro.get(j).getCreditSize());
                                 } catch (Exception e) {

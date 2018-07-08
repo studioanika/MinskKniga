@@ -268,7 +268,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="Выбрать город"
-                    android:textAlignment="textStart"/>
+                    android:textAlignment="textStart" />
 
                 <EditText
                     android:id="@+id/school"

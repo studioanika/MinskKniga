@@ -2,8 +2,9 @@ package by.minskkniga.minskkniga.activity.Spravoch_Clients;
 
 import android.app.DialogFragment;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -21,13 +22,20 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Add_Contacts;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
+import by.minskkniga.minskkniga.api.Class.clients.ClientInfo;
+import by.minskkniga.minskkniga.api.Class.clients.Contact;
 import by.minskkniga.minskkniga.dialog.Add_Dialog;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,6 +89,8 @@ public class Add extends AppCompatActivity {
 
     int gorod = -1;
     String contacts = "";
+
+    String id_client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,6 +277,88 @@ public class Add extends AppCompatActivity {
                 add_client();
             }
         });
+
+
+        Intent intent = getIntent();
+        id_client = intent.getStringExtra("id");
+        if(id_client != null) {
+            ok.setText("Изменить");
+            loadInfoClient(id_client);
+        }
+    }
+
+    private void loadInfoClient(String id_client) {
+
+        App.getApi().getClientId(id_client).enqueue(new Callback<List<ClientInfo>>() {
+            @Override
+            public void onResponse(Call<List<ClientInfo>> call, Response<List<ClientInfo>> response) {
+
+                if(response.body() != null){
+
+                    ClientInfo clientInfo = response.body().get(0);
+
+                    if(clientInfo != null) setInfoClient(clientInfo);
+
+                }else {
+                    Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<ClientInfo>> call, Throwable t) {
+
+                Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+    }
+
+    private void setInfoClient(ClientInfo clientInfo) {
+        gorod = Integer.parseInt(clientInfo.getGorodId());
+        name.setText(clientInfo.getName());
+        sokr_name.setText(clientInfo.getSokrName());
+        zametka.setText(clientInfo.getZametka());
+        print.setText(clientInfo.getPrint());
+        nacenka.setText(clientInfo.getNacenka());
+        skidka.setText(clientInfo.getSkidka());
+        dolg.setText(clientInfo.getDolg());
+
+        if(Integer.parseInt(clientInfo.getType_dolg()) == 0) type_dolg.setSelection(2);
+        else if(Integer.parseInt(clientInfo.getType_dolg()) == 1) type_dolg.setSelection(1);
+        else type_dolg.setSelection(0);
+
+        if(clientInfo.getType_dolg().contains("optov")) type_ceni.setSelection(1);
+        else type_ceni.setSelection(0);
+
+        if(Double.parseDouble(clientInfo.getSkidka()) == 0.00) {
+            skidka_switch.setChecked(false);
+        }else skidka_switch.setChecked(true);
+
+        if(Integer.parseInt(clientInfo.getPodarki()) == 1) podarki_switch.setChecked(true);
+        else podarki_switch.setChecked(false);
+
+        naprav.setText(clientInfo.getNapravl());
+        add_gorod.setText(clientInfo.getGorod());
+        school.setText(clientInfo.getSchool());
+
+        if(clientInfo.getContacts() != null){
+            contact_text.clear();
+            contact_type.clear();
+            for (Contact ct: clientInfo.getContacts()
+                 ) {
+                contact_type.add(ct.getText());
+                contact_text.add(ct.getText());
+                list_contact.setAdapter(new Add_Contacts(this, contact_type, contact_text));
+                setListViewHeightBasedOnChildren(list_contact);
+
+            }
+        }
+
+
+
     }
 
     public void return_gorod(int id, String name){
@@ -306,30 +398,6 @@ public class Add extends AppCompatActivity {
             return;
         }
 
-//        switch (type_dolg.getSelectedItemPosition()) {
-//            case 0:
-//                type_dolg_summa = "0.0";
-//                break;
-//            case 1:
-//                if (dolg.getText().toString().isEmpty()){
-//                    Toast.makeText(this, "Поле 'Долг' не заполнено", Toast.LENGTH_SHORT).show();
-//                    sv.smoothScrollTo(0, vzaimo_linear.getTop()+dolg.getTop());
-//                    dolg.requestFocus();
-//                    return;
-//                }
-//                type_dolg_summa = dolg.getText().toString();
-//                break;
-//            case 2:
-//                if (dolg.getText().toString().isEmpty()){
-//                    Toast.makeText(this, "Поле 'Долг' не заполнено", Toast.LENGTH_SHORT).show();
-//                    sv.smoothScrollTo(0, vzaimo_linear.getTop()+dolg.getTop());
-//                    dolg.requestFocus();
-//                    return;
-//                }
-//                type_dolg_summa = "-"+dolg.getText().toString();
-//                break;
-//        }
-
         if (type_ceni.getSelectedItemPosition()!=0){
             if (nacenka.getText().toString().isEmpty()){
                 Toast.makeText(this, "Поле 'Наценка' не заполнено", Toast.LENGTH_SHORT).show();
@@ -366,31 +434,105 @@ public class Add extends AppCompatActivity {
             }
         }
 
-        App.getApi().addClient(name.getText().toString(),
-                sokr_name.getText().toString().isEmpty()?"":sokr_name.getText().toString(),
-                zametka.getText().toString().isEmpty()?"":zametka.getText().toString(),
-                print.getText().toString().isEmpty()?"":print.getText().toString(),
-                type_ceni.getSelectedItemPosition()==0?"zakyp":"optov",
-                type_ceni.getSelectedItemPosition()==0?"0.00":nacenka.getText().toString(),
-                podarki_switch.isChecked()?"1":"0",
-                skidka.getText().toString().isEmpty()?"0.00":skidka.getText().toString(),
-                dolg.getText().toString().isEmpty()?"0.00":dolg.getText().toString(),
-                naprav.getText().toString().isEmpty()?"":naprav.getText().toString(),
-                gorod,
-                school.getText().toString().isEmpty()?"":school.getText().toString(),
-                String.valueOf(smena.getSelectedItemPosition()),
-                contacts.isEmpty()?"null":contacts).enqueue(new Callback<ResultBody>() {
 
-            @Override
-            public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                finish();
-            }
 
-            @Override
-            public void onFailure(Call<ResultBody> call, Throwable t) {
-                Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+        if(id_client != null) {
+
+            List<Contact> contacts = new ArrayList<>();
+
+            for (int i = 0; i < contact_type.size(); i++) {
+                Contact contact = new Contact();
+                contact.setRank("client");
+                contact.setUserId(id_client);
+                contact.setText(contact_text.get(i));
+                contact.setType(contact_type.get(i));
+                contacts.add(contact);
             }
-        });
+            Gson gson = new Gson();
+            String listJSON = gson.toJson(contacts);
+            String d = "";
+
+            App.getApi().updateClient(
+                    id_client,
+                    name.getText().toString(),
+                    sokr_name.getText().toString().isEmpty()?"":sokr_name.getText().toString(),
+                    zametka.getText().toString().isEmpty()?"":zametka.getText().toString(),
+                    print.getText().toString().isEmpty()?"":print.getText().toString(),
+                    type_ceni.getSelectedItemPosition()==0?"zakyp":"optov",
+                    type_ceni.getSelectedItemPosition()==0?"0.00":nacenka.getText().toString(),
+                    podarki_switch.isChecked()?"1":"0",
+                    skidka.getText().toString().isEmpty()?"0.00":skidka.getText().toString(),
+                    dolg.getText().toString().isEmpty()?"0.00":dolg.getText().toString(),
+                    naprav.getText().toString().isEmpty()?"":naprav.getText().toString(),
+                    gorod,
+                    school.getText().toString().isEmpty()?"":school.getText().toString(),
+                    String.valueOf(smena.getSelectedItemPosition()),
+                    contacts !=null ? listJSON : "").enqueue(new Callback<ResponseBody>() {
+
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    if(response.body() != null) {
+                        try {
+                            String d = response.body().string();
+                            if(d.contains("error")) Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                            else Toast.makeText(Add.this, "Изменения сохранены...", Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+        else {
+
+            List<Contact> contacts = new ArrayList<>();
+
+            for (int i = 0; i < contact_type.size(); i++) {
+                Contact contact = new Contact();
+                contact.setRank("client");
+                contact.setUserId(id_client);
+                contact.setText(contact_text.get(i));
+                contact.setType(contact_type.get(i));
+                contacts.add(contact);
+            }
+            Gson gson = new Gson();
+            String listJSON = gson.toJson(contacts);
+            String d = "";
+
+            App.getApi().addClient(name.getText().toString(),
+                    sokr_name.getText().toString().isEmpty()?"":sokr_name.getText().toString(),
+                    zametka.getText().toString().isEmpty()?"":zametka.getText().toString(),
+                    print.getText().toString().isEmpty()?"":print.getText().toString(),
+                    type_ceni.getSelectedItemPosition()==0?"zakyp":"optov",
+                    type_ceni.getSelectedItemPosition()==0?"0.00":nacenka.getText().toString(),
+                    podarki_switch.isChecked()?"1":"0",
+                    skidka.getText().toString().isEmpty()?"0.00":skidka.getText().toString(),
+                    dolg.getText().toString().isEmpty()?"0.00":dolg.getText().toString(),
+                    naprav.getText().toString().isEmpty()?"":naprav.getText().toString(),
+                    gorod,
+                    school.getText().toString().isEmpty()?"":school.getText().toString(),
+                    String.valueOf(smena.getSelectedItemPosition()),
+                    contacts !=null ? listJSON : "").enqueue(new Callback<ResultBody>() {
+
+                @Override
+                public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
+                    finish();
+                }
+
+                @Override
+                public void onFailure(Call<ResultBody> call, Throwable t) {
+                    Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     public void setListViewHeightBasedOnChildren(ListView listView) {

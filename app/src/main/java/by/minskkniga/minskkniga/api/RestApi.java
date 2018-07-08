@@ -34,7 +34,9 @@ import by.minskkniga.minskkniga.api.Class.cassa.SchetaResponse;
 import by.minskkniga.minskkniga.api.Class.category.ResponseCategory;
 import by.minskkniga.minskkniga.api.Class.category.ResponseProvScheta;
 import by.minskkniga.minskkniga.api.Class.category.Schetum;
+import by.minskkniga.minskkniga.api.Class.clients.ClientInfo;
 import by.minskkniga.minskkniga.api.Class.inventarizacia.InventarizaciaObject;
+import by.minskkniga.minskkniga.api.Class.provider_sp.ProviderInfo;
 import by.minskkniga.minskkniga.api.Class.providers.GetOzhidaemResponse;
 import by.minskkniga.minskkniga.api.Class.providers.GetZakK;
 import by.minskkniga.minskkniga.api.Class.providers.InfoZayavkaBook;
@@ -359,4 +361,26 @@ public interface RestApi {
     @FormUrlEncoded
     Call<ResponseBody> updateProviderZayavka(@FieldMap Map<String, String> map);
 
+    @GET("/api/get_client_id.php?")
+    Call<List<ClientInfo>> getClientId(@Query("id") String id);
+
+    @GET("/api/get_provider_id.php?")
+    Call<List<ProviderInfo>> getProviderId(@Query("id") String id);
+
+    @GET("update_client.php")
+    Call<ResponseBody> updateClient(@Query("id") String id,
+                                @Query("name") String name,
+                               @Query("sokr_name") String sokr_name,
+                               @Query("zametka") String zametka,
+                               @Query("print") String print,
+                               @Query("type_c") String type_c,
+                               @Query("nacenka") String nacenka,
+                               @Query("podarki") String podarki,
+                               @Query("skidka") String skidka,
+                               @Query("dolg") String dolg,
+                               @Query("napravl") String napravl,
+                               @Query("gorod_id") int gorod_id,
+                               @Query("school") String school,
+                               @Query("smena") String smena,
+                               @Query("contacts") String contacts);
 }

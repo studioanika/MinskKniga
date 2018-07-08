@@ -104,13 +104,19 @@ public class Main extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        listDataHeader.get(groupPosition)
-                                + " : "
-                                + listDataChild.get(groupPosition).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();
+                try {
+                    String sd = listDataChild.get(groupPosition).get(
+                            childPosition);
+                    String id_client = sd.split("@")[3];
+
+                    Intent intent = new Intent(Main.this, Add.class);
+                    intent.putExtra("id", id_client);
+                    startActivity(intent);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 return false;
             }
         });
@@ -198,7 +204,7 @@ public class Main extends AppCompatActivity {
                         ArrayList<String> temp = new ArrayList<>();
                         for (int j = 0; j < col; j++) {
                             if (cli.get(j).getGorod().equals(cli.get(i).getGorod())) {
-                                temp.add(cli.get(j).getName() + "@" + cli.get(j).getObrazec() + "@" + cli.get(j).getDolg());
+                                temp.add(cli.get(j).getName() + "@" + cli.get(j).getObrazec() + "@" + cli.get(j).getDolg()+ "@"+ cli.get(j).getId());
 
                                 if(!cli.get(j).getDolg().isEmpty())dolg += Double.parseDouble(cli.get(j).getDolg());
                                 if (cli.get(j).getObrazec().equals("1")) obraz = 1;
