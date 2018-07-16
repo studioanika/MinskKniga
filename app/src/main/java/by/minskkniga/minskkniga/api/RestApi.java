@@ -23,7 +23,6 @@ import by.minskkniga.minskkniga.api.Class.Zakaz;
 import by.minskkniga.minskkniga.api.Class.Zakaz_filter;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
-import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
 import by.minskkniga.minskkniga.api.Class.Zakazy_short;
 import by.minskkniga.minskkniga.api.Class.cassa.GetDohodResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.GetPerevodResponse;
@@ -35,6 +34,7 @@ import by.minskkniga.minskkniga.api.Class.category.ResponseCategory;
 import by.minskkniga.minskkniga.api.Class.category.ResponseProvScheta;
 import by.minskkniga.minskkniga.api.Class.category.Schetum;
 import by.minskkniga.minskkniga.api.Class.clients.ClientInfo;
+import by.minskkniga.minskkniga.api.Class.couriers.CourierKnigi;
 import by.minskkniga.minskkniga.api.Class.inventarizacia.InventarizaciaObject;
 import by.minskkniga.minskkniga.api.Class.provider_sp.ProviderInfo;
 import by.minskkniga.minskkniga.api.Class.providers.GetOzhidaemResponse;
@@ -80,6 +80,7 @@ public interface RestApi {
                                @Query("podarki") String podarki,
                                @Query("skidka") String skidka,
                                @Query("dolg") String dolg,
+                               @Query("type_dolg") String type_dolg,
                                @Query("napravl") String napravl,
                                @Query("gorod_id") int gorod_id,
                                @Query("school") String school,
@@ -90,12 +91,13 @@ public interface RestApi {
     Call<List<Providers>> getProviders();
 
     @GET("add_provider.php")
-    Call<ResultBody> addProvider(@Query("name") String name,
+    Call<ResponseBody> addProvider(@Query("name") String name,
                                  @Query("short_name") String short_name,
                                  @Query("zametka") String zametka,
                                  @Query("info") String info,
                                  @Query("price_type") String price_type,
                                  @Query("nakrytka") double price_sale,
+                                 @Query("type_credit_size") String type_credit_size,
                                  @Query("credit_size") double credit_size,
                                  @Query("city") String city,
                                  @Query("napravl") String napravl,
@@ -176,8 +178,8 @@ public interface RestApi {
                                                          @Query("school") String school,
                                                          @Query("smena") String smena);
 
-    @GET("get_courier_knigi.php")
-    Call<List<Zakazy_courier_knigi>> getCourier_knigi(@Query("id") String id,
+    @GET("/api/get_couriers_list_knigi.php")
+    Call<List<CourierKnigi>> getCourier_knigi(@Query("courier_id") String id,
                                                       @Query("izdanie") String izdanie,
                                                       @Query("class") String _class);
 
@@ -328,7 +330,7 @@ public interface RestApi {
     @FormUrlEncoded
     Call<ResponseBody> addNewProviderZayavka(@FieldMap Map<String, String> map);
 
-    @GET("/api/ostatok_na_sklade.php?")
+    @GET("/api/inv_kniga.php?")
     Call<InventarizaciaObject> getInventarizacia(@Query("id") String id);
 
     @GET
@@ -378,9 +380,26 @@ public interface RestApi {
                                @Query("podarki") String podarki,
                                @Query("skidka") String skidka,
                                @Query("dolg") String dolg,
+                               @Query("type_dolg") String type_dolg,
                                @Query("napravl") String napravl,
                                @Query("gorod_id") int gorod_id,
                                @Query("school") String school,
                                @Query("smena") String smena,
                                @Query("contacts") String contacts);
+    @GET("update_provider.php")
+    Call<ResponseBody> updateProvider(@Query("id") String id,
+                                    @Query("name") String name,
+                                 @Query("short_name") String short_name,
+                                 @Query("zametka") String zametka,
+                                 @Query("info") String info,
+                                 @Query("price_type") String price_type,
+                                 @Query("nakrytka") double price_sale,
+                                 @Query("type_credit_size") String type_credit_size,
+                                 @Query("credit_size") double credit_size,
+                                 @Query("city_id") String city,
+                                 @Query("napravl") String napravl,
+                                 @Query("contacts") String contacts);
+
+    @GET("get_courier_list_knigi.php")
+    Call<List<CourierKnigi>> getCourierKnigi(@Query("id") String id);
 }

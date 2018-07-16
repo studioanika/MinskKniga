@@ -38,6 +38,10 @@ public class Kniga {
     @Expose
     private Integer ost;
 
+    @SerializedName("nasklade")
+    @Expose
+    private Integer nasklade;
+
     public String getId() {
         return id;
     }
@@ -116,5 +120,13 @@ public class Kniga {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public Integer getNasklade() {
+        return nasklade;
+    }
+
+    public void setNasklade(Integer nasklade) {
+        this.nasklade = nasklade;
     }
 }

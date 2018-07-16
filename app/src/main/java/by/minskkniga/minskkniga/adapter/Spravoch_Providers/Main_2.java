@@ -2,17 +2,14 @@ package by.minskkniga.minskkniga.adapter.Spravoch_Providers;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.media.Image;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.Class.Providers;
@@ -54,6 +51,8 @@ public class Main_2 extends BaseAdapter {
 
         TextView tv1 = view.findViewById(R.id.tv1);
         TextView tv2 = view.findViewById(R.id.tv2);
+        CheckBox cb = view.findViewById(R.id.ch1);
+        cb.setVisibility(View.GONE);
 
         tv1.setText(_objects.get(position).getName());
         try{

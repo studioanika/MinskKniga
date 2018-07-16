@@ -86,6 +86,7 @@ public class Add extends AppCompatActivity {
     ListView list_contact;
     ArrayList<String> contact_type;
     ArrayList<String> contact_text;
+    ArrayList<String> contacts_id = new ArrayList<>();
 
     int gorod = -1;
     String contacts = "";
@@ -326,11 +327,15 @@ public class Add extends AppCompatActivity {
         skidka.setText(clientInfo.getSkidka());
         dolg.setText(clientInfo.getDolg());
 
-        if(Integer.parseInt(clientInfo.getType_dolg()) == 0) type_dolg.setSelection(2);
-        else if(Integer.parseInt(clientInfo.getType_dolg()) == 1) type_dolg.setSelection(1);
+        if(Integer.parseInt(clientInfo.getSmena()) == 0) smena.setSelection(0);
+        else if(Integer.parseInt(clientInfo.getSmena()) == 1) smena.setSelection(1);
+        else smena.setSelection(2);
+
+        if(Integer.parseInt(clientInfo.getType_dolg()) == 0) type_dolg.setSelection(1);
+        else if(Integer.parseInt(clientInfo.getType_dolg()) == 1) type_dolg.setSelection(2);
         else type_dolg.setSelection(0);
 
-        if(clientInfo.getType_dolg().contains("optov")) type_ceni.setSelection(1);
+        if(clientInfo.getTypeC().contains("optov")) type_ceni.setSelection(1);
         else type_ceni.setSelection(0);
 
         if(Double.parseDouble(clientInfo.getSkidka()) == 0.00) {
@@ -344,12 +349,16 @@ public class Add extends AppCompatActivity {
         add_gorod.setText(clientInfo.getGorod());
         school.setText(clientInfo.getSchool());
 
+
+        // TODO добавить ид в контакты
+
         if(clientInfo.getContacts() != null){
             contact_text.clear();
             contact_type.clear();
             for (Contact ct: clientInfo.getContacts()
                  ) {
-                contact_type.add(ct.getText());
+                contacts_id.add(ct.getId());
+                contact_type.add(ct.getType());
                 contact_text.add(ct.getText());
                 list_contact.setAdapter(new Add_Contacts(this, contact_type, contact_text));
                 setListViewHeightBasedOnChildren(list_contact);
@@ -370,6 +379,7 @@ public class Add extends AppCompatActivity {
         if (!text.isEmpty()) {
             contact_type.add(type);
             contact_text.add(text);
+            contacts_id.add("-1");
             list_contact.setAdapter(new Add_Contacts(this, contact_type, contact_text));
             setListViewHeightBasedOnChildren(list_contact);
         }
@@ -434,7 +444,10 @@ public class Add extends AppCompatActivity {
             }
         }
 
-
+        String type_dog = "0";
+        if(type_dolg.getSelectedItemPosition() == 0) type_dog = "2";
+        else if(type_dolg.getSelectedItemPosition() == 1) type_dog = "0";
+        else type_dog = "1";
 
         if(id_client != null) {
 
@@ -446,11 +459,21 @@ public class Add extends AppCompatActivity {
                 contact.setUserId(id_client);
                 contact.setText(contact_text.get(i));
                 contact.setType(contact_type.get(i));
+                try{
+                    if(contacts_id.get(i) != null)contact.setId(contacts_id.get(i));
+                }
+                catch (Exception e){
+                    contact.setId("-1");
+                }
                 contacts.add(contact);
             }
             Gson gson = new Gson();
             String listJSON = gson.toJson(contacts);
             String d = "";
+
+            String type_c_u = type_ceni.getSelectedItemPosition()==0?"zakyp":"optov";
+            String type_s_u = String.valueOf(smena.getSelectedItemPosition());
+
 
             App.getApi().updateClient(
                     id_client,
@@ -458,15 +481,16 @@ public class Add extends AppCompatActivity {
                     sokr_name.getText().toString().isEmpty()?"":sokr_name.getText().toString(),
                     zametka.getText().toString().isEmpty()?"":zametka.getText().toString(),
                     print.getText().toString().isEmpty()?"":print.getText().toString(),
-                    type_ceni.getSelectedItemPosition()==0?"zakyp":"optov",
+                    type_c_u,
                     type_ceni.getSelectedItemPosition()==0?"0.00":nacenka.getText().toString(),
                     podarki_switch.isChecked()?"1":"0",
                     skidka.getText().toString().isEmpty()?"0.00":skidka.getText().toString(),
                     dolg.getText().toString().isEmpty()?"0.00":dolg.getText().toString(),
+                    type_dog,
                     naprav.getText().toString().isEmpty()?"":naprav.getText().toString(),
                     gorod,
                     school.getText().toString().isEmpty()?"":school.getText().toString(),
-                    String.valueOf(smena.getSelectedItemPosition()),
+                    type_s_u,
                     contacts !=null ? listJSON : "").enqueue(new Callback<ResponseBody>() {
 
                 @Override
@@ -516,6 +540,7 @@ public class Add extends AppCompatActivity {
                     podarki_switch.isChecked()?"1":"0",
                     skidka.getText().toString().isEmpty()?"0.00":skidka.getText().toString(),
                     dolg.getText().toString().isEmpty()?"0.00":dolg.getText().toString(),
+                    type_dog,
                     naprav.getText().toString().isEmpty()?"":naprav.getText().toString(),
                     gorod,
                     school.getText().toString().isEmpty()?"":school.getText().toString(),

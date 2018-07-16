@@ -65,7 +65,7 @@ public class AdapterInventarizacia extends BaseAdapter {
         }else tv_colvo.setTextColor(_context.getResources().getColor(R.color.red));
 
 
-        //1 получено - зел
+        // 1 получено - зел
         // 2 продажа - кр
         // 3 возврат - зел
 

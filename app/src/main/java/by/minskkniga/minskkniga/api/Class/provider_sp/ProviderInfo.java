@@ -11,6 +11,11 @@ public class ProviderInfo {
     @SerializedName("name")
     @Expose
     private String name;
+
+    @SerializedName("type_credit_size")
+    @Expose
+    private String type_creditsize;
+
     @SerializedName("short_name")
     @Expose
     private String shortName;
@@ -128,5 +133,13 @@ public class ProviderInfo {
 
     public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
+    }
+
+    public String getType_creditsize() {
+        return type_creditsize;
+    }
+
+    public void setType_creditsize(String type_creditsize) {
+        this.type_creditsize = type_creditsize;
     }
 }

@@ -152,11 +152,13 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
         else tv_obr.setText("0");
         if(_kniga.getFakt() != null) tv_fact.setText(String.valueOf(_kniga.getFakt()));
         else tv_fact.setText("0");
-        if(_kniga.getCour() != null) tv_cour.setText(String.valueOf(_kniga.getFakt()));
+        if(_kniga.getCour() != null) tv_cour.setText(String.valueOf(_kniga.getCour()));
         else tv_cour.setText("0");
         if(_kniga.getOst() != null) tv_ost_b.setText(String.valueOf(_kniga.getOst()));
         else tv_ost_b.setText("0");
 
+        tv_sclad.setText(String.valueOf(_kniga.getNasklade()));
+        getResult(tv_sclad, tv_nedos, tv_nedos_i);
         //fact - то, что ввел из руки = недостача/излишек
 
         tv_sclad.addTextChangedListener(new TextWatcher() {

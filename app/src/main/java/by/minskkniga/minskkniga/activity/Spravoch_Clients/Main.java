@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
@@ -127,6 +128,22 @@ public class Main extends AppCompatActivity {
         lv2 = findViewById(R.id.lv2);
 
         lv2.setAdapter(new Main_2(this, clien));
+
+        lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                try {
+                    String id_client =clien.get(i).getId();
+
+                    Intent intent = new Intent(Main.this, Add.class);
+                    intent.putExtra("id", id_client);
+                    startActivity(intent);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         search = findViewById(R.id.search);
         search.addTextChangedListener(new TextWatcher() {

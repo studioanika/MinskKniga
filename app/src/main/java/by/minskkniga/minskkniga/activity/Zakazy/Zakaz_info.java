@@ -114,8 +114,12 @@ public class Zakaz_info extends AppCompatActivity {
                 col = 0;
                 for (WhatZakazal buffer : response.body().getWhatZakazal()) {
                     col++;
-                    summa += Double.parseDouble(buffer.getCena().equals("")?"0":buffer.getCena()) * Double.parseDouble(buffer.getZakazano());
-                    ves += Double.parseDouble(buffer.getVes().equals("")?"0":buffer.getVes()) * Double.parseDouble(buffer.getZakazano());
+                    try {
+                        summa += Double.parseDouble(buffer.getCena().equals("")?"0":buffer.getCena()) * Double.parseDouble(buffer.getZakazano());
+                        ves += Double.parseDouble(buffer.getVes().equals("")?"0":buffer.getVes()) * Double.parseDouble(buffer.getZakazano());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 tv1.setText(String.format("Итого %s позиций на %sBYN", col, Math.round(summa * 100.0) / 100.0));

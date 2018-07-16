@@ -59,7 +59,11 @@ public class Zakaz_info extends BaseAdapter{
         tv4.setText(_objects.get(position).getZakazano());
         tv5.setText(_objects.get(position).getOtgruzeno().equals("")?"0":_objects.get(position).getOtgruzeno());
         tv6.setText(_objects.get(position).getPodarki());
-        tv7.setText(String.format("%.2f", Double.parseDouble(_objects.get(position).getZakazano())*Double.parseDouble(_objects.get(position).getCena())));
+        try {
+            tv7.setText(String.format("%.2f", Double.parseDouble(_objects.get(position).getZakazano())*Double.parseDouble(_objects.get(position).getCena())));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return view;
     }

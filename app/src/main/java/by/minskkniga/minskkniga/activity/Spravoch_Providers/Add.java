@@ -20,15 +20,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Add_Contacts;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.ResultBody;
+import by.minskkniga.minskkniga.api.Class.clients.Contact;
 import by.minskkniga.minskkniga.api.Class.provider_sp.ProviderInfo;
 import by.minskkniga.minskkniga.dialog.Add_Dialog;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,6 +73,7 @@ public class Add extends AppCompatActivity {
 
     ArrayList<String> contact_type;
     ArrayList<String> contact_text;
+    ArrayList<String> contacts_id = new ArrayList<>();
 
     String price_type;
     int type_dolg;
@@ -121,7 +126,7 @@ public class Add extends AppCompatActivity {
         });
 
         dolg_size.setVisibility(View.INVISIBLE);
-//start открытие закрытие подпунктов
+
 
         price_caption = findViewById(R.id.price_caption);
         price_linear = findViewById(R.id.price_linear);
@@ -176,7 +181,7 @@ public class Add extends AppCompatActivity {
         });
 
 
-//end открытие закрытие подпунктов
+
 
         type_ceni = findViewById(R.id.type_ceni);
         type_ceni.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -267,13 +272,45 @@ public class Add extends AppCompatActivity {
 
     private void setInfoProvider(ProviderInfo providerInfo) {
 
+        city = Integer.parseInt(providerInfo.getCityId());
+
         name_ed.setText(providerInfo.getName());
         short_name_ed.setText(providerInfo.getShortName());
         zametka_ed.setText(providerInfo.getShortName());
         info_ed.setText(providerInfo.getInfo());
 
-        //if(providerInfo.getPriceType())
+        add_city.setText(providerInfo.getCity());
 
+        naprav_ed.setText(providerInfo.getNapravl());
+
+        if(providerInfo.getPriceType().contains("zakyp")) type_ceni.setSelection(1);
+        else if(providerInfo.getPriceType().contains("prod")) type_ceni.setSelection(0);
+        else type_ceni.setSelection(2);
+
+        nakrytka_ed.setText(providerInfo.getNakrytka());
+
+        dolg_size.setText(providerInfo.getCreditSize());
+
+        if(providerInfo.getType_creditsize()!= null && !providerInfo.getType_creditsize().isEmpty()){
+
+            if(Integer.parseInt(providerInfo.getType_creditsize()) == 0) dolg_type.setSelection(1);
+            else if(Integer.parseInt(providerInfo.getType_creditsize()) == 1) dolg_type.setSelection(2);
+            else dolg_type.setSelection(0);
+        }
+
+        if(providerInfo.getContacts() != null){
+            contact_text.clear();
+            contact_type.clear();
+            for (Contact ct: providerInfo.getContacts()
+                    ) {
+                contacts_id.add(ct.getId());
+                contact_type.add(ct.getType());
+                contact_text.add(ct.getText());
+                list_contact.setAdapter(new Add_Contacts(this, contact_type, contact_text));
+                setListViewHeightBasedOnChildren(list_contact);
+
+            }
+        }
     }
 
     public void return_gorod(int id, String name) {
@@ -285,6 +322,7 @@ public class Add extends AppCompatActivity {
         if (!text.isEmpty()) {
             contact_type.add(type);
             contact_text.add(text);
+            contacts_id.add("-1");
             list_contact.setAdapter(new Add_Contacts(this, contact_type, contact_text));
             setListViewHeightBasedOnChildren(list_contact);
         }
@@ -391,30 +429,105 @@ public class Add extends AppCompatActivity {
 
         if (contacts.isEmpty()) contacts = "null";
 
+        List<Contact> contacts = new ArrayList<>();
+
+        for (int i = 0; i < contact_type.size(); i++) {
+            Contact contact = new Contact();
+            contact.setRank("provider");
+            contact.setUserId(id_provider);
+            contact.setText(contact_text.get(i));
+            contact.setType(contact_type.get(i));
+            try{
+                if(contacts_id.get(i) != null)contact.setId(contacts_id.get(i));
+            }
+            catch (Exception e){
+                contact.setId("-1");
+            }
+            contacts.add(contact);
+        }
+
+        Gson gson = new Gson();
+        String listJSON = gson.toJson(contacts);
+        String d = "";
+
+        String type_dolg = "0";
+        if(dolg_type.getSelectedItemPosition() == 0) type_dolg = "2";
+        else if(dolg_type.getSelectedItemPosition() == 1) type_dolg = "0";
+        else type_dolg = "1";
+
         if(id_provider != null){
 
 
 
+            App.getApi().updateProvider(id_provider,
+                    name_ed.getText().toString(),
+                    short_name_ed.getText().toString(),
+                    zametka_ed.getText().toString(),
+                    info_ed.getText().toString(),
+                    price_type,
+                    Double.parseDouble(nakrytka_ed.getText().toString()),
+                    type_dolg,
+                    creditsize,
+                    String.valueOf(city),
+                    naprav_ed.getText().toString(),
+                    contacts !=null ? listJSON : "").enqueue(new Callback<ResponseBody>() {
+
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.body() != null) {
+                        try {
+                            String d = response.body().string();
+                            if(d.contains("error")) Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                            else Toast.makeText(Add.this, "Изменения сохранены...", Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
         else {
+
             App.getApi().addProvider(name_ed.getText().toString(),
                     short_name_ed.getText().toString(),
                     zametka_ed.getText().toString(),
                     info_ed.getText().toString(),
                     price_type,
                     Double.parseDouble(nakrytka_ed.getText().toString()),
+                    type_dolg,
                     creditsize,
                     String.valueOf(city),
                     naprav_ed.getText().toString(),
-                    contacts).enqueue(new Callback<ResultBody>() {
+                    contacts !=null ? listJSON : "").enqueue(new Callback<ResponseBody>() {
 
                 @Override
-                public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                    finish();
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.body() != null) {
+                        ResponseBody resultBody = response.body();
+
+                        try {
+                            String sd = resultBody.string();
+
+                            if(sd.contains("error")) Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                            else {
+                                Toast.makeText(Add.this, "Поставщик успешно создан", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
 
                 @Override
-                public void onFailure(Call<ResultBody> call, Throwable t) {
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
                     Toast.makeText(Add.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
                 }
             });

@@ -153,7 +153,8 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:text="Дата"
-                    android:textColor="@color/text_blue" />
+                    android:textColor="@color/text_blue"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -161,7 +162,8 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:text="Контрагент"
-                    android:textColor="@color/tab_indicator" />
+                    android:textColor="@color/tab_indicator"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -169,7 +171,8 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:text="К-во"
-                    android:textColor="@color/tab_indicator" />
+                    android:textColor="@color/tab_indicator"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -177,7 +180,8 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:text="Основание"
-                    android:textColor="@color/tab_indicator" />
+                    android:textColor="@color/tab_indicator"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

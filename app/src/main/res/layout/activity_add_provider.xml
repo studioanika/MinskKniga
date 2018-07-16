@@ -189,7 +189,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:hint="0.00" />
+                        android:hint="0.00"
+                        android:inputType="numberDecimal" />
 
                 </LinearLayout>
 
@@ -277,7 +278,8 @@
                 android:fontFamily="@font/roboto"
                 android:padding="5dp"
                 android:text="Контактные лица"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
 
             <View
                 android:layout_width="fill_parent"
@@ -289,7 +291,8 @@
                 android:id="@+id/contactface_linear"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <ListView
                     android:id="@+id/contactface_listview"

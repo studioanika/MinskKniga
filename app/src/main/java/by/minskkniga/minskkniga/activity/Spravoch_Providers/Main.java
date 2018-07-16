@@ -150,6 +150,15 @@ public class Main extends AppCompatActivity {
             }
         });
 
+        lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(Main.this, Add.class);
+                intent.putExtra("id", prov.get(i).getId());
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void search(){
@@ -171,14 +180,7 @@ public class Main extends AppCompatActivity {
         notfound_2.setText("Ничего не найдено");
         lv2.setAdapter(new Main_2(this, prov));
 
-        lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(Main.this, Add.class);
-                intent.putExtra("id", prov.get(i).getId());
-                startActivity(intent);
-            }
-        });
+
     }
 
     @Override

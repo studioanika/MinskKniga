@@ -1,6 +1,7 @@
 package by.minskkniga.minskkniga.adapter.Spravoch_Couriers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,22 +11,23 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
+import by.minskkniga.minskkniga.activity.Spravoch_Couriers.Zakaz_info;
+import by.minskkniga.minskkniga.api.Class.couriers.CourierKnigi;
 
 public class Zakazy_1 extends BaseExpandableListAdapter {
 
     private Context _context;
-    private ArrayList<Zakazy_courier_knigi> _object;
+    private ArrayList<CourierKnigi> _object;
 
 
-    public Zakazy_1(Context context, ArrayList<Zakazy_courier_knigi> object) {
+    public Zakazy_1(Context context, ArrayList<CourierKnigi> object) {
         this._context = context;
         this._object = object;
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._object.get(groupPosition).getMas().size();
+        return this._object.size();
     }
 
     @Override
@@ -46,15 +48,13 @@ public class Zakazy_1 extends BaseExpandableListAdapter {
         TextView tv1 = (TextView) convertView.findViewById(R.id.tv1);
         TextView tv2 = (TextView) convertView.findViewById(R.id.tv2);
 
-        tv1.setText(_object.get(groupPosition).getMas().get(childPosition).getName());
-        tv2.setText(_object.get(groupPosition).getMas().get(childPosition).getOtgruz());
-
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._object.get(groupPosition).getMas().size();
+        // TODO здесь нужно будет заменить
+        return 0;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class Zakazy_1 extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded,
+    public View getGroupView(final int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -84,9 +84,21 @@ public class Zakazy_1 extends BaseExpandableListAdapter {
         TextView tv1 = (TextView) convertView.findViewById(R.id.tv1);
         TextView tv2 = (TextView) convertView.findViewById(R.id.tv2);
 
-        tv1.setText(_object.get(groupPosition).getName());
-        tv2.setText(_object.get(groupPosition).getOtgruz());
+//        tv1.setText(_object.get(groupPosition).getName());
+//        tv2.setText(_object.get(groupPosition).getOtgruz());
 
+        tv1.setText(_object.get(groupPosition).getName());
+        tv2.setText(_object.get(groupPosition).getKur());
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(_context, Zakaz_info.class);
+                intent.putExtra("id", _object.get(groupPosition).getProd_id());
+                intent.putExtra("name", _object.get(groupPosition).getName());
+                _context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }

@@ -3,10 +3,10 @@ package by.minskkniga.minskkniga.activity.Spravoch_Couriers;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -37,7 +37,7 @@ import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Courier_filter_1;
 import by.minskkniga.minskkniga.api.Class.Courier_filter_2;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
-import by.minskkniga.minskkniga.api.Class.Zakazy_courier_knigi;
+import by.minskkniga.minskkniga.api.Class.couriers.CourierKnigi;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,8 +83,8 @@ public class Zakazy extends AppCompatActivity {
     EditText search_1;
     EditText search_2;
 
-    ArrayList<Zakazy_courier_knigi> zakazy_1;
-    ArrayList<Zakazy_courier_knigi> zakazy_1_buf;
+    ArrayList<CourierKnigi> zakazy_1;
+    ArrayList<CourierKnigi> zakazy_1_buf;
 
     ArrayList<Zakazy_courier_clients> zakazy_2;
     ArrayList<Zakazy_courier_clients> zakazy_2_buf;
@@ -341,19 +341,22 @@ public class Zakazy extends AppCompatActivity {
     }
 
     public void search_1() {
-        zakazy_1.clear();
-        for (Zakazy_courier_knigi buffer : zakazy_1_buf) {
-            if (buffer.getName().toLowerCase().contains(search_1.getText().toString())||
-                    buffer.getBarcode().toLowerCase().contains(search_1.getText().toString())) {
-                zakazy_1.add(buffer);
-            }
-        }
-        if (!zakazy_1.isEmpty()) {
-            notfound_1.setVisibility(View.GONE);
-        } else {
-            notfound_1.setVisibility(View.VISIBLE);
-        }
-        lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
+
+        // TODO здесь нужно подправить
+
+//        zakazy_1.clear();
+//        for (Zakazy_courier_knigi buffer : zakazy_1_buf) {
+//            if (buffer.getName().toLowerCase().contains(search_1.getText().toString())||
+//                    buffer.getBarcode().toLowerCase().contains(search_1.getText().toString())) {
+//                zakazy_1.add(buffer);
+//            }
+//        }
+//        if (!zakazy_1.isEmpty()) {
+//            notfound_1.setVisibility(View.GONE);
+//        } else {
+//            notfound_1.setVisibility(View.VISIBLE);
+//        }
+//        lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
     }
 
     public void search_2() {
@@ -395,24 +398,24 @@ public class Zakazy extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (tabHost.getCurrentTab() == 0 && search_1.getText().toString().isEmpty()) {
-            load_filter_1();
-            Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-        }
-        if (tabHost.getCurrentTab() == 1 && search_2.getText().toString().isEmpty()) {
-            load_filter_2();
-            Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
-        }
+//        if (tabHost.getCurrentTab() == 0 && search_1.getText().toString().isEmpty()) {
+//            load_filter_1();
+//            //Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+//        }
+//        if (tabHost.getCurrentTab() == 1 && search_2.getText().toString().isEmpty()) {
+//            load_filter_2();
+//            //Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     public void reload_1(){
         if (spinner1.getSelectedItemPosition() == 0) izdatel = "null";
         if (spinner2.getSelectedItemPosition() == 0) clas = "null";
 
-        Toast.makeText(this, izdatel+" "+clas, Toast.LENGTH_SHORT).show();
-        App.getApi().getCourier_knigi(String.valueOf(id),izdatel,clas).enqueue(new Callback<List<Zakazy_courier_knigi>>() {
+        //Toast.makeText(this, izdatel+" "+clas, Toast.LENGTH_SHORT).show();
+        App.getApi().getCourier_knigi(String.valueOf(id),izdatel,clas).enqueue(new Callback<List<CourierKnigi>>() {
             @Override
-            public void onResponse(Call<List<Zakazy_courier_knigi>> call, Response<List<Zakazy_courier_knigi>> response) {
+            public void onResponse(Call<List<CourierKnigi>> call, Response<List<CourierKnigi>> response) {
                 zakazy_1.clear();
                 zakazy_1_buf.clear();
                 zakazy_1.addAll(response.body());
@@ -428,7 +431,7 @@ public class Zakazy extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Zakazy_courier_knigi>> call, Throwable t) {
+            public void onFailure(Call<List<CourierKnigi>> call, Throwable t) {
 
             }
         });

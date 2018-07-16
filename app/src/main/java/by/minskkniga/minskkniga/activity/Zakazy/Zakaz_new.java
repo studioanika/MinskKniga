@@ -107,7 +107,7 @@ public class Zakaz_new extends AppCompatActivity {
     int col = 0;
 
 
-    // TODO дату для каждой позиции
+    // TODO дабавить изменение статуса
 
 
     public void initialize() {
