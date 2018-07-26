@@ -198,9 +198,9 @@ public class Main extends AppCompatActivity {
             }
         });
 
-        startAnimation();
-
-
+        Intent intent = getIntent();
+        String sd  = intent.getStringExtra("menu");
+        if(sd == null) startAnimation();
 
     }
 
@@ -548,6 +548,8 @@ public class Main extends AppCompatActivity {
         String _obraz = "";
         if(!obraz.contains("null")) _obraz = obraz;
         if(obraz.contains("Образец")) _obraz = "";
+        else if(obraz.contains("Да")) _obraz = "Есть";
+        else if(obraz.contains("Нет")) _obraz = "";
 
         String _izdatel = "";
         if(!izdatel.contains("null")) _izdatel = izdatel;

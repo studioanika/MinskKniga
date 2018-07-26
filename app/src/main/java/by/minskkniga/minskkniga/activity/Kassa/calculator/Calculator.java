@@ -546,18 +546,19 @@ public abstract class Calculator extends AppCompatActivity
 
     private void hideCalculator(){
         try{
-            if(!results.isEmpty() && results != null) {
-                mCalculatorDisplay.setText(results);
-                tab1.setResultTV(results);
-                tab2.setResultTV(results);
-                tab3.setResultTV(results);
-            }
             if(!mFormulaEditText.getText().toString().isEmpty()) {
                 mCalculatorDisplay.setText(mFormulaEditText.getText().toString());
                 tab1.setResultTV(mFormulaEditText.getText().toString());
                 tab2.setResultTV(mFormulaEditText.getText().toString());
                 tab3.setResultTV(mFormulaEditText.getText().toString());
+            }else  if(!results.isEmpty() && results != null) {
+                mCalculatorDisplay.setText(results);
+                tab1.setResultTV(results);
+                tab2.setResultTV(results);
+                tab3.setResultTV(results);
             }
+
+
 
 
         }

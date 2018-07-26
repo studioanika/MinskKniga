@@ -3,8 +3,6 @@ package by.minskkniga.minskkniga.activity.category;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,23 +11,17 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.Kassa.SchetOperation;
 import by.minskkniga.minskkniga.activity.category.adapter.CategoryAdapter;
 import by.minskkniga.minskkniga.activity.category.adapter.PodCategoryAdapter;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.cassa.ObjectTransaction;
 import by.minskkniga.minskkniga.api.Class.category.Category;
 import by.minskkniga.minskkniga.api.Class.category.PodCat;
 import by.minskkniga.minskkniga.api.Class.category.ResponseCategory;
@@ -120,8 +112,10 @@ public class CategoryActivity extends AppCompatActivity {
 
     public void clickCategory(int i) {
 
-        if(i != list.size() -1) {
+        if(i == list.size()-1) {
+            showDialogAddCategory();
 
+        }else {
             categoryFinal = list.get(i).getName();
             categoryFinal_ID = list.get(i).getId();
             podCatList = list.get(i).getList();
@@ -140,10 +134,7 @@ public class CategoryActivity extends AppCompatActivity {
 
             categoryAdapter.setSelected(i);
 
-            clickPodCategory(0);
-
-        }else {
-            showDialogAddCategory();
+            if(podCatList.size() != 1)clickPodCategory(0);
         }
 
     }

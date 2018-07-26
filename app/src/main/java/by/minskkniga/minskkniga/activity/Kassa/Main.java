@@ -584,7 +584,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(getRashodResponse != null )url_rashod = url_prihod + "id=" + getRashodResponse.getId()+"&";
+                if(getRashodResponse != null )url_rashod = url_rashod + "id=" + getRashodResponse.getId()+"&";
                 else return;
 
                 url_rashod = url_rashod + "prov_id=" + provider_id+"&";
@@ -675,7 +675,7 @@ public class Main extends AppCompatActivity {
         cat_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startCat("1");
+                startCat("2");
             }
         });
 
@@ -834,7 +834,7 @@ public class Main extends AppCompatActivity {
         cat_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startCat("1");
+                startCat("3");
             }
         });
 

@@ -73,7 +73,8 @@
             android:layout_weight="1"
             android:gravity="right"
             android:text="Заказ"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
     </LinearLayout>
 
 </LinearLayout>

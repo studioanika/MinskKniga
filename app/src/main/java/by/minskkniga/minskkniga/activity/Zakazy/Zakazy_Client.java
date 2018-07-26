@@ -30,6 +30,7 @@ import retrofit2.Response;
 public class Zakazy_Client extends AppCompatActivity {
 
     int id;
+    int id_client = 0;
     static String name;
     ImageButton back;
     TextView caption;
@@ -63,6 +64,7 @@ public class Zakazy_Client extends AppCompatActivity {
 
         caption = findViewById(R.id.caption);
         id = getIntent().getIntExtra("id", 0);
+        id_client = getIntent().getIntExtra("id", 0);
         name = getIntent().getStringExtra("name");
         caption.setText(name);
 
@@ -72,9 +74,10 @@ public class Zakazy_Client extends AppCompatActivity {
         expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v,int groupPosition, long id) {
-                Intent intent = new Intent(Zakazy_Client.this, Zakaz_info.class);
+                Intent intent = new Intent(Zakazy_Client.this, Zakaz_new.class);
                 intent.putExtra("name", name);
-                intent.putExtra("id", zakazy.get(groupPosition).getId());
+                intent.putExtra("id_c", String.valueOf(id_client));
+                intent.putExtra("id_z", zakazy.get(groupPosition).getId());
                 startActivity(intent);
                 return true;
             }

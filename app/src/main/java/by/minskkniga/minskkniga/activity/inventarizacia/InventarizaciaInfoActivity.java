@@ -2,7 +2,9 @@ package by.minskkniga.minskkniga.activity.inventarizacia;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -53,6 +55,8 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
     String id = "0";
     String url = "/api/inv_ed.php?";
 
+    SharedPreferences sp;
+
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,8 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
+
+        sp = getSharedPreferences("login", Context.MODE_PRIVATE);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -107,17 +113,47 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 getResult(tv_sclad, tv_nedos, tv_nedos_i);
+                url = "/api/inv_ed.php?";
                 url = url +"id="+id;
                 try{
+
+                    // id - id knigi
+                    // izl - izlishek
+                    // ned - nodostacha
+                    // aut - user
+                    // ost - na sklade
+                    // pod_s = ost + izlishek
+
                     Double d = Double.parseDouble(tv_nedos.getText().toString());
                     Double fact = Double.parseDouble(String.valueOf(_kniga.getFakt()));
 
-                    double result = Double.parseDouble(tv_nedos.getText().toString());
+                    Double result_d =Double.parseDouble(tv_nedos.getText().toString());
+                    int result = result_d.intValue();
                     if(result >0) url = url + "&ned=0&izl="+String.valueOf(result);
                     else if(result < 0)url = url + "&izl=0&ned="+String.valueOf(result);
                     else url = url + "&izl=0&ned=0";
+
+                    url = url + "&aut="+sp.getString("user_id", "");
+                    url = url + "&ost=" +String.valueOf(_kniga.getNasklade());
+
+                    int pod_s = 0;
+
+                    try{
+
+                        int ds = _kniga.getNasklade();
+                        Double iz = Double.parseDouble(tv_nedos.getText().toString());
+
+                        int izii = iz.intValue();
+                        pod_s = ds + izii;
+
+                    }catch (Exception e){}
+
+                    //url = url + "&pod_s=" +String.valueOf(pod_s);
+
                 }
-                catch (Exception e){}
+                catch (Exception e){
+                    String sd = e.toString();
+                }
 
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("http://cc96297.tmweb.ru/api/")
@@ -125,12 +161,16 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
                         .build();
                 RestApi api = retrofit.create(RestApi.class);
 
+                //Response{protocol=http/1.1, code=200, message=OK, url=http://cc96297.tmweb.ru/api/inv_ed.php?id=2&izl=0&ned=0&aut=1&ost=2113id=2&ned=0&izl=80&aut=1&ost=2113}
+
                 api.setInvEd(url).enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.body() != null) {
                             String d = response.body().toString();
                             dialogEdit.dismiss();
+                            loadData();
+
                         }
                     }
 
@@ -267,7 +307,7 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
         }
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() -1));
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount()));
         listView.setLayoutParams(params);
     }
 

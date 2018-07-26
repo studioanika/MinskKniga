@@ -113,8 +113,6 @@ public class FragmentProviderZayavki extends Fragment implements IFragmentProvid
                 book.add(0,book1);
                 book.addAll(getListBooks(i, list));
                 listDataChild.put(String.valueOf(i), book);
-
-
                 i++;
         }
         int is = listDataChild.size();
@@ -170,6 +168,5 @@ public class FragmentProviderZayavki extends Fragment implements IFragmentProvid
         loadData();
         super.onResume();
     }
-
 
 }

@@ -51,13 +51,21 @@ public class Zakaz_new extends BaseAdapter {
         TextView tv6 = view.findViewById(R.id.tv6); //подарков
         TextView tv7 = view.findViewById(R.id.tv7); //сумма
 
+        try{
+            Double d = Double.parseDouble(_objects.get(position).summa);
+            tv7.setText(String.format("%.2f", d));
+
+        }catch (Exception e){
+            tv7.setText(_objects.get(position).summa);
+        }
+
         tv1.setText(_objects.get(position).name);
         tv2.setText(_objects.get(position).artukil);
         tv3.setText(_objects.get(position).cena);
         tv4.setText(_objects.get(position).col_zakaz);
         tv5.setText(_objects.get(position).otgruzeno);
         tv6.setText(_objects.get(position).col_podar);
-        tv7.setText(_objects.get(position).summa);
+
 
         return view;
     }

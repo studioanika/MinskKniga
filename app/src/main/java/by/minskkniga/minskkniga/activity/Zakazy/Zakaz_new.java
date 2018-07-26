@@ -47,6 +47,8 @@ import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.Dialog_clients;
 import by.minskkniga.minskkniga.api.Class.Gorod;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
+import by.minskkniga.minskkniga.api.Class.WhatZakazal;
+import by.minskkniga.minskkniga.api.Class.Zakaz;
 import by.minskkniga.minskkniga.api.Class.Zakaz_product;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -106,6 +108,7 @@ public class Zakaz_new extends AppCompatActivity {
     double ves = 0;
     int col = 0;
 
+    Zakaz zakaz;
 
     // TODO дабавить изменение статуса
 
@@ -120,12 +123,7 @@ public class Zakaz_new extends AppCompatActivity {
         });
         menu = findViewById(R.id.menu);
         drawer = findViewById(R.id.drawer);
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawer.openDrawer(GravityCompat.END);
-            }
-        });
+
 
         caption = findViewById(R.id.caption);
         products = new ArrayList<>();
@@ -210,11 +208,33 @@ public class Zakaz_new extends AppCompatActivity {
 
 //        dlg_client = new Add_Dialog(this, "zakaz_client");
 //        dlg_client.setCancelable(false);
-        if (getIntent().getStringExtra("name_client").equals("null")){
-            showDialogZakazClient();
-        }else{
-            id_client = getIntent().getStringExtra("id_client");
-            caption.setText(getIntent().getStringExtra("name_client"));
+        Intent intent = getIntent();
+        String id_z = intent.getStringExtra("id_z");
+        if(id_z != null){
+            String cap = intent.getStringExtra("name");
+            id_client = intent.getStringExtra("id_c");
+            caption.setText(cap);
+            menu.setImageDrawable(getResources().getDrawable(R.drawable.ic_check));
+            menu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+            reload(id_z);
+        }else {
+            if (getIntent().getStringExtra("name_client").equals("null")){
+                showDialogZakazClient();
+            }else{
+                id_client = getIntent().getStringExtra("id_client");
+                caption.setText(getIntent().getStringExtra("name_client"));
+            }
+            menu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    drawer.openDrawer(GravityCompat.END);
+                }
+            });
         }
 
 
@@ -635,6 +655,11 @@ public class Zakaz_new extends AppCompatActivity {
         date1.setText(df.format(currentDate));
         date2.setText(df.format(currentDate));
 
+//        Intent intent = getIntent();
+//        String id_z = intent.getStringExtra("id");
+//        if(id_z != null) {
+//            reload(id_z);
+//        }
 
         load_couriers();
     }
@@ -809,8 +834,8 @@ public class Zakaz_new extends AppCompatActivity {
                     couriers_id.add(buffer.getId());
                 }
 
-                adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, couriers);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.spinner_item, couriers);
+                //adapter.setDropDownViewResource(R.layout.spinner_item);
                 courier.setAdapter(adapter);
             }
 
@@ -905,5 +930,117 @@ public class Zakaz_new extends AppCompatActivity {
         summa_z.setText(String.valueOf(Math.round(this_summa_z * 100.0) / 100.0));
         summa_p.setText(String.valueOf(Math.round(this_summa_p * 100.0) / 100.0));
         summa.setText(String.valueOf(Math.round(this_summa * 100.0) / 100.0));
+    }
+
+    public void reload(final String id) {
+        App.getApi().getZakaz_info(id).enqueue(new Callback<Zakaz>() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onResponse(Call<Zakaz> call, Response<Zakaz> response) {
+                Zakaz zakaz = response.body();
+                blank.setText(zakaz.getId());
+                date1.setText(zakaz.getDate());
+                date2.setText(zakaz.getDateIzm());
+                autor.setText(zakaz.getAutor());
+                oplacheno.setChecked(zakaz.getOplacheno().equals("1"));
+                //courier.setText(response.body().getCourier());
+
+
+
+                summa = 0;
+                ves = 0;
+                col = 0;
+                for (WhatZakazal buffer : response.body().getWhatZakazal()) {
+                    col++;
+                    try {
+                        summa += Double.parseDouble(buffer.getCena().equals("")?"0":buffer.getCena()) * Double.parseDouble(buffer.getZakazano());
+                        ves += Double.parseDouble(buffer.getVes().equals("")?"0":buffer.getVes()) * Double.parseDouble(buffer.getZakazano());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                tv1.setText(String.format("Итого %s позиций на %sBYN", col, Math.round(summa * 100.0) / 100.0));
+                tv2.setText(String.format("Вес: %sкг", Math.round(ves * 100.0) / 100.0));
+
+
+
+                switch (zakaz.getStatus()) {
+                    case "0"://chernovik новый green
+                        status.setText("Новый");
+                        status.setTextColor(Color.rgb(97, 184, 126));
+                        chernovik.setChecked(true);
+                        break;
+                    case "1"://новый green
+                        status.setText("Новый");
+                        status.setTextColor(Color.rgb(97, 184, 126));
+                        break;
+                    case "2"://в сборке yellow
+                        status.setText("В сборке");
+                        status.setTextColor(Color.rgb(242, 201, 76));
+                        break;
+                    case "3"://собран blue
+                        status.setText("Собран");
+                        status.setTextColor(Color.BLUE);
+                        break;
+                    case "4"://в доставке lightred
+                        status.setText("В доставке");
+                        status.setTextColor(Color.rgb(242, 0, 86));
+                        break;
+                    case "5"://отгружен darkred
+                        status.setText("Отгружен");
+                        status.setTextColor(Color.rgb(139, 0, 0));
+                        break;
+                    case "6"://возвращение darkred
+                        status.setText("Возвращение");
+                        status.setTextColor(Color.rgb(100, 0, 0));
+                        break;
+
+                }
+
+                if(response.body().getWhatZakazal() != null){
+                    products.clear();
+                    for (WhatZakazal wat: response.body().getWhatZakazal()
+                         ) {
+
+                        // TODO добавить сумму
+                        String sums = "0";
+                        try{
+
+                            Double price = Double.parseDouble(wat.getCena());
+                            int col = Integer.parseInt(wat.getZakazano());
+
+                            Double sum = price * col;
+                            sums = String.valueOf(sum);
+
+                        }
+                        catch (Exception e){}
+
+                        if(wat.getOtgruzeno().isEmpty()){
+                            wat.setOtgruzeno("0");
+                        }
+//
+                        Zakaz_product product = new Zakaz_product(
+                                wat.getId(), wat.getName(), wat.getArtikul(), wat.getCena(),
+                                wat.getZakazano(),wat.getPodarki(), "", "",
+                                sums, wat.getOtgruzeno(), wat.getVes(), "",
+                                wat.getClas(),  "", ""
+                        );
+
+                        products.add(product);
+//
+                    }
+
+                }
+                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_new(Zakaz_new.this, products));
+                //lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_info(Zakaz_info.this, response.body().getWhatZakazal()));
+                //lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_info(Zakaz_info.this, (ArrayList<WhatZakazal>) zakaz.getWhatZakazal()));
+            }
+
+            @Override
+            public void onFailure(Call<Zakaz> call, Throwable t) {
+
+            }
+        });
     }
 }

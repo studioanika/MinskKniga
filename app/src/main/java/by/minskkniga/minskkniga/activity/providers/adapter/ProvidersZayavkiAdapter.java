@@ -75,17 +75,19 @@ public class ProvidersZayavkiAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.item_list_providers_zayavki_zakaz);
         LinearLayout lin = (LinearLayout) convertView
                 .findViewById(R.id.lin);
-        try{
-            txtName.setText(book.getName());
-            txtClass.setText(book.getClasss());
-            txtIzdanie.setText(book.getIzdatel().substring(0,1));
-            txtSokr.setText(book.getSokrName());
-            txtZakaz.setText(_listDataHeader.get(groupPosition).getWhatZakazal()
-                    .get(childPosition).getZav());
+        if(childPosition != 0){
+            try{
+                txtName.setText(book.getName());
+                txtClass.setText(book.getClasss());
+                txtIzdanie.setText(book.getIzdatel().substring(0,1));
+                txtSokr.setText(book.getSokrName());
+                txtZakaz.setText(_listDataHeader.get(groupPosition).getWhatZakazal()
+                        .get(childPosition).getZav());
 
 
+            }
+            catch (Exception e){}
         }
-        catch (Exception e){}
 
 
 

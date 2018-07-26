@@ -23,7 +23,7 @@ public class Zakaz_info extends AppCompatActivity {
     String name;
     String id;
     TextView caption;
-    ImageButton back;
+    ImageButton back, apply;
     Zakaz zakaz;
 
     TextView blank;
@@ -43,6 +43,7 @@ public class Zakaz_info extends AppCompatActivity {
 
     public void initialize(){
 
+        apply = (ImageButton) findViewById(R.id.menu);
         caption = findViewById(R.id.caption);
         id = getIntent().getStringExtra("id");
         name = getIntent().getStringExtra("name");
@@ -67,6 +68,19 @@ public class Zakaz_info extends AppCompatActivity {
         oplacheno = header.findViewById(R.id.oplacheno);
 
         zakaz = new Zakaz();
+
+        apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                update();
+            }
+        });
+
+    }
+
+    private void update() {
+
+
 
     }
 

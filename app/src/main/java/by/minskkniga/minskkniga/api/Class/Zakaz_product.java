@@ -88,4 +88,5 @@ public class Zakaz_product implements Parcelable {
         barcode = parcel.readString();
         barcode_status = parcel.readString();
     }
+
 }
