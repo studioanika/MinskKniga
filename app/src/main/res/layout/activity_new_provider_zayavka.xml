@@ -121,7 +121,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/t4418913"
@@ -141,6 +142,8 @@
                     android:textColor="@color/tab_indicator"
                     android:textColorLink="@color/tab_indicator" />
             </RelativeLayout>
+
+
 
         </LinearLayout>
 
@@ -166,6 +169,7 @@
                     android:id="@+id/new_z_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
                     android:layout_marginLeft="8dp"
                     android:layout_toRightOf="@+id/t248133168"
                     android:text="TextView"

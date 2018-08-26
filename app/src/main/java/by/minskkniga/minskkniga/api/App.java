@@ -13,11 +13,18 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://cc96297.tmweb.ru/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        Api = retrofit.create(RestApi.class);
+        by.minskkniga.minskkniga.activity.prefs.Prefs pref = new by.minskkniga.minskkniga.activity.prefs.Prefs(this);
+
+
+        try {
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(pref.getHost())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            Api = retrofit.create(RestApi.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static RestApi getApi() {

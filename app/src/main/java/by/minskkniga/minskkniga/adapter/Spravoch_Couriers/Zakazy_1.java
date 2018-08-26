@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Spravoch_Couriers.Zakaz_info;
 import by.minskkniga.minskkniga.api.Class.couriers.CourierKnigi;
+import by.minskkniga.minskkniga.api.Class.couriers.CurZakaz;
 
 public class Zakazy_1 extends BaseExpandableListAdapter {
 
@@ -39,6 +40,8 @@ public class Zakazy_1 extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
+        final CurZakaz curZakaz = _object.get(groupPosition).getList_zakaz().get(childPosition);
+
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -48,12 +51,27 @@ public class Zakazy_1 extends BaseExpandableListAdapter {
         TextView tv1 = (TextView) convertView.findViewById(R.id.tv1);
         TextView tv2 = (TextView) convertView.findViewById(R.id.tv2);
 
+        tv1.setText(curZakaz.getClient_name());
+        tv2.setText(curZakaz.getKur_zak());
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(_context, Zakaz_info.class);
+                intent.putExtra("id", curZakaz.getZakaz_id());
+                intent.putExtra("name", curZakaz.getClient_name());
+                _context.startActivity(intent);
+            }
+        });
+
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        // TODO здесь нужно будет заменить
+        if(_object.get(groupPosition).getList_zakaz() != null) {
+            return _object.get(groupPosition).getList_zakaz().size();
+        }
         return 0;
     }
 
@@ -90,15 +108,15 @@ public class Zakazy_1 extends BaseExpandableListAdapter {
         tv1.setText(_object.get(groupPosition).getName());
         tv2.setText(_object.get(groupPosition).getKur());
 
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(_context, Zakaz_info.class);
-                intent.putExtra("id", _object.get(groupPosition).getProd_id());
-                intent.putExtra("name", _object.get(groupPosition).getName());
-                _context.startActivity(intent);
-            }
-        });
+//        convertView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(_context, Zakaz_info.class);
+//                intent.putExtra("id", _object.get(groupPosition).getProd_id());
+//                intent.putExtra("name", _object.get(groupPosition).getName());
+//                _context.startActivity(intent);
+//            }
+//        });
 
         return convertView;
     }

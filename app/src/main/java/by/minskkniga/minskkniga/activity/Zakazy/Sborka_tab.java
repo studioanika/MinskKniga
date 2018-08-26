@@ -3,16 +3,13 @@ package by.minskkniga.minskkniga.activity.Zakazy;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -233,7 +229,7 @@ public class Sborka_tab extends AppCompatActivity {
                 sokr_name.setText(response.body().getSokrName());
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Glide.with(Sborka_tab.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + response.body().getImage()).apply(new RequestOptions().placeholder(R.drawable.ic_launcher_foreground)).into(image);
+                    Glide.with(Sborka_tab.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + response.body().getImage()).into(image);
                 } else {
                     Glide.with(Sborka_tab.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + response.body().getImage()).into(image);
                 }

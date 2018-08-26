@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.prefs.Prefs;
 import by.minskkniga.minskkniga.api.App;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,11 +27,13 @@ import retrofit2.Response;
 public class Login extends AppCompatActivity {
 
     EditText login;
-    EditText pass;
+    EditText pass, host;
     Button button;
 
     SharedPreferences sp;
     SharedPreferences.Editor ed;
+
+    Prefs prefs;
 
     ProgressDialog pd;
 
@@ -40,9 +43,13 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        prefs = new Prefs(this);
+
         login = findViewById(R.id.login);
         pass = findViewById(R.id.pass);
+        host = findViewById(R.id.host);
         button = findViewById(R.id.button);
+
 
         sp = getSharedPreferences("login", Context.MODE_PRIVATE);
         ed = sp.edit();
@@ -50,7 +57,7 @@ public class Login extends AppCompatActivity {
         login.setText(sp.getString("login", ""));
         pass.setText(sp.getString("pass", ""));
 
-        if (!login.getText().toString().isEmpty() && !pass.getText().toString().isEmpty()) {
+        if (!login.getText().toString().isEmpty() && !pass.getText().toString().isEmpty() && !prefs.getHost().isEmpty()) {
             login();
         }
 
@@ -73,13 +80,23 @@ public class Login extends AppCompatActivity {
     public void login() {
         if (!login.getText().toString().isEmpty() && !pass.getText().toString().isEmpty()) {
 
+            ed.putString("login", login.getText().toString());
+            ed.putString("pass", pass.getText().toString());
+            ed.apply();
+
+            if(prefs.getHost().isEmpty()) {
+                prefs.setHost(host.getText().toString());
+                Intent i = getBaseContext().getPackageManager()
+                        .getLaunchIntentForPackage(getBaseContext().getPackageName());
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }
 
             pd = new ProgressDialog(this);
             pd.setTitle("Авторизация");
             pd.setMessage("Пожалуйста подождите");
             pd.setCancelable(false);
             pd.show();
-
 
             App.getApi().login(login.getText().toString(), pass.getText().toString()).enqueue(new Callback<by.minskkniga.minskkniga.api.Class.Login>() {
                 @Override
@@ -98,6 +115,7 @@ public class Login extends AppCompatActivity {
                         startActivity(intent);
                     } else {
                         pd.cancel();
+                        prefs.setHost("");
                         Toast.makeText(Login.this, "Не верный логин или пароль", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -108,6 +126,7 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(Login.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
                 }
             });
+
         } else {
             Toast.makeText(Login.this, "Не все поля заполнены", Toast.LENGTH_SHORT).show();
         }

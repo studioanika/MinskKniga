@@ -63,6 +63,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Kassa.Main;
 import by.minskkniga.minskkniga.activity.Kassa.fragments.FragmentDohod;
 import by.minskkniga.minskkniga.activity.Kassa.fragments.FragmentPerevod;
 import by.minskkniga.minskkniga.activity.Kassa.fragments.FragmentRashod;
@@ -88,6 +89,7 @@ public abstract class Calculator extends AppCompatActivity
      * Constant for an invalid resource id.
      */
     public static final int INVALID_RES_ID = -1;
+
 
     protected enum CalculatorState {
         INPUT, EVALUATE, RESULT, ERROR
@@ -178,6 +180,8 @@ public abstract class Calculator extends AppCompatActivity
 
     ImageView img_clear;
     TextView tv_cancel, tv_done;
+    String schetid;
+    String schet;
 
     private TextView mCalculatorDisplay, operationTXT;
 
@@ -321,12 +325,9 @@ public abstract class Calculator extends AppCompatActivity
             hideCalculator();
             return;
         }else if (mPadViewPager == null || mPadViewPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first pad (or the pad is not paged),
-            // allow the system to handle the Back button.
             super.onBackPressed();
         } else {
             cancelAnimation();
-            // Otherwise, select the previous pad.
             mPadViewPager.setCurrentItem(mPadViewPager.getCurrentItem() - 1);
         }
     }
@@ -545,6 +546,9 @@ public abstract class Calculator extends AppCompatActivity
     }
 
     private void hideCalculator(){
+
+        mEqualButton.performClick();
+
         try{
             if(!mFormulaEditText.getText().toString().isEmpty()) {
                 mCalculatorDisplay.setText(mFormulaEditText.getText().toString());
@@ -647,7 +651,10 @@ public abstract class Calculator extends AppCompatActivity
 
     public void showCalculator(TextView tv, String value){
         mCalculatorDisplay = tv;
-        if(mFormulaEditText != null) mFormulaEditText.setText(value);
+        if(mFormulaEditText != null) {
+            if(!value.isEmpty() && !value.equals("0"))mFormulaEditText.setText(value);
+            else mFormulaEditText.setText("");
+        }
         if(tv != null && calculator != null){
             calculator.setVisibility(View.VISIBLE);
             YoYo.with(Techniques.SlideInUp)
@@ -697,8 +704,8 @@ public abstract class Calculator extends AppCompatActivity
             if (resultCode == RESULT_OK) {
 
                 try {
-                    String schet = data.getStringExtra("schet");
-                    String schetid = data.getStringExtra("schetid");
+                    schet = data.getStringExtra("schet");
+                    schetid = data.getStringExtra("schetid");
 
                     if(schet.isEmpty()) return;
                     else {
@@ -713,9 +720,10 @@ public abstract class Calculator extends AppCompatActivity
         }
     }
 
-    public void startScheta(){
+    public void startScheta(String schet_ids){
 
         Intent intent = new Intent(Calculator.this, SchetaListActivity.class);
+        intent.putExtra("id", schet_ids);
         startActivityForResult(intent, REQUEST_CODE_1);
 
     }
@@ -749,6 +757,7 @@ public abstract class Calculator extends AppCompatActivity
             public boolean onQueryTextChange(String s) {
                 providers.clear();
                 providersID.clear();
+
                 for (ObjectTransaction obj: list
                         ) {
                     if(obj.getName().toLowerCase().contains(s.toLowerCase()) || obj.getName().contains(s.toUpperCase()) || obj.getName().contains(s))
@@ -775,9 +784,17 @@ public abstract class Calculator extends AppCompatActivity
                 progressBar.setVisibility(View.GONE);
 
                 providers.clear();
+                providersID.clear();
                 if(response.body() != null) {
-                    list = response.body();
-                    for (ObjectTransaction object: response.body()
+                    ObjectTransaction obj = new ObjectTransaction();
+                    obj.setName("Не выбран");
+                    obj.setId("-1");
+
+                    list.clear();
+                    list.add(obj);
+                    list.addAll(response.body());
+
+                    for (ObjectTransaction object: list
                             ) {
                         providers.add(object.getName());
                         providersID.add(object.getId());
@@ -822,13 +839,14 @@ public abstract class Calculator extends AppCompatActivity
         dialogEdit.getWindow().setAttributes(lp);
     }
 
-    public void showMonyDialog(TextView tv){
+    public void showMonyDialog(final TextView tv){
         mCalculatorDisplay = tv;
         final Dialog dialogEdit = new Dialog(this);
         //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogEdit.setContentView(R.layout.alert_money_calculator);
         final TextView tv_itog = (TextView) dialogEdit.findViewById(R.id.d_money_itog);
+        tv_itog.setText("ИТОГО : "+tv.getText().toString());
         final TextView tv_done = (TextView) dialogEdit.findViewById(R.id.d_money_done);
         final TextView tv_2 = (TextView) dialogEdit.findViewById(R.id.d_money_2_result);
         final TextView tv_5 = (TextView) dialogEdit.findViewById(R.id.d_money_5_result);
@@ -855,7 +873,7 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_500.getText().toString()) * 500;
                     tv_500.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
 
                 }catch (Exception e){
 
@@ -881,7 +899,7 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_200.getText().toString()) * 200;
                     tv_200.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
 
                 }catch (Exception e){
 
@@ -907,7 +925,7 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_100.getText().toString()) * 100;
                     tv_100.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
 
                 }catch (Exception e){
 
@@ -933,7 +951,7 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_50.getText().toString()) * 50;
                     tv_50.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
 
                 }catch (Exception e){
 
@@ -959,7 +977,7 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_20.getText().toString()) * 20;
                     tv_20.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
 
                 }catch (Exception e){
 
@@ -985,7 +1003,7 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_10.getText().toString()) * 10;
                     tv_10.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
 
                 }catch (Exception e){
 
@@ -1011,7 +1029,7 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_5.getText().toString()) * 5;
                     tv_5.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
 
                 }catch (Exception e){
 
@@ -1037,7 +1055,7 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_2.getText().toString()) * 2;
                     tv_2.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
 
                 }catch (Exception e){
 
@@ -1067,10 +1085,10 @@ public abstract class Calculator extends AppCompatActivity
 
     private void updateItog(TextView tv1,TextView tv2,TextView tv3,TextView tv4,
                             TextView tv5, TextView tv6, TextView tv7, TextView tv8,
-                            TextView itog){
+                            TextView itog, TextView  tv){
 
         int sum = 0;
-
+        Double d_sum = 0.00;
         try{
 
             sum += Integer.parseInt(tv1.getText().toString());
@@ -1081,10 +1099,15 @@ public abstract class Calculator extends AppCompatActivity
             sum += Integer.parseInt(tv6.getText().toString());
             sum += Integer.parseInt(tv7.getText().toString());
             sum += Integer.parseInt(tv8.getText().toString());
-
-            itog.setText("Итог : "+String.valueOf(sum));
-            if(mCalculatorDisplay != null) mCalculatorDisplay.setText(String.valueOf(sum));
-            money = String.valueOf(sum);
+            if(tv != null &&
+                    !tv.getText().toString().isEmpty())
+                d_sum = sum + Double.parseDouble(tv.getText().toString());
+            else d_sum = (double) sum;
+            itog.setText("Итог : "+String.valueOf(d_sum));
+            if(mCalculatorDisplay != null) {
+                mCalculatorDisplay.setText(String.valueOf(d_sum));
+            }
+            money = String.valueOf(d_sum);
             tab1.tv_summa.setText(money);
             tab2.tv_summa.setText(money);
             tab3.tv_summa.setText(money);
@@ -1097,5 +1120,46 @@ public abstract class Calculator extends AppCompatActivity
 
     }
 
+    public void end() {
 
+        Intent intent = new Intent(Calculator.this, Main.class);
+        if(schetid != null) {
+            intent.putExtra("id", schetid);
+            intent.putExtra("name", schet);
+        }
+
+        startActivity(intent);
+
+    }
+
+
+    public String id_cat_pr, cat_pr, id_podcat_pr;
+
+    public void setCategoryPrihod(String id_cat, String cat, String id_podcat){
+
+      id_cat_pr = id_cat;
+      cat_pr = cat;
+      id_podcat_pr = id_podcat;
+
+    }
+
+    public String id_cat_r, cat_r, id_podcat_r;
+
+    public void setCategoryRashod(String id_cat, String cat, String id_podcat){
+
+        id_cat_r = id_cat;
+        cat_r = cat;
+        id_podcat_r = id_podcat;
+
+    }
+
+    public String id_cat_pe, cat_pe, id_podcat_pe;
+
+    public void setCategoryPerevod(String id_cat, String cat, String id_podcat){
+
+        id_cat_pe = id_cat;
+        cat_pe = cat;
+        id_podcat_pe = id_podcat;
+
+    }
 }

@@ -2,22 +2,17 @@ package by.minskkniga.minskkniga.activity.Zakazy;
 
 import android.annotation.SuppressLint;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,9 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
+import by.minskkniga.minskkniga.activity.Zakazy.adapter.ZakazyClientsCityAdapter;
 import by.minskkniga.minskkniga.adapter.Zakazy.Filter;
 import by.minskkniga.minskkniga.adapter.Zakazy.Main_1;
 import by.minskkniga.minskkniga.adapter.Zakazy.Main_2;
@@ -37,8 +34,9 @@ import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Clients;
 import by.minskkniga.minskkniga.api.Class.Spinner_filter;
 import by.minskkniga.minskkniga.api.Class.Zakaz_filter;
-import by.minskkniga.minskkniga.api.Class.Zakazy;
 import by.minskkniga.minskkniga.api.Class.Zakazy_short;
+import by.minskkniga.minskkniga.api.Class.zakazy.ClientsCity;
+import by.minskkniga.minskkniga.api.Class.zakazy.ZakazyCity;
 import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,7 +47,7 @@ public class Main extends AppCompatActivity {
     ImageButton back;
     ImageButton filter_button;
     LinearLayout filter_layout;
-    ListView lv1;
+    ExpandableListView lv1;
     ListView lv2;
 
     ArrayList<Clients> clien = new ArrayList<>();
@@ -57,6 +55,8 @@ public class Main extends AppCompatActivity {
 
     ArrayList<Zakazy_short> zakazy_short = new ArrayList<>();
     ArrayList<Zakazy_short> zakazy_short_buf = new ArrayList<>();
+
+    EditText et_search;
 
     TabHost tabHost;
 
@@ -145,12 +145,49 @@ public class Main extends AppCompatActivity {
         clear3 = findViewById(R.id.clear3);
 
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        try {
+            FloatingActionButton fab = findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        dlg_zakaz = new Add_Dialog(Main.this, "zakaz_type", "null", "null", "");
+                        dlg_zakaz.show(getFragmentManager(), "");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        et_search = (EditText) findViewById(R.id.search);
+        et_search.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                dlg_zakaz = new Add_Dialog(Main.this, "zakaz_type", "null", "null", "");
-                dlg_zakaz.show(getFragmentManager(), "");
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                String s = editable.toString().toLowerCase();
+                clien.clear();
+                for (Clients c: clien_buf
+                     ) {
+
+                    if(c.getName().toLowerCase().contains(s)) {
+                        clien.add(c);
+                    }
+
+                }
+                lv2.setAdapter(new Main_2(Main.this, clien));
             }
         });
 
@@ -165,10 +202,7 @@ public class Main extends AppCompatActivity {
         lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(Main.this, Zakaz_info.class);
-                intent.putExtra("name", zakazy_short.get(position).getClient());
-                intent.putExtra("id", zakazy_short.get(position).getId());
-                startActivity(intent);
+//
             }
         });
 
@@ -253,6 +287,13 @@ public class Main extends AppCompatActivity {
         return i;
     }
 
+    public void actStart(int id, String name){
+        Intent intent = new Intent(Main.this, Zakazy_Client.class);
+                intent.putExtra("id", id);
+                intent.putExtra("name", name);
+                startActivity(intent);
+    }
+
     public void filter(){
         zakazy_short.clear();
         int col1,col2,col3;
@@ -305,27 +346,48 @@ public class Main extends AppCompatActivity {
     }
 
     public void reload_1() {
-        App.getApi().getZakazy().enqueue(new Callback<List<Zakazy_short>>() {
+        App.getApi().getClientsCity().enqueue(new Callback<List<ClientsCity>>() {
             @Override
-            public void onResponse(Call<List<Zakazy_short>> call, Response<List<Zakazy_short>> response) {
-                zakazy_short.clear();
-                zakazy_short_buf.clear();
-                zakazy_short.addAll(response.body());
-                zakazy_short_buf.addAll(response.body());
+            public void onResponse(Call<List<ClientsCity>> call, Response<List<ClientsCity>> response) {
 
-                if (!zakazy_short.isEmpty()) {
+                if(response.body() != null){
                     notfound_1.setVisibility(View.GONE);
-                } else {
-                    notfound_1.setVisibility(View.VISIBLE);
-                }
-                notfound_1.setText("Ничего не найдено");
+                    HashMap<ZakazyCity, List<Clients>> map = new HashMap<>();
 
-                lv1.setAdapter(new Main_1(Main.this, zakazy_short));
-                filter();
+                    notfound_1.setText("Ничего не найдено");
+                    List<ZakazyCity> ls = new ArrayList<>();
+                    HashMap<String, ZakazyCity> l = new HashMap<>();
+                    int i = 0;
+
+                    for (ClientsCity c: response.body()
+                         ) {
+
+                        ZakazyCity z = new ZakazyCity();
+                        z.setDolg(c.getDolg());
+                        z.setId_city(c.getId_city());
+                        z.setName_city(c.getName_city());
+                        z.setObrazec(c.getObrazec());
+
+                        map.put(z, c.getList_city());
+                        l.put(String.valueOf(i), z);
+
+                        i++;
+
+                    }
+
+
+
+                    lv1.setAdapter(new ZakazyClientsCityAdapter(Main.this,
+                            response.body(), map, l));
+
+                }
+
             }
 
             @Override
-            public void onFailure(Call<List<Zakazy_short>> call, Throwable t) {
+            public void onFailure(Call<List<ClientsCity>> call, Throwable t) {
+
+
 
             }
         });
@@ -362,7 +424,7 @@ public class Main extends AppCompatActivity {
     }
 
     public void reload_2(){
-        App.getApi().getClients().enqueue(new Callback<List<Clients>>() {
+        App.getApi().getListClients().enqueue(new Callback<List<Clients>>() {
             @Override
             public void onResponse(Call<List<Clients>> call, Response<List<Clients>> response) {
                 clien.clear();

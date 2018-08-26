@@ -13,4 +13,10 @@
         android:text="TextView"
         android:textColor="@color/tab_indicator"
         android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/item.comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item.text" />
 </RelativeLayout>

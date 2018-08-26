@@ -32,10 +32,12 @@ public class ProvidersZayavkiAdapter extends BaseExpandableListAdapter {
 
     public ProvidersZayavkiAdapter(Context context, List<ProvidersZayavkiId> listDataHeader,
                                  HashMap<String, List<Book>> listChildData) {
+
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
         String s ="";
+
     }
 
     @Override
@@ -75,21 +77,16 @@ public class ProvidersZayavkiAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.item_list_providers_zayavki_zakaz);
         LinearLayout lin = (LinearLayout) convertView
                 .findViewById(R.id.lin);
-        if(childPosition != 0){
-            try{
-                txtName.setText(book.getName());
-                txtClass.setText(book.getClasss());
-                txtIzdanie.setText(book.getIzdatel().substring(0,1));
-                txtSokr.setText(book.getSokrName());
-                txtZakaz.setText(_listDataHeader.get(groupPosition).getWhatZakazal()
-                        .get(childPosition).getZav());
+        try{
+            txtName.setText(book.getName());
+            txtClass.setText(book.getClasss());
+            txtIzdanie.setText(book.getIzdatel().substring(0,1));
+            txtSokr.setText(book.getSokrName());
+            txtZakaz.setText(book.getZakaz());
 
 
-            }
-            catch (Exception e){}
         }
-
-
+        catch (Exception e){}
 
         return convertView;
     }

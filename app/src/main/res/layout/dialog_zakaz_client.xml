@@ -26,8 +26,9 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Очистить фильтр"
-            android:layout_weight="1"/>
+            android:textSize="10sp" />
 
     </LinearLayout>
 
@@ -44,21 +45,24 @@
         android:id="@+id/filter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:visibility="visible">
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6"/>
+            android:layout_weight="0.6" />
 
         <Button
             android:id="@+id/select_gorod"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Фильтровать по городу"
-            android:layout_weight="1"/>
+            android:textSize="10sp"
+            android:visibility="visible" />
 
     </LinearLayout>
 

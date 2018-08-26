@@ -2,7 +2,6 @@ package by.minskkniga.minskkniga.adapter.Zakazy;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -12,12 +11,10 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.Zakazy.Zakaz_info;
 import by.minskkniga.minskkniga.activity.Zakazy.Zakazy_Client;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
@@ -138,6 +135,10 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
         tv1.setText(_zakazy.get(groupPosition).getDate());
 
         switch (_zakazy.get(groupPosition).getStatus()) {
+            case "0":
+                //tv1.setTextColor(Color.GREEN);
+                tv2.setText("Черновик");
+                break;
             case "1":
                 //tv1.setTextColor(Color.GREEN);
                 tv2.setTextColor(Color.rgb(97, 184, 126));

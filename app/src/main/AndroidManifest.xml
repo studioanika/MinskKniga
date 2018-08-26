@@ -179,6 +179,10 @@
         <activity
             android:name=".activity.providers.ProvidersZayavkiRaschetActivity"
             android:label="@string/title_activity_providers_zayavki_raschet"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".adapter.Zakazy.ReturnToSclad"
+            android:label="@string/title_activity_return_to_sclad"
             android:theme="@style/AppTheme"></activity>
     </application>
 

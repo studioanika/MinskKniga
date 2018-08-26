@@ -20,9 +20,11 @@ public class Zakaz_product implements Parcelable {
     public String clas;
     public String barcode;
     public String barcode_status;
+    public String id_poz;
 
-    public Zakaz_product(String id, String name, String artukil, String cena, String col_zakaz, String col_podar, String ispodar, String const_podar, String summa, String otgruzeno, String ves, String image, String clas, String barcode, String barcode_status) {
+    public Zakaz_product(String id_poz,String id, String name, String artukil, String cena, String col_zakaz, String col_podar, String ispodar, String const_podar, String summa, String otgruzeno, String ves, String image, String clas, String barcode, String barcode_status) {
         this.id = id;
+        this.id_poz = id_poz;
         this.name = name;
         this.artukil = artukil;
         this.cena = cena;

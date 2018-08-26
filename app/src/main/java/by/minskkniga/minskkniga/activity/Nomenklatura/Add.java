@@ -239,6 +239,31 @@ public class Add extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+        showDialogExit();
+    }
+
+    private void showDialogExit() {
+
+        AlertDialog.Builder ad = new AlertDialog.Builder(Add.this);
+        ad.setMessage("Вы действительно хотите выйти?");
+        ad.setPositiveButton("ПОДТВЕРДИТЬ", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                finish();
+            }
+        });
+        ad.setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                dialog.cancel();
+            }
+        });
+        ad.setCancelable(false);
+        ad.show();
+
+    }
+
     public void ok() {
         if (name.getText().toString().isEmpty()) {
             Toast.makeText(this, "Поле 'Наименование' не заполнено", Toast.LENGTH_SHORT).show();

@@ -258,6 +258,10 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
         String text = calculator.mFormulaEditText.getText().toString();
         String text2 = calculator.mResultEditText.getText().toString();
 
+        if(calculator.id_cat_pe != null && !calculator.id_cat_pe.isEmpty()){
+            setCategory(calculator.cat_pe, calculator.id_cat_pe, calculator.id_podcat_pe);
+        }
+
         if(!text.isEmpty()){
             try{
                 Double.parseDouble(text);
@@ -285,7 +289,7 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
 
         if(t_perevod != -1) operation.type_perevod = t_perevod;
-        operation.startScheta();
+        operation.startScheta(schet_ID);
 
     }
 
@@ -293,6 +297,9 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
         if(category != null) pol_tv.setText(category);
         if(cat_ID != null) this.cat_ID = cat_ID;
         if(podcat_ID != null) this.podcat_ID = podcat_ID;
+
+        Calculator schetOperation = (Calculator) context;
+        schetOperation.setCategoryPerevod(cat_ID, category, podcat_ID);
     }
 
     public void setScheta(String id, String schet, int type){
@@ -361,7 +368,7 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
                     btn_save.setEnabled(true);
                     Toast.makeText(getContext(), "Операция одобрена", Toast.LENGTH_SHORT).show();
                     Calculator calculator = (Calculator) context;
-                    calculator.finish();
+                    calculator.end();
                 }
 
             }

@@ -10,6 +10,7 @@ public class Prefs {
     private static final String APP_PREFERENCES_SESSION_ID_SCHET = "session_id_sched";
     private static final String APP_PREFERENCES_SESSION_NAME_SCHET = "session_name_sched";
     private static final String APP_PREFERENCES_SESSION_ID_OPER = "session_id_oper";
+    private static final String APP_PREFERENCES_HOST = "host";
     private SharedPreferences mSettings;
 
     public Prefs(Context context) {
@@ -44,6 +45,16 @@ public class Prefs {
     public void setSchet(String id){
         SharedPreferences.Editor editor = mSettings.edit();
         editor.putString(APP_PREFERENCES_SESSION_NAME_SCHET, id);
+        editor.apply();
+    }
+
+    public String  getHost(){
+        return mSettings.getString(APP_PREFERENCES_HOST,"");
+    }
+
+    public void setHost(String host){
+        SharedPreferences.Editor editor = mSettings.edit();
+        editor.putString(APP_PREFERENCES_HOST, host);
         editor.apply();
     }
 

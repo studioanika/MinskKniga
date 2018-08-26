@@ -22,7 +22,6 @@ import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.Zakaz;
 import by.minskkniga.minskkniga.api.Class.Zakaz_filter;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
-import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
 import by.minskkniga.minskkniga.api.Class.Zakazy_short;
 import by.minskkniga.minskkniga.api.Class.cassa.GetDohodResponse;
 import by.minskkniga.minskkniga.api.Class.cassa.GetPerevodResponse;
@@ -34,19 +33,27 @@ import by.minskkniga.minskkniga.api.Class.category.ResponseCategory;
 import by.minskkniga.minskkniga.api.Class.category.ResponseProvScheta;
 import by.minskkniga.minskkniga.api.Class.category.Schetum;
 import by.minskkniga.minskkniga.api.Class.clients.ClientInfo;
+import by.minskkniga.minskkniga.api.Class.couriers.CourierClients;
 import by.minskkniga.minskkniga.api.Class.couriers.CourierKnigi;
+import by.minskkniga.minskkniga.api.Class.couriers.ObjectReturnObrazci;
+import by.minskkniga.minskkniga.api.Class.couriers.ObjectReturnZakaz;
 import by.minskkniga.minskkniga.api.Class.inventarizacia.InventarizaciaObject;
+import by.minskkniga.minskkniga.api.Class.nomenclatura.ObjectZakazyObrazci;
 import by.minskkniga.minskkniga.api.Class.provider_sp.ProviderInfo;
 import by.minskkniga.minskkniga.api.Class.providers.GetOzhidaemResponse;
 import by.minskkniga.minskkniga.api.Class.providers.GetZakK;
 import by.minskkniga.minskkniga.api.Class.providers.InfoZayavkaBook;
 import by.minskkniga.minskkniga.api.Class.providers.Money;
+import by.minskkniga.minskkniga.api.Class.providers.MoneyProvResponse;
 import by.minskkniga.minskkniga.api.Class.providers.ProviderObject;
 import by.minskkniga.minskkniga.api.Class.providers.ProviderZayavkiIzdatelstva;
 import by.minskkniga.minskkniga.api.Class.providers.ProviderZayavkiNews;
 import by.minskkniga.minskkniga.api.Class.providers.ProvidersZayavkiId;
 import by.minskkniga.minskkniga.api.Class.providers.ZavInfo;
 import by.minskkniga.minskkniga.api.Class.providers.ZayavkaInfo;
+import by.minskkniga.minskkniga.api.Class.zakazy.ClientsCity;
+import by.minskkniga.minskkniga.api.Class.zakazy.MoneyZakResponse;
+import by.minskkniga.minskkniga.api.Class.zakazy.ZakazyObrazec;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -171,12 +178,12 @@ public interface RestApi {
     @GET("get_zakaz_info.php")
     Call<Zakaz> getZakaz_info(@Query("id") String id);
 
-    @GET("get_courier_zakazy.php")
-    Call<List<Zakazy_courier_clients>> getCourier_zakazy(@Query("id") String id,
-                                                         @Query("napravl") String napravl,
-                                                         @Query("gorod") String gorod,
-                                                         @Query("school") String school,
-                                                         @Query("smena") String smena);
+//    @GET("get_courier_zakazy.php")
+//    Call<List<Zakazy_courier_clients>> getCourier_zakazy(@Query("id") String id,
+//                                                         @Query("napravl") String napravl,
+//                                                         @Query("gorod") String gorod,
+//                                                         @Query("school") String school,
+//                                                         @Query("smena") String smena);
 
     @GET("/api/get_couriers_list_knigi.php")
     Call<List<CourierKnigi>> getCourier_knigi(@Query("courier_id") String id,
@@ -306,6 +313,10 @@ public interface RestApi {
                                    @Query("nach_sum") String nach_sum, @Query("itog") String itog,
                                    @Query("kom") String kom);
 
+    @GET("/api/update_schet.php?")
+    Call<ResponseBody>updateSchet(@Query("name") String name, @Query("type") String type,
+                                   @Query("kom") String kom);
+
     @GET("/api/set_kassa_order.php?")
     Call<ResponseBody> addOperationCassa(@Query("cat_id") String cat_id, @Query("pod_cat_id") String pod_cat_id,
                                    @Query("schet_id") String schet_id, @Query("summa") String summa,
@@ -402,4 +413,65 @@ public interface RestApi {
 
     @GET("get_courier_list_knigi.php")
     Call<List<CourierKnigi>> getCourierKnigi(@Query("id") String id);
+
+    @GET("get_clients_city.php")
+    Call<List<ClientsCity>> getClientsCity();
+
+    @GET("get_prov_d.php")
+    Call<List<MoneyProvResponse>> getProvD(@Query("id") String id);
+
+    @GET("get_zak_dengi.php")
+    Call<List<MoneyZakResponse>> getZakDengi(@Query("id") String id);
+
+    @POST("update_zakazi.php")
+    @FormUrlEncoded
+    Call<ResponseBody> updateZakay(@FieldMap Map<String, String> map);
+
+    @GET("get_list_couriers.php")
+    Call<List<Couriers>> getCour();
+
+    @GET("get_zakazy_obrazcy.php")
+    Call<List<ObjectZakazyObrazci>> getZakazyObrazci();
+
+    @POST("add_zakaz_obrazec.php")
+    @FormUrlEncoded
+    Call<ResponseBody> addZakazObrazec(@FieldMap Map<String, String> map);
+
+    @GET("get_list_clients.php")
+    Call<List<Clients>> getListClients();
+
+    @GET("get_zakaz_info.php")
+    Call<ZakazyObrazec> getZakazObrazciId(@Query("id") String id, @Query("obrazec") String obrazec);
+
+    @GET("get_courier_zakazy.php")
+    Call<List<CourierClients>> getCourier_zakazy(@Query("id") String id);
+
+    @POST("courier_obrazcy_vzyac.php")
+    @FormUrlEncoded
+    Call<ResponseBody> courier_obrazcy_vzyac(@FieldMap Map<String, String> map);
+
+    @POST("courier_obrazcy_vipolneno.php")
+    @FormUrlEncoded
+    Call<ResponseBody> courier_obrazcy_vipolneno(@FieldMap Map<String, String> map);
+
+    @POST("courier_zakazy_vzyac.php")
+    @FormUrlEncoded
+    Call<ResponseBody> courier_zakazy_vzyac(@FieldMap Map<String, String> map);
+
+    @POST("courier_zakazy_vipolneno.php")
+    @FormUrlEncoded
+    Call<ResponseBody> courier_zakazy_vipolneno(@FieldMap Map<String, String> map);
+
+    @POST("add_courier_return_knigi_sklad.php")
+    @FormUrlEncoded
+    Call<ResponseBody> returnToSklad(@FieldMap Map<String, String> map);
+
+    @GET("get_courier_return_knigi_sklad_info.php")
+    Call<ObjectReturnZakaz> getInfoReturnZakaz(@Query("id") String id,
+                                               @Query("obrazec") String obrazec);
+
+
+    @GET("get_courier_return_knigi_sklad_info.php")
+    Call<ObjectReturnObrazci> getInfoReturnObrazci(@Query("id") String id,
+                                                   @Query("obrazec") String obrazec);
 }

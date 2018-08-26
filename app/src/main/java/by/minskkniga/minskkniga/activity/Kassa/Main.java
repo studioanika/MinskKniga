@@ -929,6 +929,20 @@ public class Main extends AppCompatActivity {
         tv_prihod.setText(String.valueOf(general_itog.getDohod()));
         tv_nach.setText(String.valueOf(general_itog.getStart_seson_sum()));
 
+
+        try{
+
+            String a = tv_balans.getText().toString();
+            String b = tv_rashod.getText().toString();
+            String c = tv_prihod.getText().toString();
+
+            if(Double.parseDouble(a) < 0) tv_balans.setTextColor(getResources().getColor(R.color.red));
+            if(Double.parseDouble(b) < 0) tv_rashod.setTextColor(getResources().getColor(R.color.red));
+            if(Double.parseDouble(c) < 0) tv_prihod.setTextColor(getResources().getColor(R.color.red));
+
+        }
+        catch (Exception e){}
+
     }
 
     @Override
@@ -965,7 +979,7 @@ public class Main extends AppCompatActivity {
 
                         if(schet.isEmpty()) return;
                         else {
-                            schet_tv.setText(schet);
+                            //schet_tv.setText(schet);
                             iz_tv.setText(schet);
 
                         }

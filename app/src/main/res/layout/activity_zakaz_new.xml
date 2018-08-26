@@ -56,6 +56,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <ExpandableListView
+            android:id="@+id/exp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"></ExpandableListView>
+
         <TextView
             android:id="@+id/notfound"
             android:layout_width="match_parent"

@@ -26,12 +26,13 @@
                 android:text="Товары" />
 
             <TextView
+                android:id="@+id/zak_money_info_tovary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textStyle="bold"
-                android:text="0.00" />
+                android:text="0.00"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -49,11 +50,12 @@
                 android:text="Возврат" />
 
             <TextView
+                android:id="@+id/zak_money_info_vozvrat"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="0.00"/>
+                android:text="0.00" />
 
         </LinearLayout>
 
@@ -79,12 +81,13 @@
                 android:text="Оплачено" />
 
             <TextView
+                android:id="@+id/zak_money_info_oplata"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textStyle="bold"
-                android:text="0.00"/>
+                android:text="0.00"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -102,11 +105,12 @@
                 android:text="Подарки" />
 
             <TextView
+                android:id="@+id/zak_money_info_podarki"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="0.00"/>
+                android:text="0.00" />
 
         </LinearLayout>
 
@@ -132,12 +136,13 @@
                 android:text="Итого:" />
 
             <TextView
+                android:id="@+id/zak_money_info_itogo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textStyle="bold"
-                android:text="0.00"/>
+                android:text="0.00"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -155,12 +160,13 @@
                 android:text="Скидка:" />
 
             <TextView
+                android:id="@+id/zak_money_info_skidka"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:textStyle="bold"
-                android:text="0.00"/>
+                android:text="0.00"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -229,9 +235,10 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/lv1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+   <android.support.v7.widget.RecyclerView
+       android:id="@+id/fragment_monry_recycler"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+   </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

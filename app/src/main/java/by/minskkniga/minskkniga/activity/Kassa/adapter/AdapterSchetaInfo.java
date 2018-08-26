@@ -57,7 +57,9 @@ public class AdapterSchetaInfo extends BaseAdapter {
         TextView tv_rashod = view.findViewById(R.id.desc_schet_rashod);
         TextView tv_note = view.findViewById(R.id.desc_schet_note);
         TextView tv_schet_perevoda = view.findViewById(R.id.desc_schet_schet_perevoda);
+        TextView tv_contr = view.findViewById(R.id.desc_schet_contr);
 
+        if(item.getKontragent() != null) tv_contr.setText(item.getKontragent());
         if(item.getDate() != null) tv_date.setText(item.getDate());
         if(item.getCategory() != null) tv_cat_podcat.setText(item.getCategory());
         if(item.getPod_cat() != null) tv_cat_podcat.setText(

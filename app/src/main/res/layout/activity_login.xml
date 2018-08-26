@@ -82,6 +82,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/r_o_comment" />
 
+           <EditText
+               android:id="@+id/host"
+               android:layout_width="match_parent"
+               android:layout_height="48dp"
+               android:layout_marginLeft="16dp"
+               android:layout_marginRight="16dp"
+               android:layout_marginTop="20dp"
+               android:ems="10"
+               android:hint="http://cc96297.tmweb.ru/api/"
+               android:inputType="text"
+               android:text="http://cc96299.tmweb.ru/api/"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/pass" />
+
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"

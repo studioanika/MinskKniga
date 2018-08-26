@@ -14,21 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.providers.ProviderZayavkiListActivity;
-import by.minskkniga.minskkniga.activity.providers.ProvidersListActivity;
 import by.minskkniga.minskkniga.activity.providers.RashodOrder;
-import by.minskkniga.minskkniga.activity.providers.adapter.FragmentNewsAdapter;
 import by.minskkniga.minskkniga.activity.providers.adapter.MoneyAdapter;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.providers.Money;
-import by.minskkniga.minskkniga.api.Class.providers.MoneyTovar;
-import by.minskkniga.minskkniga.api.Class.providers.ProviderNews;
+import by.minskkniga.minskkniga.api.Class.providers.ItemListProvMoney;
+import by.minskkniga.minskkniga.api.Class.providers.MoneyProvResponse;
+import by.minskkniga.minskkniga.api.Class.providers.ProvMoneyInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,7 +42,7 @@ public class FragmentMoney extends Fragment implements IFragmentProvider {
     TextView tv_tovari, tv_vozvrat, tv_oplacheno, tv_itogo, tv_dolg;
     RecyclerView recyclerView;
     MoneyAdapter adapter;
-    private List<MoneyTovar> studentList;
+    private List<ItemListProvMoney> studentList;
     private LinearLayoutManager mLayoutManager;
     Context activity;
 
@@ -95,36 +90,39 @@ public class FragmentMoney extends Fragment implements IFragmentProvider {
     @Override
     public void loadData() {
 
-        App.getApi().getProviderMoney(this.id).enqueue(new Callback<List<Money>>() {
+        App.getApi().getProvD(this.id).enqueue(new Callback<List<MoneyProvResponse>>() {
             @Override
-            public void onResponse(Call<List<Money>> call, Response<List<Money>> response) {
+            public void onResponse(Call<List<MoneyProvResponse>> call, Response<List<MoneyProvResponse>> response) {
 
-                List<Money> lis = response.body();
-                if(lis != null) {
+                if(response.body() != null){
+                    if(response.body().get(0).getInfo() != null){
 
-                    if(lis.get(0).getVisible() == null){
-                        tv_tovari.setText(String.valueOf(lis.get(0).getTovari()));
-                        tv_vozvrat.setText(String.valueOf(lis.get(0).getVozvrat()));
-                        tv_oplacheno.setText(String.valueOf(lis.get(0).getOpl()));
-                        tv_itogo.setText(String.valueOf(lis.get(0).getItog()));
+                        ProvMoneyInfo info = response.body().get(0).getInfo();
 
-                        setRecycler(lis.get(0).getList());
-                    }else Toast.makeText(v.getContext(), "У поставщика нет записей в кассе", Toast.LENGTH_SHORT).show();
+                        tv_tovari.setText(String.valueOf(info.getTovar()));
+                        tv_vozvrat.setText(String.valueOf(info.getVozvrat()));
+                        tv_oplacheno.setText(String.valueOf(info.getOplaty()));
+                        tv_itogo.setText(String.valueOf(info.getItog()));
 
+                    }
+
+                    if(response.body().get(0).getList() != null) {
+                        setRecycler(response.body().get(0).getList());
+                    }
                 }
-                else {}
 
             }
 
             @Override
-            public void onFailure(Call<List<Money>> call, Throwable t) {
+            public void onFailure(Call<List<MoneyProvResponse>> call, Throwable t) {
 
             }
         });
 
+
     }
 
-    private void setRecycler(List<MoneyTovar> list) {
+    private void setRecycler(List<ItemListProvMoney> list) {
 
         recyclerView = (RecyclerView) v.findViewById(R.id.fragment_monry_recycler);
 

@@ -136,6 +136,7 @@ public class Kassa_info extends AppCompatActivity {
                             scheta.setName(schetaItog.getName());
                             scheta.setValue(schetaItog.getNachSum());
                             scheta.setId(schetaItog.getId());
+                            scheta.setComment(schetaItog.getKoment());
                             listItog.add(scheta);
                         }
 
@@ -150,6 +151,7 @@ public class Kassa_info extends AppCompatActivity {
                             scheta.setName(schetaNoItog.getName());
                             scheta.setValue(schetaNoItog.getNachSum());
                             scheta.setId(schetaNoItog.getId());
+                            scheta.setComment(schetaNoItog.getKoment());
                             listNeItog.add(scheta);
                         }
                     }
@@ -161,6 +163,20 @@ public class Kassa_info extends AppCompatActivity {
                         tv_act.setText(String.valueOf(generalItog.getActivy()));
                         tv_ob.setText(String.valueOf(generalItog.getObyazatelstva()));
                         tv_balans.setText(String.valueOf(generalItog.getBalans()));
+
+                        try{
+                            String a = tv_act.getText().toString();
+                            if(Double.parseDouble(a) < 0) tv_act.setTextColor(getResources().getColor(R.color.red));
+
+                            String b = tv_ob.getText().toString();
+                            if(Double.parseDouble(b) < 0) tv_ob.setTextColor(getResources().getColor(R.color.red));
+
+                            String c = tv_balans.getText().toString();
+                            if(Double.parseDouble(c) < 0) tv_balans.setTextColor(getResources().getColor(R.color.red));
+
+                        }catch (Exception e){
+
+                        }
 
                     }
 

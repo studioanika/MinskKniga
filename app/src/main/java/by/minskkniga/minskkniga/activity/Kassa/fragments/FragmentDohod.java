@@ -239,20 +239,13 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
     }
 
     private void update() {
-//
-//        if(!isCat) {
-//            cat_tv.setText("Веберите категорию");
-//            podcat_ID = "";
-//            cat_ID = "";
-//        }
-//        if(!isSchet){
-//            schet_tv.setText("Выберите счет");
-//            schet_ID = "";
-//        }
-
         Calculator calculator = (Calculator) context;
         String text = calculator.mFormulaEditText.getText().toString();
         String text2 = calculator.mResultEditText.getText().toString();
+
+        if(calculator.id_cat_pr != null && !calculator.id_cat_pr.isEmpty()){
+            setCategory(calculator.cat_pr, calculator.id_cat_pr, calculator.id_podcat_pr);
+        }
 
         if(!text.isEmpty()){
             try{
@@ -279,6 +272,7 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
     }
 
     private void startCat(){
+
         Calculator schetOperation = (Calculator) context;
         schetOperation.startCat("1");
 
@@ -287,7 +281,7 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
     private void startScheta(){
 
         Calculator schetOperation = (Calculator) context;
-        schetOperation.startScheta();
+        schetOperation.startScheta(schet_ID);
 
     }
 
@@ -295,6 +289,9 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
         if(category != null) cat_tv.setText(category);
         if(cat_ID != null) this.cat_ID = cat_ID;
         if(podcat_ID != null) this.podcat_ID = podcat_ID;
+
+        Calculator schetOperation = (Calculator) context;
+        schetOperation.setCategoryPrihod(cat_ID, category, podcat_ID);
     }
 
     public void setScheta(String id, String schet){
@@ -354,7 +351,7 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
                     btn_save.setEnabled(true);
                     Toast.makeText(getContext(), "Операция одобрена", Toast.LENGTH_SHORT).show();
                     Calculator calculator = (Calculator) context;
-                    calculator.finish();
+                    calculator.end();
                 }
 
             }
@@ -365,4 +362,6 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
             }
         });
     }
+
+
 }

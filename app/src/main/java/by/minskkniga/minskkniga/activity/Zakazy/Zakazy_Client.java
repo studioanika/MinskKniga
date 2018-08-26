@@ -3,9 +3,11 @@ package by.minskkniga.minskkniga.activity.Zakazy;
 
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
@@ -13,14 +15,16 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Zakazy.Zakazy_2;
-import by.minskkniga.minskkniga.api.*;
+import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
+import by.minskkniga.minskkniga.api.Class.zakazy.ItemListZakMoney;
+import by.minskkniga.minskkniga.api.Class.zakazy.MoneyZakResponse;
+import by.minskkniga.minskkniga.api.Class.zakazy.ZakMoneyInfo;
 import by.minskkniga.minskkniga.dialog.Add_Dialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +38,10 @@ public class Zakazy_Client extends AppCompatActivity {
     static String name;
     ImageButton back;
     TextView caption;
+    RecyclerView recyclerView;
+
+    TextView zak_money_info_tovary, zak_money_info_vozvrat, zak_money_info_oplata,
+            zak_money_info_podarki, zak_money_info_itogo, zak_money_info_skidka;
 
     FloatingActionButton fab;
     DialogFragment dlg_zakaz;
@@ -69,7 +77,12 @@ public class Zakazy_Client extends AppCompatActivity {
         caption.setText(name);
 
         expListView = findViewById(R.id.expandeblelistview);
-
+        zak_money_info_tovary = (TextView) findViewById(R.id.zak_money_info_tovary);
+        zak_money_info_vozvrat = (TextView) findViewById(R.id.zak_money_info_vozvrat);
+        zak_money_info_oplata = (TextView) findViewById(R.id.zak_money_info_oplata);
+        zak_money_info_podarki = (TextView) findViewById(R.id.zak_money_info_podarki);
+        zak_money_info_itogo = (TextView) findViewById(R.id.zak_money_info_itogo);
+        zak_money_info_skidka = (TextView) findViewById(R.id.zak_money_info_skidka);
 
         expListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
@@ -78,6 +91,8 @@ public class Zakazy_Client extends AppCompatActivity {
                 intent.putExtra("name", name);
                 intent.putExtra("id_c", String.valueOf(id_client));
                 intent.putExtra("id_z", zakazy.get(groupPosition).getId());
+                if(zakazy.get(groupPosition).getObrazec().contains("1"))
+                    intent.putExtra("obrazec", "1");
                 startActivity(intent);
                 return true;
             }
@@ -142,6 +157,65 @@ public class Zakazy_Client extends AppCompatActivity {
 
     public void reload_1(){
 
+        App.getApi().getZakDengi(String.valueOf(id)).enqueue(new Callback<List<MoneyZakResponse>>() {
+            @Override
+            public void onResponse(Call<List<MoneyZakResponse>> call, Response<List<MoneyZakResponse>> response) {
+
+                if(response.body() != null){
+
+                    if(response.body().get(0).getInfo() != null){
+
+                        ZakMoneyInfo info = response.body().get(0).getInfo();
+
+                        try{
+                            zak_money_info_skidka.setText(String.valueOf(info.getSkidka()));
+                            zak_money_info_itogo.setText(String.valueOf(info.getItog()));
+                            zak_money_info_oplata.setText(String.valueOf(info.getOplaty()));
+                            zak_money_info_podarki.setText(String.valueOf(info.getPodarki()));
+                            zak_money_info_vozvrat.setText(String.valueOf(info.getVozvrat()));
+                            zak_money_info_tovary.setText(String.valueOf(info.getTovar()));
+                        }catch (Exception e){
+
+                        }
+
+                    }
+
+                    if(response.body().get(0).getList() != null){
+
+                        setRecycler(response.body().get(0).getList());
+
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<MoneyZakResponse>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void setRecycler(List<ItemListZakMoney> list) {
+
+
+        recyclerView = (RecyclerView) findViewById(R.id.fragment_monry_recycler);
+
+        recyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+
+        // use a linear layout manager
+        recyclerView.setLayoutManager(mLayoutManager);
+
+        // create an Object for Adapter
+        MoneyAdapterZak adapter = new MoneyAdapterZak(list, recyclerView, this) {
+        };
+
+        // set the adapter object to the Recyclerview
+        recyclerView.setAdapter(adapter);
+
     }
 
     public void reload_2(){
@@ -154,6 +228,7 @@ public class Zakazy_Client extends AppCompatActivity {
                 zakazy_buf.clear();
                 zakazy.addAll(response.body());
                 zakazy_buf.addAll(response.body());
+
 
 
                 expListView.setAdapter(new Zakazy_2(Zakazy_Client.this, zakazy));

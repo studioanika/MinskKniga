@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -12,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -26,9 +24,7 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.category.adapter.SchetaAdapter;
-import by.minskkniga.minskkniga.activity.providers.NewProviderZayavka;
 import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.cassa.Scheta;
 import by.minskkniga.minskkniga.api.Class.category.Schetum;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -39,9 +35,12 @@ public class SchetaListActivity extends AppCompatActivity {
 
     String categoryFinal = "";
     String categoryFinalID = "";
+    List<Schetum> list = new ArrayList<>();
 
     ListView lv;
     SchetaAdapter adapter;
+
+    String schet_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +57,11 @@ public class SchetaListActivity extends AppCompatActivity {
             }
         });
         lv = (ListView) findViewById(R.id.lv_scheta);
+
+        Intent intent = getIntent();
+        schet_id = intent.getStringExtra("id");
+
+
         loadData();
     }
 
@@ -68,7 +72,7 @@ public class SchetaListActivity extends AppCompatActivity {
             public void onResponse(Call<List<Schetum>> call, final Response<List<Schetum>> response) {
 
                 if(response.body() != null){
-
+                    list = response.body();
                     adapter = new SchetaAdapter(SchetaListActivity.this, response.body());
                     lv.setAdapter(adapter);
 
@@ -76,6 +80,8 @@ public class SchetaListActivity extends AppCompatActivity {
 
                     categoryFinal = response.body().get(0).getName();
                     categoryFinalID = response.body().get(0).getId();
+
+                    chechSchetId();
                 }
 
             }
@@ -85,6 +91,26 @@ public class SchetaListActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void chechSchetId() {
+
+        Intent intent = getIntent();
+        String schet_id = intent.getStringExtra("id");
+
+        if(schet_id != null || !schet_id.isEmpty()) {
+            int i = 0;
+            for (Schetum s: list
+                 ) {
+                if (s.getId().equals(schet_id)) {
+                    adapter.setSelected(i);
+                    setSchet(i);
+                }
+                i++;
+            }
+
+        }
 
     }
 
@@ -220,4 +246,86 @@ public class SchetaListActivity extends AppCompatActivity {
 
     }
 
+    private void updateSchetApi(String name, String type, String kom, final Dialog dialog){
+
+        App.getApi().updateSchet(name, type, kom).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.body() != null){
+                    dialog.dismiss();
+                    loadData();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    public void setEditSchet(int position) {
+
+        final Dialog dialogEdit = new Dialog(this);
+        //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogEdit.setContentView(R.layout.dialog_add_new_schet);
+
+
+        final EditText et_name = (EditText) dialogEdit.findViewById(R.id.as_name);
+        final EditText et_note = (EditText) dialogEdit.findViewById(R.id.as_note);
+        final EditText et_summ = (EditText) dialogEdit.findViewById(R.id.as_summ);
+
+        TextView tv_done = (TextView) dialogEdit.findViewById(R.id.as_done);
+        TextView tv_cancel = (TextView) dialogEdit.findViewById(R.id.as_cancel);
+
+        final CheckBox checkBox = (CheckBox) dialogEdit.findViewById(R.id.as_check);
+
+        final Spinner spinner = (Spinner) dialogEdit.findViewById(R.id.as_spinner);
+
+        ArrayList<String> arr = new ArrayList<>();arr.add("Наличный");arr.add("Безналичный");arr.add("Кредит");
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(SchetaListActivity.this, R.layout.adapter_nomenklatura_filter, arr);
+        spinner.setAdapter(spinnerArrayAdapter);
+
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogEdit.dismiss();
+            }
+        });
+
+        tv_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = et_name.getText().toString();
+                String nach = et_summ.getText().toString();
+                String kom = et_note.getText().toString();
+                String itog = "0";
+                if(checkBox.isChecked()) itog = "1";
+                else itog = "0";
+
+                if(name.isEmpty()) {
+                    Toast.makeText(SchetaListActivity.this, "Введите название", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(nach.isEmpty()) {
+                    Toast.makeText(SchetaListActivity.this, "Введите начальную сумму", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                updateSchetApi(name, String.valueOf(spinner.getSelectedItemPosition()), kom, dialogEdit);
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialogEdit.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialogEdit.setCancelable(false);
+        dialogEdit.show();
+        dialogEdit.getWindow().setAttributes(lp);
+
+    }
 }

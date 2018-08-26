@@ -462,12 +462,16 @@ public class Add_Dialog extends DialogFragment {
                 .setPositiveButton("Создать", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(context, Zakaz_new.class);
-                        intent.putExtra("type", type_zakaz);
-                        intent.putExtra("id_client", id_client);
-                        intent.putExtra("name_client", name_client);
-                        context.startActivity(intent);
-                        dialog.cancel();
+                        try {
+                            Intent intent = new Intent(context, Zakaz_new.class);
+                            intent.putExtra("type", type_zakaz);
+                            intent.putExtra("id_client", id_client);
+                            intent.putExtra("name_client", name_client);
+                            context.startActivity(intent);
+                            dialog.cancel();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 })
                 .setNegativeButton("Закрыть", new DialogInterface.OnClickListener() {
@@ -839,6 +843,7 @@ public class Add_Dialog extends DialogFragment {
                     @Override
                     public void onClick(final DialogInterface dialog, int which) {
                         product = new Zakaz_product(
+                                "",
                                 id_product,
                                 String.valueOf(name.getText()),
                                 String.valueOf(artikul.getText()),

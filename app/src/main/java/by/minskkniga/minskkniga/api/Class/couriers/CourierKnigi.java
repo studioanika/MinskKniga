@@ -3,6 +3,8 @@ package by.minskkniga.minskkniga.api.Class.couriers;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class CourierKnigi {
 
     @SerializedName("prod_id")
@@ -16,6 +18,18 @@ public class CourierKnigi {
     @SerializedName("kur")
     @Expose
     private String kur;
+
+    @SerializedName("list_zakaz")
+    @Expose
+    private List<CurZakaz> list_zakaz;
+
+    public List<CurZakaz> getList_zakaz() {
+        return list_zakaz;
+    }
+
+    public void setList_zakaz(List<CurZakaz> list_zakaz) {
+        this.list_zakaz = list_zakaz;
+    }
 
     public String getProd_id() {
         return prod_id;

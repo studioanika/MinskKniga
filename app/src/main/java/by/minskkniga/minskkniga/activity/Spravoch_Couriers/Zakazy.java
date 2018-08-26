@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TabHost;
@@ -32,11 +31,12 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Zakazy_1;
-import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.Zakazy_2;
+import by.minskkniga.minskkniga.adapter.Spravoch_Couriers.adapter.CourierClientsAdapter;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Courier_filter_1;
 import by.minskkniga.minskkniga.api.Class.Courier_filter_2;
 import by.minskkniga.minskkniga.api.Class.Zakazy_courier_clients;
+import by.minskkniga.minskkniga.api.Class.couriers.CourierClients;
 import by.minskkniga.minskkniga.api.Class.couriers.CourierKnigi;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,7 +76,7 @@ public class Zakazy extends AppCompatActivity {
     IntentIntegrator qrScan;
 
     ExpandableListView lv1;
-    ListView lv2;
+    ExpandableListView lv2;
     TextView checkbox;
     int check = 0;
 
@@ -102,242 +102,246 @@ public class Zakazy extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spravoch_courier_zakazy);
 
-        back = findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        filter_layout_1 = findViewById(R.id.filter_layout_1);
-        filter_layout_1.setVisibility(View.GONE);
-        filter_layout_2 = findViewById(R.id.filter_layout_2);
-        filter_layout_2.setVisibility(View.GONE);
-        filter = findViewById(R.id.filter_button);
-
-        notfound_1 = findViewById(R.id.notfound_1);
-        notfound_2 = findViewById(R.id.notfound_2);
-
-        spinner1 = findViewById(R.id.spinner1);
-        spinner2 = findViewById(R.id.spinner2);
-        spinner3 = findViewById(R.id.spinner3);
-        spinner4 = findViewById(R.id.spinner4);
-        spinner5 = findViewById(R.id.spinner5);
-        spinner6 = findViewById(R.id.spinner6);
-
-        search_1 = findViewById(R.id.search1);
-        search_2 = findViewById(R.id.search2);
-
-        barcode = findViewById(R.id.barcode);
-        qrScan = new IntentIntegrator(this);
-        barcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                qrScan.initiateScan();
-            }
-        });
-
-        filter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (tabHost.getCurrentTab()){
-                    case 0:
-                        if (filter_layout_1.getVisibility()==View.GONE){
-                            filter_layout_1.setVisibility(View.VISIBLE);
-                        }else{
-                            filter_layout_1.setVisibility(View.GONE);
-                        }
-                        break;
-                    case 1:
-                        if (filter_layout_2.getVisibility()==View.GONE){
-                            filter_layout_2.setVisibility(View.VISIBLE);
-                        }else{
-                            filter_layout_2.setVisibility(View.GONE);
-                        }
-                        break;
+        try {
+            back = findViewById(R.id.back);
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
                 }
-            }
-        });
+            });
 
+            filter_layout_1 = findViewById(R.id.filter_layout_1);
+            filter_layout_1.setVisibility(View.GONE);
+            filter_layout_2 = findViewById(R.id.filter_layout_2);
+            filter_layout_2.setVisibility(View.GONE);
+            filter = findViewById(R.id.filter_button);
 
-        lv1 = findViewById(R.id.lv1);
-        lv2 = findViewById(R.id.lv2);
+            notfound_1 = findViewById(R.id.notfound_1);
+            notfound_2 = findViewById(R.id.notfound_2);
 
-        zakazy_1 = new ArrayList<>();
-        zakazy_1_buf = new ArrayList<>();
+            spinner1 = findViewById(R.id.spinner1);
+            spinner2 = findViewById(R.id.spinner2);
+            spinner3 = findViewById(R.id.spinner3);
+            spinner4 = findViewById(R.id.spinner4);
+            spinner5 = findViewById(R.id.spinner5);
+            spinner6 = findViewById(R.id.spinner6);
 
-        zakazy_2 = new ArrayList<>();
-        zakazy_2_buf = new ArrayList<>();
+            search_1 = findViewById(R.id.search1);
+            search_2 = findViewById(R.id.search2);
 
-        checkbox = findViewById(R.id.checkbox);
-        Drawable img = getResources().getDrawable(R.drawable.ic_check_0);
-        img.setBounds(0, 0, 32, 32);
-        checkbox.setCompoundDrawables(null, null, img, null);
-
-        checkbox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (check){
-                    case 0:
-                        Drawable img1 = getResources().getDrawable(R.drawable.ic_check_1);
-                        img1.setBounds(0, 0, 32, 32);
-                        checkbox.setCompoundDrawables(null, null, img1, null);
-                        check=1;
-                        break;
-                    case 1:
-                        Drawable img2 = getResources().getDrawable(R.drawable.ic_check_2);
-                        img2.setBounds(0, 0, 32, 32);
-                        checkbox.setCompoundDrawables(null, null, img2, null);
-                        check=2;
-                        break;
-                    case 2:
-                        Drawable img0 = getResources().getDrawable(R.drawable.ic_check_0);
-                        img0.setBounds(0, 0, 32, 32);
-                        checkbox.setCompoundDrawables(null, null, img0, null);
-                        check=0;
-                        break;
+            barcode = findViewById(R.id.barcode);
+            qrScan = new IntentIntegrator(this);
+            barcode.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    qrScan.initiateScan();
                 }
-                search_2();
-            }
-        });
+            });
 
-        caption = findViewById(R.id.caption);
-        id = getIntent().getStringExtra("id");
-        name = getIntent().getStringExtra("name");
-        caption.setText(name);
-
-        tabHost = findViewById(R.id.tabHost);
-        tabHost.setup();
-
-        TabHost.TabSpec tabSpec = tabHost.newTabSpec("tag1");
-
-        tabSpec.setContent(R.id.linearLayout1);
-        tabSpec.setIndicator("по книгам");
-        tabHost.addTab(tabSpec);
-
-        tabSpec = tabHost.newTabSpec("tag2");
-        tabSpec.setContent(R.id.linearLayout2);
-        tabSpec.setIndicator("по клиентам");
-        tabHost.addTab(tabSpec);
-
-        tabHost.setCurrentTab(1);
-
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            public void onTabChanged(String tabId) {
-                if (tabHost.getCurrentTab()==0)
-                    load_filter_1();
-                if (tabHost.getCurrentTab()==1)
-                    load_filter_2();
-            }
-        });
-
-        clear_1 = findViewById(R.id.clear_1);
-        ok_1 = findViewById(R.id.ok_1);
-
-        clear_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                spinner1.setSelection(0);
-                spinner2.setSelection(0);
-                izdatel = "Издательство";
-                clas = "Класс";
-                reload_1();
-                lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
-                filter_layout_1.setVisibility(View.GONE);
-            }
-        });
-
-        ok_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                izdatel = spinner1.getSelectedItem().toString();
-                clas = spinner2.getSelectedItem().toString();
-                reload_1();
-                lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
-                filter_layout_1.setVisibility(View.GONE);
-            }
-        });
-
-        clear_2 = findViewById(R.id.clear_2);
-        ok_2 = findViewById(R.id.ok_2);
+            filter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (tabHost.getCurrentTab()){
+                        case 0:
+                            if (filter_layout_1.getVisibility()==View.GONE){
+                                filter_layout_1.setVisibility(View.VISIBLE);
+                            }else{
+                                filter_layout_1.setVisibility(View.GONE);
+                            }
+                            break;
+                        case 1:
+                            if (filter_layout_2.getVisibility()==View.GONE){
+                                filter_layout_2.setVisibility(View.VISIBLE);
+                            }else{
+                                filter_layout_2.setVisibility(View.GONE);
+                            }
+                            break;
+                    }
+                }
+            });
 
 
-        clear_2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                spinner3.setSelection(0);
-                spinner4.setSelection(0);
-                spinner5.setSelection(0);
-                spinner6.setSelection(0);
-                napravl = "Направление";
-                sity = "Город";
-                school = "Школа";
-                smena = "Смена";
-                reload_2();
-                lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
-                filter_layout_2.setVisibility(View.GONE);
-            }
-        });
+            lv1 = findViewById(R.id.lv1);
+            lv2 = findViewById(R.id.lv2);
 
-        ok_2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                napravl = spinner3.getSelectedItem().toString();
-                sity = spinner4.getSelectedItem().toString();
-                school = spinner5.getSelectedItem().toString();
-                smena = spinner6.getSelectedItem().toString();
-                reload_2();
-                lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
-                filter_layout_2.setVisibility(View.GONE);
-            }
-        });
+            zakazy_1 = new ArrayList<>();
+            zakazy_1_buf = new ArrayList<>();
 
-        menu = findViewById(R.id.menu);
-        drawer = findViewById(R.id.drawer);
+            zakazy_2 = new ArrayList<>();
+            zakazy_2_buf = new ArrayList<>();
 
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(GravityCompat.END);
-            }
-        });
+            checkbox = findViewById(R.id.checkbox);
+            Drawable img = getResources().getDrawable(R.drawable.ic_check_0);
+            img.setBounds(0, 0, 32, 32);
+            checkbox.setCompoundDrawables(null, null, img, null);
 
-        search_1.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            checkbox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (check){
+                        case 0:
+                            Drawable img1 = getResources().getDrawable(R.drawable.ic_check_1);
+                            img1.setBounds(0, 0, 32, 32);
+                            checkbox.setCompoundDrawables(null, null, img1, null);
+                            check=1;
+                            break;
+                        case 1:
+                            Drawable img2 = getResources().getDrawable(R.drawable.ic_check_2);
+                            img2.setBounds(0, 0, 32, 32);
+                            checkbox.setCompoundDrawables(null, null, img2, null);
+                            check=2;
+                            break;
+                        case 2:
+                            Drawable img0 = getResources().getDrawable(R.drawable.ic_check_0);
+                            img0.setBounds(0, 0, 32, 32);
+                            checkbox.setCompoundDrawables(null, null, img0, null);
+                            check=0;
+                            break;
+                    }
+                    search_2();
+                }
+            });
 
-            }
+            caption = findViewById(R.id.caption);
+            id = getIntent().getStringExtra("id");
+            name = getIntent().getStringExtra("name");
+            caption.setText(name);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                search_1();
-            }
+            tabHost = findViewById(R.id.tabHost);
+            tabHost.setup();
 
-            @Override
-            public void afterTextChanged(Editable s) {
+            TabHost.TabSpec tabSpec = tabHost.newTabSpec("tag1");
 
-            }
-        });
+            tabSpec.setContent(R.id.linearLayout1);
+            tabSpec.setIndicator("по книгам");
+            tabHost.addTab(tabSpec);
 
-        search_2.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            tabSpec = tabHost.newTabSpec("tag2");
+            tabSpec.setContent(R.id.linearLayout2);
+            tabSpec.setIndicator("по клиентам");
+            tabHost.addTab(tabSpec);
 
-            }
+            tabHost.setCurrentTab(1);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                search_2();
-            }
+            tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+                public void onTabChanged(String tabId) {
+                    if (tabHost.getCurrentTab()==0)
+                        load_filter_1();
+                    if (tabHost.getCurrentTab()==1)
+                        load_filter_2();
+                }
+            });
 
-            @Override
-            public void afterTextChanged(Editable s) {
+            clear_1 = findViewById(R.id.clear_1);
+            ok_1 = findViewById(R.id.ok_1);
 
-            }
-        });
+            clear_1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    spinner1.setSelection(0);
+                    spinner2.setSelection(0);
+                    izdatel = "Издательство";
+                    clas = "Класс";
+                    reload_1();
+                    lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
+                    filter_layout_1.setVisibility(View.GONE);
+                }
+            });
 
-        load_filter_2();
+            ok_1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    izdatel = spinner1.getSelectedItem().toString();
+                    clas = spinner2.getSelectedItem().toString();
+                    reload_1();
+                    lv1.setAdapter(new Zakazy_1(Zakazy.this, zakazy_1));
+                    filter_layout_1.setVisibility(View.GONE);
+                }
+            });
+
+            clear_2 = findViewById(R.id.clear_2);
+            ok_2 = findViewById(R.id.ok_2);
+
+
+            clear_2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    spinner3.setSelection(0);
+                    spinner4.setSelection(0);
+                    spinner5.setSelection(0);
+                    spinner6.setSelection(0);
+                    napravl = "Направление";
+                    sity = "Город";
+                    school = "Школа";
+                    smena = "Смена";
+                    reload_2();
+                    //lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
+                    //filter_layout_2.setVisibility(View.GONE);
+                }
+            });
+
+            ok_2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    napravl = spinner3.getSelectedItem().toString();
+                    sity = spinner4.getSelectedItem().toString();
+                    school = spinner5.getSelectedItem().toString();
+                    smena = spinner6.getSelectedItem().toString();
+                    reload_2();
+                    //lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
+                    //filter_layout_2.setVisibility(View.GONE);
+                }
+            });
+
+            menu = findViewById(R.id.menu);
+            drawer = findViewById(R.id.drawer);
+
+            menu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    drawer.openDrawer(GravityCompat.END);
+                }
+            });
+
+            search_1.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    search_1();
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            search_2.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    search_2();
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            load_filter_2();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void search_1() {
@@ -383,7 +387,7 @@ public class Zakazy extends AppCompatActivity {
         } else {
             notfound_2.setVisibility(View.VISIBLE);
         }
-        lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
+        //lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
     }
 
     @Override
@@ -406,6 +410,13 @@ public class Zakazy extends AppCompatActivity {
 //            load_filter_2();
 //            //Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
 //        }
+
+        if (tabHost.getCurrentTab() == 0 ) {
+            reload_1();
+        }
+        if (tabHost.getCurrentTab() == 1 ) {
+            reload_2();
+        }
     }
 
     public void reload_1(){
@@ -445,26 +456,35 @@ public class Zakazy extends AppCompatActivity {
         if (spinner5.getSelectedItemPosition() == 0) school = "null";
         if (spinner6.getSelectedItemPosition() == 0) smena = "null";
 
-        App.getApi().getCourier_zakazy(String.valueOf(id), napravl, sity, school, smena).enqueue(new Callback<List<Zakazy_courier_clients>>() {
+        App.getApi().getCourier_zakazy(String.valueOf(id)).enqueue(new Callback<List<CourierClients>>() {
             @Override
-            public void onResponse(Call<List<Zakazy_courier_clients>> call, Response<List<Zakazy_courier_clients>> response) {
-                zakazy_2.clear();
-                zakazy_2_buf.clear();
-                zakazy_2.addAll(response.body());
-                zakazy_2_buf.addAll(response.body());
-                lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
+            public void onResponse(Call<List<CourierClients>> call, Response<List<CourierClients>> response) {
+//                zakazy_2.clear();
+//                zakazy_2_buf.clear();
+//                zakazy_2.addAll(response.body());
+//                zakazy_2_buf.addAll(response.body());
+//                lv2.setAdapter(new Zakazy_2(Zakazy.this, zakazy_2));
+//
+//
 
-                if (!zakazy_2.isEmpty()) {
+                if(response.body() != null){
+
+                    if (response.body().size() != 0) {
                     notfound_2.setVisibility(View.GONE);
-                } else {
-                    notfound_2.setVisibility(View.VISIBLE);
+                    } else {
+                        notfound_2.setVisibility(View.VISIBLE);
+                    }
+                    notfound_2.setText("Ничего не найдено");
+
+                    lv2.setAdapter(new CourierClientsAdapter(Zakazy.this, response.body()));
                 }
-                notfound_2.setText("Ничего не найдено");
+
+
             }
 
             @Override
-            public void onFailure(Call<List<Zakazy_courier_clients>> call, Throwable t) {
-                Toast.makeText(Zakazy.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<List<CourierClients>> call, Throwable t) {
+
             }
         });
     }

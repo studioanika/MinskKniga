@@ -64,8 +64,8 @@
 
                 <ImageView
                     android:id="@+id/iv2"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"/>
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
 
             </LinearLayout>
 

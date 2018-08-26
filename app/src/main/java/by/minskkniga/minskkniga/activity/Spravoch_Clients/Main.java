@@ -46,7 +46,6 @@ public class Main extends AppCompatActivity {
     TabHost tabHost;
 
 
-    // TODO еще нужно добавить просмотр/редактирование клиента
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,18 +1,15 @@
 package by.minskkniga.minskkniga.activity.Kassa.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.api.Class.Couriers;
 import by.minskkniga.minskkniga.api.Class.cassa.Scheta;
 
 
@@ -50,9 +47,18 @@ public class AdapterItogScheta extends BaseAdapter {
 
         TextView tv1 = view.findViewById(R.id.item_schet_name);
         TextView tv2 = view.findViewById(R.id.item_schet_value);
+        TextView tv3 = view.findViewById(R.id.item_schet_comment);
 
         tv1.setText(_objects.get(position).getName());
         tv2.setText(_objects.get(position).getValue());
+        tv3.setText(_objects.get(position).getComment());
+
+        try{
+
+            String a = tv2.getText().toString();
+            if(Double.parseDouble(a) < 0) tv2.setTextColor(_context.getResources().getColor(R.color.red));
+        }
+        catch (Exception e){}
 
         return view;
     }

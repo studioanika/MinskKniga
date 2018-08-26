@@ -13,16 +13,14 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.providers.ProviderZayavkiListActivity;
-import by.minskkniga.minskkniga.activity.providers.ProvidersListActivity;
-import by.minskkniga.minskkniga.api.Class.providers.MoneyTovar;
-import by.minskkniga.minskkniga.api.Class.providers.ProviderNews;
+import by.minskkniga.minskkniga.api.Class.providers.ItemListProvMoney;
 
 
 public class MoneyAdapter extends RecyclerView.Adapter {
     private final int VIEW_ITEM = 1;
     private final int VIEW_PROG = 0;
 
-    private List<MoneyTovar> list;
+    private List<ItemListProvMoney> list;
 
     // The minimum amount of items to have below your current scroll position
 // before loading more.
@@ -32,7 +30,7 @@ public class MoneyAdapter extends RecyclerView.Adapter {
 
     public ProviderZayavkiListActivity activity;
 
-    public MoneyAdapter(List<MoneyTovar> _list, RecyclerView recyclerView, Context activity) {
+    public MoneyAdapter(List<ItemListProvMoney> _list, RecyclerView recyclerView, Context activity) {
         list = _list;
         this.activity = (ProviderZayavkiListActivity) activity;
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
@@ -64,12 +62,12 @@ public class MoneyAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof StudentViewHolder) {
 
-            final MoneyTovar item = (MoneyTovar) list.get(position);
+            final ItemListProvMoney item = (ItemListProvMoney) list.get(position);
 
-            ((StudentViewHolder) holder).tvVozvrat.setText(item.getVoz());
+            ((StudentViewHolder) holder).tvVozvrat.setText(String.valueOf(item.getVozvrat()));
             ((StudentViewHolder) holder).tvDate.setText(item.getDate());
-            ((StudentViewHolder) holder).tvOplata.setText(item.getOplata());
-            ((StudentViewHolder) holder).tvTovar.setText(item.getTovar());
+            ((StudentViewHolder) holder).tvOplata.setText(String.valueOf(String.valueOf(item.getOplaty())));
+            ((StudentViewHolder) holder).tvTovar.setText(String.valueOf(String.valueOf(item.getTovar())));
 
 
         }

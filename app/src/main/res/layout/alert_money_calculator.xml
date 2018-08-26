@@ -306,7 +306,7 @@
             android:id="@+id/d_money_itog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ИТОГО : 5000"
+            android:text="ИТОГО : 0"
             android:textColor="@android:color/black"
             android:textStyle="bold" />
     </RelativeLayout>

@@ -260,6 +260,10 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
         String text = calculator.mFormulaEditText.getText().toString();
         String text2 = calculator.mResultEditText.getText().toString();
 
+        if(calculator.id_cat_r != null && !calculator.id_cat_r.isEmpty()){
+            setCategory(calculator.cat_r, calculator.id_cat_r, calculator.id_podcat_pr);
+        }
+
         if(!text.isEmpty()){
             try{
                 Double.parseDouble(text);
@@ -286,8 +290,7 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
 
     private void startScheta(){
 
-
-        operation.startScheta();
+        operation.startScheta(schet_ID);
 
     }
 
@@ -295,6 +298,9 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
         if(category != null) cat_tv.setText(category);
         if(cat_ID != null) this.cat_ID = cat_ID;
         if(podcat_ID != null) this.podcat_ID = podcat_ID;
+
+        Calculator schetOperation = (Calculator) context;
+        schetOperation.setCategoryRashod(cat_ID, category, podcat_ID);
     }
 
     public void setScheta(String id, String schet){
@@ -354,7 +360,7 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
                     btn_save.setEnabled(true);
                     Toast.makeText(getContext(), "Операция одобрена", Toast.LENGTH_SHORT).show();
                     Calculator calculator = (Calculator) context;
-                    calculator.finish();
+                    calculator.end();
                 }
 
             }

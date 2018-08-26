@@ -8,6 +8,11 @@ public class WhatZakazal {
     @SerializedName("id")
     @Expose
     private String id;
+
+    @SerializedName("id_poz")
+    @Expose
+    private String id_poz;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -38,6 +43,14 @@ public class WhatZakazal {
     @SerializedName("cena")
     @Expose
     private String cena;
+
+    public String getId_poz() {
+        return id_poz;
+    }
+
+    public void setId_poz(String id_poz) {
+        this.id_poz = id_poz;
+    }
 
     public String getId() {
         return id;

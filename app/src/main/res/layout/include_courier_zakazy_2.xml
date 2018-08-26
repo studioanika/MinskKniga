@@ -98,27 +98,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Клиенты"/>
+            android:text="Клиент" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Заказ"/>
+            android:gravity="right"
+            android:text="Сумма" />
 
         <TextView
             android:id="@+id/checkbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Вып."/>
+            android:text="Вып."
+            android:visibility="gone" />
 
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Книги"/>
+            android:text="Книги"
+            android:visibility="gone" />
 
 
     </LinearLayout>
@@ -133,7 +136,7 @@
         android:visibility="visible" />
 
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/lv2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

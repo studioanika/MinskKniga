@@ -10,6 +10,11 @@ public class Zakazy {
     @SerializedName("id")
     @Expose
     private String id;
+
+    @SerializedName("obrazec")
+    @Expose
+    private String obrazec;
+
     @SerializedName("date")
     @Expose
     private String date;
@@ -129,4 +134,11 @@ public class Zakazy {
         this.classWhatZakazal = classWhatZakazal;
     }
 
+    public String getObrazec() {
+        return obrazec;
+    }
+
+    public void setObrazec(String obrazec) {
+        this.obrazec = obrazec;
+    }
 }
