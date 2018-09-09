@@ -65,7 +65,14 @@
                     android:padding="8dp">
 
                     <Spinner
+                        android:id="@+id/spinner4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Spinner
                         android:id="@+id/spinner1"
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
@@ -90,11 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
-                    <Spinner
-                        android:id="@+id/spinner4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+
 
                 </LinearLayout>
 

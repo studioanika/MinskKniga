@@ -4,15 +4,20 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Zakaz_filter {
 
     @SerializedName("status")
     @Expose
     private ArrayList<String> status;
+
+
     @SerializedName("gorod")
     @Expose
-    private ArrayList<String> gorod;
+    private List<ZakazFilterItem> gorod;
+
+
     @SerializedName("school")
     @Expose
     private ArrayList<String> school;
@@ -25,11 +30,11 @@ public class Zakaz_filter {
         this.status = status;
     }
 
-    public ArrayList<String> getGorod() {
+    public List<ZakazFilterItem> getGorod() {
         return gorod;
     }
 
-    public void setGorod(ArrayList<String> gorod) {
+    public void setGorod(List<ZakazFilterItem> gorod) {
         this.gorod = gorod;
     }
 

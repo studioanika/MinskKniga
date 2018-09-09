@@ -738,7 +738,7 @@ public abstract class Calculator extends AppCompatActivity
         tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                dialogEdit.dismiss();
             }
         });
 
@@ -847,6 +847,7 @@ public abstract class Calculator extends AppCompatActivity
         dialogEdit.setContentView(R.layout.alert_money_calculator);
         final TextView tv_itog = (TextView) dialogEdit.findViewById(R.id.d_money_itog);
         tv_itog.setText("ИТОГО : "+tv.getText().toString());
+        final Double d = Double.valueOf(tv.getText().toString());
         final TextView tv_done = (TextView) dialogEdit.findViewById(R.id.d_money_done);
         final TextView tv_2 = (TextView) dialogEdit.findViewById(R.id.d_money_2_result);
         final TextView tv_5 = (TextView) dialogEdit.findViewById(R.id.d_money_5_result);
@@ -873,10 +874,11 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_500.getText().toString()) * 500;
                     tv_500.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
 
                 }catch (Exception e){
-
+                    tv_500.setText("0");
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
                 }
             }
         });
@@ -899,10 +901,11 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_200.getText().toString()) * 200;
                     tv_200.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
 
                 }catch (Exception e){
-
+                    tv_200.setText("0");
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
                 }
             }
         });
@@ -925,10 +928,11 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_100.getText().toString()) * 100;
                     tv_100.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
 
                 }catch (Exception e){
-
+                    tv_100.setText("0");
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
                 }
             }
         });
@@ -951,10 +955,11 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_50.getText().toString()) * 50;
                     tv_50.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
 
                 }catch (Exception e){
-
+                    tv_50.setText("0");
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
                 }
             }
         });
@@ -977,10 +982,11 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_20.getText().toString()) * 20;
                     tv_20.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
 
                 }catch (Exception e){
-
+                    tv_20.setText("0");
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
                 }
             }
         });
@@ -1003,10 +1009,11 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_10.getText().toString()) * 10;
                     tv_10.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
 
                 }catch (Exception e){
-
+                    tv_10.setText("0");
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
                 }
             }
         });
@@ -1029,10 +1036,11 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_5.getText().toString()) * 5;
                     tv_5.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
 
                 }catch (Exception e){
-
+                    tv_5.setText("0");
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
                 }
             }
         });
@@ -1055,10 +1063,11 @@ public abstract class Calculator extends AppCompatActivity
                 try{
                     int res = Integer.parseInt(et_2.getText().toString()) * 2;
                     tv_2.setText(String.valueOf(res));
-                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, tv);
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
 
                 }catch (Exception e){
-
+                    tv_2.setText("0");
+                    updateItog(tv_500, tv_200, tv_100, tv_50, tv_20, tv_10, tv_5, tv_2,tv_itog, d);
                 }
             }
         });
@@ -1085,7 +1094,7 @@ public abstract class Calculator extends AppCompatActivity
 
     private void updateItog(TextView tv1,TextView tv2,TextView tv3,TextView tv4,
                             TextView tv5, TextView tv6, TextView tv7, TextView tv8,
-                            TextView itog, TextView  tv){
+                            TextView itog, Double d){
 
         int sum = 0;
         Double d_sum = 0.00;
@@ -1099,10 +1108,7 @@ public abstract class Calculator extends AppCompatActivity
             sum += Integer.parseInt(tv6.getText().toString());
             sum += Integer.parseInt(tv7.getText().toString());
             sum += Integer.parseInt(tv8.getText().toString());
-            if(tv != null &&
-                    !tv.getText().toString().isEmpty())
-                d_sum = sum + Double.parseDouble(tv.getText().toString());
-            else d_sum = (double) sum;
+            d_sum = sum + d;
             itog.setText("Итог : "+String.valueOf(d_sum));
             if(mCalculatorDisplay != null) {
                 mCalculatorDisplay.setText(String.valueOf(d_sum));
@@ -1122,13 +1128,19 @@ public abstract class Calculator extends AppCompatActivity
 
     public void end() {
 
-        Intent intent = new Intent(Calculator.this, Main.class);
-        if(schetid != null) {
-            intent.putExtra("id", schetid);
-            intent.putExtra("name", schet);
-        }
+        if(id != null){
+            if(!id.isEmpty()){
+                Intent intent = new Intent(Calculator.this, Main.class);
+                if(schetid != null) {
+                    intent.putExtra("id", schetid);
+                    intent.putExtra("name", schet);
+                }
 
-        startActivity(intent);
+                startActivity(intent);
+            }else onBackPressed();
+        }else {
+            onBackPressed();
+        }
 
     }
 
@@ -1161,5 +1173,12 @@ public abstract class Calculator extends AppCompatActivity
         cat_pe = cat;
         id_podcat_pe = id_podcat;
 
+    }
+
+    public void startMain(String _id, String _name){
+        Intent intent = new Intent(this, Main.class);
+        intent.putExtra("id", _id);
+        intent.putExtra("name", _name);
+        startActivity(intent);
     }
 }

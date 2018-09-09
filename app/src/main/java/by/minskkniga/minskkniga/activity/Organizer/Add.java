@@ -111,8 +111,8 @@ public class Add extends AppCompatActivity {
         ed_autor.setText(autor_name);
         if (!date.equals("null")) ed_date.setText(date);
         ed_text.setText(text);
-        adapter = new ArrayAdapter<>(Add.this, R.layout.adapter_nomenklatura_filter, stat);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter = new ArrayAdapter<>(Add.this, R.layout.spinner_item_organizer, stat);
+        adapter.setDropDownViewResource(R.layout.spinner_item_organizer);
         spinner3.setAdapter(adapter);
 
         if (!tab.equals("null")) {
@@ -233,8 +233,8 @@ public class Add extends AppCompatActivity {
                     couriers_buf.add((response.body().getCouriers().get(i).getRank().equals("admin")?"Админ ":"Курьер ") + response.body().getCouriers().get(i).getName());
                 }
 
-                adapter = new ArrayAdapter<>(Add.this, R.layout.adapter_nomenklatura_filter, clients_buf);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                adapter = new ArrayAdapter<>(Add.this, R.layout.spinner_item_organizer, clients_buf);
+                adapter.setDropDownViewResource(R.layout.spinner_item);
                 spinner1.setAdapter(adapter);
 
                 if (!contragent_id.equals("null")) {
@@ -245,8 +245,8 @@ public class Add extends AppCompatActivity {
                     }
                 }
 
-                adapter = new ArrayAdapter<String>(Add.this, R.layout.adapter_nomenklatura_filter, couriers_buf);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                adapter = new ArrayAdapter<String>(Add.this, R.layout.spinner_item_organizer, couriers_buf);
+                adapter.setDropDownViewResource(R.layout.spinner_item_organizer);
                 spinner2.setAdapter(adapter);
 
                 if (!ispolnitel.equals("null")) {

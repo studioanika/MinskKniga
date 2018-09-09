@@ -73,6 +73,34 @@ public class Product implements Serializable{
     @Expose
     private String ostatok;
 
+    @SerializedName("kol_obr")
+    @Expose
+    private String kol_obr;
+
+    @SerializedName("cur")
+    @Expose
+    private String cur;
+
+    @SerializedName("cena")
+    @Expose
+    private String cena;
+
+    public String getCur() {
+        return cur;
+    }
+
+    public void setCur(String cur) {
+        this.cur = cur;
+    }
+
+    public String getKol_obr() {
+        return kol_obr;
+    }
+
+    public void setKol_obr(String kol_obr) {
+        this.kol_obr = kol_obr;
+    }
+
     public String getId() {
         return id;
     }
@@ -239,5 +267,13 @@ public class Product implements Serializable{
 
     public void setRezerv(String rezerv) {
         this.rezerv = rezerv;
+    }
+
+    public String getCena() {
+        return cena;
+    }
+
+    public void setCena(String cena) {
+        this.cena = cena;
     }
 }

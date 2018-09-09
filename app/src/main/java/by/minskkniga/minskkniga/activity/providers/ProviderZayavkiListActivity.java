@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -16,14 +15,13 @@ import android.view.View;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.providers.fragments.FragmentMoney;
-import by.minskkniga.minskkniga.activity.providers.fragments.FragmentNews;
 import by.minskkniga.minskkniga.activity.providers.fragments.FragmentProviderZayavki;
-import by.minskkniga.minskkniga.activity.providers.fragments.FragmentPublishing;
 
 public class ProviderZayavkiListActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
-    String id, name;
+    String id, name, type;
+    boolean auto;
     FloatingActionButton fab;
 
     PagerAdapter adapter;
@@ -44,6 +42,9 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
         name = intent.getStringExtra("name");
+        auto = intent.getBooleanExtra("new", false);
+        if(auto) type = "auto";
+        else type = "";
 
         getSupportActionBar().setTitle(name);
 
@@ -126,7 +127,7 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
 
                     return tab1;
                 case 1:
-                    FragmentProviderZayavki tab2 = new FragmentProviderZayavki(id);
+                    FragmentProviderZayavki tab2 = new FragmentProviderZayavki(id, type);
                     return tab2;
                 default:
                     return null;

@@ -246,12 +246,14 @@
                         android:layout_height="wrap_content">
 
                         <TextView
+                            android:id="@+id/ostatok_n"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Остатки" />
 
                         <TextView
+                            android:id="@+id/standart_up"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -270,6 +272,7 @@
                             android:text="На складе" />
 
                         <TextView
+                            android:id="@+id/sklad"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -282,6 +285,7 @@
                             android:text="У курьеров" />
 
                         <TextView
+                            android:id="@+id/couriers_b"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -300,6 +304,7 @@
                             android:text="Доступно" />
 
                         <TextView
+                            android:id="@+id/dostupno"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -312,6 +317,7 @@
                             android:text="В образцах" />
 
                         <TextView
+                            android:id="@+id/obrazci"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -331,8 +337,10 @@
                             android:text="Заказано" />
 
                         <ImageButton
+                            android:id="@+id/btn_rangs"
                             android:layout_width="48dp"
-                            android:layout_height="48dp" />
+                            android:layout_height="48dp"
+                            android:src="@drawable/ic_format_list_numbered_black_24dp" />
 
                         <EditText
                             android:inputType="number"
@@ -383,10 +391,11 @@
                             android:text="Вес" />
 
                         <TextView
+                            android:id="@+id/ves"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="0"/>
+                            android:text="0" />
 
 
                     </LinearLayout>
@@ -423,14 +432,14 @@
 
         </LinearLayout>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="16dp"
-            app:backgroundTint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_check" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_check" />
 
 </RelativeLayout>

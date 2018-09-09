@@ -21,6 +21,10 @@ public class Scheta {
     @Expose
     private String comment;
 
+    @SerializedName("type")
+    @Expose
+    private String type;
+
     public String getComment() {
         return comment;
     }
@@ -51,6 +55,14 @@ public class Scheta {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
 

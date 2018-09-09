@@ -14,17 +14,20 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.category.adapter.SchetaAdapter;
 import by.minskkniga.minskkniga.api.App;
+import by.minskkniga.minskkniga.api.Class.category.SchetInfo;
 import by.minskkniga.minskkniga.api.Class.category.Schetum;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -191,7 +194,7 @@ public class SchetaListActivity extends AppCompatActivity {
         dialogEdit.getWindow().setAttributes(lp);
 
     }
-    private void done(){
+    public void done(){
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         intent.putExtra("schet", categoryFinal);
@@ -246,9 +249,10 @@ public class SchetaListActivity extends AppCompatActivity {
 
     }
 
-    private void updateSchetApi(String name, String type, String kom, final Dialog dialog){
+    private void updateSchetApi(String id, String name, String type, String kom,
+                                String nach, String itog, final Dialog dialog){
 
-        App.getApi().updateSchet(name, type, kom).enqueue(new Callback<ResponseBody>() {
+        App.getApi().updateSchet(id, name, type, kom, nach, itog).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.body() != null){
@@ -265,12 +269,13 @@ public class SchetaListActivity extends AppCompatActivity {
 
     }
 
-    public void setEditSchet(int position) {
+    public void setEditSchet(final int position) {
 
         final Dialog dialogEdit = new Dialog(this);
         //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogEdit.setContentView(R.layout.dialog_add_new_schet);
+
 
 
         final EditText et_name = (EditText) dialogEdit.findViewById(R.id.as_name);
@@ -279,6 +284,8 @@ public class SchetaListActivity extends AppCompatActivity {
 
         TextView tv_done = (TextView) dialogEdit.findViewById(R.id.as_done);
         TextView tv_cancel = (TextView) dialogEdit.findViewById(R.id.as_cancel);
+        final TextView tv_title = (TextView) dialogEdit.findViewById(R.id.as_title);
+        ImageView img_delete = (ImageView) dialogEdit.findViewById(R.id.img_delete);
 
         final CheckBox checkBox = (CheckBox) dialogEdit.findViewById(R.id.as_check);
 
@@ -315,7 +322,72 @@ public class SchetaListActivity extends AppCompatActivity {
                     return;
                 }
 
-                updateSchetApi(name, String.valueOf(spinner.getSelectedItemPosition()), kom, dialogEdit);
+                updateSchetApi(list.get(position).getId(),name, String.valueOf(spinner.getSelectedItemPosition()), kom, nach, itog,dialogEdit);
+            }
+        });
+
+        App.getApi().getCassaSchetInfo(list.get(position).getId()).enqueue(new Callback<List<SchetInfo>>() {
+            @Override
+            public void onResponse(Call<List<SchetInfo>> call, Response<List<SchetInfo>> response) {
+
+                if(response.body() != null){
+
+                    try {
+                        SchetInfo info = response.body().get(0);
+
+                        tv_title.setText(info.getName());
+                        et_name.setText(info.getName());
+                        et_note.setText(info.getKoment());
+                        et_summ.setText(info.getStart_seson_sum());
+
+                        spinner.setSelection(info.getType());
+
+                        if(Integer.parseInt(info.getItog()) == 0) checkBox.setChecked(false);
+                        else checkBox.setChecked(true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<SchetInfo>> call, Throwable t) {
+
+            }
+        });
+
+        img_delete.setVisibility(View.VISIBLE);
+        img_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                App.getApi().deleteSchet(list.get(position).getId()).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                        if(response.body() != null){
+
+                            try {
+
+                                if(response.body().string().contains("ok")) {
+                                    loadData();
+                                    dialogEdit.dismiss();
+                                }
+                                else Toast.makeText(SchetaListActivity.this, "Ошибка подключения к серверу",Toast.LENGTH_SHORT).show();
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
             }
         });
 

@@ -10,7 +10,7 @@ public class GeneralItog {
     private Double activy;
     @SerializedName("obyazatelstva")
     @Expose
-    private Integer obyazatelstva;
+    private Double obyazatelstva;
     @SerializedName("balans")
     @Expose
     private Double balans;
@@ -23,11 +23,11 @@ public class GeneralItog {
         this.activy = activy;
     }
 
-    public Integer getObyazatelstva() {
+    public Double getObyazatelstva() {
         return obyazatelstva;
     }
 
-    public void setObyazatelstva(Integer obyazatelstva) {
+    public void setObyazatelstva(Double obyazatelstva) {
         this.obyazatelstva = obyazatelstva;
     }
 

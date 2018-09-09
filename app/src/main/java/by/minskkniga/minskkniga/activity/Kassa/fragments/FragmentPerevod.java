@@ -367,8 +367,8 @@ public class FragmentPerevod extends Fragment implements IFragmentSchetOperation
 
                     btn_save.setEnabled(true);
                     Toast.makeText(getContext(), "Операция одобрена", Toast.LENGTH_SHORT).show();
-                    Calculator calculator = (Calculator) context;
-                    calculator.end();
+                    Calculator schetOperation = (Calculator) context;
+                    schetOperation.startMain(schet_ID, schet_tv.getText().toString());
                 }
 
             }

@@ -2,7 +2,7 @@
     <string name="app_name">MinskKniga</string>
 
     <string-array name="price_spinner_client">
-        <item>Закупочная</item>
+        <item>Розничная</item>
         <item>Оптовая</item>
     </string-array>
 
@@ -153,5 +153,7 @@
     <string name="desc_eq">equals</string>
     <string name="title_activity_providers_zayavki_raschet">ProvidersZayavkiRaschetActivity</string>
     <string name="title_activity_return_to_sclad">Возврат на склад</string>
+    <string name="title_activity_rangs">Таблица рангов</string>
+    <string name="title_activity_prihod_order">PrihodOrder</string>
 
 </resources>

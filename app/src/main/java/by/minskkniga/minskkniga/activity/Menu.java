@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,12 +30,16 @@ public class Menu extends AppCompatActivity {
 
     ListView lv1;
     ImageButton notif;
+    ImageView exits;
     TextView notif_count;
     SharedPreferences sp;
+    SharedPreferences.Editor ed;
     String user_id;
     String rank;
     String name;
     String col;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,20 @@ public class Menu extends AppCompatActivity {
         });
 
         sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+        ed = sp.edit();
+        exits = findViewById(R.id.exit);
+        exits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ed.putString("login", "");
+                ed.putString("pass", "");
+                ed.apply();
+                finish();
+
+            }
+        });
+
+
         rank = sp.getString("rank", "");
         name = sp.getString("name", "");
         user_id = sp.getString("user_id", "");
@@ -122,6 +141,8 @@ public class Menu extends AppCompatActivity {
                 }
             }
         });
+
+        reload();
     }
 
 
@@ -149,7 +170,7 @@ public class Menu extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        reload();
+        //reload();
     }
 
     public void reload() {

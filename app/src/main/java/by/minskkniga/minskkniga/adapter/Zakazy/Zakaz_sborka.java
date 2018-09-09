@@ -73,8 +73,9 @@ public class Zakaz_sborka extends BaseAdapter {
         if (_objects.get(position).col_zakaz.equals(_objects.get(position).otgruzeno)){
             Glide.with(_context).load(R.drawable.ic_check_2).into(iv2);
         }else{
-            if (Integer.parseInt(_objects.get(position).otgruzeno)>0) {
-                Glide.with(_context).load(R.drawable.ic_check_0).into(iv2);
+            if (Integer.parseInt(_objects.get(position).otgruzeno) >
+                    Integer.parseInt(_objects.get(position).col_zakaz)) {
+                Glide.with(_context).load(R.drawable.ic_check_2).into(iv2);
             }else{
                 Glide.with(_context).load(R.drawable.ic_check_1).into(iv2);
             }

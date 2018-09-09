@@ -145,8 +145,17 @@
                 android:id="@+id/barcode"
                 android:layout_width="24dp"
                 android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
                 android:layout_margin="15dp"
-                app:srcCompat="@drawable/ic_barcode_scan"/>
+                app:srcCompat="@drawable/ic_barcode_scan" />
+
+            <ImageView
+                android:id="@+id/clear_q"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.1"
+                app:srcCompat="@drawable/ic_backspace_black_24dp" />
 
         </LinearLayout>
 

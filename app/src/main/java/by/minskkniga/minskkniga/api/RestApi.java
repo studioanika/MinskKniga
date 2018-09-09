@@ -31,6 +31,7 @@ import by.minskkniga.minskkniga.api.Class.cassa.ObjectTransaction;
 import by.minskkniga.minskkniga.api.Class.cassa.SchetaResponse;
 import by.minskkniga.minskkniga.api.Class.category.ResponseCategory;
 import by.minskkniga.minskkniga.api.Class.category.ResponseProvScheta;
+import by.minskkniga.minskkniga.api.Class.category.SchetInfo;
 import by.minskkniga.minskkniga.api.Class.category.Schetum;
 import by.minskkniga.minskkniga.api.Class.clients.ClientInfo;
 import by.minskkniga.minskkniga.api.Class.couriers.CourierClients;
@@ -38,6 +39,7 @@ import by.minskkniga.minskkniga.api.Class.couriers.CourierKnigi;
 import by.minskkniga.minskkniga.api.Class.couriers.ObjectReturnObrazci;
 import by.minskkniga.minskkniga.api.Class.couriers.ObjectReturnZakaz;
 import by.minskkniga.minskkniga.api.Class.inventarizacia.InventarizaciaObject;
+import by.minskkniga.minskkniga.api.Class.inventarizacia.RangObject;
 import by.minskkniga.minskkniga.api.Class.nomenclatura.ObjectZakazyObrazci;
 import by.minskkniga.minskkniga.api.Class.provider_sp.ProviderInfo;
 import by.minskkniga.minskkniga.api.Class.providers.GetOzhidaemResponse;
@@ -160,7 +162,8 @@ public interface RestApi {
                                 @Query("zakup_cena") String zakup_cena,
                                 @Query("prod_cena") String prod_cena,
                                 @Query("standart") String standart,
-                                @Query("ves") String ves);
+                                @Query("ves") String ves,
+                                @Query("rezerv") String rezerv);
 
 
     @GET("artikyl.php")
@@ -261,7 +264,8 @@ public interface RestApi {
     Call<ProviderZayavkiNews> getProvidersNewsZ();
 
     @GET("/api/get_zav_prov.php?")
-    Call<List<ProvidersZayavkiId>> getProvidersZayavki(@Query("id") String id);
+    Call<List<ProvidersZayavkiId>> getProvidersZayavki(@Query("id") String id,
+                                                       @Query("type") String type);
 
     @GET("/api/get_prov_d.php?")
     Call<List<Money>> getProviderMoney(@Query("id") String id);
@@ -313,9 +317,12 @@ public interface RestApi {
                                    @Query("nach_sum") String nach_sum, @Query("itog") String itog,
                                    @Query("kom") String kom);
 
-    @GET("/api/update_schet.php?")
-    Call<ResponseBody>updateSchet(@Query("name") String name, @Query("type") String type,
-                                   @Query("kom") String kom);
+    @GET("/api/update_kassa_schet_info.php?")
+    Call<ResponseBody>updateSchet(@Query("id") String id, @Query("name") String name, @Query("type") String type,
+                                   @Query("kom") String kom, @Query("nach_sum") String nach_summ, @Query("itog") String itog);
+
+    @GET("/api/delete_kassa_schet_info.php?")
+    Call<ResponseBody>deleteSchet(@Query("id") String id);
 
     @GET("/api/set_kassa_order.php?")
     Call<ResponseBody> addOperationCassa(@Query("cat_id") String cat_id, @Query("pod_cat_id") String pod_cat_id,
@@ -414,8 +421,8 @@ public interface RestApi {
     @GET("get_courier_list_knigi.php")
     Call<List<CourierKnigi>> getCourierKnigi(@Query("id") String id);
 
-    @GET("get_clients_city.php")
-    Call<List<ClientsCity>> getClientsCity();
+    @GET
+    Call<List<ClientsCity>> getClientsCity(@Url String url);
 
     @GET("get_prov_d.php")
     Call<List<MoneyProvResponse>> getProvD(@Query("id") String id);
@@ -474,4 +481,20 @@ public interface RestApi {
     @GET("get_courier_return_knigi_sklad_info.php")
     Call<ObjectReturnObrazci> getInfoReturnObrazci(@Query("id") String id,
                                                    @Query("obrazec") String obrazec);
+
+    @GET("get_kassa_schet_info.php")
+    Call<List<SchetInfo>> getCassaSchetInfo(@Query("id") String id);
+
+    @GET("table_rang.php")
+    Call<RangObject> getRangId(@Query("id") String id);
+
+    @GET("send_zayavka.php")
+    Call<ResponseBody> sendAllSposob(@Query("id") String id);
+
+    @GET("/api/get_client_schet.php?")
+    Call<List<ResponseProvScheta>> getClientScheta(@Query("id") String id);
+
+    @POST("update_zakazi_obr.php")
+    @FormUrlEncoded
+    Call<ResponseBody> updateZakazyObr(@FieldMap Map<String, String> map);
 }

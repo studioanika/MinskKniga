@@ -223,7 +223,7 @@ public class NewProviderZayavka extends AppCompatActivity {
     }
 
     private void sendZayavka() {
-
+        btn.setEnabled(false);
         int i = productForZayackaProviderList.size();
 
         String date = tv_date.getText().toString();
@@ -270,6 +270,7 @@ public class NewProviderZayavka extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.body() != null){
+                    btn.setEnabled(true);
                     String body_s = null;
                     try {
                         body_s = response.body().string();
@@ -282,7 +283,7 @@ public class NewProviderZayavka extends AppCompatActivity {
                            id_zayavki = ds[1];
                            id_zayavki = id_zayavki.substring(0, id_zayavki.length() - 1);                          //id_zayavki = id_zayavki.replaceAll("]", "");
                            isSend = true;
-                           Toast.makeText(getApplicationContext(), "Заявка успешно отправлена.", Toast.LENGTH_SHORT).show();
+                           Toast.makeText(getApplicationContext(), "Заявка успешно cоздана.", Toast.LENGTH_SHORT).show();
                        }
                        catch (Exception e){
                             String sd = e.toString();
@@ -294,6 +295,7 @@ public class NewProviderZayavka extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), "Ошибка отправки заявки...", Toast.LENGTH_SHORT).show();
+                btn.setEnabled(true);
             }
         });
 
@@ -537,7 +539,8 @@ public class NewProviderZayavka extends AppCompatActivity {
 
     private void more() {
 
-        showDrawer();
+        if(rel_drawer.getVisibility() == View.GONE)showDrawer();
+        else hideDrawer();
 
     }
     private void showDrawer(){

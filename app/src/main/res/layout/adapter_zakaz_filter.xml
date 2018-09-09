@@ -9,15 +9,16 @@
         android:id="@+id/tv1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="TextView"/>
+        android:text="TextView"
+        android:visibility="visible" />
 
     <CheckBox
         android:id="@+id/ch1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="left"
         android:layoutDirection="rtl"
         android:padding="8dp"
-        android:gravity="left"
-        android:text="Text"/>
+        android:text="Text"
+        android:visibility="gone" />
 </LinearLayout>

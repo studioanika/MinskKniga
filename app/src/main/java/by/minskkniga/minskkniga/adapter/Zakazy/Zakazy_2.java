@@ -1,7 +1,6 @@
 package by.minskkniga.minskkniga.adapter.Zakazy;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -16,12 +15,7 @@ import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Zakazy.Zakazy_Client;
-import by.minskkniga.minskkniga.api.App;
-import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.Zakazy;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class Zakazy_2 extends BaseExpandableListAdapter {
 
@@ -176,41 +170,42 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
 
         tv3.setText(_zakazy.get(groupPosition).getSumma());
 
-        ch1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ch1.isEnabled()) {
-                    ad = new AlertDialog.Builder(_context);
-                    ad.setTitle("Вы уверены, что хотите изменить статус оплаты?");
-                    ad.setPositiveButton("ГОТОВО", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int arg1) {
-
-                            App.getApi().setOplata(_zakazy.get(groupPosition).getId()).enqueue(new Callback<ResultBody>() {
-                                @Override
-                                public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
-                                    _zakazy.get(groupPosition).setOplacheno("1");
-                                    ch1.setEnabled(false);
-                                }
-
-                                @Override
-                                public void onFailure(Call<ResultBody> call, Throwable t) {
-
-                                }
-                            });
-                        }
-
-                    });
-                    ad.setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int arg1) {
-                            dialog.cancel();
-                            ch1.setChecked(false);
-                        }
-                    });
-                    ad.setCancelable(false);
-                    ad.show();
-                }
-            }
-        });
+//        ch1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (ch1.isEnabled()) {
+//                    ad = new AlertDialog.Builder(_context);
+//                    ad.setTitle("Вы уверены, что хотите изменить статус оплаты?");
+//                    ad.setPositiveButton("ГОТОВО", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int arg1) {
+//
+//                            App.getApi().setOplata(_zakazy.get(groupPosition).getId()).enqueue(new Callback<ResultBody>() {
+//                                @Override
+//                                public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
+//                                    _zakazy.get(groupPosition).setOplacheno("1");
+//                                    ch1.setEnabled(false);
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<ResultBody> call, Throwable t) {
+//
+//                                }
+//                            });
+//                        }
+//
+//                    });
+//                    ad.setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
+//                        public void onClick(DialogInterface dialog, int arg1) {
+//                            dialog.cancel();
+//                            ch1.setChecked(false);
+//                        }
+//                    });
+//                    ad.setCancelable(false);
+//                    ad.show();
+//                }
+//            }
+//        });
+        ch1.setEnabled(false);
 
         return convertView;
     }

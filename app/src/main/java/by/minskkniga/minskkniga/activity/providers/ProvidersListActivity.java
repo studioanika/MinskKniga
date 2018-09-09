@@ -4,19 +4,16 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.providers.adapter.ProvidersZayavkiAdapter;
 import by.minskkniga.minskkniga.activity.providers.fragments.FragmentNews;
 import by.minskkniga.minskkniga.activity.providers.fragments.FragmentPublishing;
 
@@ -132,11 +129,12 @@ public class ProvidersListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void startPZLA(String id, String name){
+    public void startPZLA(String id, String name, boolean news){
 
         Intent intent = new Intent(this, ProviderZayavkiListActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("name", name);
+        intent.putExtra("new", news);
         startActivity(intent);
 
     }

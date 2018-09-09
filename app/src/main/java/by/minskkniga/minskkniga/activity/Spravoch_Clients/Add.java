@@ -46,6 +46,7 @@ public class Add extends AppCompatActivity {
 
     ScrollView sv;
     ImageButton back;
+    TextView caction_name;
 
     TextView price_caption;
     TextView vzaimo_caption;
@@ -103,6 +104,7 @@ public class Add extends AppCompatActivity {
         add_contact = findViewById(R.id.add_contact);
         cancel = findViewById(R.id.cancel);
         ok = findViewById(R.id.ok);
+        caction_name = findViewById(R.id.caption);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -320,6 +322,7 @@ public class Add extends AppCompatActivity {
     private void setInfoClient(ClientInfo clientInfo) {
         gorod = Integer.parseInt(clientInfo.getGorodId());
         name.setText(clientInfo.getName());
+        caction_name.setText(clientInfo.getName());
         sokr_name.setText(clientInfo.getSokrName());
         zametka.setText(clientInfo.getZametka());
         print.setText(clientInfo.getPrint());

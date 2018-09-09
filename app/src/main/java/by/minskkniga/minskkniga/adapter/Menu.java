@@ -14,7 +14,7 @@ public class Menu extends BaseAdapter{
 
     private LayoutInflater lInflater;
     private Context _context;
-    private String[] object = {"Заказы", "Поставщики", "Касса", "Номенклатура", "Органайзер", "Инвентаризация", "Справочники", "Клиенты", "Поставщики", "Курьеры"};
+    private String[] object = {"Заказы", "Заявки поставщикам", "Касса", "Номенклатура", "Органайзер", "Инвентаризация", "Справочники", "Клиенты", "Поставщики", "Курьеры"};
 
     public Menu(Context context){
         this._context = context;

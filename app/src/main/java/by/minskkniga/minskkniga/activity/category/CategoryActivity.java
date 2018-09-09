@@ -84,6 +84,7 @@ public class CategoryActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 clickPodCategory(i);
+                done();
             }
         });
 
@@ -98,6 +99,7 @@ public class CategoryActivity extends AppCompatActivity {
                 podCategoryFinal = podCatList.get(i).getName();
                 podCategoryFinal_ID = podCatList.get(i).getId();
                 podCategoryAdapter.setSelected(i);
+                //done();
             }else showDialogAdd(TypeDialogCategory.AddPodcategory, null, null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,7 +136,7 @@ public class CategoryActivity extends AppCompatActivity {
 
             categoryAdapter.setSelected(i);
 
-            if(podCatList.size() != 1)clickPodCategory(0);
+            if(podCatList.size() != 1) clickPodCategory(0);
         }
 
     }
@@ -201,7 +203,7 @@ public class CategoryActivity extends AppCompatActivity {
 
     }
 
-    private void done(){
+    public void done(){
         Intent intent = new Intent();
         intent.putExtra("cat", categoryFinal);
         intent.putExtra("cat_id", categoryFinal_ID);

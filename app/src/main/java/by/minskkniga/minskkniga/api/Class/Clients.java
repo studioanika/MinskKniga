@@ -8,6 +8,11 @@ public class Clients {
     @SerializedName("id")
     @Expose
     private String id;
+
+    @SerializedName("id_client")
+    @Expose
+    private String id_client;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -53,6 +58,35 @@ public class Clients {
     @SerializedName("gorod")
     @Expose
     private String gorod;
+
+    @SerializedName("date")
+    @Expose
+    private String date;
+
+    @SerializedName("client_name")
+    @Expose
+    private String client_name;
+
+    @SerializedName("status")
+    @Expose
+    private String status;
+
+    @SerializedName("oplacheno")
+    @Expose
+    private String oplacheno;
+
+    @SerializedName("col_vo")
+    @Expose
+    private int col_vo;
+
+    @SerializedName("ves")
+    @Expose
+    private Double ves;
+
+    @SerializedName("summa")
+    @Expose
+    private Double summa;
+
 
     public String getId() {
         return id;
@@ -180,5 +214,69 @@ public class Clients {
 
     public void setGorod(String gorod) {
         this.gorod = gorod;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getClient_name() {
+        return client_name;
+    }
+
+    public void setClient_name(String client_name) {
+        this.client_name = client_name;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getOplacheno() {
+        return oplacheno;
+    }
+
+    public void setOplacheno(String oplacheno) {
+        this.oplacheno = oplacheno;
+    }
+
+    public int getCol_vo() {
+        return col_vo;
+    }
+
+    public void setCol_vo(int col_vo) {
+        this.col_vo = col_vo;
+    }
+
+    public Double getVes() {
+        return ves;
+    }
+
+    public void setVes(Double ves) {
+        this.ves = ves;
+    }
+
+    public Double getSumma() {
+        return summa;
+    }
+
+    public String getId_client() {
+        return id_client;
+    }
+
+    public void setId_client(String id_client) {
+        this.id_client = id_client;
+    }
+
+    public void setSumma(Double summa) {
+        this.summa = summa;
     }
 }

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -76,7 +75,7 @@ public class FragmentPublishingAdapter extends RecyclerView.Adapter {
             ((StudentViewHolder) holder).lin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    activity.startPZLA(item.getId(), item.getName());
+                    activity.startPZLA(item.getId(), item.getName(), false);
                 }
             });
         }

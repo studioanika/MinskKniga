@@ -32,7 +32,7 @@ public class ItemListZakMoney {
 
     @SerializedName("podarki")
     @Expose
-    private int podarki;
+    private Double podarki;
 
     public String getId() {
         return id;
@@ -78,11 +78,15 @@ public class ItemListZakMoney {
         this.oplaty = oplaty;
     }
 
-    public int getPodarki() {
+    public void setTovar(Double tovar) {
+        this.tovar = tovar;
+    }
+
+    public Double getPodarki() {
         return podarki;
     }
 
-    public void setPodarki(int podarki) {
+    public void setPodarki(Double podarki) {
         this.podarki = podarki;
     }
 }

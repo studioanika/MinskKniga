@@ -73,7 +73,7 @@ public class FragmentNewsAdapter extends RecyclerView.Adapter {
             ((StudentViewHolder) holder).lin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    activity.startPZLA(item.getId(), item.getName());
+                    activity.startPZLA(item.getId(), item.getName(), true);
                 }
             });
 

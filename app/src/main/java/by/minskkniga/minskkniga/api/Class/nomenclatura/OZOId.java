@@ -11,4 +11,14 @@ public class OZOId {
     public void setId(String id) {
         this.id = id;
     }
+
+    String komplekt_id;
+
+    public String getKomplekt_id() {
+        return komplekt_id;
+    }
+
+    public void setKomplekt_id(String komplekt_id) {
+        this.komplekt_id = komplekt_id;
+    }
 }

@@ -48,10 +48,13 @@ public class AdapterItogScheta extends BaseAdapter {
         TextView tv1 = view.findViewById(R.id.item_schet_name);
         TextView tv2 = view.findViewById(R.id.item_schet_value);
         TextView tv3 = view.findViewById(R.id.item_schet_comment);
+        TextView tv4 = view.findViewById(R.id.item_schet_type);
 
         tv1.setText(_objects.get(position).getName());
         tv2.setText(_objects.get(position).getValue());
         tv3.setText(_objects.get(position).getComment());
+        tv4.setText("Тип: "+_objects.get(position).getType());
+        tv4.setVisibility(View.VISIBLE);
 
         try{
 

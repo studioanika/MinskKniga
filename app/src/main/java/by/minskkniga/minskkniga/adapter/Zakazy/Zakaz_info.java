@@ -60,7 +60,7 @@ public class Zakaz_info extends BaseAdapter{
         tv5.setText(_objects.get(position).getOtgruzeno().equals("")?"0":_objects.get(position).getOtgruzeno());
         tv6.setText(_objects.get(position).getPodarki());
         try {
-            tv7.setText(String.format("%.2f", Double.parseDouble(_objects.get(position).getZakazano())*Double.parseDouble(_objects.get(position).getCena())));
+            tv7.setText(String.valueOf(_objects.get(position).getSumma()));
         } catch (Exception e) {
             e.printStackTrace();
         }

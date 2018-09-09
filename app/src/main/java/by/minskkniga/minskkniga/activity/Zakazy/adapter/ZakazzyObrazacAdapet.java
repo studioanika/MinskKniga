@@ -124,9 +124,9 @@ public class ZakazzyObrazacAdapet extends BaseExpandableListAdapter{
         Product product = header_list.get(i).getList().get(i1);
 
         tv1.setText(product.getName());
-        tv2.setText(product.getProdCena());
+        tv2.setText(product.getCena());
         tv3.setText(product.getVes());
-        //tv4.setText(product.getArtikul());
+        //tv4.setText(product.getS);
 
         return view;
     }
@@ -134,5 +134,9 @@ public class ZakazzyObrazacAdapet extends BaseExpandableListAdapter{
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return false;
+    }
+
+    public List<ObjectZakazyObrazci> getListOb(){
+        return header_list;
     }
 }

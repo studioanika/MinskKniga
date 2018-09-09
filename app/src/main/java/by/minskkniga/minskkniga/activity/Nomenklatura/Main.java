@@ -67,6 +67,7 @@ public class Main extends AppCompatActivity {
     ExpandableListView exp;
     TextView notfound;
     EditText search;
+    ImageView clear_q;
 
     ImageView imgmore;
     LinearLayout lin_header;
@@ -140,6 +141,8 @@ public class Main extends AppCompatActivity {
             }
         });
 
+
+
         nav_notfound = findViewById(R.id.nav_notfound);
         nav_lv = findViewById(R.id.nav_lv);
 
@@ -203,6 +206,13 @@ public class Main extends AppCompatActivity {
 
         barcode = findViewById(R.id.barcode);
         search = findViewById(R.id.search);
+        clear_q = findViewById(R.id.clear_q);
+        clear_q.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search.setText("");
+            }
+        });
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -303,6 +313,7 @@ public class Main extends AppCompatActivity {
                 reload();
                 lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, products));
                 filter_layout.setVisibility(View.GONE);
+                getNewFilter();
             }
         });
 
@@ -375,11 +386,11 @@ public class Main extends AppCompatActivity {
         products.clear();
         for (Products buffer : products_buf) {
             if (buffer.getName().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
-                    buffer.getClas().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
-                    buffer.getIzdatel().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    //buffer.getClas().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    //buffer.getIzdatel().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
                     buffer.getArtikul().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
                     buffer.getSokrName().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
-                    buffer.getProdCena().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    //buffer.getProdCena().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
                     buffer.getBarcode().toLowerCase().contains(search.getText().toString().toLowerCase())) {
                 products.add(buffer);
             }
@@ -397,6 +408,11 @@ public class Main extends AppCompatActivity {
         if (spinner2.getSelectedItemPosition() == 0) izdatel = "null";
         if (spinner3.getSelectedItemPosition() == 0) obraz = "null";
         if (spinner4.getSelectedItemPosition() == 0) class_ = "null";
+
+        if(spinner3.getSelectedItem().toString().contains("Да")) obraz = "Есть";
+        if(spinner3.getSelectedItem().toString().contains("Нет")) obraz = "";
+
+
 
         App.getApi().getProducts(avtor, izdatel, obraz, class_).enqueue(new Callback<List<Products>>() {
             @Override
@@ -512,7 +528,7 @@ public class Main extends AppCompatActivity {
                     if(position != 0) {
                         avtor = spinner1.getSelectedItem().toString();
                         if(filter_.contains("clas") || filter_.contains("izdatel") ||
-                                filter_.contains("obtazec")){
+                                filter_.contains("obrazec")){
                             filter_ = filter_+",autor";
                         } else filter_ = "autor";
 
@@ -524,7 +540,7 @@ public class Main extends AppCompatActivity {
                     if(position != 0) {
                         izdatel = spinner2.getSelectedItem().toString();
                         if(filter_.contains("clas") || filter_.contains("autor") ||
-                                filter_.contains("obtazec")){
+                                filter_.contains("obrazec")){
                             filter_ = filter_+",izdatel";
                         } else filter_ = "izdatel";
 
@@ -536,8 +552,8 @@ public class Main extends AppCompatActivity {
                         obraz = spinner3.getSelectedItem().toString();
                         if(filter_.contains("clas") || filter_.contains("izdatel") ||
                                 filter_.contains("autor")){
-                            filter_ = filter_+",obtazec";
-                        } else filter_ = "obtazec";
+                            filter_ = filter_+",obrazec";
+                        } else filter_ = "obrazec";
 
                         getNewFilter();
                     }
@@ -546,7 +562,7 @@ public class Main extends AppCompatActivity {
                     if(position != 0) {
                         class_ = spinner4.getSelectedItem().toString();
                         if(filter_.contains("autor") || filter_.contains("izdatel") ||
-                                filter_.contains("obtazec")){
+                                filter_.contains("obrazec")){
                             filter_ = filter_+",clas";
                         } else filter_ = "clas";
 

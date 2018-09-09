@@ -15,9 +15,17 @@ public class ObrazciComplect {
     @Expose
     private String komplect_name;
 
+    @SerializedName("komplekt_ves")
+    @Expose
+    private String komplect_ves;
+
     @SerializedName("komplekt_cena")
     @Expose
     private String komplect_cena;
+
+    @SerializedName("summa")
+    @Expose
+    private String summa;
 
     @SerializedName("komplekt_list")
     @Expose
@@ -53,5 +61,21 @@ public class ObrazciComplect {
 
     public void setKomplect_list(List<ObrazciProduct> komplect_list) {
         this.komplect_list = komplect_list;
+    }
+
+    public String getKomplect_ves() {
+        return komplect_ves;
+    }
+
+    public void setKomplect_ves(String komplect_ves) {
+        this.komplect_ves = komplect_ves;
+    }
+
+    public String getSumma() {
+        return summa;
+    }
+
+    public void setSumma(String summa) {
+        this.summa = summa;
     }
 }

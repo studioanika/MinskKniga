@@ -1,0 +1,68 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/drawer_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/nav_print"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:textColor="@color/drawer_text"
+        android:drawableStart="@drawable/ic_print"
+        android:drawablePadding="10dp"
+        android:gravity="left"
+        android:text="Печать" />
+
+    <TextView
+        android:id="@+id/nav_otpravit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:textColor="@color/drawer_text"
+        android:drawableStart="@drawable/ic_share"
+        android:drawablePadding="10dp"
+        android:gravity="left"
+        android:text="Отправить" />
+
+    <TextView
+        android:id="@+id/nav_add"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_add_white_24dp"
+        android:gravity="left"
+        android:padding="10dp"
+        android:text="Добавить товар"
+        android:textColor="@color/drawer_text" />
+
+    <TextView
+        android:id="@+id/nav_raschet"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_assignment_black_24dp"
+        android:gravity="left"
+        android:padding="10dp"
+        android:text="Показать расчет"
+        android:textColor="@color/drawer_text" />
+
+    <TextView
+        android:id="@+id/nav_contacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:textColor="@color/drawer_text"
+        android:drawableStart="@drawable/ic_contacts"
+        android:drawablePadding="10dp"
+        android:gravity="left"
+        android:text="Контакты" />
+
+</LinearLayout>

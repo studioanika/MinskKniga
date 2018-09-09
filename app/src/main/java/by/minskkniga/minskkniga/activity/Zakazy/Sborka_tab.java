@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Barcode;
+import by.minskkniga.minskkniga.activity.inventarizacia.RangsActivity;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Product;
 import by.minskkniga.minskkniga.api.Class.Zakaz_product;
@@ -40,13 +41,13 @@ public class Sborka_tab extends AppCompatActivity {
     int id;
 
     ImageView image;
-    TextView name;
-    TextView artikul;
-    TextView clas;
-    TextView izdatel;
-    TextView obrazec;
-    TextView autor;
-    TextView sokr_name;
+    TextView name, obrazci;
+    TextView artikul, ves;
+    TextView clas, ostatok;
+    TextView izdatel, sklad;
+    TextView obrazec, standart;
+    TextView autor, u_couriers;
+    TextView sokr_name, dostupno;
 
     EditText zakazano;
     EditText otgruzeno;
@@ -54,6 +55,7 @@ public class Sborka_tab extends AppCompatActivity {
     Button prev;
     Button next;
     Button barcode;
+    ImageButton rangs;
     FloatingActionButton fab;
 
     LinearLayout ll;
@@ -78,7 +80,15 @@ public class Sborka_tab extends AppCompatActivity {
         products = new ArrayList<>();
 
         ll = findViewById(R.id.ll);
-
+        rangs = findViewById(R.id.btn_rangs);
+        rangs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Sborka_tab.this, RangsActivity.class);
+                intent.putExtra("id", products.get(id).id);
+                startActivity(intent);
+            }
+        });
         zakazano = findViewById(R.id.zakazano);
         otgruzeno = findViewById(R.id.otgruzeno);
         check_otgruzeno = findViewById(R.id.check_otgruzeno);
@@ -140,6 +150,13 @@ public class Sborka_tab extends AppCompatActivity {
         });
 
         name = findViewById(R.id.name);
+        ves = findViewById(R.id.ves);
+        ostatok = findViewById(R.id.ostatok_n);
+        standart = findViewById(R.id.standart_up);
+        sklad = findViewById(R.id.sklad);
+        u_couriers = findViewById(R.id.couriers_b);
+        dostupno = findViewById(R.id.dostupno);
+        obrazci = findViewById(R.id.obrazci);
         artikul = findViewById(R.id.artikul);
         clas = findViewById(R.id.clas);
         izdatel = findViewById(R.id.izdatel);
@@ -197,7 +214,7 @@ public class Sborka_tab extends AppCompatActivity {
         initialize();
 
         id = getIntent().getIntExtra("id", 0);
-
+        products.clear();
         caption.setText(getIntent().getStringExtra("name"));
         products.addAll(getIntent().<Zakaz_product>getParcelableArrayListExtra(Zakaz_product.class.getCanonicalName()));
 
@@ -233,6 +250,13 @@ public class Sborka_tab extends AppCompatActivity {
                 } else {
                     Glide.with(Sborka_tab.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + response.body().getImage()).into(image);
                 }
+                ves.setText(String.valueOf(response.body().getVes()));
+                //ostatok.setText(response.body().getOstatok());
+                sklad.setText(response.body().getOstatok());
+                dostupno.setText(response.body().getDostupno());
+                standart.setText("Стандарт  " +response.body().getStandart());
+                obrazci.setText(response.body().getKol_obr());
+                u_couriers.setText(response.body().getCur());
             }
 
             @Override

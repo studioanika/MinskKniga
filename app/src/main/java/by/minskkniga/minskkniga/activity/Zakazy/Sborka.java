@@ -71,6 +71,7 @@ public class Sborka extends AppCompatActivity {
         setContentView(R.layout.activity_sborka);
         initialize();
 
+        products.clear();
         caption.setText(getIntent().getStringExtra("name"));
         final ArrayList<Zakaz_product> product = getIntent().getParcelableArrayListExtra(Zakaz_product.class.getCanonicalName());
         products.addAll(product);
@@ -80,11 +81,12 @@ public class Sborka extends AppCompatActivity {
         for (Zakaz_product buffer : products) {
             if (Integer.parseInt(buffer.otgruzeno) > 0) {
                 i++;
-                ves += Double.parseDouble(buffer.ves);
+                ves += Double.parseDouble(buffer.ves) * Integer
+                        .parseInt(buffer.otgruzeno);;
             }
         }
 
-        sobrano.setText(String.format("%d поз./ %s кг.", i, ves));
+        sobrano.setText(String.format("%d поз./ %s кг.", i,String.format("%.02f", ves) ));
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -101,8 +103,6 @@ public class Sborka extends AppCompatActivity {
     }
 
 
-
-
     @SuppressLint("DefaultLocale")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -113,15 +113,17 @@ public class Sborka extends AppCompatActivity {
                     products.clear();
                     products.addAll(product);
                     lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_sborka(this, products));
-
+                    ves = 0;
+                    i = 0;
                     for (Zakaz_product buffer : products) {
                         if (Integer.parseInt(buffer.otgruzeno) > 0) {
                             i++;
-                            ves += Double.parseDouble(buffer.ves);
+                            ves += Double.parseDouble(buffer.ves) * Integer
+                            .parseInt(buffer.otgruzeno);
                         }
                     }
 
-                    sobrano.setText(String.format("%d поз./ %s кг.", i, ves));
+                    sobrano.setText(String.format("%d поз./ %s кг.", i, String.format("%.02f", ves)));
             }
         }
     }

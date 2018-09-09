@@ -44,6 +44,9 @@ public class ZakazyObrazec {
     @Expose
     private Integer kol;
 
+    @SerializedName("summa")
+    @Expose
+    private Double summa;
 
     @SerializedName("what_zakazal")
     @Expose
@@ -128,5 +131,13 @@ public class ZakazyObrazec {
 
     public void setWhat_zakazal(List<ObrazciComplect> what_zakazal) {
         this.what_zakazal = what_zakazal;
+    }
+
+    public Double getSumma() {
+        return summa;
+    }
+
+    public void setSumma(Double summa) {
+        this.summa = summa;
     }
 }

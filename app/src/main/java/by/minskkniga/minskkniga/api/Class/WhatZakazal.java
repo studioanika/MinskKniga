@@ -44,6 +44,14 @@ public class WhatZakazal {
     @Expose
     private String cena;
 
+    @SerializedName("summa")
+    @Expose
+    private Double summa;
+
+    @SerializedName("image")
+    @Expose
+    private String image;
+
     public String getId_poz() {
         return id_poz;
     }
@@ -140,4 +148,19 @@ public class WhatZakazal {
         this.cena = cena;
     }
 
+    public Double getSumma() {
+        return summa;
+    }
+
+    public void setSumma(Double summa) {
+        this.summa = summa;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

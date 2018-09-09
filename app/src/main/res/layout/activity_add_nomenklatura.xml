@@ -220,12 +220,22 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1" />
 
+
+
                     <ImageButton
                         android:id="@+id/barcode_button"
                         android:layout_width="24dp"
                         android:layout_height="20dp"
                         android:layout_margin="15dp"
                         app:srcCompat="@drawable/ic_barcode_scan" />
+
+                    <ImageButton
+                        android:id="@+id/rangs_button"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_format_list_numbered_black_24dp" />
 
                 </LinearLayout>
 

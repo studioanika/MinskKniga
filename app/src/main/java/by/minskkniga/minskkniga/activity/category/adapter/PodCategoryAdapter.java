@@ -14,7 +14,6 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.category.CategoryActivity;
-import by.minskkniga.minskkniga.api.Class.category.Category;
 import by.minskkniga.minskkniga.api.Class.category.PodCat;
 
 public class PodCategoryAdapter extends BaseAdapter{
@@ -67,6 +66,7 @@ public class PodCategoryAdapter extends BaseAdapter{
             public void onClick(View view) {
                 CategoryActivity activity = (CategoryActivity) _context;
                 activity.clickPodCategory(position);
+                activity.done();
             }
         });
 
@@ -75,6 +75,7 @@ public class PodCategoryAdapter extends BaseAdapter{
             public boolean onLongClick(View view) {
                 CategoryActivity activity = (CategoryActivity) _context;
                 activity.clickLongPodCategory(_objects.get(position).getId(), _objects.get(position).getName());
+
                 return true;
             }
         });

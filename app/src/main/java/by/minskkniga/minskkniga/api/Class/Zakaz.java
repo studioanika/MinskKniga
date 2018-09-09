@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Zakaz {
 
@@ -32,6 +31,19 @@ public class Zakaz {
     @SerializedName("status")
     @Expose
     private String status;
+
+    @SerializedName("skidka")
+    @Expose
+    private String skidka;
+
+    @SerializedName("ves")
+    @Expose
+    private Double ves;
+
+    @SerializedName("summa")
+    @Expose
+    private String summa;
+
     @SerializedName("what_zakazal")
     @Expose
     private ArrayList<WhatZakazal> whatZakazal = null;
@@ -108,5 +120,27 @@ public class Zakaz {
         this.whatZakazal = whatZakazal;
     }
 
+    public String getSkidka() {
+        return skidka;
+    }
 
+    public void setSkidka(String skidka) {
+        this.skidka = skidka;
+    }
+
+    public Double getVes() {
+        return ves;
+    }
+
+    public void setVes(Double ves) {
+        this.ves = ves;
+    }
+
+    public String getSumma() {
+        return summa;
+    }
+
+    public void setSumma(String summa) {
+        this.summa = summa;
+    }
 }

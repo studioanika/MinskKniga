@@ -1,11 +1,13 @@
 package by.minskkniga.minskkniga.activity.Zakazy.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -66,22 +68,62 @@ public class ZakazyClientsCityAdapter extends BaseExpandableListAdapter {
 
             final Clients client =  _listDataChild.get(l.get(String.valueOf(groupPosition))).get(childPosition);
             TextView tv1 = convertView.findViewById(R.id.tv1);
-            TextView tv2 = convertView.findViewById(R.id.tv2);
+            TextView status = convertView.findViewById(R.id.tv2);
+            TextView tv3 = convertView.findViewById(R.id.tv3);
             CheckBox ch1 = convertView.findViewById(R.id.ch1);
+            LinearLayout lin_h = convertView.findViewById(R.id.lin_h);
 
+            if(childPosition == 0) lin_h.setVisibility(View.VISIBLE);
+            else lin_h.setVisibility(View.GONE);
+
+            tv3.setVisibility(View.VISIBLE);
             int obr = Integer.parseInt(_listDataHeader.get(groupPosition).getObrazec());
 
             if(obr == 1) ch1.setChecked(true);
             else ch1.setChecked(false);
 
-            tv1.setText(client.getName());
-            tv2.setText(client.getDolg());
+            tv1.setText(client.getClient_name());
 
+            switch (client.getStatus()) {
+                case "0"://chernovik новый green
+                    status.setText("Новый");
+                    status.setTextColor(Color.rgb(97, 184, 126));
+                    break;
+                case "1"://новый green
+                    status.setText("Новый");
+                    status.setTextColor(Color.rgb(97, 184, 126));
+                    break;
+                case "2"://в сборке yellow
+                    status.setText("В сборке");
+                    status.setTextColor(Color.rgb(242, 201, 76));
+                    break;
+                case "3"://собран blue
+                    status.setText("Собран");
+                    status.setTextColor(Color.BLUE);
+                    break;
+                case "4"://в доставке lightred
+                    status.setText("В доставке");
+                    status.setTextColor(Color.rgb(242, 0, 86));
+                    break;
+                case "5"://отгружен darkred
+                    status.setText("Отгружен");
+                    status.setTextColor(Color.rgb(139, 0, 0));
+                    break;
+                case "6"://возвращение darkred
+                    status.setText("Возвращение");
+                    status.setTextColor(Color.rgb(100, 0, 0));
+                    break;
+
+            }
+
+            tv3.setText(String.valueOf(client.getSumma()));
+            if(client.getSumma() < 0) tv3.setTextColor(Color.RED);
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Main main = (Main) _context;
-                    main.actStart(Integer.parseInt(client.getId()), client.getName());
+                    main.startInfoZakaz(client.getClient_name(),
+                            client.getId_client(), client.getId());
                 }
             });
 

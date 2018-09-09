@@ -329,10 +329,11 @@ public class InventarizaciaActivity extends AppCompatActivity {
     public void reload() {
         if (spinner1.getSelectedItemPosition() == 0) avtor = "null";
         if (spinner2.getSelectedItemPosition() == 0) izdatel = "null";
-        obraz = "null";
-        class_ = "null";
+        if (spinner3.getSelectedItemPosition() == 0) obraz = "null";
+        if (spinner4.getSelectedItemPosition() == 0) class_ = "null";
 
-        //izdatel = intent.getStringExtra("izdatel");
+        if(spinner3.getSelectedItem().toString().contains("Да")) obraz = "Есть";
+        if(spinner3.getSelectedItem().toString().contains("Нет")) obraz = "";
 
         App.getApi().getProducts(avtor, izdatel, obraz, class_).enqueue(new Callback<List<Products>>() {
             @Override
@@ -447,14 +448,15 @@ public class InventarizaciaActivity extends AppCompatActivity {
 
                 long i1 = R.id.spinner1;
                 long i2 = R.id.spinner2;
+                long i3 = R.id.spinner3;
+                long i4 = R.id.spinner4;
                 long vi = spinner.getId();
-
 
                 if(vi == i1) {
                     if(position != 0) {
                         avtor = spinner1.getSelectedItem().toString();
                         if(filter_.contains("clas") || filter_.contains("izdatel") ||
-                                filter_.contains("obtazec")){
+                                filter_.contains("obrazec")){
                             filter_ = filter_+",autor";
                         } else filter_ = "autor";
 
@@ -466,9 +468,31 @@ public class InventarizaciaActivity extends AppCompatActivity {
                     if(position != 0) {
                         izdatel = spinner2.getSelectedItem().toString();
                         if(filter_.contains("clas") || filter_.contains("autor") ||
-                                filter_.contains("obtazec")){
+                                filter_.contains("obrazec")){
                             filter_ = filter_+",izdatel";
                         } else filter_ = "izdatel";
+
+                        getNewFilter();
+                    }
+                }
+                if(vi == i3) {
+                    if(position != 0) {
+                        obraz = spinner3.getSelectedItem().toString();
+                        if(filter_.contains("clas") || filter_.contains("izdatel") ||
+                                filter_.contains("autor")){
+                            filter_ = filter_+",obrazec";
+                        } else filter_ = "obrazec";
+
+                        getNewFilter();
+                    }
+                }
+                if(vi == i4) {
+                    if(position != 0) {
+                        class_ = spinner4.getSelectedItem().toString();
+                        if(filter_.contains("autor") || filter_.contains("izdatel") ||
+                                filter_.contains("obrazec")){
+                            filter_ = filter_+",clas";
+                        } else filter_ = "clas";
 
                         getNewFilter();
                     }
@@ -485,16 +509,18 @@ public class InventarizaciaActivity extends AppCompatActivity {
 
     private void getNewFilter(){
         String _class = "";
-//        if(!class_.contains("null")) _class = class_;
-//        if(class_.contains("Класс")) _class = "";
+        if(!class_.contains("null")) _class = class_;
+        if(class_.contains("Класс")) _class = "";
 
         String _autor = "";
         if(!avtor.contains("null")) _autor = avtor;
         if(avtor.contains("Автор")) _autor = "";
 
         String _obraz = "";
-//        if(!obraz.contains("null")) _obraz = obraz;
-//        if(obraz.contains("Образец")) _obraz = "";
+        if(!obraz.contains("null")) _obraz = obraz;
+        if(obraz.contains("Образец")) _obraz = "";
+        else if(obraz.contains("Да")) _obraz = "Есть";
+        else if(obraz.contains("Нет")) _obraz = "";
 
         String _izdatel = "";
         if(!izdatel.contains("null")) _izdatel = izdatel;
@@ -507,8 +533,13 @@ public class InventarizaciaActivity extends AppCompatActivity {
                 if(response.body() != null){
                     if(!filter_.contains("autor"))setAdapter(spinner1, response.body().getAutor(), 1);
                     if(!filter_.contains("izdatel"))setAdapter(spinner2, response.body().getIzdatel(), 2);
+                    if(!filter_.contains("obrazec"))setAdapter(spinner3, yesno, 3);
+                    if(!filter_.contains("clas"))setAdapter(spinner4, response.body().getClas(), 4);
+                    Intent intent = getIntent();
+                    boolean b = intent.getBooleanExtra("type_z", false);
                     reload();
                 }
+
             }
 
             @Override

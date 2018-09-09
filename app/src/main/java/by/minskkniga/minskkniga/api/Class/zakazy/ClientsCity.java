@@ -24,6 +24,14 @@ public class ClientsCity {
     @Expose
     private String obrazec;
 
+    @SerializedName("col_vo")
+    @Expose
+    private int col_vo;
+
+    @SerializedName("ves")
+    @Expose
+    private Double ves;
+
     public String getObrazec() {
         return obrazec;
     }
@@ -66,5 +74,21 @@ public class ClientsCity {
 
     public void setList_city(List<Clients> list_city) {
         this.list_city = list_city;
+    }
+
+    public int getCol_vo() {
+        return col_vo;
+    }
+
+    public void setCol_vo(int col_vo) {
+        this.col_vo = col_vo;
+    }
+
+    public Double getVes() {
+        return ves;
+    }
+
+    public void setVes(Double ves) {
+        this.ves = ves;
     }
 }

@@ -137,6 +137,7 @@ public class Kassa_info extends AppCompatActivity {
                             scheta.setValue(schetaItog.getNachSum());
                             scheta.setId(schetaItog.getId());
                             scheta.setComment(schetaItog.getKoment());
+                            scheta.setType(schetaItog.getType());
                             listItog.add(scheta);
                         }
 
@@ -152,6 +153,7 @@ public class Kassa_info extends AppCompatActivity {
                             scheta.setValue(schetaNoItog.getNachSum());
                             scheta.setId(schetaNoItog.getId());
                             scheta.setComment(schetaNoItog.getKoment());
+                            scheta.setType(schetaNoItog.getType());
                             listNeItog.add(scheta);
                         }
                     }

@@ -30,6 +30,31 @@
         android:text="Отправить" />
 
     <TextView
+        android:id="@+id/nav_order"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_share"
+        android:gravity="left"
+        android:padding="10dp"
+        android:text="Приходный ордер"
+        android:textColor="@color/drawer_text" />
+
+    <TextView
+        android:id="@+id/nav_otgruz"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_share"
+        android:gravity="left"
+        android:padding="10dp"
+        android:text="Отгрузить заказ"
+        android:textColor="@color/drawer_text"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/nav_sobrat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,6 +65,19 @@
         android:drawablePadding="10dp"
         android:gravity="left"
         android:text="Собрать заказ" />
+
+    <TextView
+        android:id="@+id/nav_edit_otgruzhennoe"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_load"
+        android:gravity="left"
+        android:padding="10dp"
+        android:text="Изменить отгруженное"
+        android:textColor="@color/drawer_text"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/nav_contacts"

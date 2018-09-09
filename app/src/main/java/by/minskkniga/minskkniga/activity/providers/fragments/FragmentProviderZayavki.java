@@ -52,10 +52,12 @@ public class FragmentProviderZayavki extends Fragment implements IFragmentProvid
     HashMap<String, List<Book>> listDataChild;
 
     String id;
+    String type;
 
     @SuppressLint("ValidFragment")
-    public FragmentProviderZayavki(String id) {
+    public FragmentProviderZayavki(String id, String type) {
         this.id = id;
+        this.type = type;
     }
 
     @Nullable
@@ -77,8 +79,10 @@ public class FragmentProviderZayavki extends Fragment implements IFragmentProvid
     @Override
     public void loadData() {
 
+
+
         showProgress();
-        App.getApi().getProvidersZayavki(id).enqueue(new Callback<List<ProvidersZayavkiId>>() {
+        App.getApi().getProvidersZayavki(id, type).enqueue(new Callback<List<ProvidersZayavkiId>>() {
             @Override
             public void onResponse(Call<List<ProvidersZayavkiId>> call, Response<List<ProvidersZayavkiId>> response) {
                 hideProgress();
@@ -109,7 +113,11 @@ public class FragmentProviderZayavki extends Fragment implements IFragmentProvid
 
                 List<Book> book = new ArrayList<Book>();
                 Book book1 = new Book();
-                book1.setClasss("-1");
+                book1.setClasss("Кл.");
+                book1.setName("Наим.");
+                book1.setSokrName("Сокр.");
+                book1.setZakaz("Заказано");
+                book1.setIzdatel("Изд.");
                 book.add(0,book1);
                 book.addAll(getListBooks(i, list));
                 listDataChild.put(String.valueOf(i), book);

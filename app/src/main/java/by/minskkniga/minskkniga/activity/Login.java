@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.prefs.Prefs;
-import by.minskkniga.minskkniga.api.App;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -84,24 +83,31 @@ public class Login extends AppCompatActivity {
             ed.putString("pass", pass.getText().toString());
             ed.apply();
 
-            if(prefs.getHost().isEmpty()) {
-                prefs.setHost(host.getText().toString());
-                Intent i = getBaseContext().getPackageManager()
-                        .getLaunchIntentForPackage(getBaseContext().getPackageName());
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-            }
-
             pd = new ProgressDialog(this);
             pd.setTitle("Авторизация");
             pd.setMessage("Пожалуйста подождите");
             pd.setCancelable(false);
             pd.show();
 
-            App.getApi().login(login.getText().toString(), pass.getText().toString()).enqueue(new Callback<by.minskkniga.minskkniga.api.Class.Login>() {
+            String host_s = "";
+
+            if(prefs.getHost().isEmpty()) host_s = host.getText().toString();
+            else host_s = prefs.getHost();
+
+            retrofit2.Retrofit retrofit = new retrofit2.Retrofit.Builder()
+                    .baseUrl(host_s)
+                    .addConverterFactory(retrofit2.converter.gson.GsonConverterFactory.create())
+                    .build();
+            by.minskkniga.minskkniga.api.RestApi api = retrofit.create(by.minskkniga.minskkniga.api.RestApi.class);
+
+            final String finalHost_s = host_s;
+            final String finalHost_s1 = host_s;
+            api.login(login.getText().toString(), pass.getText().toString()).enqueue(new Callback<by.minskkniga.minskkniga.api.Class.Login>() {
                 @Override
                 public void onResponse(Call<by.minskkniga.minskkniga.api.Class.Login> call, Response<by.minskkniga.minskkniga.api.Class.Login> response) {
+                    //if(prefs.getHost().isEmpty()) prefs.setHost(host.getText().toString());
                     if (!response.body().getMessage().equals("error")) {
+
                         pd.cancel();
                         Toast.makeText(Login.this, response.body().getRank()+" "+response.body().getUser_id(), Toast.LENGTH_SHORT).show();
                         ed.putString("id", response.body().getId());
@@ -111,19 +117,28 @@ public class Login extends AppCompatActivity {
                         ed.putString("user_id", response.body().getUser_id());
                         ed.putString("name", response.body().getName());
                         ed.apply();
+                        if(prefs.getHost().isEmpty()){
+                            prefs.setHost(finalHost_s);
+                            getApplication().onCreate();
+
+                        }
+
                         Intent intent = new Intent(Login.this, Menu.class);
                         startActivity(intent);
+
+
                     } else {
+                        //if(prefs.getHost().isEmpty()) prefs.setHost(finalHost_s1);
                         pd.cancel();
-                        prefs.setHost("");
                         Toast.makeText(Login.this, "Не верный логин или пароль", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<by.minskkniga.minskkniga.api.Class.Login> call, Throwable t) {
+                    String d = t.toString();
                     pd.cancel();
-                    Toast.makeText(Login.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Ошибка соединения с сервером...", Toast.LENGTH_SHORT).show();
                 }
             });
 

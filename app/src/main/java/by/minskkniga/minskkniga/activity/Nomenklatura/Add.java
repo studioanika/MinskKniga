@@ -42,6 +42,7 @@ import java.lang.reflect.Method;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Barcode;
+import by.minskkniga.minskkniga.activity.inventarizacia.RangsActivity;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Product;
 import by.minskkniga.minskkniga.api.Class.ResultBody;
@@ -95,7 +96,7 @@ public class Add extends AppCompatActivity {
 
     LinearLayout linear_add;
 
-
+    ImageButton btn_rangs;
 
     public void initialize() {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -178,6 +179,17 @@ public class Add extends AppCompatActivity {
         linear_add = findViewById(R.id.linear_add);
 
         linear_add.setVisibility(View.VISIBLE);
+        btn_rangs = findViewById(R.id.rangs_button);
+
+        if(id != null) btn_rangs.setVisibility(View.VISIBLE);
+        btn_rangs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Add.this, RangsActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -197,7 +209,7 @@ public class Add extends AppCompatActivity {
 
                     name.setText(response.body().getName());
                     clas.setText(response.body().getClas());
-                    obrazec_spinner.setSelection(response.body().getArtikul().equals("Есть") ? 1 : 0);
+                    obrazec_spinner.setSelection(response.body().getObrazec().equals("Есть") ? 1 : 0);
                     artikul.setText(response.body().getArtikul());
                     sokr_name.setText(response.body().getSokrName());
                     izdatel.setText(response.body().getIzdatel());
@@ -214,6 +226,7 @@ public class Add extends AppCompatActivity {
                     ogidanie.setText(response.body().getOgidanie());
                     upakovok.setText(response.body().getUpakovok());
                     ostatok.setText(response.body().getOstatok());
+                    reserv.setText(response.body().getRezerv());
 
                     Toast.makeText(Add.this, response.body().getImage(), Toast.LENGTH_SHORT).show();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -290,7 +303,7 @@ public class Add extends AppCompatActivity {
                     prod_cena.getText().toString().isEmpty() ? "" : prod_cena.getText().toString(),
                     standart.getText().toString().isEmpty() ? "" : standart.getText().toString(),
                     ves.getText().toString().isEmpty() ? "" : ves.getText().toString(),
-                    reserv.getText().toString().isEmpty() ? "" : ves.getText().toString()
+                    reserv.getText().toString().isEmpty() ? "" : reserv.getText().toString()
             ).enqueue(new Callback<ResultBody>() {
                 @Override
                 public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {
@@ -316,7 +329,8 @@ public class Add extends AppCompatActivity {
                     zakup_cena.getText().toString().isEmpty() ? "" : zakup_cena.getText().toString(),
                     prod_cena.getText().toString().isEmpty() ? "" : prod_cena.getText().toString(),
                     standart.getText().toString().isEmpty() ? "" : standart.getText().toString(),
-                    ves.getText().toString().isEmpty() ? "" : ves.getText().toString()
+                    ves.getText().toString().isEmpty() ? "" : ves.getText().toString(),
+                    reserv.getText().toString().isEmpty() ? "" : reserv.getText().toString()
             ).enqueue(new Callback<ResultBody>() {
                 @Override
                 public void onResponse(Call<ResultBody> call, Response<ResultBody> response) {

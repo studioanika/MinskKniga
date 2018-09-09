@@ -90,8 +90,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:fitsSystemWindows="true"
-        android:background="@color/drawer_background">
+        android:background="@color/drawer_background"
+        android:fitsSystemWindows="true">
 
         <include
             layout="@layout/nav_new_zakaz"

@@ -81,6 +81,7 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
             }
         });
 
+
         initView();
     }
 
@@ -94,7 +95,7 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
         TextView tv_cancel = (TextView) dialogEdit.findViewById(R.id.a_i_cancel);
         TextView tv_done = (TextView) dialogEdit.findViewById(R.id.a_i_done);
         TextView tv_obr = (TextView) dialogEdit.findViewById(R.id.a_i_obr);
-        TextView tv_ost_b = (TextView) dialogEdit.findViewById(R.id.a_i_ost_b);
+        final TextView tv_ost_b = (TextView) dialogEdit.findViewById(R.id.a_i_ost_b);
         TextView tv_cour = (TextView) dialogEdit.findViewById(R.id.a_i_cour);
         final EditText tv_sclad = (EditText) dialogEdit.findViewById(R.id.a_i_sklad);
         TextView tv_fact = (TextView) dialogEdit.findViewById(R.id.a_i_fact);
@@ -113,6 +114,10 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 getResult(tv_sclad, tv_nedos, tv_nedos_i);
+                String o_b = tv_ost_b.getText().toString();
+                String sk = tv_sclad.getText().toString();
+                if(o_b.equals(sk)) return;
+
                 url = "/api/inv_ed.php?";
                 url = url +"id="+id;
                 try{
@@ -129,9 +134,9 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
 
                     Double result_d =Double.parseDouble(tv_nedos.getText().toString());
                     int result = result_d.intValue();
-                    if(result >0) url = url + "&ned=0&izl="+String.valueOf(result);
-                    else if(result < 0)url = url + "&izl=0&ned="+String.valueOf(result);
-                    else url = url + "&izl=0&ned=0";
+                    if(tv_nedos_i.getText().toString().contains("Излишек")) url = url + "&ned=0&izl="+String.valueOf(result);
+                    else url = url + "&izl=0&ned="+String.valueOf(result);
+                    //else url = url + "&izl=0&ned=0";
 
                     url = url + "&aut="+sp.getString("user_id", "");
                     url = url + "&ost=" +String.valueOf(_kniga.getNasklade());
@@ -255,12 +260,14 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
             }
 
 
-            Double fact = Double.parseDouble(String.valueOf(_kniga.getFakt()));
+            Double fact = Double.parseDouble(String.valueOf(_kniga.getOst()));
 
-            double result = (fact - d);
-            tv_nedostacha.setText(String.valueOf(result));
+            double result = ( fact - d);
+            String r = String.valueOf(result);
+            r = r.replace("-", "");
+            tv_nedostacha.setText(r);
 
-            if((fact - d) <0) {
+            if((fact - d) >0) {
                 tv_nedostacha.setTextColor(getResources().getColor(R.color.red));
                 tv_nedostacha.setTextColor(getResources().getColor(R.color.red));
                 tv_nedostacha_i.setTextColor(getResources().getColor(R.color.red));
@@ -289,6 +296,16 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
         tv_izdatel = (TextView) findViewById(R.id.i_info_izdatel);
         img = (ImageView) findViewById(R.id.i_info_img);
         lv = (ListView) findViewById(R.id.i_info_lv);
+
+        tv_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(InventarizaciaInfoActivity.this, RangsActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
 
         loadData();
     }
@@ -331,7 +348,7 @@ public class InventarizaciaInfoActivity extends AppCompatActivity {
 
                             list = object.getKont();
                             lv.setAdapter(new AdapterInventarizacia(InventarizaciaInfoActivity.this, list));
-                            setListViewBase(lv);
+                            //setListViewBase(lv);
 
                         }
 

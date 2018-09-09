@@ -271,9 +271,10 @@ public class RashodOrder extends AppCompatActivity {
                             showDrawer();
                             Toast.makeText(RashodOrder.this, "Расходный ордер успешно создан", Toast.LENGTH_SHORT).show();
                         }
-                        else Toast.makeText(RashodOrder.this, "Расходный ордер успешно создан", Toast.LENGTH_SHORT).show();
+                        else Toast.makeText(RashodOrder.this, "Ошибка создания ордера...", Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         e.printStackTrace();
+                        Toast.makeText(RashodOrder.this, "Ошибка создания ордера...", Toast.LENGTH_SHORT).show();
                     }
 
                 }

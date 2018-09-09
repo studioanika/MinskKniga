@@ -2,13 +2,10 @@ package by.minskkniga.minskkniga.activity.category.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,11 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
-import by.minskkniga.minskkniga.activity.Zakazy.Main;
 import by.minskkniga.minskkniga.activity.category.CategoryActivity;
-import by.minskkniga.minskkniga.api.Class.Spinner_filter;
 import by.minskkniga.minskkniga.api.Class.category.Category;
-import by.minskkniga.minskkniga.api.Class.category.PodCat;
 
 public class CategoryAdapter extends BaseAdapter{
 
@@ -80,6 +74,7 @@ public class CategoryAdapter extends BaseAdapter{
             public boolean onLongClick(View view) {
                 CategoryActivity activity = (CategoryActivity) _context;
                 activity.clickLongCategory(_objects.get(position).getId(), _objects.get(position).getName());
+
                 return true;
             }
         });

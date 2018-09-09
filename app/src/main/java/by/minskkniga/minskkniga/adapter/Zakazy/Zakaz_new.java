@@ -53,7 +53,7 @@ public class Zakaz_new extends BaseAdapter {
 
         try{
             Double d = Double.parseDouble(_objects.get(position).summa);
-            tv7.setText(String.format("%.2f", d));
+            tv7.setText(_objects.get(position).summa);
 
         }catch (Exception e){
             tv7.setText(_objects.get(position).summa);

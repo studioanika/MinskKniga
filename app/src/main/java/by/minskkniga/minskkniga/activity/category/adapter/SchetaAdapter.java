@@ -71,6 +71,7 @@ public class SchetaAdapter extends BaseAdapter{
             public void onClick(View view) {
 
                 activity.setSchet(position);
+                activity.done();
             }
         });
 

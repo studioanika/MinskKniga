@@ -63,6 +63,14 @@ public class ZavInfo {
     @Expose
     private Double ves;
 
+    @SerializedName("nal")
+    @Expose
+    private String nal;
+
+    @SerializedName("beznal")
+    @Expose
+    private String beznal;
+
     @SerializedName("what_zakazal")
     @Expose
     private List<ZavInfoTovar> what_zakazal;
@@ -162,5 +170,21 @@ public class ZavInfo {
 
     public void setChern(String chern) {
         this.chern = chern;
+    }
+
+    public String getNal() {
+        return nal;
+    }
+
+    public void setNal(String nal) {
+        this.nal = nal;
+    }
+
+    public String getBeznal() {
+        return beznal;
+    }
+
+    public void setBeznal(String beznal) {
+        this.beznal = beznal;
     }
 }

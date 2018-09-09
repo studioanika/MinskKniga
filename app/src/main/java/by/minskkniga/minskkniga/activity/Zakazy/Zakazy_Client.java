@@ -220,7 +220,6 @@ public class Zakazy_Client extends AppCompatActivity {
 
     public void reload_2(){
 
-
         App.getApi().getZakazy_client(id).enqueue(new Callback<List<Zakazy>>() {
             @Override
             public void onResponse(Call<List<Zakazy>> call, Response<List<Zakazy>> response) {

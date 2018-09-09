@@ -27,12 +27,14 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Zakazy.adapter.ZakazyClientsCityAdapter;
+import by.minskkniga.minskkniga.activity.prefs.Prefs;
 import by.minskkniga.minskkniga.adapter.Zakazy.Filter;
 import by.minskkniga.minskkniga.adapter.Zakazy.Main_1;
 import by.minskkniga.minskkniga.adapter.Zakazy.Main_2;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Clients;
 import by.minskkniga.minskkniga.api.Class.Spinner_filter;
+import by.minskkniga.minskkniga.api.Class.ZakazFilterItem;
 import by.minskkniga.minskkniga.api.Class.Zakaz_filter;
 import by.minskkniga.minskkniga.api.Class.Zakazy_short;
 import by.minskkniga.minskkniga.api.Class.zakazy.ClientsCity;
@@ -49,6 +51,10 @@ public class Main extends AppCompatActivity {
     LinearLayout filter_layout;
     ExpandableListView lv1;
     ListView lv2;
+    String url_ = "get_clients_city.php?";
+    String url_head;
+
+    Prefs prefs;
 
     ArrayList<Clients> clien = new ArrayList<>();
     ArrayList<Clients> clien_buf  = new ArrayList<>();
@@ -76,6 +82,13 @@ public class Main extends AppCompatActivity {
     ArrayList<Spinner_filter> buf1 = new ArrayList<>();
     ArrayList<Spinner_filter> buf2 = new ArrayList<>();
     ArrayList<Spinner_filter> buf3 = new ArrayList<>();
+
+    Zakaz_filter zakaz_filter_general;
+
+
+    public String filter_status = "";
+    public String filter_gorod = "";
+    public String filter_school = "";
 
     public void initialize() {
         back = findViewById(R.id.back);
@@ -198,6 +211,8 @@ public class Main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zakazy);
         initialize();
+        prefs = new Prefs(this);
+        url_head = prefs.getHost();
 
         lv1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -220,35 +235,137 @@ public class Main extends AppCompatActivity {
         clear1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (Spinner_filter buf : buf1)
-                    buf.setChecked("0");
-                clear1.setText("X");
-                filter();
+                clearF1();
+                reload_1();
             }
         });
 
         clear2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (Spinner_filter buf : buf2)
-                    buf.setChecked("0");
-                clear2.setText("X");
-                filter();
+                clearF2();
+                reload_1();
             }
         });
 
         clear3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (Spinner_filter buf : buf3)
-                    buf.setChecked("0");
-                clear3.setText("X");
-                filter();
+                clearF3();
+                reload_1();
+            }
+        });
+
+
+        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i != 0){
+
+                    if(buf1 != null) {
+                        if(zakaz_filter_general != null){
+                            filter_status = buf1.get(i).getName();
+                        }
+                    }
+                    reload_1();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+               if(i != 0){
+                   if(buf2 != null) {
+                       if(zakaz_filter_general != null){
+                           filter_gorod = buf2.get(i).getId();
+                       }
+                   }
+                   reload_1();
+               }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i != 0){
+                    if(buf3 != null) {
+                        if(zakaz_filter_general != null){
+                            filter_school = buf3.get(i).getName();
+                        }
+                    }
+                    reload_1();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
         filter_load();
         reload_2();
+    }
+
+    private void clearF1() {
+        filter_status = "";
+        if(zakaz_filter_general != null){
+
+            buf1.clear();
+            buf1.add(new Spinner_filter("Статус", "0"));
+            for (String buffer : zakaz_filter_general.getStatus()) {
+                buf1.add(new Spinner_filter(String.valueOf(buffer), "0"));
+            }
+
+            spinner1.setAdapter(new Filter(Main.this, 1, buf1));
+        }
+
+        reload_1();
+
+    }
+
+    private void clearF2() {
+        filter_gorod = "";
+        if(zakaz_filter_general != null){
+
+            buf2.clear();
+            Spinner_filter spinner_filter = new Spinner_filter(String.valueOf("Город"), "0");
+            spinner_filter.setId("-1");
+            buf2.add(spinner_filter);
+            for (ZakazFilterItem buffer : zakaz_filter_general.getGorod()) {
+                Spinner_filter spinner_filter1 = new Spinner_filter(String.valueOf(buffer.getName()), "0");
+                spinner_filter1.setId(buffer.getId());
+                buf2.add(spinner_filter1);
+            }
+
+            spinner2.setAdapter(new Filter(Main.this, 2, buf2));
+        }
+        reload_1();
+    }
+
+    private void clearF3() {
+        filter_school = "";
+        if(zakaz_filter_general != null){
+
+            buf3.clear();
+            buf3.add(new Spinner_filter("Школа", "0"));
+            for (String buffer : zakaz_filter_general.getSchool()) {
+                buf3.add(new Spinner_filter(String.valueOf(buffer), "0"));
+            }
+
+            spinner3.setAdapter(new Filter(Main.this, 3, buf3));
+        }
+        reload_1();
     }
 
     @SuppressLint("DefaultLocale")
@@ -346,7 +463,16 @@ public class Main extends AppCompatActivity {
     }
 
     public void reload_1() {
-        App.getApi().getClientsCity().enqueue(new Callback<List<ClientsCity>>() {
+
+        String url_general = url_head + url_;
+
+
+
+        if(!filter_status.isEmpty()) url_general += "status="+filter_status+"&";
+        if(!filter_gorod.isEmpty()) url_general += "city="+filter_gorod+"&";
+        if(!filter_school.isEmpty()) url_general += "school="+filter_school+"&";
+
+        App.getApi().getClientsCity(url_general).enqueue(new Callback<List<ClientsCity>>() {
             @Override
             public void onResponse(Call<List<ClientsCity>> call, Response<List<ClientsCity>> response) {
 
@@ -387,7 +513,7 @@ public class Main extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<ClientsCity>> call, Throwable t) {
 
-
+                Toast.makeText(Main.this, "error...", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -397,23 +523,41 @@ public class Main extends AppCompatActivity {
         App.getApi().getZakaz_filter().enqueue(new Callback<Zakaz_filter>() {
             @Override
             public void onResponse(Call<Zakaz_filter> call, Response<Zakaz_filter> response) {
+
+                zakaz_filter_general = response.body();
+
                 buf1.clear();
+                buf1.add(new Spinner_filter("Статус", "0"));
                 for (String buffer : response.body().getStatus()) {
                     buf1.add(new Spinner_filter(String.valueOf(buffer), "0"));
                 }
+
                 spinner1.setAdapter(new Filter(Main.this, 1, buf1));
 
-                buf2.clear();
-                for (String buffer : response.body().getGorod()) {
-                    buf2.add(new Spinner_filter(String.valueOf(buffer), "0"));
-                }
-                spinner2.setAdapter(new Filter(Main.this, 2, buf2));
 
+                buf2.clear();
+                Spinner_filter spinner_filter1 = new Spinner_filter(String.valueOf("Город"), "0");
+                spinner_filter1.setId("-1");
+                buf2.add(spinner_filter1);
+                for (ZakazFilterItem buffer : response.body().getGorod()) {
+                    Spinner_filter spinner_filter = new Spinner_filter(String.valueOf(buffer.getName()), "0");
+                    spinner_filter.setId(buffer.getId());
+                    buf2.add(spinner_filter);
+                }
+
+                spinner2.setAdapter(new Filter(Main.this, 2, buf2));
+//
                 buf3.clear();
+                buf3.add(new Spinner_filter("Школа", "0"));
                 for (String buffer : response.body().getSchool()) {
                     buf3.add(new Spinner_filter(String.valueOf(buffer), "0"));
                 }
+
                 spinner3.setAdapter(new Filter(Main.this, 3, buf3));
+
+                filter_gorod = "";
+                filter_school = "";
+                filter_status = "";
             }
 
             @Override
@@ -448,6 +592,16 @@ public class Main extends AppCompatActivity {
                 Toast.makeText(Main.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void startInfoZakaz(String name, String id_c, String id_z){
+
+        Intent intent = new Intent(Main.this, Zakaz_new.class);
+        intent.putExtra("name", name);
+        intent.putExtra("id_c", id_c);
+        intent.putExtra("id_z", id_z);
+        startActivity(intent);
+
     }
 
 }

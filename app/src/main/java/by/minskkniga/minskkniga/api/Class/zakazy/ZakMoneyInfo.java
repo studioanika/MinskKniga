@@ -7,15 +7,15 @@ public class ZakMoneyInfo {
 
     @SerializedName("vozvrat")
     @Expose
-    private int vozvrat;
+    private Double vozvrat;
 
     @SerializedName("podarki")
     @Expose
-    private int podarki;
+    private Double podarki;
 
     @SerializedName("oplaty")
     @Expose
-    private int oplaty;
+    private Double oplaty;
 
     @SerializedName("tovar")
     @Expose
@@ -29,27 +29,27 @@ public class ZakMoneyInfo {
     @Expose
     private Double itog;
 
-    public int getVozvrat() {
+    public Double getVozvrat() {
         return vozvrat;
     }
 
-    public void setVozvrat(int vozvrat) {
+    public void setVozvrat(Double vozvrat) {
         this.vozvrat = vozvrat;
     }
 
-    public int getPodarki() {
+    public Double getPodarki() {
         return podarki;
     }
 
-    public void setPodarki(int podarki) {
+    public void setPodarki(Double podarki) {
         this.podarki = podarki;
     }
 
-    public int getOplaty() {
+    public Double getOplaty() {
         return oplaty;
     }
 
-    public void setOplaty(int oplaty) {
+    public void setOplaty(Double oplaty) {
         this.oplaty = oplaty;
     }
 

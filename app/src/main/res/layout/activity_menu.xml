@@ -12,6 +12,15 @@
             android:layout_width="match_parent"
             android:layout_height="56dp">
 
+            <ImageView
+                android:id="@+id/exit"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp"
+                app:srcCompat="@drawable/ic_exit_to_app_black_24dp" />
+
             <TextView
                 android:id="@+id/caption"
                 android:layout_width="wrap_content"
@@ -26,26 +35,27 @@
 
             <ImageButton
                 android:id="@+id/notif"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="56dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                app:srcCompat="@drawable/ic_notif"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="false"
+                android:layout_toLeftOf="@+id/exit"
+                app:srcCompat="@drawable/ic_notif" />
 
             <TextView
                 android:id="@+id/notif_count"
                 android:layout_width="13dp"
                 android:layout_height="13dp"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/circle"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="15dp"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentRight="false"
                 android:layout_marginRight="15dp"
-                android:textColor="#fff"
-                android:textSize="9sp"
+                android:layout_marginTop="15dp"
+                android:layout_toLeftOf="@+id/exit"
+                android:background="@drawable/circle"
                 android:paddingLeft="4dp"
-                android:text="0"/>
+                android:text="0"
+                android:textColor="#fff"
+                android:textSize="9sp" />
 
         </RelativeLayout>
 

@@ -136,8 +136,8 @@ public class Zakaz_info extends AppCompatActivity {
                     }
                 }
 
-                tv1.setText(String.format("Итого %s позиций на %sBYN", col, Math.round(summa * 100.0) / 100.0));
-                tv2.setText(String.format("Вес: %sкг", Math.round(ves * 100.0) / 100.0));
+                tv1.setText(String.format("Итого %s позиций на %sBYN", col, zakaz.getSumma()));
+                tv2.setText(String.format("Вес: %sкг",zakaz.getVes()));
 
 
 

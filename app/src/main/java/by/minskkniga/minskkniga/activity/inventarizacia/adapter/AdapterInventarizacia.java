@@ -60,9 +60,9 @@ public class AdapterInventarizacia extends BaseAdapter {
         tv_date.setText(object.getDate());
         tv_contragent.setText(object.getClient());
         tv_colvo.setText(object.getKolVo());
-        if(Integer.parseInt(object.getKolVo()) > 0){
-            tv_colvo.setTextColor(_context.getResources().getColor(R.color.green));
-        }else tv_colvo.setTextColor(_context.getResources().getColor(R.color.red));
+//        if(Integer.parseInt(object.getKolVo()) > 0){
+//            tv_colvo.setTextColor(_context.getResources().getColor(R.color.green));
+//        }else tv_colvo.setTextColor(_context.getResources().getColor(R.color.red));
 
 
         // 1 получено - зел
@@ -72,12 +72,15 @@ public class AdapterInventarizacia extends BaseAdapter {
         if(object.getType() == 1) {
             tv_type.setText("Получено");
             tv_type.setTextColor(_context.getResources().getColor(R.color.green));
+            tv_colvo.setTextColor(_context.getResources().getColor(R.color.green));
         }else if(object.getType() == 2) {
             tv_type.setText("Продажа");
             tv_type.setTextColor(_context.getResources().getColor(R.color.red));
+            tv_colvo.setTextColor(_context.getResources().getColor(R.color.red));
         }else {
             tv_type.setText("Возврат");
             tv_type.setTextColor(_context.getResources().getColor(R.color.green));
+            tv_colvo.setTextColor(_context.getResources().getColor(R.color.green));
         }
 
 

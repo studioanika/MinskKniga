@@ -7,49 +7,49 @@ public class ProvMoneyInfo {
 
     @SerializedName("oplaty")
     @Expose
-    private int oplaty;
+    private Double oplaty;
 
     @SerializedName("tovar")
     @Expose
-    private int tovar;
+    private Double tovar;
 
     @SerializedName("vozvrat")
     @Expose
-    private int vozvrat;
+    private Double vozvrat;
 
     @SerializedName("itog")
     @Expose
-    private int itog;
+    private Double itog;
 
-    public int getOplaty() {
+    public Double getOplaty() {
         return oplaty;
     }
 
-    public void setOplaty(int oplaty) {
+    public void setOplaty(Double oplaty) {
         this.oplaty = oplaty;
     }
 
-    public int getTovar() {
+    public Double getTovar() {
         return tovar;
     }
 
-    public void setTovar(int tovar) {
+    public void setTovar(Double tovar) {
         this.tovar = tovar;
     }
 
-    public int getVozvrat() {
+    public Double getVozvrat() {
         return vozvrat;
     }
 
-    public void setVozvrat(int vozvrat) {
+    public void setVozvrat(Double vozvrat) {
         this.vozvrat = vozvrat;
     }
 
-    public int getItog() {
+    public Double getItog() {
         return itog;
     }
 
-    public void setItog(int itog) {
+    public void setItog(Double itog) {
         this.itog = itog;
     }
 }

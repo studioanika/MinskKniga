@@ -327,8 +327,8 @@ public class Zakaz_info extends AppCompatActivity {
 //                    ves+=Double.parseDouble(zakaz.getWhatZakazal().get(i).getVes())* Double.parseDouble(zakaz.getWhatZakazal().get(i).getZak());
 //                }
 
-                tv1.setText("Итого " + zakaz.getWhatZakazal().size() + " позиция на " + summa + " BYN");
-                tv2.setText("Вес: " + ves + " кг");
+                tv1.setText("Итого " + zakaz.getWhatZakazal().size() + " позиция на " + String.valueOf(zakaz.getSumma()) + " BYN");
+                tv2.setText("Вес: " + String.valueOf(zakaz.getVes()) + " кг");
 
                 status_general = zakaz.getStatus();
                 switch (zakaz.getStatus()) {

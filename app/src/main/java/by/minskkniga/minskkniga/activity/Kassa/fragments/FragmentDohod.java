@@ -350,8 +350,8 @@ public class FragmentDohod extends Fragment implements IFragmentSchetOperation, 
                 if(response.body() != null){
                     btn_save.setEnabled(true);
                     Toast.makeText(getContext(), "Операция одобрена", Toast.LENGTH_SHORT).show();
-                    Calculator calculator = (Calculator) context;
-                    calculator.end();
+                    Calculator schetOperation = (Calculator) context;
+                    schetOperation.startMain(schet_ID, schet_tv.getText().toString());
                 }
 
             }

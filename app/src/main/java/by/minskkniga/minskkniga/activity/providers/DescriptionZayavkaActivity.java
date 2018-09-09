@@ -3,27 +3,39 @@ package by.minskkniga.minskkniga.activity.providers;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,6 +62,10 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 201;
     SimpleDateFormat df;
 
+
+    TextView nav_send;
+    TextView nav_raschet, nav_add;
+
     List<ProviderObject> list = new ArrayList<>();
     List<ProviderObject> listF = new ArrayList<>();
     List<Products> listPr = new ArrayList<>();
@@ -61,6 +77,9 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
     Spinner spinner;
     CheckBox a_d_z_note, a_d_z_oplata;
     EditText et_comment;
+    LinearLayout linear;
+    EditText et_nal;
+    EditText et_beznal;
 
     String id_z = "";
 
@@ -69,7 +88,21 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
     private LinearLayoutManager mLayoutManager;
     private List<ZavInfoTovar> studentList;
 
+    RelativeLayout rel_drawer;
+    Button btn_cancel;
+    Button btn_oprihodovat;
+
+
+    DrawerLayout drawer;
+    Double dengi;
+    ZavInfo zavInfo;
+
+
     String providers = "null";
+    TextWatcher text_nal;
+    TextWatcher text_beznal;
+
+    int finalColor;
 
     String[] arr = new String[]{"Черновик","Не обработан","Оприходован","Ожидаем","Отменен","Не обработан"};
     @SuppressLint("RestrictedApi")
@@ -95,11 +128,24 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
 
         progress = (ProgressBar) findViewById(R.id.progress);
         recyclerView = (RecyclerView) findViewById(R.id.a_d_z_tv_result_recycler);
-
-
+        drawer = findViewById(R.id.drawer);
         studentList = new ArrayList<ZavInfoTovar>();
-
+        nav_send = (TextView) findViewById(R.id.nav_otpravit);
+        nav_add = (TextView) findViewById(R.id.nav_add);
+        nav_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSendDialog();
+            }
+        });
+        nav_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startSelectN();
+            }
+        });
         recyclerView.setHasFixedSize(true);
+        linear = findViewById(R.id.linear);
 
         mLayoutManager = new LinearLayoutManager(this);
 
@@ -116,10 +162,163 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
 
         a_d_z_note = (CheckBox) findViewById(R.id.a_d_z_note);
         a_d_z_oplata = (CheckBox) findViewById(R.id.a_d_z_oplata);
+        btn_cancel = findViewById(R.id.btn_cancel);
+        btn_oprihodovat = findViewById(R.id.btn_oprihodovat);
+
+        btn_oprihodovat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finalColor = Color.CYAN;
+                spinner.setSelection(2);
+
+            }
+        });
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finalColor = Color.RED;
+                spinner.setSelection(4);
+            }
+        });
+
+        et_beznal = findViewById(R.id.et_beznal);
+        et_nal = findViewById(R.id.et_nal);
+
+        text_nal = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                et_beznal.removeTextChangedListener(text_beznal);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                try{
+                    if(dengi != null){
+                        double d = Double.parseDouble(editable.toString());
+                        if(dengi >= d){
+                            et_beznal.setText(String.format("%.2f",dengi - d));
+                        }//et_nal.setTextColor(Co);
+                    }
+                    et_beznal.addTextChangedListener(text_beznal);
+                }
+                catch (Exception e){}
+            }
+        };
+        et_nal.addTextChangedListener(text_nal);
+        text_beznal = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                et_nal.removeTextChangedListener(text_nal);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+                try{
+                    if(dengi != null){
+                        double d = Double.parseDouble(editable.toString());
+                        if(dengi >= d){
+                            et_nal.setText(String.format("%.2f",dengi - d));
+                        }
+
+                    }
+                    et_nal.addTextChangedListener(text_nal);
+                }
+
+                catch (Exception e){}
+            }
+        };
+        et_beznal.addTextChangedListener(text_beznal);
+        nav_raschet = findViewById(R.id.nav_raschet);
+        nav_raschet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DescriptionZayavkaActivity.this, ProvidersZayavkiRaschetActivity.class);
+                intent.putExtra("izdatel", zavInfo.getProvedires_name());
+                intent.putExtra("id", zavInfo.getProvedires());
+                // TODO здесь походу еще ид будет
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void showSendDialog() {
+
+        final Dialog dialogEdit = new Dialog(this);
+        //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogEdit.setContentView(R.layout.alert_show_send);
+
+        TextView tv_cancel = (TextView) dialogEdit.findViewById(R.id.editmoney_cancel);
+        TextView tv_done = (TextView) dialogEdit.findViewById(R.id.editmoney_done);
+        RadioGroup rgp = dialogEdit.findViewById(R.id.rgrp);
+        RadioButton rbtn1 = dialogEdit.findViewById(R.id.rbtn1);
+        final RadioButton rbtn2 = dialogEdit.findViewById(R.id.rbtn2);
+        rbtn1.setChecked(true);
+
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogEdit.dismiss();
+            }
+        });
+        tv_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(rbtn2.isChecked()) send();
+                dialogEdit.dismiss();
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialogEdit.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialogEdit.show();
+        dialogEdit.getWindow().setAttributes(lp);
+
+    }
+
+    private void send() {
+
+        App.getApi().sendAllSposob(id_z).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    if(response.body().string().contains("ok"))
+                    {
+                        Toast.makeText(DescriptionZayavkaActivity.this,
+                                "Заявка успешно отправлена", Toast.LENGTH_SHORT).show();
+                        loadData(id_z);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
     }
 
     private void loadData(String id) {
         progress.setVisibility(View.VISIBLE);
+        btn_oprihodovat.setVisibility(View.GONE);
+        btn_cancel.setVisibility(View.GONE);
+        linear.setVisibility(View.GONE);
         App.getApi().getZavInfo(id).enqueue(new Callback<ZavInfo>() {
             @Override
             public void onResponse(Call<ZavInfo> call, Response<ZavInfo> response) {
@@ -140,6 +339,17 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
     }
 
     private void setInfo(ZavInfo description) {
+        zavInfo = description;
+        et_beznal.removeTextChangedListener(text_beznal);
+        et_nal.removeTextChangedListener(text_nal);
+        try{
+            Double d1 = Double.parseDouble(description.getNal());
+            Double d2 = Double.parseDouble(description.getBeznal());
+
+            dengi = description.getSumma();
+        }
+        catch (Exception e){}
+
         providers = description.getProvedires_name();
         id_z = description.getId();
 
@@ -148,16 +358,68 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
         tva_d_z_date.setText(description.getDate());
         tva_d_z_author.setText(description.getAutor());
 
+        et_beznal.setText(description.getBeznal());
+        et_nal.setText(description.getNal());
+
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.adapter_nomenklatura_filter, arr);
         spinner.setAdapter(spinnerArrayAdapter);
         if(description.getStatus()!=null){
             try{
+
                 int select = Integer.parseInt(description.getStatus());
+                int color = (Color.rgb(97, 184, 126));
+                switch (select){
+                    case 0:
+                        color = (Color.rgb(97, 184, 126));
+                        break;
+                    case 1:
+                        color = (Color.rgb(97, 184, 126));
+                        break;
+                    case 2:
+                        color = (Color.rgb(242, 201, 76));
+                        linear.setVisibility(View.VISIBLE);
+                        break;
+                    case 3:
+                        color = (Color.BLUE);
+                        btn_oprihodovat.setVisibility(View.VISIBLE);
+                        btn_cancel.setVisibility(View.VISIBLE);
+                        break;
+                    case 4:
+                        color = (Color.rgb(242, 0, 86));
+                        break;
+                    case 5:
+                        color = (Color.rgb(139, 0, 0));
+                        break;
+                    case 6:
+                        color = (Color.rgb(100, 0, 0));
+                        break;
+                }
+
+                finalColor = color;
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        ((TextView) adapterView.getChildAt(0)).setTextColor(finalColor);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
                 spinner.setSelection(select);
 
                 if(select ==0) a_d_z_note.setChecked(true);
+
+
+
             }
             catch (Exception e){}
+
+            et_beznal.addTextChangedListener(text_beznal);
+            et_nal.addTextChangedListener(text_nal);
+
+            //spinner.setBackgroundColor();
         }
         spinner.setEnabled(false);
         if(Integer.parseInt(description.getOplacheno()) == 0) a_d_z_oplata.setChecked(false);
@@ -237,12 +499,18 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
         //body.put("autor", author);
         //body.put("status", status);
         body.put("komment", comment);
+        body.put("status", String.valueOf(spinner.getSelectedItemPosition()));
         //body.put("courier_id", courier);
         //body.put("auto", auto);
         Gson gson = new Gson();
         String listJSON = gson.toJson(studentList);
         String d = "";
 
+        String nal = et_nal.getText().toString();
+        String beznal = et_beznal.getText().toString();
+
+        body.put("nal", nal);
+        body.put("beznal", beznal);
         body.put("oplacheno", oplacheno);
         body.put("chern", chernovik);
         body.put("id", id_z);
@@ -262,6 +530,7 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
                             Toast.makeText(DescriptionZayavkaActivity.this,
                                     "Заявка отредактирована.",
                                     Toast.LENGTH_SHORT).show();
+                            loadData(id_z);
                         }
 
                     } catch (Exception e) {
@@ -293,7 +562,8 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.add) {
-            startSelectN();
+            drawer.openDrawer(GravityCompat.END, true);
+
         }
         if (id == R.id.apply) {
             sendZayavka();

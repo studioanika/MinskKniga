@@ -1,6 +1,7 @@
 package by.minskkniga.minskkniga.activity.providers.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +81,7 @@ public class ProvidersZayavkiAdapter extends BaseExpandableListAdapter {
         try{
             txtName.setText(book.getName());
             txtClass.setText(book.getClasss());
-            txtIzdanie.setText(book.getIzdatel().substring(0,1));
+            txtIzdanie.setText(book.getIzdatel());
             txtSokr.setText(book.getSokrName());
             txtZakaz.setText(book.getZakaz());
 
@@ -156,11 +157,26 @@ public class ProvidersZayavkiAdapter extends BaseExpandableListAdapter {
             int opl = Integer.parseInt(_listDataHeader.get(groupPosition).getOpl());
             int staus = Integer.parseInt(_listDataHeader.get(groupPosition).getStatus());
 
-            if(staus == 0) txtStatus.setText("Черновик");
-            else if(staus == 1) txtStatus.setText("Не обработан");
-            else if(staus == 2) txtStatus.setText("Оприходован");
-            else if(staus == 3) txtStatus.setText("Ожидаем");
-            else if(staus == 4) txtStatus.setText("Отменен");
+            if(staus == 0) {
+                txtStatus.setText("Черновик");
+                txtStatus.setTextColor(Color.rgb(97, 184, 126));
+            }
+            else if(staus == 1) {
+                txtStatus.setText("Не обработан");
+                txtStatus.setTextColor(Color.rgb(97, 184, 126));
+            }
+            else if(staus == 2) {
+                txtStatus.setText("Оприходован");
+                txtStatus.setTextColor(Color.rgb(242, 201, 76));
+            }
+            else if(staus == 3) {
+                txtStatus.setText("Ожидаем");
+                txtStatus.setTextColor(Color.BLUE);
+            }
+            else if(staus == 4) {
+                txtStatus.setText("Отменен");
+                txtStatus.setTextColor(Color.RED);
+            }
 
             if(opl == 0) check.setChecked(false);
             else check.setChecked(true);
