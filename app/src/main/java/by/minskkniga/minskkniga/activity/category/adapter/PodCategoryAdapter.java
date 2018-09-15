@@ -14,6 +14,7 @@ import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.category.CategoryActivity;
+import by.minskkniga.minskkniga.activity.category.TypeDialogCategory;
 import by.minskkniga.minskkniga.api.Class.category.PodCat;
 
 public class PodCategoryAdapter extends BaseAdapter{
@@ -65,8 +66,12 @@ public class PodCategoryAdapter extends BaseAdapter{
             @Override
             public void onClick(View view) {
                 CategoryActivity activity = (CategoryActivity) _context;
-                activity.clickPodCategory(position);
-                activity.done();
+
+                if(position != _objects.size() -1){
+                    activity.clickPodCategory(position);
+                    activity.done();
+                }
+                else activity.showDialogAdd(TypeDialogCategory.AddPodcategory, null, null);
             }
         });
 

@@ -21,6 +21,7 @@ import by.minskkniga.minskkniga.activity.Kassa.adapter.AdapterItogScheta;
 import by.minskkniga.minskkniga.activity.Kassa.calculator.CalculatorGB;
 import by.minskkniga.minskkniga.activity.Kassa.calculator.CalculatorL;
 import by.minskkniga.minskkniga.activity.Kassa.calculator.Utils;
+import by.minskkniga.minskkniga.activity.Menu;
 import by.minskkniga.minskkniga.activity.prefs.Prefs;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.cassa.GeneralItog;
@@ -65,7 +66,7 @@ public class Kassa_info extends AppCompatActivity {
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                onBackPressed();
             }
         });
 
@@ -104,6 +105,12 @@ public class Kassa_info extends AppCompatActivity {
         prefs.setSchet("");
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(Kassa_info.this, Menu.class));
+        super.onBackPressed();
     }
 
     private void startMain(String id, String name){
@@ -169,13 +176,15 @@ public class Kassa_info extends AppCompatActivity {
                         try{
                             String a = tv_act.getText().toString();
                             if(Double.parseDouble(a) < 0) tv_act.setTextColor(getResources().getColor(R.color.red));
+                            else tv_act.setTextColor(getResources().getColor(R.color.green));
 
                             String b = tv_ob.getText().toString();
                             if(Double.parseDouble(b) < 0) tv_ob.setTextColor(getResources().getColor(R.color.red));
+                            else tv_ob.setTextColor(getResources().getColor(R.color.green));
 
                             String c = tv_balans.getText().toString();
                             if(Double.parseDouble(c) < 0) tv_balans.setTextColor(getResources().getColor(R.color.red));
-
+                            else tv_balans.setTextColor(getResources().getColor(R.color.green));
                         }catch (Exception e){
 
                         }

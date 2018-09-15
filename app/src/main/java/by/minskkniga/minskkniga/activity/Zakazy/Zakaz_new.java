@@ -295,6 +295,7 @@ public class Zakaz_new extends AppCompatActivity {
             nav_sobrat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(drawer.isDrawerOpen(GravityCompat.END)) drawer.closeDrawers();
                     optimiz();
                     Intent intent = new Intent(Zakaz_new.this, Sborka.class);
                     intent.putExtra(Zakaz_product.class.getCanonicalName(), products);
@@ -994,6 +995,7 @@ public class Zakaz_new extends AppCompatActivity {
                         status.setTextColor(Color.rgb(242, 201, 76));
                         status.setText("В сборке");
                         status_id=2;
+                        ok.setText("Сохранить");
                     }else{
                         status.setTextColor(Color.rgb(97, 184, 126));
                         status.setText("Новый");
@@ -1267,7 +1269,9 @@ public class Zakaz_new extends AppCompatActivity {
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                         Toast.makeText(Zakaz_new.this, "Заказ обновлен.", Toast.LENGTH_SHORT).show();
+                        if(sobran.isChecked()) finish();
                         load_couriers();
+
                     }
 
                     @Override

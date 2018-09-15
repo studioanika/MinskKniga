@@ -39,7 +39,7 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         id = intent.getStringExtra("id");
         name = intent.getStringExtra("name");
         auto = intent.getBooleanExtra("new", false);
@@ -49,8 +49,8 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(name);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("ДЕНЬГИ"));
         tabLayout.addTab(tabLayout.newTab().setText("ЗАЯВКИ"));
+        tabLayout.addTab(tabLayout.newTab().setText("ДЕНЬГИ"));
 
         TabLayout.Tab tab = tabLayout.getTabAt(0);
         tab.select();
@@ -61,12 +61,15 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(viewPager.getCurrentItem() == 1) {
-                    startActivity(new Intent(ProviderZayavkiListActivity.this, NewProviderZayavka.class));
+                if(viewPager.getCurrentItem() == 0) {
+                   Intent intent1 =  new Intent(ProviderZayavkiListActivity.this, NewProviderZayavka.class);
+                   intent1.putExtra("id", id);
+                   intent1.putExtra("name", name);
+                   startActivity(intent1);
                 }
             }
         });
-        fab.setVisibility(View.GONE);
+        //fab.setVisibility(View.GONE);
 
     }
 
@@ -84,7 +87,7 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
                     viewPager.setCurrentItem(tab.getPosition());
-                    if(viewPager.getCurrentItem() == 1) fab.setVisibility(View.VISIBLE);
+                    if(viewPager.getCurrentItem() == 0) fab.setVisibility(View.VISIBLE);
                     else fab.setVisibility(View.GONE);
                 }
 
@@ -123,12 +126,11 @@ public class ProviderZayavkiListActivity extends AppCompatActivity {
 
             switch (position) {
                 case 0:
-                    FragmentMoney tab1 = new FragmentMoney(id);
-
-                    return tab1;
-                case 1:
                     FragmentProviderZayavki tab2 = new FragmentProviderZayavki(id, type);
                     return tab2;
+                case 1:
+                    FragmentMoney tab1 = new FragmentMoney(id);
+                    return tab1;
                 default:
                     return null;
             }

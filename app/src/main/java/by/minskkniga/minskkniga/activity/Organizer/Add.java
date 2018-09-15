@@ -234,7 +234,7 @@ public class Add extends AppCompatActivity {
                 }
 
                 adapter = new ArrayAdapter<>(Add.this, R.layout.spinner_item_organizer, clients_buf);
-                adapter.setDropDownViewResource(R.layout.spinner_item);
+                //adapter.setDropDownViewResource(R.layout.spinner_item);
                 spinner1.setAdapter(adapter);
 
                 if (!contragent_id.equals("null")) {

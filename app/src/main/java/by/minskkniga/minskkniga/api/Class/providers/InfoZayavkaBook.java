@@ -73,6 +73,22 @@ public class InfoZayavkaBook {
     @Expose
     private Double sum;
 
+    @SerializedName("image")
+    @Expose
+    private String image;
+
+    @SerializedName("round")
+    @Expose
+    private boolean round;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public String getId() {
         return id;
     }
@@ -207,5 +223,13 @@ public class InfoZayavkaBook {
 
     public void setSum(Double sum) {
         this.sum = sum;
+    }
+
+    public boolean isRound() {
+        return round;
+    }
+
+    public void setRound(boolean round) {
+        this.round = round;
     }
 }

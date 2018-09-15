@@ -13,6 +13,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context="by.minskkniga.minskkniga.activity.providers.DescriptionZayavkaActivity">
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app"
@@ -58,7 +60,7 @@
                         android:id="@+id/a_d_z_id_i"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Бланк заказа" />
+                        android:text="Заявка" />
 
                     <TextView
                         android:id="@+id/a_d_z_id"

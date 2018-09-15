@@ -35,8 +35,8 @@ public class ProvidersListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("ИЗДАТЕЛЬСТВА"));
         tabLayout.addTab(tabLayout.newTab().setText("НОВЫЕ"));
+        tabLayout.addTab(tabLayout.newTab().setText("ИЗДАТЕЛЬСТВА"));
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -45,9 +45,6 @@ public class ProvidersListActivity extends AppCompatActivity {
                 startActivity(new Intent(ProvidersListActivity.this, NewProviderZayavka.class));
             }
         });
-
-        TabLayout.Tab tab = tabLayout.getTabAt(0);
-        tab.select();
 
         initViewPager();
 
@@ -102,11 +99,11 @@ public class ProvidersListActivity extends AppCompatActivity {
 
             switch (position) {
                 case 0:
-                    FragmentPublishing tab1 = new FragmentPublishing(ProvidersListActivity.this);
-                    return tab1;
-                case 1:
                     FragmentNews tab2 = new FragmentNews(ProvidersListActivity.this);
                     return tab2;
+                case 1:
+                    FragmentPublishing tab1 = new FragmentPublishing(ProvidersListActivity.this);
+                    return tab1;
                 default:
                     return null;
             }

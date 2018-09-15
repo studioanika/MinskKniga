@@ -71,6 +71,7 @@
             android:layout_marginLeft="8dp"
             android:layout_weight="1"
             android:button="@drawable/checkbox_selector"
+            android:enabled="false"
             android:gravity="center" />
 
         <TextView

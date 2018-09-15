@@ -122,6 +122,12 @@ public class FragmentMoney extends Fragment implements IFragmentProvider {
 
     }
 
+    @Override
+    public void onResume() {
+        if(id != null) loadData();
+        super.onResume();
+    }
+
     private void setRecycler(List<ItemListProvMoney> list) {
 
         recyclerView = (RecyclerView) v.findViewById(R.id.fragment_monry_recycler);

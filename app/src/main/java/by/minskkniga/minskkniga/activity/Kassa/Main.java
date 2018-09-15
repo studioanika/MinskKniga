@@ -111,7 +111,7 @@ public class Main extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                onBackPressed();
             }
         });
 
@@ -135,6 +135,12 @@ public class Main extends AppCompatActivity {
         });
 
         loadData();
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(Main.this, Kassa_info.class));
+        super.onBackPressed();
     }
 
     public void startInfoOperation(String id_oper, int type){

@@ -133,6 +133,7 @@ public class RashodOrder extends AppCompatActivity {
 
     private void loadData() {
         progressBar.setVisibility(View.VISIBLE);
+
         App.getApi().getProvScheta(id).enqueue(new Callback<List<ResponseProvScheta>>() {
             @Override
             public void onResponse(Call<List<ResponseProvScheta>> call, Response<List<ResponseProvScheta>> response) {
@@ -195,6 +196,7 @@ public class RashodOrder extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<ResponseProvScheta>> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
+
             }
         });
 
@@ -223,6 +225,7 @@ public class RashodOrder extends AppCompatActivity {
 
 
     private void sendData() {
+
 
         int cat_pos = sp_cat.getSelectedItemPosition();
         int pod_cat_pos = sp_podcat.getSelectedItemPosition();
@@ -257,19 +260,22 @@ public class RashodOrder extends AppCompatActivity {
 
         String com = comment.getText().toString();
         progressBar.setVisibility(View.VISIBLE);
+        btn_save.setEnabled(false);
         App.getApi().addOperationCassa(categoryListFinal.get(sp_cat.getSelectedItemPosition()).getId(),
                 categoryListFinal.get(sp_cat.getSelectedItemPosition()).getList().get(sp_podcat.getSelectedItemPosition()).getId(),
                 schet, sum, date, id, com, "2", "0").enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 isOk = false;
+                btn_save.setEnabled(true);
                 if(response.body() != null){
                     progressBar.setVisibility(View.GONE);
                     try {
                         if(response.body().string().contains("ok")){
                             isOk = true;
-                            showDrawer();
+                            //showDrawer();
                             Toast.makeText(RashodOrder.this, "Расходный ордер успешно создан", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                         else Toast.makeText(RashodOrder.this, "Ошибка создания ордера...", Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
@@ -283,6 +289,7 @@ public class RashodOrder extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                btn_save.setEnabled(true);
                 progressBar.setVisibility(View.GONE);
             }
         });

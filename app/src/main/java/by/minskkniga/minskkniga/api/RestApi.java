@@ -274,7 +274,8 @@ public interface RestApi {
     Call<ZavInfo> getZavInfo(@Query("id") String id);
 
     @GET("/api/get_info_k.php?")
-    Call<List<InfoZayavkaBook>> getInfoBookZ(@Query("id") String id, @Query("zak") String zak);
+    Call<List<InfoZayavkaBook>> getInfoBookZ(@Query("id") String id,
+                                             @Query("zak") String zak, @Query("id_zak") String id_zak);
 
     @GET("/api/get_list_providers.php?")
     Call<List<ProviderObject>> getAllProviders();
@@ -497,4 +498,8 @@ public interface RestApi {
     @POST("update_zakazi_obr.php")
     @FormUrlEncoded
     Call<ResponseBody> updateZakazyObr(@FieldMap Map<String, String> map);
+
+    @GET("/api/set_round.php?")
+    Call<ResponseBody> setRoundProduct(@Query("id") String id,@Query("zak") String zak,
+                                                   @Query("round") int round, @Query("id_zak") String id_zak);
 }

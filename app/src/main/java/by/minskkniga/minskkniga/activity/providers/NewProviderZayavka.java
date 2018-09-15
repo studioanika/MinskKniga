@@ -86,17 +86,25 @@ public class NewProviderZayavka extends AppCompatActivity {
 
 
     boolean isSend = false;
+    String id_p;
+    String name_p;
 
+    Toolbar toolbar;
 
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_provider_zayavka);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Intent intent = getIntent();
+        id_p = intent.getStringExtra("id");
+        name_p = intent.getStringExtra("name");
         sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+
+        if(name_p != null) toolbar.setTitle(name_p);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
@@ -106,9 +114,10 @@ public class NewProviderZayavka extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(providerObject != null) {
+                if(providerObject != null || id_p != null) {
                     Intent intent = new Intent(NewProviderZayavka.this, SelectNomeclaturaActivity.class);
-                    intent.putExtra("izdatel", providerObject.getName());
+                    if(id_p == null)intent.putExtra("izdatel", providerObject.getName());
+                    else intent.putExtra("izdatel", name_p);
                     startActivityForResult(intent, REQUEST_CODE);
                 }else showSelectProvider();
             }
@@ -116,7 +125,7 @@ public class NewProviderZayavka extends AppCompatActivity {
 
         initView();
         getCouriers();
-        showSelectProvider();
+        if(id_p == null) showSelectProvider();
     }
 
     private void getCouriers() {
@@ -189,9 +198,11 @@ public class NewProviderZayavka extends AppCompatActivity {
         rel_add_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(providerObject != null) {
+                if(providerObject != null || id_p != null) {
+                    hideDrawer();
                     Intent intent = new Intent(NewProviderZayavka.this, SelectNomeclaturaActivity.class);
-                    intent.putExtra("izdatel", providerObject.getName());
+                    if(id_p == null)intent.putExtra("izdatel", providerObject.getName());
+                    else intent.putExtra("izdatel", name_p);
                     startActivityForResult(intent, REQUEST_CODE);
                 }else showSelectProvider();
             }
@@ -208,14 +219,12 @@ public class NewProviderZayavka extends AppCompatActivity {
         rel_view_oper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isSend) {
+                    hideDrawer();
                     Intent intent = new Intent(NewProviderZayavka.this, ProvidersZayavkiRaschetActivity.class);
-                    intent.putExtra("izdatel", providerObject.getName());
-                    intent.putExtra("id", providerObject.getId());
+                    intent.putExtra("izdatel", name_p);
+                    intent.putExtra("id", id_p);
                     // TODO здесь походу еще ид будет
                     startActivity(intent);
-                }
-
 
             }
         });
@@ -228,7 +237,9 @@ public class NewProviderZayavka extends AppCompatActivity {
 
         String date = tv_date.getText().toString();
         String author = sp.getString("id", "");
-        String providers = providerObject.getId();
+        String providers = "";
+        if(id_p == null) providers = providerObject.getId();
+        else providers = id_p;
         String status = "1";
         String comment = comment_et.getText().toString();
         String auto = "0";
@@ -284,6 +295,7 @@ public class NewProviderZayavka extends AppCompatActivity {
                            id_zayavki = id_zayavki.substring(0, id_zayavki.length() - 1);                          //id_zayavki = id_zayavki.replaceAll("]", "");
                            isSend = true;
                            Toast.makeText(getApplicationContext(), "Заявка успешно cоздана.", Toast.LENGTH_SHORT).show();
+                           finish();
                        }
                        catch (Exception e){
                             String sd = e.toString();
@@ -381,6 +393,7 @@ public class NewProviderZayavka extends AppCompatActivity {
 
                     try{
                         providerObject = listF.get(i);
+                        toolbar.setTitle(listF.get(i).getName());
                         dialogEdit.dismiss();
                     }
                     catch (Exception e){}
@@ -422,7 +435,7 @@ public class NewProviderZayavka extends AppCompatActivity {
             try {
                 ProductForZayackaProvider pfzp = new ProductForZayackaProvider();
                 pfzp.setProducts(products);
-                pfzp.setZayavka("0");
+                pfzp.setZayavka(products.getFor_providers_count());
                 productForZayackaProviderList.add(pfzp);
                 String sd = "";
             } catch (Exception e) {
@@ -562,6 +575,28 @@ public class NewProviderZayavka extends AppCompatActivity {
             hideDrawer();
             return;
         }
+        if(productForZayackaProviderList != null && productForZayackaProviderList.size() != 0){
+            showDialogExit();
+            return;
+        }
         super.onBackPressed();
+    }
+
+    private void showDialogExit() {
+        AlertDialog.Builder ad = new AlertDialog.Builder(NewProviderZayavka.this);
+        ad.setMessage("Сохранить?");
+        ad.setPositiveButton("ДА", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                sendZayavka();
+            }
+        });
+        ad.setNegativeButton("НЕТ", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                finish();
+            }
+        });
+        ad.setCancelable(false);
+        ad.show();
+
     }
 }

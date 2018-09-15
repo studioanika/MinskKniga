@@ -1,23 +1,28 @@
 package by.minskkniga.minskkniga.activity.providers;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import java.io.IOException;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.providers.InfoZayavkaBook;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,6 +35,11 @@ public class DescriptionZayavkaBookActivity extends AppCompatActivity {
              zakazano, ostatok, ozhidaet, cost, zayavok, summa;
 
     CheckBox okrugl;
+    String zak;
+    String id, id_z;
+
+    CompoundButton.OnCheckedChangeListener listener;
+    CompoundButton.OnCheckedChangeListener listenerNull;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -44,8 +54,10 @@ public class DescriptionZayavkaBookActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
-        String zak = intent.getStringExtra("zak");
+        id = intent.getStringExtra("id");
+        id_z = intent.getStringExtra("id_zak");
+        zak = intent.getStringExtra("zak");
+
         uiInitialization();
         loadData(id,zak);
     }
@@ -69,11 +81,75 @@ public class DescriptionZayavkaBookActivity extends AppCompatActivity {
         imBook = (ImageView) findViewById(R.id.infobook_img);
         okrugl = (CheckBox) findViewById(R.id.infobook_okrgl);
 
+        listener = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                swowDialog(b);
+            }
+        };
+
+        listenerNull = new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+            }
+        };
+
+    }
+
+    private void swowDialog(final boolean b) {
+
+        AlertDialog.Builder ad = new AlertDialog.Builder(DescriptionZayavkaBookActivity.this);
+        ad.setMessage("Вы действительно хотите изменить значение переменной?");
+        ad.setPositiveButton("ДА", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+
+                int r = 0;
+                if(b) r = 1;
+
+                App.getApi().setRoundProduct(id, zak, r, id_z).enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try {
+
+                            if(response.body().string().contains("error")) {
+                                Toast.makeText(DescriptionZayavkaBookActivity.this,
+                                        "Ошибка редактирования....",
+                                        Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(DescriptionZayavkaBookActivity.this,
+                                        "Отредактировано.",
+                                        Toast.LENGTH_SHORT).show();
+                                okrugl.setOnCheckedChangeListener(listenerNull);
+                                loadData(id, zak);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(DescriptionZayavkaBookActivity.this,
+                                "Проверьте подключение к интернету....",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        ad.setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                dialog.cancel();
+            }
+        });
+        ad.setCancelable(false);
+        ad.show();
+
     }
 
     private void loadData(String id, String zak) {
 
-        App.getApi().getInfoBookZ(id, zak).enqueue(new Callback<List<InfoZayavkaBook>>() {
+        App.getApi().getInfoBookZ(id, zak, id_z).enqueue(new Callback<List<InfoZayavkaBook>>() {
             @Override
             public void onResponse(Call<List<InfoZayavkaBook>> call, Response<List<InfoZayavkaBook>> response) {
 
@@ -108,7 +184,11 @@ public class DescriptionZayavkaBookActivity extends AppCompatActivity {
         cost.setText(infoZayavkaBook.getCost());
         zayavok.setText(infoZayavkaBook.getZayavka());
         summa.setText(String.valueOf(infoZayavkaBook.getSum()));
+        okrugl.setChecked(infoZayavkaBook.isRound());
 
+        Glide.with(DescriptionZayavkaBookActivity.this).load("http://cc96297.tmweb.ru/admin/img/nomen/" + infoZayavkaBook.getImage()).into(imBook);
+
+        okrugl.setOnCheckedChangeListener(listener);
     }
 
     @Override
@@ -118,7 +198,6 @@ public class DescriptionZayavkaBookActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if( id == android.R.id.home){
             finish();
         }

@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context=".activity.providers.NewProviderZayavka">
 
     <android.support.design.widget.AppBarLayout
@@ -22,300 +24,301 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ScrollView
         android:layout_below="@+id/app"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/t6666"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Бланк заказа" />
-
-                <TextView
-                    android:id="@+id/new_z_blank"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_toRightOf="@+id/t6666"
-                    android:text="TextView"
-                    android:textColor="@color/tab_indicator"
-                    android:textColorLink="@color/tab_indicator" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/t12331313"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:layout_toLeftOf="@+id/new_z_date"
-                    android:text="Дата" />
-
-                <TextView
-                    android:id="@+id/new_z_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:text="TextView"
-                    android:textColor="@color/tab_indicator"
-                    android:textColorLink="@color/tab_indicator" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:weightSum="2">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <RelativeLayout
+            <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1">
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-                <TextView
-                    android:id="@+id/t5261611"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="Автор" />
+                    android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/new_z_author"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/t6666"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Заявка" />
+
+                    <TextView
+                        android:id="@+id/new_z_blank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@+id/t6666"
+                        android:text="TextView"
+                        android:textColor="@color/tab_indicator"
+                        android:textColorLink="@color/tab_indicator" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_toRightOf="@+id/t5261611"
-                    android:text="TextView"
-                    android:textColor="@color/tab_indicator"
-                    android:textColorLink="@color/tab_indicator" />
-            </RelativeLayout>
+                    android:layout_weight="1">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:visibility="gone">
+                    <TextView
+                        android:id="@+id/t12331313"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:layout_toLeftOf="@+id/new_z_date"
+                        android:text="Дата" />
 
-                <TextView
-                    android:id="@+id/t4418913"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="8dp"
-                    android:layout_toLeftOf="@+id/new_z_courer"
-                    android:text="Курьер" />
+                    <TextView
+                        android:id="@+id/new_z_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="TextView"
+                        android:textColor="@color/tab_indicator"
+                        android:textColorLink="@color/tab_indicator" />
 
-                <Spinner
-                    android:id="@+id/new_z_courer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:text="TextView"
-                    android:textColor="@color/tab_indicator"
-                    android:textColorLink="@color/tab_indicator" />
-            </RelativeLayout>
+                </RelativeLayout>
 
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:weightSum="2">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/t248133168"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="Статус" />
-
-                <Spinner
-                    android:id="@+id/new_z_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="8dp"
-                    android:layout_toRightOf="@+id/t248133168"
-                    android:text="TextView"
-                    android:textColor="@android:color/holo_blue_bright"
-                    android:textColorLink="@color/tab_indicator" />
-            </RelativeLayout>
-
-        </LinearLayout>
-
-
-        <EditText
-            android:id="@+id/new_z_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textImeMultiLine" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/new_z_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:background="@color/tab_indicator"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:text="готово"
-                android:textColor="@color/colorWhite" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="false"
-                android:layout_alignParentRight="true"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/fab_margin"
-                app:backgroundTint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_cart" />
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical">
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:orientation="horizontal"
                 android:weightSum="2">
 
-                <TextView
-                    android:id="@+id/new_z_p_inf_1"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Итого 0 поз. на 0,00 BYN"
-                    android:textColor="@color/tab_indicator"
-                    android:textSize="16sp" />
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/new_z_p_inf_2"
+                    <TextView
+                        android:id="@+id/t5261611"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="Автор" />
+
+                    <TextView
+                        android:id="@+id/new_z_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@+id/t5261611"
+                        android:text="TextView"
+                        android:textColor="@color/tab_indicator"
+                        android:textColorLink="@color/tab_indicator" />
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="Вес: 0,00 кг"
-                    android:textColor="@color/tab_indicator"
-                    android:textSize="16sp" />
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/t4418913"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="8dp"
+                        android:layout_toLeftOf="@+id/new_z_courer"
+                        android:text="Курьер" />
+
+                    <Spinner
+                        android:id="@+id/new_z_courer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text="TextView"
+                        android:textColor="@color/tab_indicator"
+                        android:textColorLink="@color/tab_indicator" />
+                </RelativeLayout>
+
+
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:weightSum="2">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/t248133168"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Класс"
-                        android:textColor="@color/tab_indicator" />
+                        android:layout_centerVertical="true"
+                        android:text="Статус" />
+
+                    <Spinner
+                        android:id="@+id/new_z_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@+id/t248133168"
+                        android:text="TextView"
+                        android:textColor="@android:color/holo_blue_bright"
+                        android:textColorLink="@color/tab_indicator" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+            <EditText
+                android:id="@+id/new_z_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textImeMultiLine" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/new_z_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/tab_indicator"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp"
+                    android:text="готово"
+                    android:textColor="@color/colorWhite" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="false"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="@dimen/fab_margin"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:srcCompat="@drawable/ic_cart" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
                     <TextView
+                        android:id="@+id/new_z_p_inf_1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Изд."
-                        android:textColor="@color/tab_indicator" />
+                        android:text="Итого 0 поз. на 0,00 BYN"
+                        android:textColor="@color/tab_indicator"
+                        android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/new_z_p_inf_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Арт."
-                        android:textColor="@color/tab_indicator" />
+                        android:gravity="right"
+                        android:text="Вес: 0,00 кг"
+                        android:textColor="@color/tab_indicator"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_height="wrap_content">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Сокр."
-                        android:textColor="@color/tab_indicator" />
+                        android:layout_weight="1">
 
-                    <TextView
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Класс"
+                            android:textColor="@color/tab_indicator" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Изд."
+                            android:textColor="@color/tab_indicator" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Арт."
+                            android:textColor="@color/tab_indicator" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Кол-во"
-                        android:textColor="@color/tab_indicator" />
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Сокр."
+                            android:textColor="@color/tab_indicator" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Кол-во"
+                            android:textColor="@color/tab_indicator" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_pr_z"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </android.support.v7.widget.RecyclerView>
+
+
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_pr_z"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </android.support.v7.widget.RecyclerView>
-
-
-    </LinearLayout>
-
+    </ScrollView>
 
     <RelativeLayout
         android:id="@+id/drawer_right"

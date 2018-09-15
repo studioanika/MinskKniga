@@ -189,7 +189,8 @@ public class ProvidersZayavkiRaschetActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        izdatel = intent.getStringExtra("izdatel");
+        //izdatel = intent.getStringExtra("izdatel");
+        izdatel = "Издатель";
         id_provider = intent.getStringExtra("id");
 
         filter.setOnClickListener(new View.OnClickListener() {
@@ -266,8 +267,8 @@ public class ProvidersZayavkiRaschetActivity extends AppCompatActivity {
             }
         });
 
-        spinner2.setEnabled(false);
-        spinner2.setClickable(false);
+        //spinner2.setEnabled(false);
+        //spinner2.setClickable(false);
         //load_filter();
         getNewFilter();
         reload();
@@ -378,8 +379,8 @@ public class ProvidersZayavkiRaschetActivity extends AppCompatActivity {
                 }
                 notfound.setText("Ничего не найдено");
 
-                spinner2.setEnabled(false);
-                spinner2.setClickable(false);
+                //spinner2.setEnabled(false);
+                //spinner2.setClickable(false);
                 progressBar.setVisibility(View.GONE);
 
             }

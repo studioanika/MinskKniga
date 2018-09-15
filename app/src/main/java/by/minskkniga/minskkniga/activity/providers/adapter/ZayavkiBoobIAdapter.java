@@ -31,16 +31,18 @@ public class ZayavkiBoobIAdapter extends RecyclerView.Adapter {
     private boolean loading;
 
    public DescriptionZayavkaActivity activity;
+   String id;
 
 
-    public ZayavkiBoobIAdapter(List<ZavInfoTovar> _list, RecyclerView recyclerView, DescriptionZayavkaActivity activity) {
+    public ZayavkiBoobIAdapter(List<ZavInfoTovar> _list, RecyclerView recyclerView,
+                               DescriptionZayavkaActivity activity, String id) {
         list = _list;
         this.activity = activity;
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
 
             final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView
                     .getLayoutManager();
-
+        this.id = id;
 
         }
     }
@@ -79,7 +81,14 @@ public class ZayavkiBoobIAdapter extends RecyclerView.Adapter {
             ((StudentViewHolder) holder).lin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                activity.startInfoDescr(bookI.getK_id(), bookI.getZayavka());
+                activity.startInfoDescr(bookI.getK_id(), bookI.getZayavka(), id);
+                }
+            });
+
+            ((StudentViewHolder) holder).zayavka.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    activity.longClickItem(bookI, ((StudentViewHolder) holder).zayavka, position);
                 }
             });
 

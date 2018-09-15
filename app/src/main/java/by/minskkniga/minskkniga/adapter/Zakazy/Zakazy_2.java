@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,10 +23,12 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
     private Context _context;
     ArrayList<Zakazy> _zakazy;
     AlertDialog.Builder ad;
+    Zakazy_Client client;
 
     public Zakazy_2(Context context, ArrayList<Zakazy> zakazy) {
         this._context = context;
         this._zakazy = zakazy;
+        client = (Zakazy_Client) context;
     }
 
     @Override
@@ -113,9 +116,11 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.adapter_zakazy_client_2_group, null);
         }
 
+        RelativeLayout rel = convertView.findViewById(R.id.rel);
         TextView tv1 = convertView.findViewById(R.id.tv1);
         TextView tv2 = convertView.findViewById(R.id.tv2);
         final CheckBox ch1 = convertView.findViewById(R.id.ch1);
+        final ImageView ch2 = convertView.findViewById(R.id.ch2);
         TextView tv3 = convertView.findViewById(R.id.tv3);
         ImageView info = convertView.findViewById(R.id.info);
 
@@ -161,15 +166,27 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
         }
 
         if (_zakazy.get(groupPosition).getOplacheno().equals("0")) {
+            ch1.setVisibility(View.GONE);
+            ch2.setVisibility(View.VISIBLE);
             ch1.setChecked(false);
             ch1.setEnabled(true);
+            ch2.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_check_1));
         } else {
+            ch2.setVisibility(View.VISIBLE);
+            ch1.setVisibility(View.GONE);
+            ch2.setImageDrawable(_context.getResources().getDrawable(R.drawable.ic_check_2));
             ch1.setChecked(true);
             ch1.setEnabled(false);
         }
 
         tv3.setText(_zakazy.get(groupPosition).getSumma());
 
+        rel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                client.startNew(groupPosition);
+            }
+        });
 //        ch1.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -205,7 +222,7 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
 //                }
 //            }
 //        });
-        ch1.setEnabled(false);
+         ch1.setEnabled(false);
 
         return convertView;
     }

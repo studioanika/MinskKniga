@@ -552,9 +552,14 @@ public abstract class Calculator extends AppCompatActivity
         try{
             if(!mFormulaEditText.getText().toString().isEmpty()) {
                 mCalculatorDisplay.setText(mFormulaEditText.getText().toString());
-                tab1.setResultTV(mFormulaEditText.getText().toString());
-                tab2.setResultTV(mFormulaEditText.getText().toString());
-                tab3.setResultTV(mFormulaEditText.getText().toString());
+                mEqualButton.callOnClick();
+//                tab1.setResultTV(mFormulaEditText.getText().toString());
+//                tab2.setResultTV(mFormulaEditText.getText().toString());
+//                tab3.setResultTV(mFormulaEditText.getText().toString());
+                tab1.setResultTV(results);
+                tab2.setResultTV(results);
+                tab3.setResultTV(results);
+
             }else  if(!results.isEmpty() && results != null) {
                 mCalculatorDisplay.setText(results);
                 tab1.setResultTV(results);
@@ -1179,6 +1184,7 @@ public abstract class Calculator extends AppCompatActivity
         Intent intent = new Intent(this, Main.class);
         intent.putExtra("id", _id);
         intent.putExtra("name", _name);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 }

@@ -50,6 +50,10 @@ public class Products implements Serializable {
     @Expose
     private String image;
 
+    @SerializedName("for_providers_count")
+    @Expose
+    private String for_providers_count;
+
     public String getId() {
         return id;
     }
@@ -160,5 +164,13 @@ public class Products implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getFor_providers_count() {
+        return for_providers_count;
+    }
+
+    public void setFor_providers_count(String for_providers_count) {
+        this.for_providers_count = for_providers_count;
     }
 }

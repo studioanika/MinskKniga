@@ -54,6 +54,8 @@ public class Zakazy_Client extends AppCompatActivity {
     TextView notfound_1;
     TextView notfound_2;
 
+    TextView tv_value_d, tv_type_d;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +77,10 @@ public class Zakazy_Client extends AppCompatActivity {
         id_client = getIntent().getIntExtra("id", 0);
         name = getIntent().getStringExtra("name");
         caption.setText(name);
+
+        tv_type_d = findViewById(R.id.tv_type_d);
+        tv_value_d = findViewById(R.id.tv_value_d);
+
 
         expListView = findViewById(R.id.expandeblelistview);
         zak_money_info_tovary = (TextView) findViewById(R.id.zak_money_info_tovary);
@@ -174,6 +180,15 @@ public class Zakazy_Client extends AppCompatActivity {
                             zak_money_info_podarki.setText(String.valueOf(info.getPodarki()));
                             zak_money_info_vozvrat.setText(String.valueOf(info.getVozvrat()));
                             zak_money_info_tovary.setText(String.valueOf(info.getTovar()));
+
+                            if(info.getItog() >= 0) {
+                                tv_type_d.setText("Нам должны:");
+                                tv_value_d.setText(String.valueOf(info.getItog()));
+                            }else {
+                                tv_type_d.setText("Мы должны:");
+                                tv_value_d.setText(String.valueOf(info.getItog()));
+                            }
+
                         }catch (Exception e){
 
                         }
@@ -245,6 +260,16 @@ public class Zakazy_Client extends AppCompatActivity {
                 Toast.makeText(Zakazy_Client.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void startNew(int groupPosition){
+        Intent intent = new Intent(Zakazy_Client.this, Zakaz_new.class);
+        intent.putExtra("name", name);
+        intent.putExtra("id_c", String.valueOf(id_client));
+        intent.putExtra("id_z", zakazy.get(groupPosition).getId());
+        if(zakazy.get(groupPosition).getObrazec().contains("1"))
+            intent.putExtra("obrazec", "1");
+        startActivity(intent);
     }
 
 }

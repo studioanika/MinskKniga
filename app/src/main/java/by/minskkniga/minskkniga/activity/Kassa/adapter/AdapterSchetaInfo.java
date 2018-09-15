@@ -77,6 +77,11 @@ public class AdapterSchetaInfo extends BaseAdapter {
             tv_rashod.setTextColor(_context.getResources().getColor(R.color.red));
             tv_rashod.setText(String.valueOf(item.getRashod()));
         }
+
+//        if(item.getRashod() != null) {
+//            if(item.getDohod() < 0 )tv_dohod.setTextColor(_context.getResources().getColor(R.color.red));
+//        }
+
         if(item.getOperation_sum() != null) tv_dohod.setText(String.valueOf(item.getOperation_sum()));
 
         if(item.getComment() != null) tv_note.setText(item.getComment());
@@ -123,6 +128,8 @@ public class AdapterSchetaInfo extends BaseAdapter {
                 return false;
             }
         });
+
+        if(item.getOperation_sum() < 0) tv_dohod.setTextColor(_context.getResources().getColor(R.color.red));
 
         return view;
     }

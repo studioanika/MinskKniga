@@ -59,7 +59,7 @@ public class ZakazyClientsCityAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.adapter_zakazy_2_1, null);
+            convertView = infalInflater.inflate(R.layout.adapter_zakazy_clients_city, null);
         }
 
         //ImageView imgNext = (ImageView) convertView.findViewById(R.id.item_list_group_providers_zayavki_next);
@@ -116,7 +116,7 @@ public class ZakazyClientsCityAdapter extends BaseExpandableListAdapter {
 
             }
 
-            tv3.setText(String.valueOf(client.getSumma()));
+            tv3.setText(String.valueOf(client.getVes()));
             if(client.getSumma() < 0) tv3.setTextColor(Color.RED);
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -175,7 +175,7 @@ public class ZakazyClientsCityAdapter extends BaseExpandableListAdapter {
         CheckBox ch1 = convertView.findViewById(R.id.ch1);
 
         tv1.setText(_listDataHeader.get(groupPosition).getName_city());
-        tv2.setText(_listDataHeader.get(groupPosition).getDolg());
+        tv2.setText(String.valueOf(_listDataHeader.get(groupPosition).getVes()));
         int obr = Integer.parseInt(_listDataHeader.get(groupPosition).getObrazec());
 
         if(obr == 1) ch1.setChecked(true);

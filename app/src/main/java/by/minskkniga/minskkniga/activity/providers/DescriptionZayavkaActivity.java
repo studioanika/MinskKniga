@@ -2,11 +2,13 @@ package by.minskkniga.minskkniga.activity.providers;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -135,12 +137,14 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
         nav_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.END);
                 showSendDialog();
             }
         });
         nav_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.END);
                 startSelectN();
             }
         });
@@ -243,6 +247,7 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
         nav_raschet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.END);
                 Intent intent = new Intent(DescriptionZayavkaActivity.this, ProvidersZayavkiRaschetActivity.class);
                 intent.putExtra("izdatel", zavInfo.getProvedires_name());
                 intent.putExtra("id", zavInfo.getProvedires());
@@ -428,8 +433,9 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
 
         setRelResult(description);
         studentList = description.getWhat_zakazal();
-        mAdapter = new ZayavkiBoobIAdapter(description.getWhat_zakazal(),recyclerView,DescriptionZayavkaActivity.this);
+        mAdapter = new ZayavkiBoobIAdapter(description.getWhat_zakazal(),recyclerView,DescriptionZayavkaActivity.this, description.getId());
         recyclerView.setAdapter(mAdapter);
+
     }
 
     @SuppressLint("LongLogTag")
@@ -456,11 +462,12 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
         tva_d_z_tv_result_weight.setText("Вес: "+weight+" кг");
     }
 
-    public void startInfoDescr(String id, String zak){
+    public void startInfoDescr(String id, String zak, String id_zak){
 
         Intent intent = new Intent(DescriptionZayavkaActivity.this, DescriptionZayavkaBookActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("zak", zak);
+        intent.putExtra("id_zak", id_zak);
         startActivity(intent);
 
     }
@@ -591,7 +598,13 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
 
         final EditText et = (EditText) dialogEdit.findViewById(R.id.editmoney_et);
 
-        et.setText(tv.getText().toString());
+        String c = tv.getText().toString();
+
+        if(!c.equals("0")) {
+            et.setText(tv.getText().toString());
+            et.setSelection(tv.getText().length());
+        }
+        else et.setText("");
 
         tv_done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -650,9 +663,11 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
                     infoTovar.setCena(products.getProdCena());
                     infoTovar.setClas(products.getClas());
                     infoTovar.setIzdatel(products.getIzdatel());
-                    infoTovar.setName(products.getSokrName());
+                    infoTovar.setName(products.getName());
+                    infoTovar.setSokr_name(products.getSokrName());
                     infoTovar.setVes(products.getVes());
-                    infoTovar.setZayavka("0");
+                    infoTovar.setZayavka(products.getFor_providers_count());
+
 
                     studentList.add(infoTovar);
                 }
@@ -663,7 +678,7 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
 
         }
 
-        mAdapter = new ZayavkiBoobIAdapter(studentList,recyclerView,DescriptionZayavkaActivity.this);
+        mAdapter = new ZayavkiBoobIAdapter(studentList,recyclerView,DescriptionZayavkaActivity.this, id_z);
         recyclerView.setAdapter(mAdapter);
 
 
@@ -695,5 +710,37 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
         intent.putExtra("izdatel", providers);
 
         startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawer.isDrawerOpen(GravityCompat.END)) {
+            drawer.closeDrawer(GravityCompat.END);
+            return;
+        }
+
+        if(studentList != null && studentList.size() != 0) {
+            showDialogExit();
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    private void showDialogExit() {
+        AlertDialog.Builder ad = new AlertDialog.Builder(DescriptionZayavkaActivity.this);
+        ad.setMessage("Сохранить?");
+        ad.setPositiveButton("ДА", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                sendZayavka();
+            }
+        });
+        ad.setNegativeButton("НЕТ", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                finish();
+            }
+        });
+        ad.setCancelable(false);
+        ad.show();
+
     }
 }

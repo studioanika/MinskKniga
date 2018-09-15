@@ -240,7 +240,7 @@ public class CategoryActivity extends AppCompatActivity {
         }
     }
 
-    private void showDialogAdd(final TypeDialogCategory type, final String id, String name){
+    public void showDialogAdd(final TypeDialogCategory type, final String id, String name){
 
         final Dialog dialogEdit = new Dialog(this);
         //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);

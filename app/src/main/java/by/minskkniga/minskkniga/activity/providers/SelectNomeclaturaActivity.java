@@ -1,5 +1,6 @@
 package by.minskkniga.minskkniga.activity.providers;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Color;
@@ -11,6 +12,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -268,11 +271,11 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
         if(list != null) {
 
             if(isList(products_buf.get(position).getId())) {
-                Toast.makeText(SelectNomeclaturaActivity.this, "Удалено", Toast.LENGTH_SHORT).show();
-                list.remove(products_buf.get(position));
+                Toast.makeText(SelectNomeclaturaActivity.this, "Позиция уже есть в списке", Toast.LENGTH_SHORT).show();
+                //list.remove(products_buf.get(position));
+                return;
             } else {
-                Toast.makeText(SelectNomeclaturaActivity.this, "Добавлено", Toast.LENGTH_SHORT).show();
-                list.add(products_buf.get(position));
+                showDialogEditCount(position, products_buf.get(position).getName());
             }
 
         }
@@ -557,6 +560,59 @@ public class SelectNomeclaturaActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        intent.putExtra("list",(Serializable) list);
+        finish();
+        super.onBackPressed();
+    }
+
+    private void showDialogEditCount(final int position, String name){
+
+        final Dialog dialogEdit = new Dialog(this);
+        //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogEdit.setContentView(R.layout.dialog_add_product_count);
+
+
+        TextView tv_name = (TextView) dialogEdit.findViewById(R.id.tv_name_k);
+        tv_name.setText(name);
+        final EditText et_count = (EditText) dialogEdit.findViewById(R.id.et_colvo);
+        TextView tv_cancel = (TextView) dialogEdit.findViewById(R.id.tv_no);
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogEdit.dismiss();
+            }
+        });
+
+        TextView tv_ok = (TextView) dialogEdit.findViewById(R.id.tv_yes);
+        tv_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String col = et_count.getText().toString();
+                if(!col.isEmpty()) {
+                    Toast.makeText(SelectNomeclaturaActivity.this, "Добавлено", Toast.LENGTH_SHORT).show();
+                    products_buf.get(position).setFor_providers_count(col);
+                    list.add(products_buf.get(position));
+                    dialogEdit.dismiss();
+                }
+
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialogEdit.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialogEdit.setCancelable(false);
+        dialogEdit.show();
+        dialogEdit.getWindow().setAttributes(lp);
 
     }
 }
