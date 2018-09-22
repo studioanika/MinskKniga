@@ -11,6 +11,10 @@ public class Zakazy {
     @Expose
     private String id;
 
+    @SerializedName("type")
+    @Expose
+    private String type;
+
     @SerializedName("obrazec")
     @Expose
     private String obrazec;
@@ -140,5 +144,13 @@ public class Zakazy {
 
     public void setObrazec(String obrazec) {
         this.obrazec = obrazec;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

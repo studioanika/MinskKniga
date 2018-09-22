@@ -1,6 +1,7 @@
 package by.minskkniga.minskkniga.activity.Zakazy;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -66,7 +67,15 @@ class MoneyAdapterZak extends RecyclerView.Adapter{
             ((StudentViewHolder) holder).tvDate.setText(item.getDate());
             ((StudentViewHolder) holder).tvOplata.setText(String.valueOf(String.valueOf(item.getOplaty())));
             ((StudentViewHolder) holder).tvTovar.setText(String.valueOf(String.valueOf(item.getTovar())));
-
+            if(!item.getId_zak().equals("0")){
+                ((StudentViewHolder) holder).tvDate.setTextColor(Color.BLUE);
+                ((StudentViewHolder) holder).lin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        activity.startNewFromLV(item.getId_zak());
+                    }
+                });
+            }
 
         }
     }
@@ -90,6 +99,7 @@ class MoneyAdapterZak extends RecyclerView.Adapter{
             tvDate  = (TextView) v.findViewById(R.id.item_fragment_money_date);
             tvOplata  = (TextView) v.findViewById(R.id.item_fragment_money_oplaty);
             tvVozvrat  = (TextView) v.findViewById(R.id.item_fragment_money_vozvrat);
+            lin = v.findViewById(R.id.lin);
         }
     }
 }

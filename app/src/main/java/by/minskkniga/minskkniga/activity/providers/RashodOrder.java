@@ -227,43 +227,51 @@ public class RashodOrder extends AppCompatActivity {
     private void sendData() {
 
 
-        int cat_pos = sp_cat.getSelectedItemPosition();
-        int pod_cat_pos = sp_podcat.getSelectedItemPosition();
+        String schet = null;
+        String sum = null;
+        String date = null;
+        String com = null;
+        try {
+            int cat_pos = sp_cat.getSelectedItemPosition();
+            int pod_cat_pos = sp_podcat.getSelectedItemPosition();
 
-        if(categoryListFinal.get(cat_pos).getId() == null
-                || categoryListFinal.get(cat_pos).getId().isEmpty()) {
-            Toast.makeText(RashodOrder.this, "Не выбрана категория", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(categoryListFinal.get(pod_cat_pos).getList().get(sp_podcat.getSelectedItemPosition()).getId() == null ||
-                categoryListFinal.get(pod_cat_pos).getList().get(sp_podcat.getSelectedItemPosition()).getId().isEmpty()) {
-            Toast.makeText(RashodOrder.this, "Не выбрана подкатегория", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if(schetumListFinal == null) {
-                Toast.makeText(RashodOrder.this, "Не выбран счет", Toast.LENGTH_SHORT).show();
+            if(categoryListFinal.get(cat_pos).getId() == null
+                    || categoryListFinal.get(cat_pos).getId().isEmpty()) {
+                Toast.makeText(RashodOrder.this, "Не выбрана категория", Toast.LENGTH_SHORT).show();
                 return;
+            }
+
+            if(categoryListFinal.get(cat_pos).getList().get(sp_podcat.getSelectedItemPosition()).getId() == null ||
+                    categoryListFinal.get(cat_pos).getList().get(sp_podcat.getSelectedItemPosition()).getId().isEmpty()) {
+                Toast.makeText(RashodOrder.this, "Не выбрана подкатегория", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(schetumListFinal == null) {
+                    Toast.makeText(RashodOrder.this, "Не выбран счет", Toast.LENGTH_SHORT).show();
+                    return;
+            }
+
+            schet = schetumListFinal.get(sp_chet.getSelectedItemPosition()).getId();
+
+            sum = summa.getText().toString();
+
+            if(sum.isEmpty()){
+                Toast.makeText(RashodOrder.this, "Введите сумму", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            date = df.format(currentDate);
+
+            com = comment.getText().toString();
+            progressBar.setVisibility(View.VISIBLE);
+            btn_save.setEnabled(false);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        String schet = schetumListFinal.get(sp_chet.getSelectedItemPosition()).getId();
-
-        String sum = summa.getText().toString();
-
-        if(sum.isEmpty()){
-            Toast.makeText(RashodOrder.this, "Введите сумму", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String date = df.format(currentDate);
-
-        String com = comment.getText().toString();
-        progressBar.setVisibility(View.VISIBLE);
-        btn_save.setEnabled(false);
         App.getApi().addOperationCassa(categoryListFinal.get(sp_cat.getSelectedItemPosition()).getId(),
                 categoryListFinal.get(sp_cat.getSelectedItemPosition()).getList().get(sp_podcat.getSelectedItemPosition()).getId(),
-                schet, sum, date, id, com, "2", "0").enqueue(new Callback<ResponseBody>() {
+                schet, sum, date, id, com, "2", "0", "").enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 isOk = false;
@@ -289,6 +297,7 @@ public class RashodOrder extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                String d = t.toString();
                 btn_save.setEnabled(true);
                 progressBar.setVisibility(View.GONE);
             }

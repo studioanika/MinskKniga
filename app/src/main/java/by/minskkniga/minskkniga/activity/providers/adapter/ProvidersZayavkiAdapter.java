@@ -130,7 +130,8 @@ public class ProvidersZayavkiAdapter extends BaseExpandableListAdapter {
             public void onClick(View view) {
 
                 ProviderZayavkiListActivity activity = (ProviderZayavkiListActivity) _context;
-                activity.startNextAct(_listDataHeader.get(groupPosition).getId());
+                if(!_listDataHeader.get(groupPosition).getType().equals("vozvrat"))activity.startNextAct(_listDataHeader.get(groupPosition).getId());
+                else activity.startNextActReturn(_listDataHeader.get(groupPosition).getId());
             }
         });
 
@@ -184,6 +185,18 @@ public class ProvidersZayavkiAdapter extends BaseExpandableListAdapter {
         } catch (Exception e) {
             e.printStackTrace();
 
+        }
+
+        if(_listDataHeader.get(groupPosition).getType().equals("vozvrat")){
+            int staus = Integer.parseInt(_listDataHeader.get(groupPosition).getStatus());
+            if(staus == 1) {
+                txtStatus.setText("К возврату");
+                txtStatus.setTextColor(Color.rgb(97, 184, 126));
+            }
+            else if(staus == 2) {
+                txtStatus.setText("Передан");
+                txtStatus.setTextColor(Color.rgb(242, 201, 76));
+            }
         }
 
 

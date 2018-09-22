@@ -454,11 +454,18 @@ public class InventarizaciaActivity extends AppCompatActivity {
 
                 if(vi == i1) {
                     if(position != 0) {
-                        avtor = spinner1.getSelectedItem().toString();
-                        if(filter_.contains("clas") || filter_.contains("izdatel") ||
-                                filter_.contains("obrazec")){
-                            filter_ = filter_+",autor";
-                        } else filter_ = "autor";
+                        if(!spinner1.getSelectedItem().toString().contains("Не выбран")){
+                            avtor = spinner1.getSelectedItem().toString();
+                            if(filter_.contains("clas") || filter_.contains("izdatel") ||
+                                    filter_.contains("obrazec")){
+                                filter_ = filter_+",autor";
+                            } else filter_ = "autor";
+                        }else {
+                            if(filter_.contains("clas") || filter_.contains("izdatel") ||
+                                    filter_.contains("obrazec")){
+                                filter_ = filter_.replace(",autor", "");
+                            } else filter_ = filter_.replace("autor", "");
+                        }
 
                         getNewFilter();
                     }
@@ -466,33 +473,53 @@ public class InventarizaciaActivity extends AppCompatActivity {
                 }
                 if(vi == i2) {
                     if(position != 0) {
-                        izdatel = spinner2.getSelectedItem().toString();
-                        if(filter_.contains("clas") || filter_.contains("autor") ||
-                                filter_.contains("obrazec")){
-                            filter_ = filter_+",izdatel";
-                        } else filter_ = "izdatel";
+                        if(!spinner2.getSelectedItem().toString().contains("Не выбран")) {
+                            izdatel = spinner2.getSelectedItem().toString();
+                            if (filter_.contains("clas") || filter_.contains("autor") ||
+                                    filter_.contains("obrazec")) {
+                                filter_ = filter_ + ",izdatel";
+                            } else filter_ = "izdatel";
+                        }else {
+                            if (filter_.contains("clas") || filter_.contains("autor") ||
+                                    filter_.contains("obrazec")) {
+                                filter_ = filter_.replace(",izdatel", "");
+                            } else filter_ = filter_.replace("izdatel", "");
+                        }
 
                         getNewFilter();
                     }
                 }
                 if(vi == i3) {
                     if(position != 0) {
-                        obraz = spinner3.getSelectedItem().toString();
-                        if(filter_.contains("clas") || filter_.contains("izdatel") ||
-                                filter_.contains("autor")){
-                            filter_ = filter_+",obrazec";
-                        } else filter_ = "obrazec";
-
+                        if(!spinner3.getSelectedItem().toString().contains("Не выбран")) {
+                            obraz = spinner3.getSelectedItem().toString();
+                            if (filter_.contains("clas") || filter_.contains("izdatel") ||
+                                    filter_.contains("autor")) {
+                                filter_ = filter_ + ",obrazec";
+                            } else filter_ = "obrazec";
+                        }else {
+                            if (filter_.contains("clas") || filter_.contains("izdatel") ||
+                                    filter_.contains("autor")) {
+                                filter_ = filter_.replace(",obrazec", "");
+                            } else filter_ = filter_.replace("obrazec", "");
+                        }
                         getNewFilter();
                     }
                 }
                 if(vi == i4) {
                     if(position != 0) {
-                        class_ = spinner4.getSelectedItem().toString();
-                        if(filter_.contains("autor") || filter_.contains("izdatel") ||
-                                filter_.contains("obrazec")){
-                            filter_ = filter_+",clas";
-                        } else filter_ = "clas";
+                        if(!spinner4.getSelectedItem().toString().contains("Не выбран")) {
+                            class_ = spinner4.getSelectedItem().toString();
+                            if (filter_.contains("autor") || filter_.contains("izdatel") ||
+                                    filter_.contains("obrazec")) {
+                                filter_ = filter_ + ",clas";
+                            } else filter_ = "clas";
+                        }else {
+                            if (filter_.contains("autor") || filter_.contains("izdatel") ||
+                                    filter_.contains("obrazec")) {
+                                filter_ = filter_.replace(",clas", "");
+                            } else filter_ = filter_.replace("clas", "");
+                        }
 
                         getNewFilter();
                     }
@@ -511,20 +538,24 @@ public class InventarizaciaActivity extends AppCompatActivity {
         String _class = "";
         if(!class_.contains("null")) _class = class_;
         if(class_.contains("Класс")) _class = "";
+        if(class_.contains("Не выбран")) _class = "";
 
         String _autor = "";
         if(!avtor.contains("null")) _autor = avtor;
         if(avtor.contains("Автор")) _autor = "";
+        if(avtor.contains("Не выбран")) _autor = "";
 
         String _obraz = "";
         if(!obraz.contains("null")) _obraz = obraz;
         if(obraz.contains("Образец")) _obraz = "";
         else if(obraz.contains("Да")) _obraz = "Есть";
         else if(obraz.contains("Нет")) _obraz = "";
+        else if(obraz.contains("Не выбран")) _obraz = "";
 
         String _izdatel = "";
         if(!izdatel.contains("null")) _izdatel = izdatel;
         if(izdatel.contains("Издатель")) _izdatel = "";
+        if(izdatel.contains("Не выбран")) _izdatel = "";
 
         App.getApi().getProductsfilter(_class, _obraz, _autor, _izdatel,filter_).enqueue(new Callback<Products_filter>() {
             @Override

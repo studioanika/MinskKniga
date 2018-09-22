@@ -118,11 +118,11 @@ public class Add extends AppCompatActivity {
         if (!tab.equals("null")) {
             if (tab.equals("1")) {
                 caption.setText("Просмотр поручения");
-                spinner1.setEnabled(false);
-                spinner2.setEnabled(false);
-                spinner3.setEnabled(false);
-                ed_date.setEnabled(false);
-                ed_text.setEnabled(false);
+                //spinner1.setEnabled(false);
+                //spinner2.setEnabled(false);
+                //spinner3.setEnabled(false);
+                //ed_date.setEnabled(false);
+                //ed_text.setEnabled(false);
             } else {
                 spinner3.setEnabled(false);
                 caption.setText("Редактирование поручения");
@@ -136,8 +136,8 @@ public class Add extends AppCompatActivity {
 
 
         if (id.equals("null")) {
-            ed_autor.setVisibility(View.GONE);
-            autor_lab.setVisibility(View.GONE);
+            //ed_autor.setVisibility(View.GONE);
+            //autor_lab.setVisibility(View.GONE);
         }
 
     }

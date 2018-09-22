@@ -21,8 +21,25 @@ public class Zakaz_product implements Parcelable {
     public String barcode;
     public String barcode_status;
     public String id_poz;
+    public String sokr;
 
-    public Zakaz_product(String id_poz,String id, String name, String artukil, String cena, String col_zakaz, String col_podar, String ispodar, String const_podar, String summa, String otgruzeno, String ves, String image, String clas, String barcode, String barcode_status) {
+    public String getCol_zakaz() {
+        return col_zakaz;
+    }
+
+    public void setCol_zakaz(String col_zakaz) {
+        this.col_zakaz = col_zakaz;
+    }
+
+    public String getOtgruzeno() {
+        return otgruzeno;
+    }
+
+    public void setOtgruzeno(String otgruzeno) {
+        this.otgruzeno = otgruzeno;
+    }
+
+    public Zakaz_product(String id_poz, String id, String name, String artukil, String cena, String col_zakaz, String col_podar, String ispodar, String const_podar, String summa, String otgruzeno, String ves, String image, String clas, String barcode, String barcode_status) {
         this.id = id;
         this.id_poz = id_poz;
         this.name = name;
@@ -46,6 +63,7 @@ public class Zakaz_product implements Parcelable {
     }
 
     public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(id_poz);
         parcel.writeString(id);
         parcel.writeString(name);
         parcel.writeString(artukil);
@@ -61,6 +79,7 @@ public class Zakaz_product implements Parcelable {
         parcel.writeString(clas);
         parcel.writeString(barcode);
         parcel.writeString(barcode_status);
+        parcel.writeString(sokr);
     }
 
     public static final Parcelable.Creator<Zakaz_product> CREATOR = new Parcelable.Creator<Zakaz_product>() {
@@ -74,6 +93,7 @@ public class Zakaz_product implements Parcelable {
     };
 
     private Zakaz_product(Parcel parcel) {
+        id_poz = parcel.readString();
         id = parcel.readString();
         name = parcel.readString();
         artukil = parcel.readString();
@@ -89,6 +109,14 @@ public class Zakaz_product implements Parcelable {
         clas = parcel.readString();
         barcode = parcel.readString();
         barcode_status = parcel.readString();
+        sokr = parcel.readString();
     }
 
+    public String getSokr() {
+        return sokr;
+    }
+
+    public void setSokr(String sokr) {
+        this.sokr = sokr;
+    }
 }

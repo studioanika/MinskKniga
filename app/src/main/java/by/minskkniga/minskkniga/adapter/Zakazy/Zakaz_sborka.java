@@ -68,7 +68,8 @@ public class Zakaz_sborka extends BaseAdapter {
         tv1.setText(_objects.get(position).clas);
         tv2.setText(_objects.get(position).name);
         tv3.setText(_objects.get(position).col_zakaz);
-        tv4.setText(_objects.get(position).otgruzeno);
+        tv4.setText(_objects.get(position).sokr);
+        tv4.setBackgroundColor(Color.YELLOW);
 
         if (_objects.get(position).col_zakaz.equals(_objects.get(position).otgruzeno)){
             Glide.with(_context).load(R.drawable.ic_check_2).into(iv2);

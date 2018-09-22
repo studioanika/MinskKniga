@@ -155,5 +155,6 @@
     <string name="title_activity_return_to_sclad">Возврат на склад</string>
     <string name="title_activity_rangs">Таблица рангов</string>
     <string name="title_activity_prihod_order">PrihodOrder</string>
+    <string name="title_activity_show_otgruzennoe">ShowOtgruzennoe</string>
 
 </resources>

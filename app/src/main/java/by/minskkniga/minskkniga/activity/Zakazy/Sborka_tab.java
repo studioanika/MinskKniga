@@ -42,7 +42,7 @@ public class Sborka_tab extends AppCompatActivity {
 
     ImageView image;
     TextView name, obrazci;
-    TextView artikul, ves;
+    TextView artikul, ves, ves_otgr;
     TextView clas, ostatok;
     TextView izdatel, sklad;
     TextView obrazec, standart;
@@ -101,6 +101,8 @@ public class Sborka_tab extends AppCompatActivity {
             }
         });
 
+        ves_otgr = findViewById(R.id.ves_otgrz);
+
         zakazano.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -130,14 +132,40 @@ public class Sborka_tab extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (otgruzeno.getText().equals(""))
+                {
                     products.get(id).otgruzeno = "0";
+                }
                 else
+                {
                     products.get(id).otgruzeno = String.valueOf(otgruzeno.getText());
+
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (otgruzeno.getText().equals(""))
+                {
+                    ves_otgr.setText("0");
+                }
+                else
+                {
 
+                    try{
+                        int d = Integer.parseInt(editable.toString());
+                        Double ves_d = d * Double.parseDouble(products.get(id).ves);
+                        ves_otgr.setText(String.format("%.2f", ves_d));
+                    }
+                    catch (Exception e){
+                        ves_otgr.setText("0");
+                    }
+
+                }
+                String o = otgruzeno.getText().toString();
+                if(o.equals("0")) {
+                    otgruzeno.setText("");
+                    otgruzeno.setHint("0");
+                }
             }
         });
 
@@ -148,6 +176,9 @@ public class Sborka_tab extends AppCompatActivity {
                 products.get(id).otgruzeno = products.get(id).col_zakaz;
             }
         });
+
+        ves_otgr = findViewById(R.id.ves_otgrz);
+
 
         name = findViewById(R.id.name);
         ves = findViewById(R.id.ves);

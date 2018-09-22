@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -48,8 +49,11 @@ import java.util.Map;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.providers.adapter.ZayavkiBoobIAdapter;
+import by.minskkniga.minskkniga.adapter.Add_Contacts;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Products;
+import by.minskkniga.minskkniga.api.Class.clients.Contact;
+import by.minskkniga.minskkniga.api.Class.provider_sp.ProviderInfo;
 import by.minskkniga.minskkniga.api.Class.providers.ProductForZayackaProvider;
 import by.minskkniga.minskkniga.api.Class.providers.ProviderObject;
 import by.minskkniga.minskkniga.api.Class.providers.ZavInfo;
@@ -64,9 +68,10 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 201;
     SimpleDateFormat df;
 
+    Button peredat;
 
     TextView nav_send;
-    TextView nav_raschet, nav_add;
+    TextView nav_raschet, nav_add, nav_contacts;
 
     List<ProviderObject> list = new ArrayList<>();
     List<ProviderObject> listF = new ArrayList<>();
@@ -82,6 +87,9 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
     LinearLayout linear;
     EditText et_nal;
     EditText et_beznal;
+
+
+    TextView ad_z_none_i, ad_z_oplata_i;
 
     String id_z = "";
 
@@ -99,14 +107,18 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
     Double dengi;
     ZavInfo zavInfo;
 
+    String id_p;
+
 
     String providers = "null";
     TextWatcher text_nal;
     TextWatcher text_beznal;
 
     int finalColor;
+    String ret;
 
     String[] arr = new String[]{"Черновик","Не обработан","Оприходован","Ожидаем","Отменен","Не обработан"};
+    String[] arr1 = new String[]{"К возврату","Передан"};
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,9 +133,33 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String id = intent.getStringExtra("id");
+        id_p = intent.getStringExtra("id_p");
+        ret = intent.getStringExtra("return");
 
         initView();
-        loadData(id);
+        if(ret == null) loadData(id);
+        else loadDataVozvrat(id);
+    }
+
+    private void loadDataVozvrat(String id) {
+
+        App.getApi().getZavReturnInfo(id).enqueue(new Callback<ZavInfo>() {
+            @Override
+            public void onResponse(Call<ZavInfo> call, Response<ZavInfo> response) {
+                progress.setVisibility(View.GONE);
+                ZavInfo info = response.body();
+                if(info != null) setInfoReturn(info);
+                String sd = "";
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ZavInfo> call, Throwable t) {
+                progress.setVisibility(View.GONE);
+            }
+        });
+
     }
 
     private void initView() {
@@ -168,6 +204,9 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
         a_d_z_oplata = (CheckBox) findViewById(R.id.a_d_z_oplata);
         btn_cancel = findViewById(R.id.btn_cancel);
         btn_oprihodovat = findViewById(R.id.btn_oprihodovat);
+
+        ad_z_none_i = findViewById(R.id.a_d_z_note_i);
+        ad_z_oplata_i = findViewById(R.id.a_d_z_oplata_i);
 
         btn_oprihodovat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -255,6 +294,27 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        nav_contacts = findViewById(R.id.nav_contacts);
+        nav_contacts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.END);
+                if(id_p != null )showDialogContacts(id_p);
+            }
+        });
+
+        peredat = findViewById(R.id.peredat);
+
+        peredat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                drawer.closeDrawer(GravityCompat.END);
+                if(ret != null) {
+                    spinner.setSelection(1);
+                }
+            }
+        });
     }
 
     private void showSendDialog() {
@@ -340,6 +400,165 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
                 progress.setVisibility(View.GONE);
             }
         });
+
+    }
+
+    private void showDialogContacts(String id_client) {
+        final Dialog view = new Dialog(this);
+        //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        view.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        view.setContentView(R.layout.dialog_contacts);
+
+
+        final ProgressBar progressBar = view.findViewById(R.id.progress);
+        final ListView lv = view.findViewById(R.id.lv);
+        final TextView name = view.findViewById(R.id.tv_name);
+        final TextView close = view.findViewById(R.id.tv_close);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                view.dismiss();
+            }
+        });
+
+        final ArrayList<String> contact_type = new ArrayList<>();
+        final ArrayList<String> contact_text = new ArrayList<>();
+        final ArrayList<String> contacts_id = new ArrayList<>();
+
+        App.getApi().getProviderId(id_client).enqueue(new Callback<List<ProviderInfo>>() {
+            @Override
+            public void onResponse(Call<List<ProviderInfo>> call, Response<List<ProviderInfo>> response) {
+                progressBar.setVisibility(View.GONE);
+                if(response.body() != null){
+
+                    ProviderInfo providerInfo = response.body().get(0);
+                    name.setText(providerInfo.getName());
+                    if(providerInfo.getContacts() != null && providerInfo.getContacts().size() != 0){
+                        contact_text.clear();
+                        contact_type.clear();
+                        for (Contact ct: providerInfo.getContacts()
+                                ) {
+                            contacts_id.add(ct.getId());
+                            contact_type.add(ct.getType());
+                            contact_text.add(ct.getText());
+                            lv.setAdapter(new Add_Contacts(DescriptionZayavkaActivity.this, contact_type, contact_text));
+                            //setListViewHeightBasedOnChildren(list_contact);
+
+                        }
+                    }else {
+                        Toast.makeText(DescriptionZayavkaActivity.this, "E поставщика нету контактов...", Toast.LENGTH_SHORT).show();
+                        view.dismiss();
+                    }
+
+                }
+                else Toast.makeText(DescriptionZayavkaActivity.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<List<ProviderInfo>> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(DescriptionZayavkaActivity.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(view.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        view.show();
+        view.getWindow().setAttributes(lp);
+
+
+    }
+
+    private void setInfoReturn(ZavInfo description) {
+
+        ad_z_oplata_i.setVisibility(View.GONE);
+        ad_z_none_i.setVisibility(View.GONE);
+        zavInfo = description;
+        et_beznal.removeTextChangedListener(text_beznal);
+        et_nal.removeTextChangedListener(text_nal);
+
+        a_d_z_note.setVisibility(View.GONE);
+        a_d_z_oplata.setVisibility(View.GONE);
+
+        try{
+            Double d1 = Double.parseDouble(description.getNal());
+            Double d2 = Double.parseDouble(description.getBeznal());
+
+            dengi = description.getSumma();
+        }
+        catch (Exception e){}
+
+        providers = description.getProvedires_name();
+        id_z = description.getId();
+
+        et_comment.setText(description.getKomment());
+        tva_d_z_id.setText("№"+description.getId());
+        tva_d_z_date.setText(description.getDate());
+        tva_d_z_author.setText(description.getAutor());
+
+        et_beznal.setText(description.getBeznal());
+        et_nal.setText(description.getNal());
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, R.layout.adapter_nomenklatura_filter, arr1);
+        spinner.setAdapter(spinnerArrayAdapter);
+        if(description.getStatus()!=null){
+            try{
+
+                int select = Integer.parseInt(description.getStatus());
+                int color = (Color.rgb(97, 184, 126));
+                switch (select){
+                    case 0:
+                        color = (Color.rgb(97, 184, 126));
+                        break;
+                    case 1:
+                        color = (Color.rgb(97, 184, 126));
+                        peredat.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        color = (Color.rgb(242, 201, 76));
+                        break;
+
+                }
+
+                finalColor = color;
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        ((TextView) adapterView.getChildAt(0)).setTextColor(finalColor);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+                if(select == 1)spinner.setSelection(0);
+                else if(select == 2) spinner.setSelection(1);
+
+                if(select ==0) a_d_z_note.setChecked(true);
+
+
+
+            }
+            catch (Exception e){}
+
+            //et_beznal.addTextChangedListener(text_beznal);
+            //et_nal.addTextChangedListener(text_nal);
+
+            //spinner.setBackgroundColor();
+        }
+        spinner.setEnabled(false);
+        if(Integer.parseInt(description.getOplacheno()) == 0) a_d_z_oplata.setChecked(false);
+        else a_d_z_oplata.setChecked(true);
+
+
+        setRelResult(description);
+        studentList = description.getWhat_zakazal();
+        mAdapter = new ZayavkiBoobIAdapter(description.getWhat_zakazal(),recyclerView,DescriptionZayavkaActivity.this, description.getId());
+        recyclerView.setAdapter(mAdapter);
 
     }
 
@@ -560,6 +779,85 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
 
     }
 
+    private void sendZayavkaReturn(){
+
+        String status = String.valueOf(spinner.getSelectedItemPosition());
+        String comment = et_comment.getText().toString();
+        df = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        Date currentDate = new Date();
+        String date = df.format(currentDate);
+        String chernovik = "1";
+        if(a_d_z_note.isChecked()) chernovik = "0";
+        else chernovik = "1";
+
+        String oplacheno = "0";
+        if(a_d_z_oplata.isChecked()) oplacheno = "1";
+        else oplacheno = "0";
+
+        Map<String, String> body = new HashMap();
+        //body.put("date", date);
+        //body.put("provedires", providers);
+        //body.put("autor", author);
+        //body.put("status", status);
+        body.put("komment", comment);
+        try {
+            body.put("status", String.valueOf(spinner.getSelectedItemPosition()+1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //body.put("courier_id", courier);
+        //body.put("auto", auto);
+        Gson gson = new Gson();
+        String listJSON = gson.toJson(studentList);
+        String d = "";
+
+        String nal = et_nal.getText().toString();
+        String beznal = et_beznal.getText().toString();
+
+        body.put("nal", nal);
+        body.put("beznal", beznal);
+        body.put("oplacheno", oplacheno);
+        body.put("chern", chernovik);
+        body.put("id", id_z);
+        body.put("list", listJSON);
+
+        App.getApi().updateProviderZayavkaReurn(body).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.body() != null) {
+                    try {
+                        String d = response.body().string();
+                        if(d.contains("error")) {
+                            Toast.makeText(DescriptionZayavkaActivity.this,
+                                    "Ошибка редактирования....",
+                                    Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(DescriptionZayavkaActivity.this,
+                                    "Заявка отредактирована.",
+                                    Toast.LENGTH_SHORT).show();
+                            loadData(id_z);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(DescriptionZayavkaActivity.this,
+                                "Ошибка редактирования....",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(DescriptionZayavkaActivity.this,
+                        "Проверьте подключение к интернету....",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        //body.put("mas", mass);
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -573,7 +871,8 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
 
         }
         if (id == R.id.apply) {
-            sendZayavka();
+            if(ret == null)sendZayavka();
+            else sendZayavkaReturn();
         }
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -659,6 +958,7 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
 
                 }else {
                     ZavInfoTovar infoTovar = new ZavInfoTovar();
+                    infoTovar.setProd_id(products.getId());
                     infoTovar.setArtikul(products.getArtikul());
                     infoTovar.setCena(products.getProdCena());
                     infoTovar.setClas(products.getClas());
@@ -731,7 +1031,8 @@ public class DescriptionZayavkaActivity extends AppCompatActivity {
         ad.setMessage("Сохранить?");
         ad.setPositiveButton("ДА", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int arg1) {
-                sendZayavka();
+                if(ret == null)sendZayavka();
+                else sendZayavkaReturn();
             }
         });
         ad.setNegativeButton("НЕТ", new DialogInterface.OnClickListener() {

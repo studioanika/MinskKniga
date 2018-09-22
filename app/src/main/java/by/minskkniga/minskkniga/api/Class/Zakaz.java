@@ -10,6 +10,11 @@ public class Zakaz {
     @SerializedName("id")
     @Expose
     private String id;
+
+    @SerializedName("type")
+    @Expose
+    private String type;
+
     @SerializedName("date")
     @Expose
     private String date;
@@ -142,5 +147,13 @@ public class Zakaz {
 
     public void setSumma(String summa) {
         this.summa = summa;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -51,7 +51,7 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
     public String schet_ID ="0";
     String cat_ID = "0";
     String podcat_ID ="0";
-    String kontragent = "0";
+    String kontragent = "";
 
     Button btn_save;
 
@@ -352,7 +352,7 @@ public class FragmentRashod extends Fragment implements IFragmentSchetOperation,
 
         btn_save.setEnabled(false);
         App.getApi().addOperationCassa(cat_ID, podcat_ID,schet_ID, summ, date,
-                kontragent, com, type, schet_perevoda).enqueue(new Callback<ResponseBody>() {
+                kontragent, com, type, schet_perevoda,"").enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 

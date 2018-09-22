@@ -52,6 +52,7 @@ public class PrihodOrder extends AppCompatActivity {
     List<Schetum> schetumListFinal2 = null;
 
     String id = "";
+    String name, id_z;
 
     RelativeLayout drawer, rel_send_email, rel_call;
 
@@ -75,8 +76,11 @@ public class PrihodOrder extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         id = intent.getStringExtra("id");
+        name = intent.getStringExtra("name");
+        id_z = intent.getStringExtra("id_zak");
 
         tv_name = (TextView) findViewById(R.id.r_o_pr);
+        if(name != null) tv_name.setText(name);
         sp_chet = (Spinner) findViewById(R.id.r_o_chet);
         sp_cat = (Spinner) findViewById(R.id.r_o_cat);
         sp_podcat = (Spinner) findViewById(R.id.r_o_pod_cat);
@@ -224,6 +228,8 @@ public class PrihodOrder extends AppCompatActivity {
     private void sendData() {
 
         try {
+            String id_zak = "";
+            if(id_z != null)  id_zak = id_z;
             int cat_pos = sp_cat.getSelectedItemPosition();
             int pod_cat_pos = sp_podcat.getSelectedItemPosition();
 
@@ -257,18 +263,21 @@ public class PrihodOrder extends AppCompatActivity {
 
             String com = comment.getText().toString();
             progressBar.setVisibility(View.VISIBLE);
+            btn_save.setEnabled(false);
             App.getApi().addOperationCassa(categoryListFinal.get(sp_cat.getSelectedItemPosition()).getId(),
                     categoryListFinal.get(sp_cat.getSelectedItemPosition()).getList().get(sp_podcat.getSelectedItemPosition()).getId(),
-                    schet, sum, date, id, com, "1", "0").enqueue(new Callback<ResponseBody>() {
+                    schet, sum, date, id, com, "1", "0", id_zak).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     isOk = false;
+                    btn_save.setEnabled(true);
                     if(response.body() != null){
                         progressBar.setVisibility(View.GONE);
                         try {
                             if(response.body().string().contains("ok")){
 
                                 Toast.makeText(PrihodOrder.this, "Приходный ордер успешно создан", Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                             else Toast.makeText(PrihodOrder.this, "Ошибка создания ордера...", Toast.LENGTH_SHORT).show();
                         } catch (IOException e) {
@@ -282,6 +291,7 @@ public class PrihodOrder extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    btn_save.setEnabled(true);
                     progressBar.setVisibility(View.GONE);
                 }
             });

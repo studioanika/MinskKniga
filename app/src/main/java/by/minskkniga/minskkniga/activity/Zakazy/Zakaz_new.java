@@ -31,6 +31,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ import java.util.Map;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Zakazy.adapter.ZakazzyObrazacAdapet;
+import by.minskkniga.minskkniga.adapter.Add_Contacts;
 import by.minskkniga.minskkniga.adapter.Dialog.Main;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Clients;
@@ -59,6 +61,8 @@ import by.minskkniga.minskkniga.api.Class.ResultBody;
 import by.minskkniga.minskkniga.api.Class.WhatZakazal;
 import by.minskkniga.minskkniga.api.Class.Zakaz;
 import by.minskkniga.minskkniga.api.Class.Zakaz_product;
+import by.minskkniga.minskkniga.api.Class.clients.ClientInfo;
+import by.minskkniga.minskkniga.api.Class.clients.Contact;
 import by.minskkniga.minskkniga.api.Class.nomenclatura.OZOId;
 import by.minskkniga.minskkniga.api.Class.nomenclatura.ObjectZakazyObrazci;
 import by.minskkniga.minskkniga.api.Class.zakazy.ObrazciComplect;
@@ -93,7 +97,7 @@ public class Zakaz_new extends AppCompatActivity {
     TextView autor;
     Spinner courier;
     TextView status;
-    int status_id;
+    int status_id = 0;
     TextView date2;
     TextView zametka;
 
@@ -135,7 +139,8 @@ public class Zakaz_new extends AppCompatActivity {
     String id_z;
     View header;
 
-    TextView nav_order, nav_otgruzit, nav_edit_otgruzhennoe;
+    TextView nav_order, nav_otgruzit, nav_edit_otgruzhennoe, nav_prinat,
+             nav_contacts;
 
     // TODO дабавить изменение статуса
 
@@ -151,9 +156,6 @@ public class Zakaz_new extends AppCompatActivity {
             });
             menu = findViewById(R.id.menu);
             drawer = findViewById(R.id.drawer);
-
-
-
             caption = findViewById(R.id.caption);
             products = new ArrayList<>();
             lv = findViewById(R.id.lv);
@@ -215,7 +217,8 @@ public class Zakaz_new extends AppCompatActivity {
     //                dlg_client = new Add_Dialog(Zakaz_new.this, "zakaz_product", products.get(i-1), String.valueOf(i-1));
     //                dlg_client.setCancelable(true);
     //                dlg_client.show(getFragmentManager(), "");
-                    showDialogZakazProducts(products.get(i-1), String.valueOf(i-1));
+                    if(status_id != 5)showDialogZakazProducts(products.get(i-1), String.valueOf(i-1));
+                    else if(status_id == 5) editStatusOtgruxhen(products.get(i-1));
                 }
             });
 
@@ -296,7 +299,7 @@ public class Zakaz_new extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if(drawer.isDrawerOpen(GravityCompat.END)) drawer.closeDrawers();
-                    optimiz();
+                    //optimiz();
                     Intent intent = new Intent(Zakaz_new.this, Sborka.class);
                     intent.putExtra(Zakaz_product.class.getCanonicalName(), products);
                     intent.putExtra("name", caption.getText());
@@ -345,6 +348,7 @@ public class Zakaz_new extends AppCompatActivity {
             nav_order.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    drawer.closeDrawer(GravityCompat.END);
                     try {
                         if(id_z != null){
                             Intent intent = getIntent();
@@ -352,6 +356,7 @@ public class Zakaz_new extends AppCompatActivity {
                             if(i == null){
                                 Intent prihod = new Intent(Zakaz_new.this, PrihodOrder.class);
                                 prihod.putExtra("id", id_client);
+                                prihod.putExtra("id_zak", id_z);
                                 startActivity(prihod);
                             }
                         }
@@ -365,10 +370,17 @@ public class Zakaz_new extends AppCompatActivity {
             nav_otgruzit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(courier.getSelectedItemPosition() != 0){
+                        status.setText("В доставке");
+                        status.setTextColor(Color.rgb(242, 0, 86));
+                        status_id = 4;
+                    }else {
+                        status.setText("Отгружен");
+                        status.setTextColor(Color.rgb(139, 0, 0));
+                        status_id = 5;
+                    }
 
-                    status.setText("В доставке");
-                    status.setTextColor(Color.rgb(242, 0, 86));
-                    status_id = 4;
+                    drawer.closeDrawer(GravityCompat.END);
 
                 }
             });
@@ -382,9 +394,159 @@ public class Zakaz_new extends AppCompatActivity {
                 }
             });
 
+            nav_prinat = findViewById(R.id.nav_prinat);
+            nav_prinat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    drawer.closeDrawer(GravityCompat.END);
+                    status.setText("Возвращение");
+                    status.setTextColor(Color.rgb(100, 0, 0));
+                    status_id = 6;
+                }
+            });
+
+            nav_contacts = findViewById(R.id.nav_contacts);
+            nav_contacts.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    drawer.closeDrawer(GravityCompat.END);
+                    if(id_client != null) showDialogContacts(id_client);
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void showDialogContacts(String id_client) {
+        final Dialog view = new Dialog(this);
+        //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        view.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        view.setContentView(R.layout.dialog_contacts);
+
+
+        final ProgressBar progressBar = view.findViewById(R.id.progress);
+        final ListView lv = view.findViewById(R.id.lv);
+        final TextView name = view.findViewById(R.id.tv_name);
+        final TextView close = view.findViewById(R.id.tv_close);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view1) {
+                view.dismiss();
+            }
+        });
+
+        final ArrayList<String> contact_type = new ArrayList<>();
+        final ArrayList<String> contact_text = new ArrayList<>();
+        final ArrayList<String> contacts_id = new ArrayList<>();
+
+        App.getApi().getClientId(id_client).enqueue(new Callback<List<ClientInfo>>()
+        {
+            @Override
+            public void onResponse(Call<List<ClientInfo>> call, Response<List<ClientInfo>> response) {
+                progressBar.setVisibility(View.GONE);
+                if (response.body() != null) {
+
+                    name.setText(response.body().get(0).getName());
+                    ClientInfo clientInfo = response.body().get(0);
+
+                    if(clientInfo.getContacts() != null && clientInfo.getContacts().size() != 0){
+                        contact_text.clear();
+                        contact_type.clear();
+                        for (Contact ct: clientInfo.getContacts()
+                                ) {
+                            contacts_id.add(ct.getId());
+                            contact_type.add(ct.getType());
+                            contact_text.add(ct.getText());
+                            lv.setAdapter(new Add_Contacts(Zakaz_new.this, contact_type, contact_text));
+//                            setListViewHeightBasedOnChildren(list_contact);
+
+                        }
+                    }else {
+                        Toast.makeText(Zakaz_new.this, "Контакты не найдены...", Toast.LENGTH_SHORT).show();
+                        view.dismiss();
+                    }
+
+                } else {
+                    Toast.makeText(Zakaz_new.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<ClientInfo>> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(Zakaz_new.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(view.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        view.show();
+        view.getWindow().setAttributes(lp);
+
+
+    }
+
+    private void editStatusOtgruxhen(final Zakaz_product zakaz_product) {
+
+        final Dialog view;
+        try {
+            view = new Dialog(this);
+            //dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+            view.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            view.setContentView(R.layout.dialog_edit_zakaz_v_dostavke);
+
+            TextView tv_done = view.findViewById(R.id.editmoney_done);
+            TextView tv_cansel = view.findViewById(R.id.editmoney_cancel);
+
+            final EditText col_zakaz = view.findViewById(R.id.tv_zakazano);
+            final EditText col_otgr = view.findViewById(R.id.et_otguzheno);
+            String otgr = zakaz_product.getOtgruzeno();
+            col_otgr.setText(otgr);
+
+            //zakaz_product.setCol_zakaz(col_zakaz.getText().toString());
+            tv_done.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view1) {
+                    try {
+                        String et  = col_otgr.getText().toString();
+                        if(!et.isEmpty()) zakaz_product.setOtgruzeno(col_otgr.getText().toString());
+                        view.dismiss();
+                        lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_new(Zakaz_new.this, products));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            tv_cansel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view1) {
+                    view.dismiss();
+                }
+            });
+
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            lp.copyFrom(view.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            view.setCancelable(false);
+            view.show();
+            view.getWindow().setAttributes(lp);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //col_zakaz.setText(zakaz_product.col_zakaz);
+
+
+
 
     }
 
@@ -724,7 +886,8 @@ public class Zakaz_new extends AppCompatActivity {
         view.requestWindowFeature(Window.FEATURE_NO_TITLE);
         view.setContentView(R.layout.dialog_zakaz_product);
 
-
+        LinearLayout lin = view.findViewById(R.id.lin);
+        final EditText col_otgr = view.findViewById(R.id.et_otguzheno);
         final EditText cena_zakaz = view.findViewById(R.id.cena_zakaz);
         final EditText col_zakaz = view.findViewById(R.id.col_zakaz);
         final TextView summa_zakaz = view.findViewById(R.id.summa_zakaz);
@@ -753,6 +916,9 @@ public class Zakaz_new extends AppCompatActivity {
         }else{
             linear_podarki.setVisibility(View.VISIBLE);
         }
+
+        if(status_id == 4) lin.setVisibility(View.VISIBLE);
+        col_otgr.setText(product.otgruzeno);
 
         cena_zakaz.setText(product.cena);
         cena_podar.setText(product.cena);
@@ -830,7 +996,8 @@ public class Zakaz_new extends AppCompatActivity {
                         product.col_zakaz = String.valueOf(col_zakaz.getText());
                         product.col_podar = String.valueOf(col_podar.getText());
                         product.summa = String.valueOf(summa.getText());
-
+                        String org = col_otgr.getText().toString();
+                        if(!org.isEmpty()) product.otgruzeno = org;
                         return_product(product, id_product);
                         view.dismiss();
             }
@@ -979,7 +1146,12 @@ public class Zakaz_new extends AppCompatActivity {
                     products.addAll(data.<Zakaz_product>getParcelableArrayListExtra(Zakaz_product.class.getCanonicalName()));
 
                     for (int i=0;i<products.size();i++){
-                        products.get(i).summa = String.valueOf(Double.parseDouble(products.get(i).cena) * Double.parseDouble(products.get(i).col_zakaz) - Double.parseDouble(products.get(i).cena) * Double.parseDouble(products.get(i).col_podar));
+                        try {
+                            Double d = Double.parseDouble(products.get(i).cena) * Double.parseDouble(products.get(i).col_zakaz)- Double.parseDouble(products.get(i).cena) * Double.parseDouble(products.get(i).col_podar);
+                            products.get(i).summa = String.valueOf(String.format("%.2f", d));
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     lv.setAdapter(new by.minskkniga.minskkniga.adapter.Zakazy.Zakaz_new(this, products));
@@ -1033,9 +1205,13 @@ public class Zakaz_new extends AppCompatActivity {
         ves = 0;
         col = 0;
         for (Zakaz_product buffer : products) {
-            col++;
-            summa += Double.parseDouble(buffer.summa.equals("")?"0":buffer.summa);
-            ves += Double.parseDouble(buffer.ves.equals("")?"0":buffer.ves) * Double.parseDouble(buffer.col_zakaz);
+            try {
+                col++;
+                summa += Double.parseDouble(buffer.summa.equals("")?"0":buffer.summa);
+                ves += Double.parseDouble(buffer.ves.equals("")?"0":buffer.ves) * Double.parseDouble(buffer.col_zakaz);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
 
         if (products.size()==0){
@@ -1347,7 +1523,7 @@ public class Zakaz_new extends AppCompatActivity {
     }
 
     public void reload(final String id) {
-
+        nav_prinat = findViewById(R.id.nav_prinat);
         App.getApi().getZakaz_info(id).enqueue(new Callback<Zakaz>() {
             @SuppressLint("DefaultLocale")
             @Override
@@ -1385,13 +1561,24 @@ public class Zakaz_new extends AppCompatActivity {
                     status_id = Integer.parseInt(zakaz.getStatus());
                     switch (zakaz.getStatus()) {
                         case "0"://chernovik новый green
-                            status.setText("Новый");
-                            status.setTextColor(Color.rgb(97, 184, 126));
-                            chernovik.setChecked(true);
+
+                                status.setText("Новый");
+                                status.setTextColor(Color.rgb(97, 184, 126));
+                                chernovik.setChecked(true);
+
                             break;
                         case "1"://новый green
-                            status.setText("Новый");
-                            status.setTextColor(Color.rgb(97, 184, 126));
+                            if(!zakaz.getType().contains("vozvrat")) {
+                                status.setText("Новый");
+                                status.setTextColor(Color.rgb(97, 184, 126));
+                            }else {
+                                status.setText("К возврату");
+                                status.setTextColor(Color.rgb(97, 184, 126));
+                                nav_otgruzit.setVisibility(View.GONE);
+                                nav_order.setVisibility(View.GONE);
+                                nav_sobrat.setVisibility(View.GONE);
+                                nav_prinat.setVisibility(View.VISIBLE);
+                            }
                             break;
                         case "2"://в сборке yellow
                             status.setText("В сборке");
@@ -1402,20 +1589,33 @@ public class Zakaz_new extends AppCompatActivity {
                         case "3"://собран blue
                             status.setText("Собран");
                             status.setTextColor(Color.BLUE);
+                            nav_otgruzit.setVisibility(View.VISIBLE);
                             break;
                         case "4"://в доставке lightred
                             status.setText("В доставке");
                             status.setTextColor(Color.rgb(242, 0, 86));
+                            fab.setVisibility(View.GONE);
+                            nav_sobrat.setVisibility(View.GONE);
                             break;
                         case "5"://отгружен darkred
                             status.setText("Отгружен");
                             status.setTextColor(Color.rgb(139, 0, 0));
                             noEditOtgruzhennoe();
                             nav_edit_otgruzhennoe.setVisibility(View.VISIBLE);
+                            fab.setVisibility(View.GONE);
+                            nav_prinat.setVisibility(View.GONE);
+                            nav_sobrat.setVisibility(View.GONE);
+                            nav_otgruzit.setVisibility(View.GONE);
+                            nav_order.setVisibility(View.GONE);
                             break;
                         case "6"://возвращение darkred
                             status.setText("Возвращение");
                             status.setTextColor(Color.rgb(100, 0, 0));
+                            nav_prinat.setVisibility(View.GONE);
+                            nav_sobrat.setVisibility(View.GONE);
+                            nav_otgruzit.setVisibility(View.GONE);
+                            nav_order.setVisibility(View.GONE);
+                            //sobran.setVisibility(View.VISIBLE);
                             break;
 
                     }
@@ -1450,7 +1650,7 @@ public class Zakaz_new extends AppCompatActivity {
                                     String.valueOf(wat.getSumma()), wat.getOtgruzeno(), wat.getVes(), wat.getImage(),
                                     wat.getClas(),  "", ""
                             );
-
+                            product.setSokr(wat.getSokrName());
                             products.add(product);
     //
                         }
@@ -1493,7 +1693,7 @@ public class Zakaz_new extends AppCompatActivity {
     }
 
     private void editOtgruzhennoe(){
-
+        lv.setEnabled(true);
         fab.setEnabled(true);
         chernovik.setEnabled(true);
         oplacheno.setEnabled(true);
@@ -1505,6 +1705,7 @@ public class Zakaz_new extends AppCompatActivity {
 
     private void noEditOtgruzhennoe(){
 
+        lv.setEnabled(false);
         fab.setEnabled(false);
         chernovik.setEnabled(false);
         oplacheno.setEnabled(false);
@@ -1513,4 +1714,6 @@ public class Zakaz_new extends AppCompatActivity {
         courier.setEnabled(false);
 
     }
+
+
 }

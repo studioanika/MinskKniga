@@ -1,0 +1,33 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/drawer_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/nav_return"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_upload"
+        android:gravity="left|center_vertical"
+        android:padding="10dp"
+        android:text="Возврат"
+        android:textColor="@color/drawer_text" />
+
+
+    <TextView
+        android:id="@+id/nav_contacts"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_contacts"
+        android:gravity="left|center_vertical"
+        android:padding="10dp"
+        android:text="Контакты"
+        android:textColor="@color/drawer_text" />
+
+</LinearLayout>

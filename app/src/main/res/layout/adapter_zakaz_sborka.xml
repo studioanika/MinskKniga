@@ -55,17 +55,25 @@
                     android:layout_weight="1"
                     android:text="Заказано" />
 
-                <TextView
-                    android:id="@+id/tv4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Отгружено"/>
-
                 <ImageView
                     android:id="@+id/iv2"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp" />
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:layout_weight="1.1" />
+
+                <RelativeLayout
+                    android:layout_weight="0.8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="8dp"
+                        android:text="Сокр." />
+                </RelativeLayout>
 
             </LinearLayout>
 

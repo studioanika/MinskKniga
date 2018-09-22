@@ -55,6 +55,7 @@ import by.minskkniga.minskkniga.api.Class.providers.ZavInfo;
 import by.minskkniga.minskkniga.api.Class.providers.ZayavkaInfo;
 import by.minskkniga.minskkniga.api.Class.zakazy.ClientsCity;
 import by.minskkniga.minskkniga.api.Class.zakazy.MoneyZakResponse;
+import by.minskkniga.minskkniga.api.Class.zakazy.ShowOtgrResponse;
 import by.minskkniga.minskkniga.api.Class.zakazy.ZakazyObrazec;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -330,7 +331,7 @@ public interface RestApi {
                                    @Query("schet_id") String schet_id, @Query("summa") String summa,
                                    @Query("date") String date, @Query("prov_id") String prov_id,
                                    @Query("com") String com,
-                                   @Query("type") String type,@Query("schet_perevoda") String schet_perevoda);
+                                   @Query("type") String type,@Query("schet_perevoda") String schet_perevoda, @Query("id_zak") String id_zak);
 
     @GET("get_providers_filter_products.php")
     Call<Products_filter> getProductsfilter(@Query("clas") String clas, @Query("obrazec") String obrazec,
@@ -502,4 +503,21 @@ public interface RestApi {
     @GET("/api/set_round.php?")
     Call<ResponseBody> setRoundProduct(@Query("id") String id,@Query("zak") String zak,
                                                    @Query("round") int round, @Query("id_zak") String id_zak);
+    @POST("/api/add_vozvrat_provider.php?")
+    @FormUrlEncoded
+    Call<ResponseBody> addVozvratProvider(@FieldMap Map<String, String> map);
+
+    @GET("/api/get_zav_vozvrat_info.php?")
+    Call<ZavInfo> getZavReturnInfo(@Query("id") String id);
+
+    @POST("/api/update_zav_vozvrat_providers.php?")
+    @FormUrlEncoded
+    Call<ResponseBody> updateProviderZayavkaReurn(@FieldMap Map<String, String> map);
+
+    @GET("/api/see_otgruzki.php?")
+    Call<List<ShowOtgrResponse>> getOtgruzki(@Query("obrazec") String clas, @Query("izdatel") String obrazec,
+                                             @Query("autor") String autor, @Query("clas") String izdatel,
+                                             @Query("id") String id);
+
+
 }

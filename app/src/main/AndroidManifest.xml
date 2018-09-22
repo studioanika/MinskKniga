@@ -191,6 +191,10 @@
         <activity
             android:name=".activity.Zakazy.PrihodOrder"
             android:label="@string/title_activity_prihod_order"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.Zakazy.ShowOtgruzennoe"
+            android:label="@string/title_activity_show_otgruzennoe"
             android:theme="@style/AppTheme"></activity>
     </application>
 

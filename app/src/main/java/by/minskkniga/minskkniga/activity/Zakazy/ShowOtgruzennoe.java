@@ -1,61 +1,50 @@
-package by.minskkniga.minskkniga.activity.Nomenklatura;
+package by.minskkniga.minskkniga.activity.Zakazy;
 
-import android.animation.Animator;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Barcode;
-import by.minskkniga.minskkniga.activity.Zakazy.adapter.ZakazzyObrazacAdapet;
-import by.minskkniga.minskkniga.adapter.Nomenklatura.Nav_zakaz;
+import by.minskkniga.minskkniga.adapter.Nomenklatura.AdapterShowOtgr;
+import by.minskkniga.minskkniga.adapter.Nomenklatura.ItemShowOtgr;
 import by.minskkniga.minskkniga.api.App;
 import by.minskkniga.minskkniga.api.Class.Products;
 import by.minskkniga.minskkniga.api.Class.Products_filter;
 import by.minskkniga.minskkniga.api.Class.Zakaz_product;
-import by.minskkniga.minskkniga.api.Class.nomenclatura.ObjectZakazyObrazci;
-import by.minskkniga.minskkniga.dialog.Add_Dialog;
+import by.minskkniga.minskkniga.api.Class.zakazy.InfoShowOtgr;
+import by.minskkniga.minskkniga.api.Class.zakazy.ShowOtgrResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Main extends AppCompatActivity {
+public class ShowOtgruzennoe extends AppCompatActivity {
+    List<Products> list = new ArrayList<>();
 
     ImageButton filter;
     LinearLayout filter_layout;
@@ -64,17 +53,12 @@ public class Main extends AppCompatActivity {
     Button clear;
     Button ok;
     ListView lv;
-    ExpandableListView exp;
     TextView notfound;
     EditText search;
-    ImageView clear_q;
+    TextView caption;
 
-    ImageView imgmore;
-    LinearLayout lin_header;
-    LinearLayout lin_header1;
-
-    ArrayList<Products> products;
-    ArrayList<Products> products_buf;
+    ArrayList<ItemShowOtgr> products;
+    ArrayList<ItemShowOtgr> products_buf;
 
     Spinner spinner1, spinner2, spinner3, spinner4;
 
@@ -84,6 +68,7 @@ public class Main extends AppCompatActivity {
     String izdatel = "Издатель";
     String obraz = "Образец";
     String class_ = "Класс";
+    String filter_ = "";
 
     boolean zakaz = false;
 
@@ -95,185 +80,101 @@ public class Main extends AppCompatActivity {
     ListView nav_lv;
     String id_client;
     ArrayList<Zakaz_product> nav_product;
-    List<ObjectZakazyObrazci> obrazciList = new ArrayList<>();
     AlertDialog.Builder ad;
 
-    NavigationView nv;
-    RelativeLayout rel;
+    String id, name;
 
-    String filter_ = "";
 
-    Animation animImgLeft, animImgRight;
+    TextView tv_skidka_proc, tv_price, tv_oplacheno,tv_skidka,tv_dolg;
 
     public void initialize(){
-        back = findViewById(R.id.back);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        imgmore = (ImageView) findViewById(R.id.n_img_more);
-        spinner1 = findViewById(R.id.spinner1);
-        spinner2 = findViewById(R.id.spinner2);
-        spinner3 = findViewById(R.id.spinner3);
-        spinner4 = findViewById(R.id.spinner4);
-        lin_header = (LinearLayout) findViewById(R.id.lin_header);
-        lin_header1 = (LinearLayout) findViewById(R.id.lin_header1);
-
-        rel = (RelativeLayout) findViewById(R.id.relll);
-        clear = findViewById(R.id.clear);
-        ok = findViewById(R.id.ok);
-        search = findViewById(R.id.search);
-
-        nv = (NavigationView) findViewById(R.id.nav_view);
-
-        drawer = findViewById(R.id.drawer);
-        nav_fab = findViewById(R.id.nav_fab);
-
-        nav_fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra(Zakaz_product.class.getCanonicalName(), nav_product);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
-
-
-        nav_notfound = findViewById(R.id.nav_notfound);
-        nav_lv = findViewById(R.id.nav_lv);
-
-        nav_lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int i, long l) {
-                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                if (vibrator != null) {
-                    vibrator.vibrate(20);
+        try {
+            back = findViewById(R.id.back);
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                  finish();
                 }
-                ad = new AlertDialog.Builder(Main.this);
-                ad.setMessage("Удалить " + nav_product.get(i).name + "?");
-                ad.setPositiveButton("ПОДТВЕРДИТЬ", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int arg1) {
-                        nav_product.remove(i);
-                        nav_lv.setAdapter(new Nav_zakaz(Main.this, nav_product));
-                        if (nav_product.size()!=0){
-                            nav_notfound.setVisibility(View.GONE);
-                        }else{
-                            nav_notfound.setVisibility(View.VISIBLE);
-                        }
-                        dialog.cancel();
-                    }
-                });
-                ad.setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int arg1) {
-                        dialog.cancel();
-                    }
-                });
-                ad.setCancelable(true);
-                ad.show();
-                return false;
-            }
-        });
+            });
 
-        nav_product = new ArrayList<>();
 
-        zakaz = getIntent().getBooleanExtra("zakaz", false);
-        if (zakaz){
-            id_client = getIntent().getStringExtra("id_client");
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        }else{
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            tv_skidka_proc = findViewById(R.id.tv_skidka_proc);
+            tv_price = findViewById(R.id.tv_price);
+            tv_oplacheno = findViewById(R.id.tv_oplacheno);
+            tv_skidka = findViewById(R.id.tv_skidka);
+            tv_dolg = findViewById(R.id.tv_dolg);
+
+            spinner1 = findViewById(R.id.spinner1);
+            spinner2 = findViewById(R.id.spinner2);
+            spinner3 = findViewById(R.id.spinner3);
+            spinner4 = findViewById(R.id.spinner4);
+            caption = findViewById(R.id.caption);
+
+            clear = findViewById(R.id.clear);
+            ok = findViewById(R.id.ok);
+            search = findViewById(R.id.search);
+
+            drawer = findViewById(R.id.drawer);
+            nav_fab = findViewById(R.id.nav_fab);
+
+
+            nav_notfound = findViewById(R.id.nav_notfound);
+            nav_lv = findViewById(R.id.nav_lv);
+
+
+            nav_product = new ArrayList<>();
+
+            id = getIntent().getStringExtra("id");
+            name = getIntent().getStringExtra("name");
+
+            lv = findViewById(R.id.lv);
+
+            products = new ArrayList<>();
+            products_buf = new ArrayList<>();
+
+
+            filter_layout = findViewById(R.id.filter_layout);
+            filter_layout.setVisibility(View.GONE);
+            filter = findViewById(R.id.filter_button);
+
+            notfound = findViewById(R.id.notfound);
+            yesno = new ArrayList<>();
+            yesno.add("Да");
+            yesno.add("Нет");
+
+            barcode = findViewById(R.id.barcode);
+            search = findViewById(R.id.search);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        lv = findViewById(R.id.lv);
-        exp = findViewById(R.id.exp);
-
-        products = new ArrayList<>();
-        products_buf = new ArrayList<>();
-
-
-        filter_layout = findViewById(R.id.filter_layout);
-        filter_layout.setVisibility(View.GONE);
-        filter = findViewById(R.id.filter_button);
-
-        notfound = findViewById(R.id.notfound);
-        yesno = new ArrayList<>();
-        yesno.add("Не выбран");
-        yesno.add("Да");
-        yesno.add("Нет");
-
-        barcode = findViewById(R.id.barcode);
-        search = findViewById(R.id.search);
-        clear_q = findViewById(R.id.clear_q);
-        clear_q.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                search.setText("");
-            }
-        });
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Main.this, Add.class);
-                intent.putExtra("zakaz", false);
-                intent.putExtra("id", "null");
-                startActivity(intent);
-            }
-        });
-
-        Intent intent = getIntent();
-        String sd  = intent.getStringExtra("menu");
-        if(sd == null) startAnimation();
-
     }
 
-    private void startAnimation() {
-
-        YoYo.with(Techniques.Pulse)
-                .delay(50)
-                .repeat(1)
-                .onStart(new YoYo.AnimatorCallback() {
-                    @Override
-                    public void call(Animator animator) {
-                        imgmore.setVisibility(View.VISIBLE);
-                    }
-                })
-                .onEnd(new YoYo.AnimatorCallback() {
-                    @Override
-                    public void call(Animator animator) {
-                        imgmore.setVisibility(View.GONE);
-                    }
-                })
-                .playOn(imgmore);
-
-    }
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nomenklatura);
+        setContentView(R.layout.activity_show_otgruzennoe);
         initialize();
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (zakaz){
-                    dlg_nomenclatura = new Add_Dialog(Main.this, "nomenclatura_info", String.valueOf(products.get(position).getId()), id_client);
-                    dlg_nomenclatura.show(getFragmentManager(), "");
-                }else{
-                    Intent intent = new Intent(Main.this, Add.class);
-                    intent.putExtra("zakaz", false);
-                    intent.putExtra("id", products.get(position).getId());
-                    startActivity(intent);
-                }
+
+//                Intent intent = new Intent(InventarizaciaActivity.this, InventarizaciaInfoActivity.class);
+//                if(products_buf != null) intent.putExtra("id", products_buf.get(position).getId());
+//                startActivity(intent);
+
             }
         });
 
+        intent = getIntent();
+        id = intent.getStringExtra("id");
+        name = intent.getStringExtra("name");
+        caption.setText(name);
         filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -287,7 +188,7 @@ public class Main extends AppCompatActivity {
         barcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new IntentIntegrator(Main.this)
+                new IntentIntegrator(ShowOtgruzennoe.this)
                         .setOrientationLocked(true)
                         .setCaptureActivity(Barcode.class)
                         .initiateScan();
@@ -302,15 +203,13 @@ public class Main extends AppCompatActivity {
                 spinner2.setSelection(0);
                 spinner3.setSelection(0);
                 spinner4.setSelection(0);
-                filter_ = "";
                 avtor = "Автор";
                 izdatel = "Издатель";
                 obraz = "Образец";
                 class_ = "Класс";
                 reload();
-                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, products));
+                lv.setAdapter(new AdapterShowOtgr(ShowOtgruzennoe.this, products));
                 filter_layout.setVisibility(View.GONE);
-                getNewFilter();
             }
         });
 
@@ -322,7 +221,7 @@ public class Main extends AppCompatActivity {
                 obraz = spinner3.getSelectedItem().toString();
                 class_ = spinner4.getSelectedItem().toString();
                 reload();
-                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, products));
+                lv.setAdapter(new AdapterShowOtgr(ShowOtgruzennoe.this, products));
                 filter_layout.setVisibility(View.GONE);
             }
         });
@@ -343,51 +242,31 @@ public class Main extends AppCompatActivity {
 
             }
         });
-
+        //spinner2.setEnabled(false);
+        //spinner2.setClickable(false);
         //load_filter();
+
+
         getNewFilter();
     }
 
-    public void return_product(Zakaz_product product){
-//        Intent intent = new Intent(Main.this, Add.class);
-//        intent.putExtra("zakaz", true);
-//        intent.putExtra("id_client", id_client);
-//        intent.putExtra("id", id);
-//        startActivityForResult(intent, 1);
 
-
-        nav_product.add(product);
-
-        nav_lv.setAdapter(new Nav_zakaz(this, nav_product));
-        startAnimation();
-        if (nav_product.size()!=0){
-            nav_notfound.setVisibility(View.GONE);
-        }else{
-            nav_notfound.setVisibility(View.VISIBLE);
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-
         if (result != null) {
             search.setText(result.getContents());
         }
-        startAnimation();
 
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void search() {
         products.clear();
-        for (Products buffer : products_buf) {
-            if (buffer.getName().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
-                    //buffer.getClas().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
-                    //buffer.getIzdatel().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
-                    buffer.getArtikul().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
-                    buffer.getSokrName().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
-                    //buffer.getProdCena().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+        for (ItemShowOtgr buffer : products_buf) {
+            if (buffer.getName_zak().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
+                    buffer.getSokr_name().toLowerCase().contains(search.getText().toString().toLowerCase()) ||
                     buffer.getBarcode().toLowerCase().contains(search.getText().toString().toLowerCase())) {
                 products.add(buffer);
             }
@@ -397,7 +276,7 @@ public class Main extends AppCompatActivity {
         } else {
             notfound.setVisibility(View.VISIBLE);
         }
-        lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, products));
+        lv.setAdapter(new AdapterShowOtgr(ShowOtgruzennoe.this, products));
     }
 
     public void reload() {
@@ -409,27 +288,60 @@ public class Main extends AppCompatActivity {
         if(spinner3.getSelectedItem().toString().contains("Да")) obraz = "Есть";
         if(spinner3.getSelectedItem().toString().contains("Нет")) obraz = "";
 
-
-
-        App.getApi().getProducts(avtor, izdatel, obraz, class_).enqueue(new Callback<List<Products>>() {
+        App.getApi().getOtgruzki(avtor, izdatel, obraz, class_, id).enqueue(new Callback<List<ShowOtgrResponse>>() {
             @Override
-            public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
-                products.clear();
-                products_buf.clear();
-                products.addAll(response.body());
-                products_buf.addAll(response.body());
-                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(Main.this, products));
+            public void onResponse(Call<List<ShowOtgrResponse>> call, Response<List<ShowOtgrResponse>> response) {
+                try {
 
-                if (!products.isEmpty()) {
-                    notfound.setVisibility(View.GONE);
-                } else {
-                    notfound.setVisibility(View.VISIBLE);
+                    if(response.body() != null){
+
+                        ShowOtgrResponse otgrResponse = response.body().get(0);
+
+                        InfoShowOtgr otgr = otgrResponse.getInfo();
+
+                        tv_skidka_proc.setText("Скидка("+otgr.getSkidkaProc()+"%)");
+                        tv_price.setText(otgr.getTovar());
+                        tv_oplacheno.setText(String.valueOf(otgr.getOplaty()));
+                        tv_skidka.setText(otgr.getSkidka());
+                        tv_dolg.setText(otgr.getItog());
+
+                        products.clear();
+                        products_buf.clear();
+
+                        if(otgrResponse.getList() != null && otgrResponse.getList().size() !=0){
+
+                            products.addAll(otgrResponse.getList());
+                            products_buf.addAll(otgrResponse.getList());
+                            lv.setAdapter(new AdapterShowOtgr(ShowOtgruzennoe.this, products));
+
+                            notfound.setVisibility(View.GONE);
+                        }else {
+                            notfound.setVisibility(View.VISIBLE);
+                        }
+
+                    }else {
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+//                products.clear();
+//                products_buf.clear();
+//                products.addAll(response.body());
+//                products_buf.addAll(response.body());
+//                lv.setAdapter(new by.minskkniga.minskkniga.adapter.Nomenklatura.Main(ShowOtgruzennoe.this, products));
+//
+//                if (!products.isEmpty()) {
+//
+//                } else {
+//
+//                }
                 notfound.setText("Ничего не найдено");
             }
 
             @Override
-            public void onFailure(Call<List<Products>> call, Throwable t) {
+            public void onFailure(Call<List<ShowOtgrResponse>> call, Throwable t) {
 
             }
         });
@@ -439,16 +351,21 @@ public class Main extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (spinner1.getSelectedItemPosition() == 0 &&
-            spinner2.getSelectedItemPosition() == 0 &&
-            spinner3.getSelectedItemPosition() == 0 &&
-            spinner4.getSelectedItemPosition() == 0 &&
-            search.getText().toString().isEmpty() &&
-            lv.getFirstVisiblePosition()==0) {
-                load_filter();
+                spinner2.getSelectedItemPosition() == 0 &&
+                spinner3.getSelectedItemPosition() == 0 &&
+                spinner4.getSelectedItemPosition() == 0 &&
+                search.getText().toString().isEmpty() &&
+                lv.getFirstVisiblePosition()==0) {
+            load_filter();
         }
     }
 
     public void load_filter(){
+        if (spinner1.getSelectedItemPosition() == 0) avtor = "null";
+        if (spinner2.getSelectedItemPosition() == 0) izdatel = "null";
+        if (spinner3.getSelectedItemPosition() == 0) obraz = "null";
+        if (spinner4.getSelectedItemPosition() == 0) class_ = "null";
+
         App.getApi().getProducts_filter().enqueue(new Callback<Products_filter>() {
 
             @Override
@@ -462,12 +379,12 @@ public class Main extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Products_filter> call, Throwable t) {
-                Toast.makeText(Main.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ShowOtgruzennoe.this, "Нет подключения к интернету", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void setAdapter(final Spinner spinner, ArrayList<String> arr, final int id) {
+    private void setAdapter(final Spinner spinner, ArrayList<String> arr, int id) {
         switch (id) {
             case 1:
                 arr.add(0, "Автор");
@@ -513,7 +430,7 @@ public class Main extends AppCompatActivity {
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id_) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 long i1 = R.id.spinner1;
                 long i2 = R.id.spinner2;
@@ -603,34 +520,6 @@ public class Main extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-
-        Intent intent = getIntent();
-        String sd  = intent.getStringExtra("menu");
-        boolean b = intent.getBooleanExtra("type_z", false);
-        if(sd == null) {
-            if(!b) {
-                Intent intent1 = new Intent();
-                intent1.putExtra(Zakaz_product.class.getCanonicalName(), nav_product);
-                setResult(RESULT_OK, intent1);
-                finish();
-            }else {
-                try {
-                    Intent intent1 = new Intent();
-                    intent1.putExtra(ObjectZakazyObrazci.class.getCanonicalName(), (Serializable) obrazciList);
-                    setResult(RESULT_OK, intent1);
-                    finish();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-        }else super.onBackPressed();
-
-    }
-
     private void getNewFilter(){
         String _class = "";
         if(!class_.contains("null")) _class = class_;
@@ -665,11 +554,7 @@ public class Main extends AppCompatActivity {
                     if(!filter_.contains("clas"))setAdapter(spinner4, response.body().getClas(), 4);
                     Intent intent = getIntent();
                     boolean b = intent.getBooleanExtra("type_z", false);
-                    if(!b)reload();
-                    else {
-                        lin_header.setVisibility(View.GONE);
-                        loadComplects();
-                    }
+                    reload();
                 }
 
             }
@@ -682,53 +567,4 @@ public class Main extends AppCompatActivity {
 
     }
 
-    private void loadComplects() {
-
-        App.getApi().getZakazyObrazci().enqueue(new Callback<List<ObjectZakazyObrazci>>() {
-            @Override
-            public void onResponse(Call<List<ObjectZakazyObrazci>> call, Response<List<ObjectZakazyObrazci>> response) {
-                if(response.body() != null){
-
-                    notfound.setVisibility(View.GONE);
-                    lv.setVisibility(View.GONE);
-                    exp.setVisibility(View.VISIBLE);
-                    lin_header.setVisibility(View.GONE);
-                    lin_header1.setVisibility(View.VISIBLE);
-
-                    exp.setAdapter(new ZakazzyObrazacAdapet(response.body(), Main.this));
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<ObjectZakazyObrazci>> call, Throwable t) {
-
-            }
-        });
-
-    }
-
-    public void addToListComplect(final ObjectZakazyObrazci objectZakazyObrazci) {
-
-        AlertDialog.Builder ad = new AlertDialog.Builder(Main.this);
-        ad.setMessage("Добавить товар в список?");
-        ad.setPositiveButton("ПОДТВЕРДИТЬ", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int arg1) {
-                if(obrazciList.contains(objectZakazyObrazci)) {
-                    Toast.makeText(Main.this, "Уже имеется в комплекте...", Toast.LENGTH_SHORT).show();
-                    return;
-                }else obrazciList.add(objectZakazyObrazci);
-            }
-        });
-        ad.setNegativeButton("ОТМЕНА", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int arg1) {
-                dialog.cancel();
-            }
-        });
-        ad.setCancelable(false);
-        ad.show();
-
-
-
-    }
 }

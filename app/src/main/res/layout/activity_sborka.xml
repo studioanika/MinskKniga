@@ -115,23 +115,33 @@
                                 android:layout_weight="1"
                                 android:text="Класс"/>
 
-                            <TextView
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_weight="0.3"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Заказано"/>
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Заказано"/>
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Отгружено" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1.1"
+                                    android:gravity="left"
+                                    android:text="Собрано" />
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Собрано" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_weight="0.8"
+                                    android:gravity="right"
+                                    android:text="Сокр." />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 

@@ -141,7 +141,8 @@ public class Zakazy_2 extends BaseExpandableListAdapter {
             case "1":
                 //tv1.setTextColor(Color.GREEN);
                 tv2.setTextColor(Color.rgb(97, 184, 126));
-                tv2.setText("Новый");
+                if(!_zakazy.get(groupPosition).getType().equals("vozvrat"))tv2.setText("Новый");
+                else tv2.setText("К возврату");
                 break;
             case "2":
                 tv2.setTextColor(Color.rgb(242, 201, 76));

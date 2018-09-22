@@ -11,6 +11,11 @@ public class ProvidersZayavkiId {
     @SerializedName("id")
     @Expose
     private String id;
+
+    @SerializedName("type")
+    @Expose
+    private String type;
+
     @SerializedName("date")
     @Expose
     private String date;
@@ -75,5 +80,11 @@ public class ProvidersZayavkiId {
         this.whatZakazal = whatZakazal;
     }
 
+    public String getType() {
+        return type;
+    }
 
+    public void setType(String type) {
+        this.type = type;
+    }
 }

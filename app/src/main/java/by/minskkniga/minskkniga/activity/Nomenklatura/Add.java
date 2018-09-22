@@ -19,6 +19,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -205,7 +207,7 @@ public class Add extends AppCompatActivity {
         if (!id.equals("null")) {
             App.getApi().getProduct(id).enqueue(new Callback<Product>() {
                 @Override
-                public void onResponse(Call<Product> call, Response<Product> response) {
+                public void onResponse(Call<Product> call, final Response<Product> response) {
 
                     name.setText(response.body().getName());
                     clas.setText(response.body().getClas());
@@ -227,6 +229,50 @@ public class Add extends AppCompatActivity {
                     upakovok.setText(response.body().getUpakovok());
                     ostatok.setText(response.body().getOstatok());
                     reserv.setText(response.body().getRezerv());
+
+                    standart.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable editable) {
+
+                            try{
+
+                                String st = editable.toString();
+
+                                if(!st.isEmpty()){
+                                    int sti = Integer.parseInt(st);
+                                    int dos = Integer.parseInt(response.body().getDostupno());
+                                    if(dos < sti){
+                                        String up = "0+"+dos;
+                                        upakovok.setText(up);
+                                    }else if(dos == sti){
+                                        upakovok.setText("1");
+                                    }else {
+
+                                        int c = (int) dos / sti;
+                                        int roz = dos -(sti * c);
+
+                                        upakovok.setText(String.valueOf(c)+"+"+String.valueOf(roz));
+                                    }
+
+                                }
+
+                            }
+                            catch (Exception e){
+
+                            }
+
+                        }
+                    });
 
                     Toast.makeText(Add.this, response.body().getImage(), Toast.LENGTH_SHORT).show();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

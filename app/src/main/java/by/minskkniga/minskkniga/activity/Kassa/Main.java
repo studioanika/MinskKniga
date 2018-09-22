@@ -20,8 +20,11 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import by.minskkniga.minskkniga.R;
 import by.minskkniga.minskkniga.activity.Kassa.adapter.AdapterSchetaInfo;
@@ -88,6 +91,11 @@ public class Main extends AppCompatActivity {
     GetDohodResponse getDohodResponse;
     GetRashodResponse getRashodResponse;
     GetPerevodResponse getPerevodResponse;
+
+    SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+    SimpleDateFormat dft = new SimpleDateFormat("HH:mm");
+    Date currentDate = new Date();
+    long currentTimeMillis = currentDate.getTime();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,6 +223,8 @@ public class Main extends AppCompatActivity {
         img_left = (ImageView) dialogEdit.findViewById(R.id.dohod_img_left);
         img_right = (ImageView) dialogEdit.findViewById(R.id.dohod_img_right);
 
+
+
         App.getApi().getDohodID(id).enqueue(new Callback<List<GetDohodResponse>>() {
             @Override
             public void onResponse(Call<List<GetDohodResponse>> call, Response<List<GetDohodResponse>> response) {
@@ -292,6 +302,8 @@ public class Main extends AppCompatActivity {
         img_left = (ImageView) dialogEdit.findViewById(R.id.dohod_img_left);
         img_right = (ImageView) dialogEdit.findViewById(R.id.dohod_img_right);
 
+
+
         App.getApi().getRashodID(id).enqueue(new Callback<List<GetRashodResponse>>() {
             @Override
             public void onResponse(Call<List<GetRashodResponse>> call, Response<List<GetRashodResponse>> response) {
@@ -358,6 +370,8 @@ public class Main extends AppCompatActivity {
         tv_time = (TextView) dialogEdit.findViewById(R.id.dohod_time);
         img_left = (ImageView) dialogEdit.findViewById(R.id.dohod_img_left);
         img_right = (ImageView) dialogEdit.findViewById(R.id.dohod_img_right);
+
+
 
         App.getApi().getPerevodID(id).enqueue(new Callback<List<GetPerevodResponse>>() {
             @Override
@@ -533,6 +547,9 @@ public class Main extends AppCompatActivity {
             }
         });;
 
+        tv_date.setText(df.format(currentDate));
+        tv_time.setText(dft.format(currentDate));
+
         App.getApi().getDohodID(id).enqueue(new Callback<List<GetDohodResponse>>() {
             @Override
             public void onResponse(Call<List<GetDohodResponse>> call, Response<List<GetDohodResponse>> response) {
@@ -544,7 +561,7 @@ public class Main extends AppCompatActivity {
                     provider_id = getDohodResponse.getClient_id();
                     cat_id = getDohodResponse.getCat_id();
                     podcat_id = getDohodResponse.getPod_cat_id();
-                    tv_date.setText(dohodResponse.getDate());
+                    //tv_date.setText(dohodResponse.getDate());
                     tv_summa.setText(dohodResponse.getPrihod());
                     pol_tv.setText(dohodResponse.getClient());
                     schet_tv.setText(dohodResponse.getSchet());
@@ -642,6 +659,9 @@ public class Main extends AppCompatActivity {
         img_left = (ImageView) dialogEdit.findViewById(R.id.dohod_img_left);
         img_right = (ImageView) dialogEdit.findViewById(R.id.dohod_img_right);
 
+        tv_date.setText(df.format(currentDate));
+        tv_time.setText(dft.format(currentDate));
+
         ImageView btn_del = (ImageView) dialogEdit.findViewById(R.id.dohod_delete);
         btn_del.setVisibility(View.VISIBLE);
         btn_del.setOnClickListener(new View.OnClickListener() {
@@ -709,7 +729,7 @@ public class Main extends AppCompatActivity {
                     provider_id = getRashodResponse.getClient_id();
                     cat_id = getRashodResponse.getCat_id();
                     podcat_id = getRashodResponse.getPod_cat_id();
-                    tv_date.setText(dohodResponse.getDate());
+                    //tv_date.setText(dohodResponse.getDate());
                     tv_summa.setText(dohodResponse.getRashod());
                     pol_tv.setText(dohodResponse.getClient());
                     schet_tv.setText(dohodResponse.getSchet());
@@ -837,6 +857,9 @@ public class Main extends AppCompatActivity {
         img_left = (ImageView) dialogEdit.findViewById(R.id.dohod_img_left);
         img_right = (ImageView) dialogEdit.findViewById(R.id.dohod_img_right);
 
+        tv_date.setText(df.format(currentDate));
+        tv_time.setText(dft.format(currentDate));
+
         cat_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -873,7 +896,7 @@ public class Main extends AppCompatActivity {
                     provider_id = getPerevodResponse.getV_id();
                     cat_id = getPerevodResponse.getCat_id();
                     podcat_id = getPerevodResponse.getPod_cat_id();
-                    tv_date.setText(perevodResponse.getDate());
+                    //tv_date.setText(perevodResponse.getDate());
                     et_comment.setText(perevodResponse.getKom());
                     tv_summa.setText(perevodResponse.getPerevod());
                     iz_tv.setText(perevodResponse.getIz());

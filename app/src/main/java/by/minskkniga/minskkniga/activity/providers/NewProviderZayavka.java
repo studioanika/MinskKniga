@@ -88,6 +88,7 @@ public class NewProviderZayavka extends AppCompatActivity {
     boolean isSend = false;
     String id_p;
     String name_p;
+    String ret;
 
     Toolbar toolbar;
 
@@ -102,6 +103,7 @@ public class NewProviderZayavka extends AppCompatActivity {
         Intent intent = getIntent();
         id_p = intent.getStringExtra("id");
         name_p = intent.getStringExtra("name");
+        ret = intent.getStringExtra("return");
         sp = getSharedPreferences("login", Context.MODE_PRIVATE);
 
         if(name_p != null) toolbar.setTitle(name_p);
@@ -126,6 +128,7 @@ public class NewProviderZayavka extends AppCompatActivity {
         initView();
         getCouriers();
         if(id_p == null) showSelectProvider();
+        if(ret != null) loadReturn();
     }
 
     private void getCouriers() {
@@ -260,7 +263,7 @@ public class NewProviderZayavka extends AppCompatActivity {
         if(productForZayackaProviderList != null) {
             for (ProductForZayackaProvider productForZayackaProviderList: productForZayackaProviderList
                  ) {
-                mass = mass+ productForZayackaProviderList.getProducts().getArtikul()+"/~/" +
+                mass = mass+ productForZayackaProviderList.getProducts().getArtikul()+"/~/" +productForZayackaProviderList.getProducts().getId()+"/~/" +
                         productForZayackaProviderList.getZayavka()+"/~~/";
             }
         }
@@ -269,7 +272,7 @@ public class NewProviderZayavka extends AppCompatActivity {
         body.put("date", date);
         body.put("provedires", providers);
         body.put("autor", author);
-        body.put("status", status);
+
         body.put("komment", comment);
         body.put("courier_id", courier);
         body.put("auto", auto);
@@ -277,39 +280,79 @@ public class NewProviderZayavka extends AppCompatActivity {
         body.put("komment", comment);
         body.put("mas", mass);
 
-        App.getApi().addNewProviderZayavka(body).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.body() != null){
-                    btn.setEnabled(true);
-                    String body_s = null;
-                    try {
-                        body_s = response.body().string();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+        if(ret == null){
+            body.put("status", status);
+            App.getApi().addNewProviderZayavka(body).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.body() != null){
+                        btn.setEnabled(true);
+                        String body_s = null;
+                        try {
+                            body_s = response.body().string();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if(body_s.contains("message")){
+                            try {
+                                String[] ds =body_s.split("\":");
+                                id_zayavki = ds[1];
+                                id_zayavki = id_zayavki.substring(0, id_zayavki.length() - 1);                          //id_zayavki = id_zayavki.replaceAll("]", "");
+                                isSend = true;
+                                Toast.makeText(getApplicationContext(), "Заявка успешно cоздана.", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                            catch (Exception e){
+                                String sd = e.toString();
+                            }
+                        }else Toast.makeText(getApplicationContext(), "Ошибка отправки заявки...", Toast.LENGTH_SHORT).show();
                     }
-                    if(body_s.contains("message")){
-                       try {
-                           String[] ds =body_s.split("\":");
-                           id_zayavki = ds[1];
-                           id_zayavki = id_zayavki.substring(0, id_zayavki.length() - 1);                          //id_zayavki = id_zayavki.replaceAll("]", "");
-                           isSend = true;
-                           Toast.makeText(getApplicationContext(), "Заявка успешно cоздана.", Toast.LENGTH_SHORT).show();
-                           finish();
-                       }
-                       catch (Exception e){
-                            String sd = e.toString();
-                       }
-                    }else Toast.makeText(getApplicationContext(), "Ошибка отправки заявки...", Toast.LENGTH_SHORT).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Ошибка отправки заявки...", Toast.LENGTH_SHORT).show();
-                btn.setEnabled(true);
-            }
-        });
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "Ошибка отправки заявки...", Toast.LENGTH_SHORT).show();
+                    btn.setEnabled(true);
+                }
+            });
+        }else {
+
+            body.put("status", "1");
+
+            App.getApi().addVozvratProvider(body).enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(response.body() != null){
+                        btn.setEnabled(true);
+                        String body_s = null;
+                        try {
+                            body_s = response.body().string();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if(body_s.contains("message")){
+                            try {
+                                String[] ds =body_s.split("\":");
+                                id_zayavki = ds[1];
+                                id_zayavki = id_zayavki.substring(0, id_zayavki.length() - 1);                          //id_zayavki = id_zayavki.replaceAll("]", "");
+                                isSend = true;
+                                Toast.makeText(getApplicationContext(), "Заявка успешно cоздана.", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                            catch (Exception e){
+                                String sd = e.toString();
+                            }
+                        }else Toast.makeText(getApplicationContext(), "Ошибка отправки заявки...", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "Ошибка отправки заявки...", Toast.LENGTH_SHORT).show();
+                    btn.setEnabled(true);
+                }
+            });
+        }
 
         String ds = "";
 
@@ -597,6 +640,24 @@ public class NewProviderZayavka extends AppCompatActivity {
         });
         ad.setCancelable(false);
         ad.show();
+
+    }
+
+    private void loadReturn(){
+        // status
+        // avtor
+        // date
+        //comment
+
+        // 2 - списан, 1 - к возврату
+
+        String[] arr = new String[]{"К возврату"};
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(NewProviderZayavka.this, R.layout.adapter_nomenklatura_filter, arr);
+        status_sp.setAdapter(spinnerArrayAdapter);
+        status_sp.setSelection(0);
+        status_sp.setClickable(false);
+
+
 
     }
 }

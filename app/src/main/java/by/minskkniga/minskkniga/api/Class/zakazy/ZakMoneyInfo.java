@@ -9,6 +9,10 @@ public class ZakMoneyInfo {
     @Expose
     private Double vozvrat;
 
+    @SerializedName("doljny")
+    @Expose
+    private Double doljny;
+
     @SerializedName("podarki")
     @Expose
     private Double podarki;
@@ -24,6 +28,10 @@ public class ZakMoneyInfo {
     @SerializedName("skidka")
     @Expose
     private Double skidka;
+
+    @SerializedName("skidka_proc")
+    @Expose
+    private Double skidka_proc;
 
     @SerializedName("itog")
     @Expose
@@ -75,5 +83,21 @@ public class ZakMoneyInfo {
 
     public void setItog(Double itog) {
         this.itog = itog;
+    }
+
+    public Double getSkidka_proc() {
+        return skidka_proc;
+    }
+
+    public void setSkidka_proc(Double skidka_proc) {
+        this.skidka_proc = skidka_proc;
+    }
+
+    public Double getDoljny() {
+        return doljny;
+    }
+
+    public void setDoljny(Double doljny) {
+        this.doljny = doljny;
     }
 }

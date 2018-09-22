@@ -9,6 +9,10 @@ public class ZavInfoTovar {
     @Expose
     private String k_id;
 
+    @SerializedName("prod_id")
+    @Expose
+    private String prod_id;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -111,5 +115,13 @@ public class ZavInfoTovar {
 
     public void setCena(String cena) {
         this.cena = cena;
+    }
+
+    public String getProd_id() {
+        return prod_id;
+    }
+
+    public void setProd_id(String prod_id) {
+        this.prod_id = prod_id;
     }
 }

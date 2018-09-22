@@ -9,6 +9,9 @@ public class ItemListZakMoney {
     @Expose
     private String id;
 
+    @SerializedName("id_zak")
+    @Expose
+    private String id_zak;
 
     @SerializedName("date")
     @Expose
@@ -24,7 +27,7 @@ public class ItemListZakMoney {
 
     @SerializedName("vozvrat")
     @Expose
-    private int vozvrat;
+    private Double vozvrat;
 
     @SerializedName("oplaty")
     @Expose
@@ -62,11 +65,11 @@ public class ItemListZakMoney {
         return tovar;
     }
 
-    public int getVozvrat() {
+    public Double getVozvrat() {
         return vozvrat;
     }
 
-    public void setVozvrat(int vozvrat) {
+    public void setVozvrat(Double vozvrat) {
         this.vozvrat = vozvrat;
     }
 
@@ -88,5 +91,13 @@ public class ItemListZakMoney {
 
     public void setPodarki(Double podarki) {
         this.podarki = podarki;
+    }
+
+    public String getId_zak() {
+        return id_zak;
+    }
+
+    public void setId_zak(String id_zak) {
+        this.id_zak = id_zak;
     }
 }
